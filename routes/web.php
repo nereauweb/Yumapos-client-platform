@@ -247,6 +247,19 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::post('/file/cropp',      'MediaController@cropp');
             Route::get('/file/copy',        'MediaController@fileCopy')->name('media.file.copy');
         });
+		
+		Route::prefix('apps')->group(function () { 
+            Route::prefix('invoicing')->group(function () { 
+                Route::get('/invoice', function () {        return view('dashboard.apps.invoicing.invoice'); });
+            });
+            Route::prefix('email')->group(function () {
+                Route::get('/inbox', function () {          return view('dashboard.apps.email.inbox'); });
+                Route::get('/message', function () {        return view('dashboard.apps.email.message'); });
+                Route::get('/compose', function () {        return view('dashboard.apps.email.compose'); });
+            });
+        });
+        Route::resource('notes', 'NotesController');
+		
     });
 });
 
