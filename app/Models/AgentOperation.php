@@ -25,7 +25,7 @@ class AgentOperation extends Model
 		'commission',
 		];
 		
-	public function operation(){ 
+	public function pointOperation(){ 
 		return $this->hasOne('App\Models\ServiceOperation','id','service_operation_id'); 
 	}
 	

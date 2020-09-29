@@ -47,7 +47,7 @@
                               <td>{{ ucfirst($user->company_data->company_name) }}</td>
                               <td>{{ ucfirst($user->company_data->legal_seat_city)  }}</td>
                               <td>{{ $user->email }}</td>
-                              <td>{{ $user->menuroles }}</td>
+                              <td>{{ implode(',',$user->getRoleNames()->toArray()) }}</td>
                               <td>{{ $user->plafond }}</td>
                               <td>
                                 <a href="{{ url('/users/' . $user->id) }}" class="btn btn-primary">{{ __('coreuiforms.view') }}</a>

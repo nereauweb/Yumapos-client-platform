@@ -147,6 +147,12 @@ Route::group(['middleware' => ['get.menu']], function () {
 		
 	});
 	
+	Route::group(['middleware' => ['role:sales']], function () {
+		Route::prefix('/sales/reports')->group(function () { 
+			Route::get('/operations', 'AgentReportController@operations')->name('agents.reports.operations');
+        });	
+	});
+	
     Route::group(['middleware' => ['role:admin']], function () {	
 		
 		Route::prefix('/admin/users/groups')->group(function () { 
