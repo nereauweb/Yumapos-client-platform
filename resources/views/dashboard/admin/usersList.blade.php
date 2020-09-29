@@ -31,7 +31,9 @@
                         <table class="table table-striped table-sm col-filtered-datatable">
                         <thead>
                           <tr>
-                            <th>{{ __('coreuiforms.users.username') }}</th>
+                            {{-- <th>{{ __('coreuiforms.users.username') }}</th> --}}
+                            <th>{{ __('lists.businessname') }}</th>
+                            <th>{{ __('lists.city') }}</th>
                             <th>{{ __('coreuiforms.users.email') }}</th>
                             <th>{{ __('coreuiforms.users.roles') }}</th>
                             <th>Balance (€)</th>
@@ -41,7 +43,9 @@
                         <tbody>
                           @foreach($users as $user)
                             <tr>
-                              <td>{{ $user->name }}</td>
+                              {{-- <td>{{ $user->name }}</td> --}}
+                              <td>{{ ucfirst($user->company_data->company_name) }}</td>
+                              <td>{{ ucfirst($user->company_data->legal_seat_city)  }}</td>
                               <td>{{ $user->email }}</td>
                               <td>{{ $user->menuroles }}</td>
                               <td>{{ $user->plafond }}</td>

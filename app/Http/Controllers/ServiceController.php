@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
-class UsersController extends Controller
+class ServiceController extends Controller
 {
 
     /**
