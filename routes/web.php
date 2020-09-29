@@ -117,7 +117,7 @@ Route::group(['middleware' => ['get.menu']], function () {
         'destroy'   => 'resource.destroy'
     ]);
 	
-	Route::group(['middleware' => ['role:user']], function () {	
+	Route::group(['middleware' => ['role:user|sales']], function () {	
 		
 		Route::get('/users/info', function () { return view('users.info'); });
 		

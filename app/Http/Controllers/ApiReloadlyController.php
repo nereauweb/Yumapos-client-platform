@@ -39,7 +39,7 @@ class ApiReloadlyController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('role:admin|user');
+        $this->middleware('role:admin|user|sales');
 		
         $ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, "https://auth.reloadly.com/oauth/token");
