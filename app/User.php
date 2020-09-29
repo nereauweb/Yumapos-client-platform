@@ -49,11 +49,11 @@ class User extends Authenticatable
         'menuroles' => 'user',
     ];
 	
-	public function master() {
+	public function referent() {
 		return $this->hasOne('App\Models\User','id','parent_id');
     }
 	
-	public function slaves() {
+	public function referenced() {
 		return $this->hasMany('App\Models\User','parent_id','id');
     }
 	
