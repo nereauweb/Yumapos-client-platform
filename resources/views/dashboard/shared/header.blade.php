@@ -31,10 +31,14 @@
               </form>
           </li>
           <li class="c-header-nav-item px-3">
-            <button class="c-class-toggler c-header-nav-btn" type="button" id="header-tooltip" data-target="body" data-class="c-dark-theme" data-toggle="c-tooltip" data-placement="bottom" title="Toggle Light/Dark Mode">
+            <button id="trigger-switch">
+              <i class="c-icon c-d-dark-none cil-sun"></i>
+				      <i class="c-icon  c-d-default-none cil-moon"></i>
+            </button>
+            {{-- <button class="c-class-toggler c-header-nav-btn" type="button" id="header-tooltip" data-target="body" data-class="c-dark-theme" data-toggle="c-tooltip" data-placement="bottom" title="Toggle Light/Dark Mode">
 				<i class="c-icon c-d-dark-none cil-sun"></i>
 				<i class="c-icon  c-d-default-none cil-moon"></i>
-            </button>
+            </button> --}}
           </li>
         </ul>
         <ul class="c-header-nav">
@@ -241,3 +245,26 @@
 		  --}}
         </div>
       </header>
+      <style>
+        button#trigger-switch {
+          background: unset;
+          border: unset;
+        }
+      </style>
+      <script>
+        document.body.classList.remove('c-dark-theme');
+        document.body.classList.add(localStorage.getItem('theme'));
+
+        const switcher = document.querySelector('#trigger-switch');
+        switcher.onclick = () => {
+          if (document.body.classList.contains('c-dark-theme')) {
+            document.body.classList.remove('c-dark-theme');
+            document.body.classList.add('c-dark-theme-false');
+            localStorage.setItem('theme', 'c-dark-theme-false');
+          } else {
+            document.body.classList.remove('c-dark-theme-false');
+            document.body.classList.add('c-dark-theme');
+            localStorage.setItem('theme', 'c-dark-theme');
+          }
+        };
+      </script>
