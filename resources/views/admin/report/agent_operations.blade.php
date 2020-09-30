@@ -53,6 +53,8 @@
 								<tr>
 									<th>Date</th>
 									<th>Operation ID</th>
+									<th>Original operation ID</th>
+									<th>Agent</th>
 									<th>Point</th>
 									<th>Original amount</th>
 									<th>Applied percentage</th>
@@ -65,6 +67,8 @@
 									<tr>
 										<td>{{ $operation->created_at }}</td>
 										<td>{{ $operation->id }}</td>
+										<td>{{ $operation->service_operation_id }}</td>
+										<td>{{ $operation->user->name }}</td>
 										<td>{{ $operation->pointOperation->user->name }}</td>
 										<td>{{ round($operation->original_amount,2) }}&nbsp;&euro;</td>
 										<td>{{ round($operation->applied_percentage,2) }}&nbsp;%</td>
