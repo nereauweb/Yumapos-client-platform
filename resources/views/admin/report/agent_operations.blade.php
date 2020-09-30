@@ -69,9 +69,6 @@
 										<td>{{ round($operation->original_amount,2) }}&nbsp;&euro;</td>
 										<td>{{ round($operation->applied_percentage,2) }}&nbsp;%</td>
 										<td>{{ round($operation->commission,2) }}&nbsp;&euro;</td>
-										<td>
-											{{-- <a href="/users/services/print/{{ $operation->service_operation_id }}" target="_BLANK">[Original operation receipt]</a> --}}
-										</td>
 									</tr>
 							@endforeach
 							@endif
