@@ -62,6 +62,7 @@
                                             <tr>
                                                 <th>Name</th>
                                                 <th>Percentage</th>
+                                                <th>State</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -69,6 +70,15 @@
                                                 <tr>
                                                     <td>{{ $reference->name }}</td>
                                                     <td>{{ $reference->parent_percent }}&percnt;</td>
+                                                    <td>
+                                                        <span class="badge px-4 py-2 @if($reference->state == 1) text-white bg-success @else text-dark bg-secondary @endif">
+                                                            @if ($reference->state == 1)
+                                                                Approved
+                                                            @else
+                                                                Pending
+                                                            @endif
+                                                        </span>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

@@ -148,6 +148,9 @@ Route::group(['middleware' => ['get.menu']], function () {
 	});
 	
 	Route::group(['middleware' => ['role:sales']], function () {
+        Route::get('/sales/users', 'AgentController@userIndex')->name('agent.user.index');
+        Route::get('/sales/user/create', 'AgentController@userCreate')->name('agent.user.create');
+        Route::post('/sales/user', 'AgentController@userStore')->name('agent.user.store');
 		Route::prefix('/sales/reports')->group(function () { 
 			Route::get('/operations', 'AgentReportController@operations')->name('agents.reports.operations');
         });	
@@ -168,6 +171,7 @@ Route::group(['middleware' => ['get.menu']], function () {
         });
 		
 		Route::prefix('/admin')->group(function () { 
+            Route::post('/user/approve/{user}', 'UsersController@approve')->name('admin.user.approve');
 			Route::resource('services',  'ServiceController', [ 'names' => 'admin.services' ]);
 			Route::get('/payments/export', 'PaymentsController@export')->name('admin.payments.export');
 			Route::resource('payments',  'PaymentsController', [ 'names' => 'admin.payments' ]);

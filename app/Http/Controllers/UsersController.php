@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ConfirmationMail;
 use Illuminate\Http\Request;
 use App\User;
 use App\Models\UserCompanyData;
@@ -10,6 +11,7 @@ use App\Models\UsersGroup;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -36,7 +38,8 @@ class UsersController extends Controller
     {
         $you = auth()->user();
         $users = User::all();
-        return view('dashboard.admin.usersList', compact('users', 'you'));
+        $groups = UsersGroup::all();
+        return view('dashboard.admin.usersList', compact('users', 'you', 'groups'));
     }
 
     /**
@@ -248,5 +251,36 @@ class UsersController extends Controller
 		if ($user->hasRole('user')) { 
 			return redirect('users/'.$user->id.'/edit')->with('success', trans('usersmanagement.createSuccess'));
 		}
+    }
+
+    public function approve(Request $request, $id) 
+    {
+
+        $user = User::FindOrFail($id);
+
+        $request->validate([
+            'parent_percent' => 'required',
+            'group' => 'required'
+        ]);        
+
+        try {
+            
+            $notHashedPassword = Str::random(); 
+
+            $user->update([
+                'state' => 1,
+                'group_id' => $request->group,
+                'parent_percent' => $request->parent_percent,
+                'password' => bcrypt($notHashedPassword),
+            ]);
+            
+
+            Mail::to($user->email)->send(new ConfirmationMail($user, $notHashedPassword));
+
+            return back()->with(['status' => 'success', 'message' => 'User approved successfully!']);
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }
