@@ -5,9 +5,9 @@
 @endsection
 
 @section('content')
-	@livewireStyles
+	@livewireStyles()
 	@livewire('show-services')
-	@livewireScripts
+	@livewireScripts()
     {{-- <div class="container">
         <div class="row">
             <div class="col-lg-12">
