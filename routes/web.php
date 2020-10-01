@@ -272,6 +272,10 @@ Route::group(['middleware' => ['get.menu']], function () {
         Route::resource('notes', 'NotesController');
 		
     });
+
+    Route::group(['middleware' => ['role:user']], function () {
+        Route::put('/user/update-password', 'ApprovedUserController@updatePassword')->name('user.updatePassword');
+    });
 });
 
 Route::get('locale', 'LocaleController@locale');
