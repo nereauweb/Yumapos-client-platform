@@ -5,8 +5,10 @@
 @endsection
 
 @section('content')
-
-    <div class="container">
+	@livewireStyles
+	@livewire('show-services')
+	@livewireScripts
+    {{-- <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -60,13 +62,13 @@
 														</svg>
 													</a>
 												@endif
-												{{--
+												
 												<a class="btn btn-danger" href="#">
 													<svg class="c-icon">
 													  <use xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-trash"></use>
 													</svg>
 												</a>
-												--}}
+												
 											</div>
 										</td>
 									</tr>
@@ -77,7 +79,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 	
 	<div id="details-modal" uk-modal></div>
 	<div id="edit-modal" uk-modal></div>
@@ -140,9 +142,9 @@
 		});
 
 	</script>
-    <script src="{{ asset('js/jquery.dataTables.js') }}"></script>
+    {{-- <script src="{{ asset('js/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('js/datatables.js') }}"></script>
+    <script src="{{ asset('js/datatables.js') }}"></script> --}}
 	<script>
 		$(document).ready(function(){
 			$('#admin-table').on('click','.details',function(e){
