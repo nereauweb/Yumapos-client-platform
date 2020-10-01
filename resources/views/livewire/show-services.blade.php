@@ -10,12 +10,30 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <input wire:model.lazy="search" type="text" class="form-control" id="search" placeholder="Search..">
+                            <input wire:model.lazy="search" type="text" class="form-control" id="search"
+                                placeholder="Search..">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="card-body">
+                <div class="uk-grid-small my-4" uk-grid>
+                    <div class="uk-width-expand">
+                        <fieldset class="form-group">
+                            <label>Date range</label>
+                            <div class="input-group">
+                                <span class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="cil-calendar"></i>
+                                    </span>
+                                </span>
+                                <input class="form-control" id="daterange" type="text">
+                                <input type="hidden" id="date_begin">
+                                <input type="hidden" id="date_end">
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
                 <table class="table table-striped table-bordered col-filtered-datatable" id="admin-table">
                     <thead>
                         <tr>
@@ -80,44 +98,65 @@
                         @endforeach
                     </tbody>
                 </table>
-                
                 {{ $operators->links() }}
             </div>
         </div>
     </div>
 </div>
 <style>
-.loader {
-    position:fixed;
-    width:100%;
-    left:0;right:0;top:0;bottom:0;
-    background-color: rgba(255,255,255,0.7);
-    z-index:9999;
-    display:none;
-}
+    .loader {
+        position: fixed;
+        width: 100%;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.7);
+        z-index: 9999;
+        display: none;
+    }
 
-@-webkit-keyframes spin {
-	from {-webkit-transform:rotate(0deg);}
-	to {-webkit-transform:rotate(360deg);}
-}
+    @-webkit-keyframes spin {
+        from {
+            -webkit-transform: rotate(0deg);
+        }
 
-@keyframes spin {
-	from {transform:rotate(0deg);}
-	to {transform:rotate(360deg);}
-}
+        to {
+            -webkit-transform: rotate(360deg);
+        }
+    }
 
-.loader::after {
-    content:'';
-    display:block;
-    position:absolute;
-    left:48%;top:40%;
-    width:40px;height:40px;
-    border-style:solid;
-    border-color:black;
-    border-top-color:transparent;
-    border-width: 4px;
-    border-radius:50%;
-    -webkit-animation: spin .8s linear infinite;
-    animation: spin .8s linear infinite;
-}
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .loader::after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 48%;
+        top: 40%;
+        width: 40px;
+        height: 40px;
+        border-style: solid;
+        border-color: black;
+        border-top-color: transparent;
+        border-width: 4px;
+        border-radius: 50%;
+        -webkit-animation: spin .8s linear infinite;
+        animation: spin .8s linear infinite;
+    }
+
 </style>
+<script>
+    $('#daterange').on('change', function (e) {
+        @this.set('start', $("#date_begin").val());
+		@this.set('end', $("#date_end").val());
+    });
+</script>

@@ -12,6 +12,8 @@ class ShowServices extends Component
     protected $paginationTheme = 'bootstrap';
     public $search;
     public $sortField;
+    public $start;
+    public $end;
     public $sortAsc = true;
 
     public function render()
@@ -21,8 +23,14 @@ class ShowServices extends Component
                 ->orWhere('name', 'like', '%'.$this->search.'%');
         })->when($this->sortField, function ($query) {
                 $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
-        })->paginate(10);
+        });
         
+        if ($this->start && $this->end) {
+            $operators = $operators->where('created_at','>=',$this->start)->where('created_at','<=',$this->end);
+        }
+
+        $operators = $operators->paginate(10);
+
         return view('livewire.show-services', [
             'operators' => $operators
         ]);
