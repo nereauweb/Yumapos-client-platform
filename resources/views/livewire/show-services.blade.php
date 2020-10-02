@@ -36,14 +36,63 @@
                 </div>
                 <table class="table table-striped table-bordered col-filtered-datatable" id="admin-table">
                     <thead>
-                        <tr>
-                            <th>Country</th>
-                            <th wire:click="sortBy('operatorId')">ID</th>
-                            <th wire:click="sortBy('name')">Name</th>
-                            <th wire:click="sortBy('denominationType')">Type</th>
-                            <th>FX currency</th>
-                            <th>FX rate</th>
-                            <th wire:click="sortBy('commission')">Commission&nbsp;(€)</th>
+                        <tr id="cursorPointer">
+                            <th wire:click="filter('country')"><span class="mr-4">Country</span>
+                                <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
+                                </path>
+                            </svg>
+                            </th>
+                            <th wire:click="sortBy('operatorId')"><span class="mr-4">ID</span>
+                                <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
+                                    </path>
+                                </svg>
+                            </th>
+                            <th wire:click="sortBy('name')"><span class="mr-4">Name</span>
+                                <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
+                                    </path>
+                                </svg>
+                            </th>
+                            <th wire:click="sortBy('denominationType')"><span class="mr-4">Type</span>
+                                <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
+                                    </path>
+                                </svg>
+                            </th>
+                            <th wire:click="filter('fxCurrency')"><span class="mr-4">FX currency</span>
+                                <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
+                                    </path>
+                                </svg>
+                            </th>
+                            <th wire:click="filter('rate')"><span class="mr-4">FX rate</span>
+                                <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
+                                    </path>
+                                </svg>
+                            </th>
+                            <th wire:click="sortBy('commission')"><span class="mr-4">Commission&nbsp;(€)</span>
+                                <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
+                                    </path>
+                                </svg>
+                            </th>
                             <th class="no-search">Actions</th>
                         </tr>
                     </thead>
@@ -153,10 +202,15 @@
         animation: spin .8s linear infinite;
     }
 
+    #cursorPointer > th {
+        cursor: pointer;
+    }
+
 </style>
 <script>
-    $('#daterange').on('change', function (e) {
+    $('#daterange').on('change', function(e) {
         @this.set('start', $("#date_begin").val());
-		@this.set('end', $("#date_end").val());
+        @this.set('end', $("#date_end").val());
     });
+
 </script>
