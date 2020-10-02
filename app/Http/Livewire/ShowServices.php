@@ -11,24 +11,26 @@ class ShowServices extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public $search;
+    public $searchData; 
     public $sortField;
     public $customSort = null;
     public $sortAscCustom = true; 
     public $start;
     public $end;
+    public $test;
     public $sortAsc = true;
 
     public function render()
     {
         $operators = ApiReloadlyOperator::where(function ($query) {
-            $query->where('operatorId', 'like', '%'.$this->search.'%')
-                ->orWhere('name', 'like', '%'.$this->search.'%');
+            $query->where('operatorId', 'like', '%'.$this->searchData.'%')
+                ->orWhere('name', 'like', '%'.$this->searchData.'%');
         })->when($this->sortField, function ($query) {
                 $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
         });
         
         if ($this->start && $this->end) {
-            $operators = $operators->where('created_at','>=',$this->start)->where('created_at','<=',$this->end);
+            $operators = $operators->where('created_at','>=', \Carbon\Carbon::parse($this->start))->where('created_at','<=', \Carbon\Carbon::parse($this->end));
             $this->customSort = '';
         }
 
@@ -80,4 +82,20 @@ class ShowServices extends Component
         $this->customSort = $type;
     }
 
+    public function resetDate() 
+    {
+        $this->start = '';
+        $this->end = '';
+    }
+
+    public function search()
+    {
+        $this->searchData = $this->search;
+    }
+
+    public function resetSearch()
+    {
+        $this->search = '';
+        $this->searchData = '';
+    }
 }

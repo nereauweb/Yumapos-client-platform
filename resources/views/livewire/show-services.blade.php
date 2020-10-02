@@ -8,18 +8,12 @@
                     <div class="col-md-8">
                         <h3>Operatori</h3>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <input wire:model.lazy="search" type="text" class="form-control" id="search"
-                                placeholder="Search..">
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="card-body">
-                <div class="uk-grid-small my-4" uk-grid>
+                <div class="uk-grid-small my-4 d-flex align-items-end" uk-grid>
                     <div class="uk-width-expand">
-                        <fieldset class="form-group">
+                        <fieldset>
                             <label>Date range</label>
                             <div class="input-group">
                                 <span class="input-group-prepend">
@@ -30,8 +24,23 @@
                                 <input class="form-control" id="daterange" type="text">
                                 <input type="hidden" id="date_begin">
                                 <input type="hidden" id="date_end">
+                                <div class="input-group-append">
+                                    <button wire:click="resetDate()" class="btn btn-danger" type="button"
+                                        id="button-addon2">reset</button>
+                                </div>
                             </div>
                         </fieldset>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input wire:model.defer="search" type="text" class="form-control" placeholder="search"
+                                aria-label="search" id="search" aria-describedby="button-addon2">
+                            <div class="input-group-append">
+                                <button class="btn {{ $search == '' ? 'btn-primary' : 'btn-danger' }}" type="button"
+                                    id="button-addon2"
+                                    wire:click="{{ $search == '' ? 'search()' : 'resetSearch()' }}">{{ $search == '' ? 'Search' : 'Reset' }}</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <table class="table table-striped table-bordered col-filtered-datatable" id="admin-table">
@@ -39,11 +48,11 @@
                         <tr id="cursorPointer">
                             <th wire:click="filter('country')"><span class="mr-4">Country</span>
                                 <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                </path>
-                            </svg>
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
+                                    </path>
+                                </svg>
                             </th>
                             <th wire:click="sortBy('operatorId')"><span class="mr-4">ID</span>
                                 <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
@@ -202,7 +211,7 @@
         animation: spin .8s linear infinite;
     }
 
-    #cursorPointer > th {
+    #cursorPointer>th {
         cursor: pointer;
     }
 
