@@ -45,7 +45,7 @@
                 </div>
                 <table class="table table-striped table-bordered col-filtered-datatable" id="admin-table">
                     <thead>
-                        <tr id="cursorPointer">
+                        <tr class="cursorPointer">
                             <th wire:click="filter('country')"><span class="mr-4">Country</span>
                                 <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -161,6 +161,13 @@
         </div>
     </div>
 </div>
+<script>
+    $('#daterange').on('change', function(e) {
+        @this.set('start', $("#date_begin").val());
+        @this.set('end', $("#date_end").val());
+    });
+
+</script>
 <style>
     .loader {
         position: fixed;
@@ -211,15 +218,8 @@
         animation: spin .8s linear infinite;
     }
 
-    #cursorPointer>th {
+    .cursorPointer>th {
         cursor: pointer;
     }
 
 </style>
-<script>
-    $('#daterange').on('change', function(e) {
-        @this.set('start', $("#date_begin").val());
-        @this.set('end', $("#date_end").val());
-    });
-
-</script>

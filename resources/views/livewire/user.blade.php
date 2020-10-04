@@ -1,4 +1,6 @@
 <div>
+    <div wire:loading class="loader">
+    </div>
     @include('livewire.user.approve')
     @include('livewire.user.destroy')
     @if (session()->has('success'))
@@ -14,14 +16,46 @@
         {{ session()->get('error') }}
     </div>
     @endif
-    <table class="table table-striped table-sm col-filtered-datatable">
+    <table class="table table-striped table-bordered col-filtered-datatable">
         <thead>
-            <tr>
-                <th>{{ __('lists.businessname') }}</th>
-                <th>{{ __('lists.city') }}</th>
-                <th>{{ __('coreuiforms.users.email') }}</th>
+            <tr class="cursorPointer">
+                <th wire:click="sortByRelations('company_data.company_name')">
+                    <span>{{ __('lists.businessname') }}</span>
+                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
+                        </path>
+                    </svg>
+                </th>
+                <th wire:click="sortByRelations('company_data.legal_seat_city')">
+                    <span>{{ __('lists.city') }}</span>
+                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
+                        </path>
+                    </svg>
+                </th>
+                <th wire:click="sortBy('email')">
+                    <span>{{ __('coreuiforms.users.email') }}</span>
+                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
+                        </path>
+                    </svg>
+                </th>
                 <th>{{ __('coreuiforms.users.roles') }}</th>
-                <th>Balance (€)</th>
+                <th wire:click="sortBy('plafond')">
+                    <span>Balance (€)</span>
+                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
+                        </path>
+                    </svg>
+                </th>
                 <th></th>
             </tr>
         </thead>
@@ -53,3 +87,58 @@
     </table>
     {{ $users->links() }}
 </div>
+<style>
+    .loader {
+        position: fixed;
+        width: 100%;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.7);
+        z-index: 9999;
+        display: none;
+    }
+
+    @-webkit-keyframes spin {
+        from {
+            -webkit-transform: rotate(0deg);
+        }
+
+        to {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .loader::after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 48%;
+        top: 40%;
+        width: 40px;
+        height: 40px;
+        border-style: solid;
+        border-color: black;
+        border-top-color: transparent;
+        border-width: 4px;
+        border-radius: 50%;
+        -webkit-animation: spin .8s linear infinite;
+        animation: spin .8s linear infinite;
+    }
+
+    .cursorPointer>th {
+        cursor: pointer;
+    }
+
+</style>

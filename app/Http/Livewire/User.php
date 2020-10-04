@@ -3,12 +3,14 @@
 namespace App\Http\Livewire;
 
 use App\Mail\ConfirmationMail;
+use App\Models\UserCompanyData;
 use App\Models\UsersGroup;
 use Illuminate\Support\Str;
 use App\User as AppUser;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Spatie\Permission\Models\Role;
 
 class User extends Component
 {
@@ -20,12 +22,58 @@ class User extends Component
     public $groupId;
     public $user_id;
 
+    public $sortField;
+    public $sortAsc = true;
+
+    public $sortRelations;
+
     public function render()
     {
         $you = auth()->user();
-        $users = AppUser::orderBy('created_at', 'desc')->paginate(10);
+        $users = AppUser::when($this->sortField, function ($query) {
+            $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
+        });
+
+        if ($this->sortRelations) {
+            switch ($this->sortRelations) {
+                case 'company_data.company_name':
+                    $users = AppUser::join('users_company_data as cd', 'cd.user_id', 'users.id')->orderBy('cd.company_name', $this->sortAsc ? 'asc' : 'desc')->select('users.*');
+                    break;
+                case 'company_data.legal_seat_city':
+                    $users = AppUser::join('users_company_data as cd', 'cd.user_id', 'users.id')->orderBy('cd.legal_seat_city', $this->sortAsc ? 'asc' : 'desc')->select('users.*');
+                    break;
+                default:
+                    $users = AppUser::when($this->sortField, function ($query) {
+                        $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
+                    });
+                    break;
+            }
+        }
+
+        $users = $users->paginate(10);
+
         $groups = UsersGroup::all();
         return view('livewire.user', compact('users', 'you', 'groups'));
+    }
+
+    public function sortBy($field)
+    {
+        if ($this->sortField === $field) {
+            $this->sortAsc = !$this->sortAsc;
+        } else {
+            $this->sortAsc = true;
+        }
+        $this->sortField = $field;
+    }
+
+    public function sortByRelations($field)
+    {
+        if ($this->sortRelations === $field) {
+            $this->sortAsc = !$this->sortAsc;
+        } else {
+            $this->sortAsc = true;
+        }
+        $this->sortRelations = $field;
     }
 
     public function approve($id) {
