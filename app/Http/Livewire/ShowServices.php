@@ -98,4 +98,6 @@ class ShowServices extends Component
         $this->search = '';
         $this->searchData = '';
     }
+
+    public function commit() {}
 }

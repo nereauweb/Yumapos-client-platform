@@ -39,7 +39,7 @@ class ReportController extends Controller
 		if($user_id!=0){
 			$operations->where('user_id',$user_id);
 		}
-		$operations = $operations->get();	
+		$operations = $operations->get();
         return view('admin/report/operations',compact('operations','date_begin','date_end','users','user_name','user_id'));
 	}
 	
