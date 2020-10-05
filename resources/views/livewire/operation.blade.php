@@ -137,7 +137,6 @@
 </div>
 
 <script>
-
     $('#triggerCommit').on('click', () => {
         @this.set('date_begin', $("#date_begin").val());
         @this.set('date_end', $("#date_end").val());
