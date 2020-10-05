@@ -4,84 +4,15 @@
     <link href="{{ asset('css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 @endsection
-
+@livewireStyles()
 @section('content')
-
-	<div class="card">
-		<div class="card-header">
-
-			<div style="display: flex; justify-content: space-between; align-items: center;">
-
-				<span id="card_title">
-					Payments
-				</span>
-
-				<div class="btn-group pull-right btn-group-xs">					
-					<a class="dropdown-item" href="/admin/payments/create">
-						<i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
-						Add payment
-					</a>
-				</div>
-			</div>
-		</div>
-		
-		<div class="card-body">
-		
-			<h1>Payments</h1>
-
-			<div class="table-responsive users-table ">
-				<table class="table table-striped table-sm col-filtered-datatable">
-					<thead class="thead">
-						<tr>
-							<th>Date</th>
-							<th>User</th>
-							<th>Amount</th>
-							<th>Details</th>
-							<th class="no-search">Approved</th>
-							<th class="no-search">Actions</th>
-						</tr>
-					</thead>
-					<tbody id="users_table">
-						@foreach($payments as $payment) 
-							<tr>
-								<td>
-									<span style="display:none;">{{ date("Y-m-d H:i:s",strtotime($payment->date)) }}</span>
-									{{ date("d/m/Y",strtotime($payment->date)) }}
-								</td>
-								<td>{{ $payment->user->name }}</td>
-								<td>{{ $payment->amount }}</td>			
-								<td>{{ $payment->details }}</td>
-								<td>{!! $payment->approved == 1 ? '<i class="cil-check-alt"></i>':'<i class="cil-x"></i>' !!}</td>
-								<td>
-									@if($payment->approved == 0)
-										{!! Form::open(array('route' => ['admin.payments.update',$payment->id], 'method' => 'PUT', 'role' => 'form', 'class' => 'needs-validation')) !!}
-										{!! csrf_field() !!}
-										<button class="btn btn-sm btn-success" type="submit">Approve</button>
-										{!! Form::close() !!}
-									@endif
-								</td>
-							</tr>
-						@endforeach
-					</tbody>
-
-				</table>
-
-			</div>				
-			<div class="uk-margin-top">
-				{!! Form::open(array('route' => 'admin.payments.export', 'method' => 'GET', 'role' => 'form', 'class' => 'needs-validation uk-margin-bottom')) !!}
-					{!! csrf_field() !!}	
-					{!! Form::button('Export', array('class' => 'btn btn-success','type' => 'submit' )) !!}		
-				{!! Form::close() !!}						
-			</div>
-		</div>
-	</div>
-
-	@include('modals.modal-delete')
-
+@livewire('payment')
+@include('modals.modal-delete')
 @endsection
 
+@livewireScripts()
 @section('javascript')
-    <script src="{{ asset('js/jquery.dataTables.js') }}"></script>
+    {{-- <script src="{{ asset('js/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('js/datatables.js') }}"></script>
+    <script src="{{ asset('js/datatables.js') }}"></script> --}}
 @endsection
