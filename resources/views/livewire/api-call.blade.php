@@ -15,7 +15,7 @@
                             <dl class="row">
                                 <dt class="col-sm-5">Operations
                                 <dt>
-                                <dd class="col-sm-7">{{ $operations->count() }}</dd>
+                                <dd class="col-sm-7">{{ $operationsCount }}</dd>
                                 <dt class="col-sm-5">Total User discounts
                                 <dt>
                                 <dd class="col-sm-7">{{ $operations->sum('user_discount') }} €</dd>

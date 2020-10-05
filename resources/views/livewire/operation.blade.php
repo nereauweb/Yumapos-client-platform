@@ -13,7 +13,7 @@
                     <dl class="row">
                         <dt class="col-sm-5">Operations
                         <dt>
-                        <dd class="col-sm-7">{{ $operations->count() }}</dd>
+                        <dd class="col-sm-7">{{ $totalOperationsCount }}</dd>
                         <dt class="col-sm-5">Total User discounts
                         <dt>
                         <dd class="col-sm-7">{{ $operations->sum('user_discount') }} €</dd>
@@ -29,7 +29,8 @@
                             {{ $operations->sum('platform_total_gain') - $operations->sum('user_discount') }} €</dd>
                     </dl>
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;" class="uk-grid-small my-4" uk-grid>
+                <div style="display: flex; justify-content: space-between; align-items: center;"
+                    class="uk-grid-small my-4" uk-grid>
                     <div wire:ignore class="uk-width-expand">
                         <fieldset class="form-group">
                             <label>Date range</label>
@@ -55,7 +56,8 @@
                                     </span>
                                 </span>
                                 <select wire:model.defer="userSelected" class="form-control custom-select" name="user">
-                                    <option value="0" @if ($user_id == 0) selected @endif>All users</option>
+                                    <option value="0" @if ($user_id == 0) selected
+                                        @endif>All users</option>
                                     @foreach ($users as $list_user_id => $list_user_name)
                                         <option value="{{ $list_user_id }}" @if ($user_id == $list_user_id) selected
                                     @endif>{{ $list_user_name }}</option>
@@ -72,14 +74,70 @@
                     <table class="table table-striped table-bordered col-filtered-datatable" id="admin-table">
                         <thead>
                             <tr class="cursorPointer">
-                                <th>Date</th>
-                                <th>User</th>
-                                <th>Operation ID</th>
-                                <th>Reloadly trans. ID</th>
-                                <th>API call ID</th>
-                                <th>Country</th>
+                                <th wire:click="sortBy('created_at')">
+                                    <span>Date</span>
+                                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
+                                        </path>
+                                    </svg>
+                                </th>
+                                <th>
+                                    <span>User</span>
+                                    {{-- <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
+                                        </path>
+                                    </svg> --}}
+                                </th>
+                                <th wire:click="sortBy('id')">
+                                    <span>Operation ID</span>
+                                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
+                                        </path>
+                                    </svg>
+                                </th>
+                                <th wire:click="sortBy('reloadly_transactionId')">
+                                    <span>Reloadly trans. ID</span>
+                                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
+                                        </path>
+                                    </svg>
+                                </th>
+                                <th wire:click="sortBy('api_reloadly_calls_id')">
+                                    <span>API call ID</span>
+                                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
+                                        </path>
+                                    </svg>
+                                </th>
+                                <th wire:click="sortBy('request_country_iso')">
+                                    <span>Country</span>
+                                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
+                                        </path>
+                                    </svg>
+                                </th>
                                 <th>Operator</th>
-                                <th>Phone number</th>
+                                <th wire:click="sortBy('request_recipient_phone')">
+                                    <span>Phone number</span>
+                                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
+                                        </path>
+                                    </svg>
+                                </th>
                                 <th>Expected destination amount</th>
                                 <th>&Delta; Paid/Sent amount</th>
                                 <th>Commission</th>
@@ -93,15 +151,18 @@
                                 @foreach ($operations as $operation)
                                     <tr>
                                         <td>{{ date('d/m/Y H:i:s', strtotime($operation->created_at)) }}</td>
-                                        <td>{{ $operation->user->name ?? ''}} [Id {{ $operation->user->id ?? '' }}]</td>
+                                        <td>{{ $operation->user->name ?? '' }} [Id {{ $operation->user->id ?? '' }}]
+                                        </td>
                                         <td>{{ $operation->id }}</td>
                                         <td>{{ $operation->reloadly_transactionId }}</td>
                                         <td>{{ $operation->api_reloadly_calls_id }}</td>
                                         <td>{{ $operation->request_country_iso }}</td>
                                         <td>{{ $operation->reloadly_operation->operatorName ?? '' }}</td>
                                         <td>{{ $operation->request_recipient_phone }}</td>
-                                        <td>{{ round($operation->final_expected_destination_amount, 2) ?? '' }}&nbsp;{{ $operation->reloadly_operation->deliveredAmountCurrencyCode ?? '' }}</td>
-                                        <td>{{ round($operation->final_amount - $operation->user_gain - $operation->sent_amount, 2) }}&nbsp;&euro;</td>
+                                        <td>{{ round($operation->final_expected_destination_amount, 2) ?? '' }}&nbsp;{{ $operation->reloadly_operation->deliveredAmountCurrencyCode ?? '' }}
+                                        </td>
+                                        <td>{{ round($operation->final_amount - $operation->user_gain - $operation->sent_amount, 2) }}&nbsp;&euro;
+                                        </td>
                                         <td>{{ round($operation->platform_commission, 2) }}&nbsp;&euro;</td>
                                         <td>{{ round($operation->platform_total_gain, 2) }}&nbsp;&euro;</td>
                                         <td>{{ round($operation->user_discount, 2) }}&nbsp;&euro;</td>
@@ -141,4 +202,5 @@
         @this.set('date_begin', $("#date_begin").val());
         @this.set('date_end', $("#date_end").val());
     });
+
 </script>
