@@ -14,15 +14,24 @@ class Payment extends Component
 
     public $sortField;
     public $sortAsc = true;
+    public $userSelected;
+    public $from;
+    public $to;
 
+    private $bothDatesSet = false;
 
     public $filterByModel;
 
     public function render()
     {
-        $payments = ModelsPayment::when($this->sortField, function ($query) {
+
+        $date_begin = ($this->from && !is_null($this->from)) ? $this->from . ' 00:00:00' : date("Y-m-d") . ' 00:00:00';
+		$date_end = ($this->to && !is_null($this->to)) ? $this->to . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
+
+        $payments = ModelsPayment::where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end)->when($this->sortField, function ($query) {
             $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
         });
+        
 
         if (($this->filterByModel && !is_null($this->filterByModel) && is_null($this->sortField)) && $this->filterByModel == 'users.name') {  
             $payments = ModelsPayment::join('users as u', 'u.id', '=', 'payments.user_id')->orderBy('u.name', $this->sortAsc ? 'asc' : 'desc')->select('payments.*');
@@ -57,5 +66,9 @@ class Payment extends Component
         }
 
         // $this->customSort = $tableColumn
+    }
+
+    function commit() {
+        $this->bothDatesSet = true;
     }
 }

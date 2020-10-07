@@ -2,13 +2,10 @@
     @include('livewire.loader')
     <div class="card">
         <div class="card-header">
-
             <div style="display: flex; justify-content: space-between; align-items: center;">
-
                 <span id="card_title">
                     Payments
                 </span>
-
                 <div class="btn-group pull-right btn-group-xs">
                     <a class="dropdown-item" href="/admin/payments/create">
                         <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
@@ -21,7 +18,35 @@
         <div class="card-body">
 
             <h1>Payments</h1>
-
+            <div class="row align-items-end">
+                <div class="col-6">
+                    @include('livewire.partials.daterange')
+                </div>
+                <div class="col-4">
+                    <div>
+                        <div class="form-group w-100">
+                            <label for="exampleFormControlSelect1">User</label>
+                            <select wire:model.defer="userSelected" class="form-control custom-select" name="user">
+                                <option value="0" selected>All users</option>
+                                @foreach ($payments as $payment)
+                                    @if (!is_null($payment->user))
+                                        <option value="{{ $payment->user->id }}">{{ $$payment->user->name }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div>
+                        <div class="form-group">
+                            <div>
+                                <button wire:click="commit" class="btn btn-success" id="commitData">Commit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="table-responsive users-table table">
                 <table class="table table-striped table-bordered col-filtered-datatable">
                     <thead class="thead">
@@ -89,13 +114,23 @@
                                     ? '<i class="cil-check-alt"></i>'
                                     : '<i class="cil-x"></i>' !!}</td>
                                 <td>
-                                    @if ($payment->approved == 0)
-                                        {!! Form::open(['route' => ['admin.payments.update', $payment->id], 'method' =>
-                                        'PUT', 'role' => 'form', 'class' => 'needs-validation']) !!}
-                                        {!! csrf_field() !!}
-                                        <button class="btn btn-sm btn-success" type="submit">Approve</button>
-                                        {!! Form::close() !!}
-                                    @endif
+                                    <div class="btn-group dropleft">
+                                        <button type="button" class="btn btn-secondary dropdown-toggle"
+                                            data-toggle="dropdown" aria-expanded="false">
+                                            <i class="cli-options"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            @if ($payment->approved == 0)
+                                                {!! Form::open(['route' => ['admin.payments.update', $payment->id],
+                                                'method' => 'PUT', 'role' => 'form']) !!}
+                                                {!! csrf_field() !!}
+                                                <button class="dropdown-item" type="submit">Approve</button>
+                                                {!! Form::close() !!}
+                                            @endif
+                                            <a class="dropdown-item" type="button">Action</a>
+                                            <a class="dropdown-item" type="button">View pdf</a>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -116,3 +151,10 @@
         </div>
     </div>
 </div>
+<script>
+    $('#commitData').on('click', () => {
+        @this.set('from', $("#date_begin").val());
+        @this.set('to', $("#date_end").val());
+    });
+
+</script>
