@@ -6,7 +6,9 @@
 @endsection
 @livewireStyles()
 @section('content')
-@livewire('payment')
+<div class="container">
+	@livewire('payment')
+</div>
 @include('modals.modal-delete')
 @endsection
 

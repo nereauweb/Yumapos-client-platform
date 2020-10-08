@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\ApiReloadlyOperator;
+use App\Models\ApiReloadlyOperatorCountry;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -17,45 +18,36 @@ class ShowServices extends Component
     public $sortAscCustom = true; 
     public $start;
     public $end;
-    public $test;
+    public $type;
     public $sortAsc = true;
+
+    public $countryId;
 
     public function render()
     {
-        $operators = ApiReloadlyOperator::where(function ($query) {
-            $query->where('operatorId', 'like', '%'.$this->searchData.'%')
-                ->orWhere('name', 'like', '%'.$this->searchData.'%');
+        $operators = ApiReloadlyOperator::join('api_reloadly_operators_countries as country', 'country.parent_id', '=', 'api_reloadly_operators.id')
+        ->join('api_reloadly_operators_fxs as fx', 'fx.parent_id', '=', 'api_reloadly_operators.id')
+        ->select('api_reloadly_operators.*')->when($this->countryId, function ($query) {
+            $query->where('country.parent_id', $this->countryId);
         })->when($this->sortField, function ($query) {
-                $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
+            $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
+        })->when(($this->start && $this->end), function ($query) {
+            $query->where('api_reloadly_operators.created_at','>=', \Carbon\Carbon::parse($this->start))->where('api_reloadly_operators.created_at','<=', \Carbon\Carbon::parse($this->end));
+        })->when($this->customSort, function ($query) {
+            $query->orderBy($this->customSort, $this->sortAscCustom ? 'asc' : 'desc');
+        })->when($this->type, function ($query) {
+            $query->where('api_reloadly_operators.denominationType', $this->type);
         });
         
-        if ($this->start && $this->end) {
-            $operators = $operators->where('created_at','>=', \Carbon\Carbon::parse($this->start))->where('created_at','<=', \Carbon\Carbon::parse($this->end));
-            $this->customSort = '';
-        }
-
-        if ($this->customSort === 'country') {
-            $operators = ApiReloadlyOperator::join('api_reloadly_operators_countries as country', 'country.parent_id', '=', 'api_reloadly_operators.id')
-            ->orderBy('country.name', $this->sortAscCustom ? 'asc' : 'desc')
-            ->select('api_reloadly_operators.*');
-        }
-
-        if ($this->customSort === 'fxCurrency') {
-            $operators = ApiReloadlyOperator::join('api_reloadly_operators_fxs as fx', 'fx.parent_id', '=', 'api_reloadly_operators.id')
-            ->orderBy('fx.currencyCode', $this->sortAscCustom ? 'asc' : 'desc')
-            ->select('api_reloadly_operators.*');
-        }
-
-        if ($this->customSort === 'rate') {
-            $operators = ApiReloadlyOperator::join('api_reloadly_operators_fxs as fx', 'fx.parent_id', '=', 'api_reloadly_operators.id')
-            ->orderBy('fx.rate', $this->sortAscCustom ? 'asc' : 'desc')
-            ->select('api_reloadly_operators.*');
-        }
-
+        $countriesList = ApiReloadlyOperatorCountry::orderBy('name', 'asc')->get();
+        $typesList = ApiReloadlyOperator::select('denominationType')->distinct('denominationType')->get();
+    
         $operators = $operators->paginate(10);
 
         return view('livewire.show-services', [
-            'operators' => $operators
+            'operators' => $operators,
+            'countriesList' => $countriesList,
+            'typesList' => $typesList
         ]);
     }
 

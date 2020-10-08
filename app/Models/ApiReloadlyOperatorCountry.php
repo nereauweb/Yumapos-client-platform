@@ -22,5 +22,9 @@ class ApiReloadlyOperatorCountry extends Model
 		'isoName',
 		'name',
 		];
-	
+    
+    public function apiReloadlyOperators() 
+    {
+        return $this->hasMany(ApiReloadlyOperator::class);
+    }
 }

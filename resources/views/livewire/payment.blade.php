@@ -30,7 +30,7 @@
                                 <option value="0" selected>All users</option>
                                 @foreach ($payments as $payment)
                                     @if (!is_null($payment->user))
-                                        <option value="{{ $payment->user->id }}">{{ $$payment->user->name }}</option>
+                                        <option value="{{ $payment->user->id }}">{{ $payment->user->name }}</option>
                                     @endif
                                 @endforeach
                             </select>

@@ -10,6 +10,17 @@
                 </div>
             </div>
             <div class="card-body">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <input wire:model.defer="search" type="text" class="form-control" placeholder="search"
+                            aria-label="search" id="search" aria-describedby="button-addon2">
+                        <div class="input-group-append">
+                            <button class="btn {{ $search == '' ? 'btn-primary' : 'btn-danger' }}" type="button"
+                                id="button-addon2"
+                                wire:click="{{ $search == '' ? 'search()' : 'resetSearch()' }}">{{ $search == '' ? 'Search' : 'Reset' }}</button>
+                        </div>
+                    </div>
+                </div>
                 <div class="uk-grid-small my-4 d-flex align-items-end" uk-grid>
                     <div class="uk-width-expand">
                         <fieldset>
@@ -23,29 +34,34 @@
                                 <input class="form-control" id="daterange" type="text">
                                 <input type="hidden" id="date_begin">
                                 <input type="hidden" id="date_end">
-                                <div class="input-group-append">
-                                    <button wire:click="commit" class="btn btn-success" type="button"
-                                        id="commitBtn">Commit</button>
-                                </div>
                             </div>
                         </fieldset>
                     </div>
-                    <div class="col-md-4">
-                        <div class="input-group">
-                            <input wire:model.defer="search" type="text" class="form-control" placeholder="search"
-                                aria-label="search" id="search" aria-describedby="button-addon2">
-                            <div class="input-group-append">
-                                <button class="btn {{ $search == '' ? 'btn-primary' : 'btn-danger' }}" type="button"
-                                    id="button-addon2"
-                                    wire:click="{{ $search == '' ? 'search()' : 'resetSearch()' }}">{{ $search == '' ? 'Search' : 'Reset' }}</button>
-                            </div>
-                        </div>
+                    <div>
+                        <select wire:model.defer="countryId" name="countryName" id="countryId" class="custom-select">
+                            <option value="-">All countries</option>
+                            @foreach ($countriesList as $item)
+                                <option value="{{$item->id}}">{{$item->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <select wire:model.defer="type" name="typesList" id="typesId" class="custom-select">
+                            <option value="-">Every typye</option>
+                            @foreach ($typesList as $item)
+                                <option value="{{$item->denominationType}}">{{$item->denominationType}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="input-group-append">
+                        <button wire:click="commit" class="btn btn-success" type="button"
+                            id="commitBtn">Commit</button>
                     </div>
                 </div>
                 <table class="table table-striped table-bordered col-filtered-datatable" id="admin-table">
                     <thead>
                         <tr class="cursorPointer">
-                            <th wire:click="filter('country')"><span class="mr-4">Country</span>
+                            <th wire:click="filter('country.name')"><span class="mr-4">Country</span>
                                 <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -77,7 +93,7 @@
                                     </path>
                                 </svg>
                             </th>
-                            <th wire:click="filter('fxCurrency')"><span class="mr-4">FX currency</span>
+                            <th wire:click="filter('fx.currencyCode')"><span class="mr-4">FX currency</span>
                                 <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -85,7 +101,7 @@
                                     </path>
                                 </svg>
                             </th>
-                            <th wire:click="filter('rate')"><span class="mr-4">FX rate</span>
+                            <th wire:click="filter('fx.rate')"><span class="mr-4">FX rate</span>
                                 <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
