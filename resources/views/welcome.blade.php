@@ -51,7 +51,7 @@
                                                             Actions
                                                             </button>
                                                             <div class="dropdown-menu">
-                                                            <a href="#" class="dropdown-item">View details</a>
+                                                            <a href="{{ route('users.show', $user) }}" class="dropdown-item">View details</a>
                                                             @if (!$user->state)
                                                                 <a href="#" class="dropdown-item">Approve</a>
                                                                 <a href="#" class="dropdown-item">Reject</a>
@@ -107,7 +107,7 @@
                                                             Actions
                                                             </button>
                                                             <div class="dropdown-menu">
-                                                            <a href="#" class="dropdown-item">View details</a>
+                                                            <a href="{{ route('users.payments.show', $payment) }}" class="dropdown-item">View details</a>
                                                             @if (!$payment->approved)
                                                                 <a href="#" class="dropdown-item">Approve</a>
                                                                 <a href="#" class="dropdown-item">Reject</a>

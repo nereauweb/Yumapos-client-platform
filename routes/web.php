@@ -19,7 +19,7 @@ Route::group(['middleware' => ['get.menu']], function () {
 	Route::get('/', function () {
 		if (Auth::User()){
             //return view('dashboard.homepage');
-			return view('welcome');
+			return redirect('/backend');
 		} else {
 			return redirect('login');;
 		}			
