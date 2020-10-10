@@ -10,10 +10,15 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+use App\Models\Payment;
+use App\User;
+use Spatie\Permission\Contracts\Role;
+
 Route::group(['middleware' => ['get.menu']], function () {
 	Route::get('/', function () {
 		if (Auth::User()){
-			//return view('dashboard.homepage');
+            //return view('dashboard.homepage');
 			return view('welcome');
 		} else {
 			return redirect('login');;
@@ -21,7 +26,40 @@ Route::group(['middleware' => ['get.menu']], function () {
 	})->name('index');
 	Route::get('/page', function () {       return view('frontend.page'); });
     //Route::get('/backend', function () {    return view('dashboard.homepage'); });
-	Route::get('/backend', function () {    return view('welcome'); });
+	Route::get('/backend', function () {
+        if (auth()->user()->role('admin')) {
+            $usersApprovedNum = User::where('state', 1)->count();
+            $usersWaitingApprovalNum = User::where('state', 0)->count();
+            $usersWithRoleUser = User::role('user')->count();
+            $usersWithRoleSales = User::role('sales')->count();
+            
+            $data = [
+                'users' => $usersWithRoleUser,
+                'sales' => $usersWithRoleSales,
+                'totalUsersApproved' => $usersApprovedNum,
+                'usersWaitingApproval' => $usersWaitingApprovalNum
+            ];
+
+            $payments = Payment::orderBy('approved', 'asc')->paginate(10, ['*'], 'payments');
+            $paymentTotals = Payment::where('approved', 1)->count();
+            $paymentsPending = Payment::where('approved', 0)->count();
+
+            $totalAmounts = Payment::where('approved', 1)->sum('amount');
+            
+            $paymentsData = [
+                'payments' => $paymentTotals,
+                'pending' => $paymentsPending,
+                'totals' => $totalAmounts
+            ];
+
+            $users = User::orderBy('state', 'asc')->paginate(10, ['*'], 'users');
+
+            return view('welcome', compact('users', 'data', 'payments', 'paymentsData')); 
+        } else {
+            return view('welcome');
+        }
+
+    });
 	
 	/*
     Route::group(['middleware' => ['role:user']], function () {

@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="col-md-4">
+                {{-- <div class="col-md-4">
                     <div class="input-group">
                         <input wire:model.defer="search" type="text" class="form-control" placeholder="search"
                             aria-label="search" id="search" aria-describedby="button-addon2">
@@ -20,7 +20,7 @@
                                 wire:click="{{ $search == '' ? 'search()' : 'resetSearch()' }}">{{ $search == '' ? 'Search' : 'Reset' }}</button>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <div class="uk-grid-small my-4 d-flex align-items-end" uk-grid>
                     <div class="uk-width-expand">
                         <fieldset>
