@@ -47,7 +47,7 @@
                     </div>
                 </div>
             </div>
-            <div class="table-responsive users-table table">
+            <div class="table-responsive-lg users-table table">
                 <table class="table table-striped table-bordered col-filtered-datatable">
                     <thead class="thead">
                         <tr>
@@ -115,20 +115,34 @@
                                     : '<i class="cil-x"></i>' !!}</td>
                                 <td>
                                     <div class="btn-group dropleft">
-                                        <button type="button" class="btn btn-secondary dropdown-toggle"
+                                        <button type="button" class="btn dropdown-toggle"
                                             data-toggle="dropdown" aria-expanded="false">
-                                            <i class="cli-options"></i>
+                                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
                                         </button>
                                         <div class="dropdown-menu">
                                             @if ($payment->approved == 0)
-                                                {!! Form::open(['route' => ['admin.payments.update', $payment->id],
+                                                {!! Form::open(['route' => ['admin.payments.updatePaymentStatus', $payment->id],
                                                 'method' => 'PUT', 'role' => 'form']) !!}
                                                 {!! csrf_field() !!}
                                                 <button class="dropdown-item" type="submit">Approve</button>
                                                 {!! Form::close() !!}
+                                                {!! Form::open(['route' => ['admin.payments.destroy', $payment->id],
+                                                'method' => 'DELETE', 'role' => 'form']) !!}
+                                                {!! csrf_field() !!}
+                                                <button class="dropdown-item" type="submit">Reject</button>
+                                                {!! Form::close() !!}
+                                                <a class="dropdown-item" type="button">View details</a>
+                                            @else
+                                                <a href="{{ route('admin.payments.edit', $payment->id) }}" class="dropdown-item" type="button">Edit payment</a>
+                                                <form action="{{ route('admin.payments.destroy', $payment->id) }}" method="post">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button class="dropdown-item" type="submit">Remove payment</button>
+                                                </form>
                                             @endif
-                                            <a class="dropdown-item" type="button">Action</a>
-                                            <a class="dropdown-item" type="button">View pdf</a>
+                                            @if (isset($payment->document))
+                                                <a href="{{ url($payment->document->filename) }}" class="dropdown-item" type="button">Download file</a>
+                                            @endif
                                         </div>
                                     </div>
                                 </td>
@@ -151,6 +165,19 @@
         </div>
     </div>
 </div>
+<style>
+    table.table {
+        width: auto;
+    }
+    table.table-bordered th, .table-bordered td {
+        width: 10%;
+    }
+
+    table.table-bordered th, .table-bordered td:last-of-type {
+        width: 2%;
+    }
+
+</style>
 <script>
     $('#commitData').on('click', () => {
         @this.set('from', $("#date_begin").val());

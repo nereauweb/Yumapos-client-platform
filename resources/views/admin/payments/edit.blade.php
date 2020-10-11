@@ -6,7 +6,7 @@
 		<div class="card">
 			<div class="card-header">
 				<div style="display: flex; justify-content: space-between; align-items: center;">
-					Add new payment
+					Update payment
 					<div class="pull-right">
 						<a href="{{ url('/admin/payments/') }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="{{ trans('usersmanagement.tooltips.back-users') }}">
 							<i class="fa fa-fw fa-reply-all" aria-hidden="true"></i>
@@ -15,15 +15,15 @@
 					</div>
 				</div>
 			</div>
-	
 			<div class="card-body">
-				{!! Form::open(array('route' => 'admin.payments.store', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation', 'enctype' => 'multipart/form-data')) !!}
-					{!! csrf_field() !!}
+				{!! Form::open(array('route' => ['admin.payments.update', $payment->id], 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation', 'enctype' => 'multipart/form-data')) !!}
+                    @method('PUT')
+                    {!! csrf_field() !!}
 					<div class="form-group has-feedback row {{ $errors->has('date') ? ' has-error ' : '' }}">
 						{!! Form::label('date', 'Date', array('class' => 'col-md-3 control-label')); !!}
 						<div class="col-md-9">
 							<div class="input-group">
-								{!! Form::text('date', NULL, array('id' => 'date', 'class' => 'form-control', 'placeholder' => 'Date','required' => 'required')) !!}
+								{!! Form::text('date', date('d/m/Y', strtotime($payment->date)), array('id' => 'date', 'class' => 'form-control', 'placeholder' => 'Date','required' => 'required')) !!}
 							</div>
 							@if ($errors->has('date'))
 								<span class="help-block">
@@ -33,25 +33,11 @@
 						</div>
 					</div>
 					
-					<div class="form-group has-feedback row {{ $errors->has('user_id') ? ' has-error ' : '' }}">
-						{!! Form::label('user_id', 'User', array('class' => 'col-md-3 control-label','required' => 'required')); !!}
-						<div class="col-md-9">
-							<div class="input-group">
-								{!! Form::select('user_id', $users, NULL, array('class' => 'custom-select')); !!}
-							</div>
-							@if ($errors->has('user_id'))
-								<span class="help-block">
-									<strong>{{ $errors->first('user_id') }}</strong>
-								</span>
-							@endif
-						</div>
-					</div>
-					
 					<div class="form-group has-feedback row {{ $errors->has('amount') ? ' has-error ' : '' }}">
 						{!! Form::label('amount', 'Amount (€)', array('class' => 'col-md-3 control-label')); !!}
 						<div class="col-md-9">
 							<div class="input-group">
-								{!! Form::number('amount', 0, array('id' => 'amount', 'class' => 'form-control', 'min' => '0', 'step' => '0.01','required' => 'required')) !!}
+								{!! Form::number('amount', $payment->amount, array('id' => 'amount', 'class' => 'form-control', 'min' => '0', 'step' => '0.01','required' => 'required')) !!}
 								<div class="input-group-append">
 									<label for="amount" class="input-group-text">
 										€
@@ -70,7 +56,7 @@
 						{!! Form::label('details', 'Details', array('class' => 'col-md-3 control-label')); !!}
 						<div class="col-md-9">
 							<div class="input-group">
-								{!! Form::text('details', NULL, array('id' => 'details', 'class' => 'form-control', 'placeholder' => 'Add payment details')) !!}
+								{!! Form::text('details', $payment->details, array('id' => 'details', 'class' => 'form-control', 'placeholder' => 'Add payment details')) !!}
 							</div>
 							@if ($errors->has('details'))
 								<span class="help-block">

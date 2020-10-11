@@ -42,7 +42,8 @@ class PaymentsController extends Controller
             [
                 'date'		=> 'required',
                 'amount'	=> 'required',
-                'user_id'	=> 'required'
+                'user_id'	=> 'required',
+                'document'  => 'mimes:jpg,doc,docx,png,pdf'
             ],
             [
                 'date.required'		=> 'Date required',
@@ -67,8 +68,17 @@ class PaymentsController extends Controller
             'user_id'	=> $request->input('user_id'),
             'details'	=> $request->input('details'),
             'approved'	=> 1,
+            'type'      => 2
         ]);
-		
+
+        $file = $request->file('document');
+        $filename = 'admin-created-' . time() . '.' . $file->getClientOriginalExtension();
+        $path = $file->storeAs('payments', $filename);
+        $payment->document()->create([
+            'label' => $payment->user->name.'-document',
+            'filename' => $path
+        ]);
+
 		$user = $payment->user;
 		
 		$user->plafond = $user->plafond + $request->input('amount');
@@ -84,22 +94,96 @@ class PaymentsController extends Controller
 	
     public function edit($id)
     {
-		
+        $payment = Payment::findOrFail($id);
+        return view('admin.payments.edit', compact('payment'));
     }
 	
     public function update(Request $request,$id) // approve
     {
-		$payment = Payment::find($id);
-		$payment->approved = 1;
-		$user = $payment->user;		
-		$user->plafond = $user->plafond + $request->input('amount');
-		$user->save();
-		$payment->save();
-		return redirect()->route('admin.payments.index')->with('success', 'Payment approved, user balance updated');
+		$payment = Payment::findOrFail($id);
+        
+        $validator = Validator::make($request->all(),
+            [
+                'date'		=> 'required',
+                'amount'	=> 'required',
+                'document'  => 'mimes:jpg,doc,docx,png,pdf'
+            ],
+            [
+                'date.required'		=> 'Date required',
+                'amount.required'	=> 'Amount required',
+                'user_id.required'	=> 'User required',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+		
+		$date = \DateTime::createFromFormat("d/m/Y",$request->input('date'));
+		
+		if (!$date) {
+            return back()->withErrors($validator)->withInput();
+        }
+		
+        try {
+            $payment->update([
+                'date'		=> $date->format("Y-m-d H:i:s"),
+                'amount'	=> $request->input('amount'),
+                'details'	=> $request->input('details'),
+                'approved'	=> 1,
+                'type'      => 2
+            ]);
+    
+            $file = $request->file('document');
+            if (isset($file)) {
+                if (isset($payment->document)) {
+                    unlink($payment->document->filename);
+                    $filename = 'admin-updated-' . time() . '.' . $file->getClientOriginalExtension();
+                    $path = $file->storeAs('payments', $filename);
+                    $payment->document()->update([
+                        'label' => $payment->user->name.'-document',
+                        'filename' => $path
+                    ]);
+                } else {
+                    $filename = 'admin-updated-' . time() . '.' . $file->getClientOriginalExtension();
+                    $path = $file->storeAs('payments', $filename);
+                    $payment->document()->create([
+                        'label' => $payment->user->name.'-document',
+                        'filename' => $path
+                    ]);
+                }
+            }
+            
+            $payment->user()->update([
+                'plafond' => $payment->user->plafond + $request->amount
+            ]);
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+
+        return redirect()->route('admin.payments.index')->with('success', 'Payment updated, user balance updated');
+    }
+
+    public function updatePaymentStatus(Request $request, $id)
+    {
+        $payment = Payment::findOrFail($id);
+        if ($payment) {
+            $payment->update([
+                'approved' => 1
+            ]);
+        }
     }
 	
     public function destroy($id, Request $request)
     {
-		
+        $payment = Payment::findOrFail($id);
+
+        if ($payment) {
+            \Storage::move($payment->document->filename, 'archived');
+            $payment->document()->delete();
+            $payment->delete();
+
+            return back()->with('success', 'file successfully deleted!');
+        }
     }
 }

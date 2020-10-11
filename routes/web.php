@@ -13,6 +13,8 @@
 
 use App\Models\Payment;
 use App\User;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Contracts\Role;
 
 Route::group(['middleware' => ['get.menu']], function () {
@@ -195,6 +197,10 @@ Route::group(['middleware' => ['get.menu']], function () {
 	});
 	
     Route::group(['middleware' => ['role:admin']], function () {	
+
+        Route::prefix('/admin/files')->group(function () {
+            Route::get('/', 'PaymentFilecontroller@index');
+        });
 		
 		Route::prefix('/admin/users/groups')->group(function () { 
 			Route::get('', 'UsersGroupsController@list')->name('admin.groups.list');
@@ -211,7 +217,8 @@ Route::group(['middleware' => ['get.menu']], function () {
 		Route::prefix('/admin')->group(function () { 
             Route::post('/user/approve/{user}', 'UsersController@approve')->name('admin.user.approve');
 			Route::resource('services',  'ServiceController', [ 'names' => 'admin.services' ]);
-			Route::get('/payments/export', 'PaymentsController@export')->name('admin.payments.export');
+            Route::get('/payments/export', 'PaymentsController@export')->name('admin.payments.export');
+            Route::put('/payments/approve/{id}', 'PaymentsController@updatePaymentStatus')->name('admin.payments.updatePaymentStatus');
 			Route::resource('payments',  'PaymentsController', [ 'names' => 'admin.payments' ]);
         });
 		
@@ -317,3 +324,15 @@ Route::group(['middleware' => ['get.menu']], function () {
 });
 
 Route::get('locale', 'LocaleController@locale');
+
+Route::get('payments/{filename}', function ($filename)
+{
+    $path = storage_path() . '/app/payments/'. $filename;
+
+    if(!\File::exists($path)) abort(404);
+
+    return response()->download($path);
+#    dd($response);
+
+    // return \Response::download($response);
+});

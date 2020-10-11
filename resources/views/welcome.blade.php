@@ -108,6 +108,9 @@
                                                             </button>
                                                             <div class="dropdown-menu">
                                                             <a href="{{ route('users.payments.show', $payment) }}" class="dropdown-item">View details</a>
+                                                            @if (isset($payment->document))
+                                                            <a href="{{ $payment->document->filename }}" class="dropdown-item">Download file</a>
+                                                            @endif
                                                             @if (!$payment->approved)
                                                                 <a href="#" class="dropdown-item">Approve</a>
                                                                 <a href="#" class="dropdown-item">Reject</a>
