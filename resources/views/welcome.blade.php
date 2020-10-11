@@ -43,7 +43,7 @@
                                             <div class="list-group-item list-group-item-action">
                                                 <div class="row justify-content-md-center">
                                                     <div class="col">
-                                                        <span>{{  $user->name }}</span>@if($user->state == 0)<span class="badge bg-secondary ml-4">Pending</span>@endif
+                                                        <span>{{  isset($user->name) ? $user->name : '' }}</span>@if($user->state == 0)<span class="badge bg-secondary ml-4">Pending</span>@endif
                                                     </div>
                                                     <div class="col-md-auto">
                                                         <div class="btn-group dropleft">
@@ -93,7 +93,7 @@
                                                 <div class="row justify-content-md-center">
                                                     <div class="col">
                                                         <div>
-                                                            <span>{{  $payment->user->name }}</span>@if (!$payment->approved)
+                                                            <span>{{  isset($payment->user->name) ? $payment->user->name : '' }}</span>@if (!$payment->approved)
                                                                 <span class="badge bg-secondary ml-4">Pending</span>
                                                             @endif
                                                         </div>

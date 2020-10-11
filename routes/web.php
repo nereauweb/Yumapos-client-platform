@@ -55,7 +55,6 @@ Route::group(['middleware' => ['get.menu']], function () {
             ];
 
             $users = User::orderBy('state', 'asc')->paginate(10, ['*'], 'users');
-
             return view('welcome', compact('users', 'data', 'payments', 'paymentsData')); 
         } else {
             return view('welcome');
@@ -218,7 +217,7 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::post('/user/approve/{user}', 'UsersController@approve')->name('admin.user.approve');
 			Route::resource('services',  'ServiceController', [ 'names' => 'admin.services' ]);
             Route::get('/payments/export', 'PaymentsController@export')->name('admin.payments.export');
-            Route::put('/payments/approve/{id}', 'PaymentsController@updatePaymentStatus')->name('admin.payments.updatePaymentStatus');
+            Route::put('/payments/approve/{ids}', 'PaymentsController@updatePaymentStatus')->name('admin.payments.updatePaymentStatus');
 			Route::resource('payments',  'PaymentsController', [ 'names' => 'admin.payments' ]);
         });
 		
