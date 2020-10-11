@@ -43,7 +43,8 @@ class PointPaymentsController extends Controller
         $validator = Validator::make($request->all(),
             [
                 'date'		=> 'required',
-                'amount'	=> 'required'
+                'amount'	=> 'required',
+                'document'  => 'mimes:jpg,doc,docx,png,pdf'
             ],
             [
                 'date.required'		=> 'Date required',
@@ -67,7 +68,18 @@ class PointPaymentsController extends Controller
             'user_id'	=> \Auth::user()->id,
             'details'	=> $request->input('details'),
             'approved'	=> 0,
+            'type'      => 1
         ]);
+        $file = $request->file('document');
+
+        if ($file) {
+            $filename = 'user-created-' . time() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('pending-payment-files', $filename);
+            $payment->document()->create([
+                'label' => $payment->user->name.'-document-user',
+                'filename' => $path
+            ]);
+        }
 
         return redirect()->route('users.payments.index')->with('success', 'Payment registered');
     }

@@ -14,7 +14,7 @@
                     <div class="card-body">
 						<div>
                             <h1 class="text-center my-5">Welcome to Yumapos</h1>
-                            @if (auth()->user()->role('admin'))
+                            @if (auth()->user()->hasRole('admin'))
                             <div class="row">
                                 <div class="col-6">
                                     <h2>User Details</h2>

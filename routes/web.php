@@ -29,7 +29,7 @@ Route::group(['middleware' => ['get.menu']], function () {
 	Route::get('/page', function () {       return view('frontend.page'); });
     //Route::get('/backend', function () {    return view('dashboard.homepage'); });
 	Route::get('/backend', function () {
-        if (auth()->user()->role('admin')) {
+        if (auth()->user()->hasRole('admin')) {
             $usersApprovedNum = User::where('state', 1)->count();
             $usersWaitingApprovalNum = User::where('state', 0)->count();
             $usersWithRoleUser = User::role('user')->count();
