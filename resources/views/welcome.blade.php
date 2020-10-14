@@ -109,11 +109,20 @@
                                                             <div class="dropdown-menu">
                                                             <a href="{{ route('users.payments.show', $payment) }}" class="dropdown-item">View details</a>
                                                             @if (isset($payment->document))
-                                                            <a href="{{ $payment->document->filename }}" class="dropdown-item">Download file</a>
-                                                            @endif
-                                                            @if (!$payment->approved)
-                                                                <a href="#" class="dropdown-item">Approve</a>
-                                                                <a href="#" class="dropdown-item">Reject</a>
+                                                                @if (!$payment->approved)
+                                                                    {!! Form::open(['route' => ['admin.payments.updatePaymentStatus', $payment->id],
+                                                                    'method' => 'PUT', 'role' => 'form']) !!}
+                                                                    {!! csrf_field() !!}
+                                                                    <button class="dropdown-item" type="submit">Approve</button>
+                                                                    {!! Form::close() !!}
+                                                                    {!! Form::open(['route' => ['admin.payments.destroy', $payment->id],
+                                                                    'method' => 'DELETE', 'role' => 'form']) !!}
+                                                                    {!! csrf_field() !!}
+                                                                    <button class="dropdown-item" type="submit">Reject</button>
+                                                                    {!! Form::close() !!}
+                                                                @else
+                                                                    <a href="{{ $payment->document->filename }}" class="dropdown-item">Download file</a>
+                                                                @endif
                                                             @endif
                                                             </div>
                                                         </div>

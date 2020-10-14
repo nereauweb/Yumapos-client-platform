@@ -38,10 +38,10 @@
                         </fieldset>
                     </div>
                     <div>
-                        <select wire:model.defer="countryId" name="countryName" id="countryId" class="custom-select">
+                        <select wire:model.defer="countryName" name="countryName" id="countryId" class="custom-select">
                             <option value="-">All countries</option>
                             @foreach ($countriesList as $item)
-                                <option value="{{$item->id}}">{{$item->name}}</option>
+                                <option value="{{$item->name}}">{{$item->name}}</option>
                             @endforeach
                         </select>
                     </div>

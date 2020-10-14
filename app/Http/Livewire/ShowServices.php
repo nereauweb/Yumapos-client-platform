@@ -2,8 +2,10 @@
 
 namespace App\Http\Livewire;
 
+use App\Http\Ding\Model\Country;
 use App\Models\ApiReloadlyOperator;
 use App\Models\ApiReloadlyOperatorCountry;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -22,13 +24,14 @@ class ShowServices extends Component
     public $sortAsc = true;
 
     public $countryId;
+    public $countryName;
 
     public function render()
     {
         $operators = ApiReloadlyOperator::join('api_reloadly_operators_countries as country', 'country.parent_id', '=', 'api_reloadly_operators.id')
         ->join('api_reloadly_operators_fxs as fx', 'fx.parent_id', '=', 'api_reloadly_operators.id')
-        ->select('api_reloadly_operators.*')->when($this->countryId, function ($query) {
-            $query->where('country.parent_id', $this->countryId);
+        ->select('api_reloadly_operators.*')->when($this->countryName, function ($query) {
+            $query->where('country.name', $this->countryName);
         })->when($this->sortField, function ($query) {
             $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
         })->when(($this->start && $this->end), function ($query) {
@@ -39,7 +42,7 @@ class ShowServices extends Component
             $query->where('api_reloadly_operators.denominationType', $this->type);
         });
         
-        $countriesList = ApiReloadlyOperatorCountry::orderBy('name', 'asc')->get();
+        $countriesList = DB::table('api_reloadly_operators_countries')->select(DB::raw('count(*) as countries_count, name'))->groupBy('name')->get();
         $typesList = ApiReloadlyOperator::select('denominationType')->distinct('denominationType')->get();
     
         $operators = $operators->paginate(10);
@@ -91,5 +94,9 @@ class ShowServices extends Component
         $this->searchData = '';
     }
 
-    public function commit() {}
+    public function commit() {
+        if (isset($this->countryId)) {
+            $countries = ApiReloadlyOperatorCountry::where('name', '=', $this->countryName);
+        }
+    }
 }
