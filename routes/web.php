@@ -221,13 +221,17 @@ Route::group(['middleware' => ['get.menu']], function () {
 			Route::resource('payments',  'PaymentsController', [ 'names' => 'admin.payments' ]);
         });
 		
-		Route::prefix('/admin/services/')->group(function () { 
+		Route::prefix('/admin/services/')->group(function () { 			
 			Route::get('/{id}/edit/local', 'ServiceController@edit_local')->name('admin.services.edit.local');
 			Route::put('/{id}/local', 'ServiceController@update_local')->name('admin.services.update.local');
         });
 		
 		Route::prefix('/admin/services/')->group(function () { 
 			Route::get('/', 'ServiceController@index')->name('admin.services.index');
+        });
+		
+		Route::prefix('/admin/ding/services/')->group(function () { 
+			Route::get('/', 'ApiDingController@products_list')->name('admin.ding.services.products');
         });
 		
 		Route::prefix('/admin/api/reloadly')->group(function () { 
@@ -242,6 +246,22 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::post('/recharge', 'ApiReloadlyController@recharge')->name('admin.api.reloadly.recharge');
             Route::get('/operators/save', 'ApiReloadlyController@save_operators')->name('admin.api.reloadly.operators.save');
         });
+		
+		Route::prefix('/admin/api/ding')->group(function () { 
+			Route::get('/', 'ApiDingController@index')->name('admin.api.ding.index');
+            Route::get('/ErrorCodeDescriptions', 'ApiDingController@ErrorCodeDescriptions')->name('admin.api.ding.ErrorCodeDescriptions');
+            Route::get('/Currencies', 'ApiDingController@Currencies')->name('admin.api.ding.Currencies');
+            Route::get('/Regions', 'ApiDingController@Regions')->name('admin.api.ding.Regions');
+            Route::get('/Countries', 'ApiDingController@Countries')->name('admin.api.ding.Countries');
+            Route::get('/Providers', 'ApiDingController@Providers')->name('admin.api.ding.Providers');
+            Route::get('/ProviderStatus', 'ApiDingController@ProviderStatus')->name('admin.api.ding.ProviderStatus');
+            Route::get('/Products', 'ApiDingController@Products')->name('admin.api.ding.Products');
+            Route::get('/ProductDescriptions', 'ApiDingController@ProductDescriptions')->name('admin.api.ding.ProductDescriptions');
+            Route::get('/Balance', 'ApiDingController@Balance')->name('admin.api.ding.Balance');
+            Route::get('/Promotions', 'ApiDingController@Promotions')->name('admin.api.ding.Promotions');
+            Route::get('/PromotionDescriptions', 'ApiDingController@PromotionDescriptions')->name('admin.api.ding.PromotionDescriptions');
+            Route::get('/AccountLookup', 'ApiDingController@AccountLookup')->name('admin.api.ding.AccountLookup');
+		});
 		
 		Route::prefix('/admin/report')->group(function () { 
             Route::get('/', 'ReportController@operations')->name('admin.report.operations');

@@ -39,9 +39,9 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.5.5/dist/css/uikit.min.css" />
 	<link rel="stylesheet" href="/css/reset.css" />
     <!-- Icons-->
-    <link href="{{ asset('css/free.min.css') }}" rel="stylesheet"> <!-- icons -->
+    <link href="{{ asset('css/free.min.css') }}" rel="stylesheet"  crossorigin> <!-- icons -->
     <!-- Main styles for this application-->
-	<link rel="stylesheet" href="https://unpkg.com/browse/@coreui/coreui@2.1.16/dist/css/coreui.min.css">
+	<link rel="stylesheet" href="https://unpkg.com/@coreui/coreui/dist/css/coreui.min.css" crossorigin>
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/pace.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/flag.min.css') }}" rel="stylesheet">
