@@ -136,18 +136,17 @@ class PaymentsController extends Controller
     
             $file = $request->file('document');
             if (isset($file)) {
-                if (isset($payment->document)) {
-                    unlink($payment->document->filename);
-                    $filename = 'admin-updated-' . time() . '.' . $file->getClientOriginalExtension();
+                if (isset($payment->documents)) {
+                    $filename = 'admin-added-' . time() . '.' . $file->getClientOriginalExtension();
                     $path = $file->storeAs('payments', $filename);
-                    $payment->document()->update([
+                    $payment->documents()->create([
                         'label' => $payment->user->name.'-document',
                         'filename' => $path
                     ]);
                 } else {
-                    $filename = 'admin-updated-' . time() . '.' . $file->getClientOriginalExtension();
+                    $filename = 'admin-added-' . time() . '.' . $file->getClientOriginalExtension();
                     $path = $file->storeAs('payments', $filename);
-                    $payment->document()->create([
+                    $payment->documents()->create([
                         'label' => $payment->user->name.'-document',
                         'filename' => $path
                     ]);

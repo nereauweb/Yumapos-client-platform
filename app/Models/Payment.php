@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use App\Models\PaymentFile;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Payment extends Model
 {
@@ -32,9 +32,9 @@ class Payment extends Model
 		return $this->hasOne('App\User','id','user_id');
 	}
 	
-	public function document() : HasOne
+	public function documents() : HasMany
 	{
-		return $this->hasOne(PaymentFile::class, 'payment_id', 'id');
+		return $this->hasMany(PaymentFile::class, 'payment_id', 'id');
 	}
 	
 }
