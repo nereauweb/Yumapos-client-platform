@@ -51,6 +51,7 @@
                 <table class="table table-striped table-bordered col-filtered-datatable">
                     <thead class="thead">
                         <tr>
+                            <th class="no-search"></th>
                             <th wire:click="sortBy('date')">
                                 <span>Date</span>
                                 <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
@@ -99,39 +100,21 @@
                                     </path>
                                 </svg>
                             </th>
-                            <th class="no-search">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="users_table">
                         @foreach ($payments as $payment)
                             <tr>
                                 <td>
-                                    <span
-                                        style="display:none;">{{ date('Y-m-d H:i:s', strtotime($payment->date)) }}</span>
-                                    {{ date('d/m/Y', strtotime($payment->date)) }}
-                                </td>
-                                <td>{{ $payment->user->name ?? '' }}</td>
-                                <td>{{ $payment->amount }}</td>
-                                <td>{{ $payment->details }}</td>
-                                <td>
-                                    @if (count($payment->documents) > 0)
-                                        @foreach ($payment->documents as $doc)
-                                            <a href="{{url($doc->filename)}}"><svg width="30" height="30" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"></path></svg></a>
-                                        @endforeach    
-                                    @else
-                                        No document added yet!
-                                    @endif
-                                </td>
-                                <td>{!! $payment->approved == 1
-                                    ? '<i class="cil-check-alt"></i>'
-                                    : '<i class="cil-x"></i>' !!}</td>
-                                <td>
-                                    <div class="btn-group dropleft">
-                                        <button type="button" class="btn dropdown-toggle"
-                                            data-toggle="dropdown" aria-expanded="false">
-                                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
-                                        </button>
-                                        <div class="dropdown-menu">
+                                    <div class="btn-group btn-group-xs">										
+										<button type="button" class="btn btn-table-action dropdown-toggle" data-toggle="dropdown">
+											{{ $payment->id }}
+											<i class="fa fa-ellipsis-v fa-fw" aria-hidden="true"></i>
+											<span class="sr-only">
+												Actions
+											</span>
+										</button>
+                                        <div class="dropdown-menu dropdown-menu-right">
                                             @if ($payment->approved == 0)
                                                 {!! Form::open(['route' => ['admin.payments.updatePaymentStatus', $payment->id],
                                                 'method' => 'PUT', 'role' => 'form']) !!}
@@ -155,6 +138,22 @@
                                         </div>
                                     </div>
                                 </td>
+                                <td>
+                                    <span
+                                        style="display:none;">{{ date('Y-m-d H:i:s', strtotime($payment->date)) }}</span>
+                                    {{ date('d/m/Y', strtotime($payment->date)) }}
+                                </td>
+                                <td>{{ $payment->user->name ?? '' }}</td>
+                                <td>{{ $payment->amount }}</td>
+                                <td>{{ $payment->details }}</td>
+                                <td>
+                                    @if (count($payment->documents) > 0)
+                                        @foreach ($payment->documents as $doc)
+                                            <a href="{{url($doc->filename)}}"><svg width="30" height="30" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"></path></svg></a>
+                                        @endforeach    
+                                    @endif
+                                </td>
+                                <td> {!! $payment->approved == 1 ? '<i class="cil-check-alt"></i>' : '<i class="cil-x"></i>' !!} </td>
                             </tr>
                         @endforeach
                     </tbody>

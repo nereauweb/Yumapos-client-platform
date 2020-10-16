@@ -26,6 +26,15 @@ Route::group(['middleware' => ['get.menu']], function () {
 			return redirect('login');;
 		}			
 	})->name('index');
+	
+	
+	Route::get('/users/{id}/impersonate', function($id) {		
+		if (Auth::User() && Auth::user()->hasrole('admin')){
+            \Auth::user()->impersonate($id);
+		}
+		return redirect('/backend');
+	})->name('admin.users.impersonate');
+	
 	Route::get('/page', function () {       return view('frontend.page'); });
     //Route::get('/backend', function () {    return view('dashboard.homepage'); });
 	Route::get('/backend', function () {

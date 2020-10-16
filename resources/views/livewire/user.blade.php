@@ -18,6 +18,7 @@
     <table class="table table-striped table-bordered col-filtered-datatable">
         <thead>
             <tr class="cursorPointer">
+                <th class="no-search"></th>
                 <th wire:click="sortByRelations('company_data.company_name')">
                     <span>{{ __('lists.businessname') }}</span>
                     <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
@@ -55,31 +56,42 @@
                         </path>
                     </svg>
                 </th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach ($users as $user)
                 <tr>
+                    <td>
+						<div class="btn-group btn-group-xs">
+							<button type="button" class="btn btn-table-action dropdown-toggle" data-toggle="dropdown">
+								{{ $user->id }}
+								<i class="fa fa-ellipsis-v fa-fw" aria-hidden="true"></i>
+								<span class="sr-only">
+									Actions
+								</span>
+							</button>
+							<div class="dropdown-menu dropdown-menu-right">								
+								@if (!$user->state)
+									<button class="dropdown-item btn-success" data-toggle="modal" data-target="#modalApprove"
+										wire:click="approve({{ $user->id }})">Approve</button>
+								@endif
+								<a href="{{ url('/users/' . $user->id) }}" class="dropdown-item btn-primary">{{ __('coreuiforms.view') }}</a>
+								<a href="{{ url('/users/' . $user->id. '/edit') }}" class="dropdown-item btn-success">{{ __('coreuiforms.edit') }}</a>									
+								@if ($you->id !== $user->id)																							
+									@if ($user->hasrole('user')||$user->hasrole('sales'))
+									<a href="{{ url('/users/' . $user->id. '/impersonate') }}" class="dropdown-item btn-warning">Impersonate</a>
+									@endif					
+									<button class="dropdown-item btn-danger" data-toggle="modal" data-target="#modalDelete"
+										wire:click="destroy({{ $user->id }})">{{ __('coreuiforms.delete') }}</button>
+								@endif
+							</div>
+						</div>
+                    </td>
                     <td>{{ ucfirst($user->company_data->company_name ?? '') }}</td>
                     <td>{{ ucfirst($user->company_data->legal_seat_city ?? '') }}</td>
                     <td>{{ $user->email }}</td>
                     <td>{{ implode(',', $user->getRoleNames()->toArray()) }}</td>
                     <td>{{ $user->plafond }}</td>
-                    <td>
-                        <a href="{{ url('/users/' . $user->id) }}"
-                            class="btn btn-primary">{{ __('coreuiforms.view') }}</a>
-                        <a href="{{ url('/users/' . $user->id . '/edit') }}"
-                            class="btn btn-primary">{{ __('coreuiforms.edit') }}</a>
-                        @if ($you->id !== $user->id)
-                            <button class="btn btn-danger" data-toggle="modal" data-target="#modalDelete"
-                                wire:click="destroy({{ $user->id }})">{{ __('coreuiforms.delete') }}</button>
-                        @endif
-                        @if (!$user->state)
-                            <button class="btn btn-success" data-toggle="modal" data-target="#modalApprove"
-                                wire:click="approve({{ $user->id }})">Approve</button>
-                        @endif
-                    </td>
                 </tr>
             @endforeach
         </tbody>

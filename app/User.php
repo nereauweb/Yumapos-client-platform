@@ -68,4 +68,12 @@ class User extends Authenticatable
 	public function configuration() {
 		return $this->hasOne('App\Models\UserConfiguration','user_id');
     }
+	
+	public function impersonate($user_id){
+		if (\Auth::user()->hasrole('admin')){			
+			\Auth::loginUsingId($user_id, true);
+			return redirect()->route('index')->with('success', 'User identity changed');
+		}
+		return back()->withError('Not authorized');
+	}
 }
