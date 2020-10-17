@@ -10,17 +10,6 @@
                 </div>
             </div>
             <div class="card-body">
-                {{-- <div class="col-md-4">
-                    <div class="input-group">
-                        <input wire:model.defer="search" type="text" class="form-control" placeholder="search"
-                            aria-label="search" id="search" aria-describedby="button-addon2">
-                        <div class="input-group-append">
-                            <button class="btn {{ $search == '' ? 'btn-primary' : 'btn-danger' }}" type="button"
-                                id="button-addon2"
-                                wire:click="{{ $search == '' ? 'search()' : 'resetSearch()' }}">{{ $search == '' ? 'Search' : 'Reset' }}</button>
-                        </div>
-                    </div>
-                </div> --}}
                 <div class="uk-grid-small my-4 d-flex align-items-end" uk-grid>
                     <div class="uk-width-expand">
                         <fieldset>
@@ -61,15 +50,15 @@
                 <table class="table table-striped table-bordered col-filtered-datatable" id="admin-table">
                     <thead>
                         <tr class="cursorPointer">
-                            <th wire:click="filter('country.name')"><span class="mr-4">Country</span>
+                            <th wire:click="sortBy('operatorId')"><span class="mr-4">ID</span>
                                 <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
+                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
                                     </path>
                                 </svg>
                             </th>
-                            <th wire:click="sortBy('operatorId')"><span class="mr-4">ID</span>
+                            <th wire:click="filter('country.name')"><span class="mr-4">Country</span>
                                 <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -117,56 +106,57 @@
                                     </path>
                                 </svg>
                             </th>
-                            <th class="no-search">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($operators as $operator)
                             <tr>
+                                <td>
+                                    <div class="btn-group btn-group-xs">
+                                        <button type="button" class="btn btn-table-action dropdown-toggle" data-toggle="dropdown">
+                                            {{ $operator->operatorId }}
+                                            <i class="fa fa-ellipsis-v fa-fw" aria-hidden="true"></i>
+                                            <span class="sr-only">
+									            Actions
+								            </span>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <div class="uk-width-small">
+                                                <a class="btn btn-success dropdown-item" href="#"
+                                                   data-operator-id="{{ $operator->id }}">
+                                                    <svg class="c-icon">
+                                                        <use
+                                                            xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-magnifying-glass">
+                                                        </use>
+                                                    </svg>
+                                                </a>
+                                                <a class="btn btn-info dropdown-item" href="#" data-operator-id="{{ $operator->id }}">
+                                                    <svg class="c-icon">
+                                                        <use
+                                                            xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-description">
+                                                        </use>
+                                                    </svg>
+                                                </a>
+                                                @if ($operator->denominationType == 'FIXED' && $operator->localFixedAmounts->count() > 0)
+                                                    <a class="btn btn-info dropdown-item" href="#"
+                                                       data-operator-id="{{ $operator->id }}">
+                                                        <svg class="c-icon">
+                                                            <use
+                                                                xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-description">
+                                                            </use>
+                                                        </svg>
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
                                 <td>{{ $operator->country->name }} ({{ $operator->country->isoName }})</td>
-                                <td>{{ $operator->operatorId }}</td>
                                 <td>{{ $operator->name }}</td>
                                 <td>{{ $operator->denominationType }}</td>
                                 <td>{{ $operator->fx->currencyCode }}</td>
                                 <td>{{ $operator->fx->rate }}</td>
                                 <td>{{ $operator->commission }}</td>
-                                <td>
-                                    <div class="uk-width-small">
-                                        <a class="btn btn-success details" href="#"
-                                            data-operator-id="{{ $operator->id }}">
-                                            <svg class="c-icon">
-                                                <use
-                                                    xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-magnifying-glass">
-                                                </use>
-                                            </svg>
-                                        </a>
-                                        <a class="btn btn-info edit" href="#" data-operator-id="{{ $operator->id }}">
-                                            <svg class="c-icon">
-                                                <use
-                                                    xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-description">
-                                                </use>
-                                            </svg>
-                                        </a>
-                                        @if ($operator->denominationType == 'FIXED' && $operator->localFixedAmounts->count() > 0)
-                                            <a class="btn btn-info edit-local" href="#"
-                                                data-operator-id="{{ $operator->id }}">
-                                                <svg class="c-icon">
-                                                    <use
-                                                        xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-description">
-                                                    </use>
-                                                </svg>
-                                            </a>
-                                        @endif
-
-                                        {{-- <a class="btn btn-danger" href="#">
-                                            <svg class="c-icon">
-                                                <use xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-trash">
-                                                </use>
-                                            </svg>
-                                        </a> --}}
-
-                                    </div>
-                                </td>
                             </tr>
                         @endforeach
                     </tbody>

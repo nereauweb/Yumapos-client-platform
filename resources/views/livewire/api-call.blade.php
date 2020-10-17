@@ -138,9 +138,7 @@
                                                 <td>{{ $operation->id }}</td>
                                                 <td>{{ date('d/m/Y H:i:s', strtotime($operation->created_at)) }}</td>
                                                 <td>
-                                                    @if ($operation->user_id)
-                                                        {{ $operation->user_id }}
-                                                    @elseif($operation->user->name)
+                                                    @if(isset($operation->user->name))
                                                         {{ $operation->user->name }}
                                                     @endif
                                                 </td>
