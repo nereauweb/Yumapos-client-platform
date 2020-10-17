@@ -25,10 +25,12 @@ class Payment extends Component
     public $filterByModel;
 
     public $unapprovedPayments;
+    public $textBeforeAmount;
     public $positiveBalance;
     public $negativeBalance;
 
     public $typeSelected;
+    public $stateSelected = null;
 
     public function render()
     {
@@ -45,11 +47,11 @@ class Payment extends Component
                                         $query->where('u.id', $this->userSelected);
                                     })->when($this->typeSelected, function ($query) {
                                         $query->where('payments.type', $this->typeSelected);
-            });
-        $this->amount = $payments->sum('amount');
+                                    })->when(!is_null($this->stateSelected), function ($query) {
+                                        $query->where('payments.approved', $this->stateSelected);
+            })->select('payments.*');
 
-//        $this->positiveBalance = $payments->where('payments.type', 1)->sum('amount');
-//        $this->negativeBalance = $payments->sum('amount');
+        $this->amount = $payments->sum('payments.amount');
 
         $payments = $payments->paginate(10);
         $users = \App\User::role('user')->get();
@@ -83,8 +85,15 @@ class Payment extends Component
     }
 
     function commit() {
-        if (!is_null($this->userSelected) && $this->userSelected > 0) {
-            $this->userIsSelected = true;
+        if ($this->stateSelected == 'null') {
+            $this->textBeforeAmount = 'Total';
+            $this->stateSelected = null;
+        } else if ($this->stateSelected == -1) {
+            $this->textBeforeAmount = 'Canceled Total';
+        } else if ($this->stateSelected == 0) {
+            $this->textBeforeAmount = 'Pending Total';
+        } else if($this->stateSelected == 1) {
+            $this->textBeforeAmount = 'Approved Total';
         }
     }
 }

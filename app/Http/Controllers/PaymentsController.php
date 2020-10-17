@@ -203,11 +203,13 @@ class PaymentsController extends Controller
     public function payUserStore(Request $request)
     {
         if ($request->updateUserBalance) {
-            $this->storePayment($request->all(), true);
-            return redirect()->route('admin.payments.index')->with(['status' => 'success', 'message' => 'Payment added, user balance updated']);
+            if ($this->storePayment($request->all(), true)) {
+                return redirect()->route('admin.payments.index')->with(['status' => 'success', 'message' => 'Payment added, user balance updated']);
+            };
         } else {
-            $this->storePayment($request->all(), false);
-            return redirect()->route('admin.payments.index')->with(['status' => 'success', 'message' => 'Payment added']);
+            if ($this->storePayment($request->all(), false)) {
+                return redirect()->route('admin.payments.index')->with(['status' => 'success', 'message' => 'Payment added']);
+            }
         }
     }
 
@@ -259,6 +261,8 @@ class PaymentsController extends Controller
 
             $user->plafond = $user->plafond + $data['amount'];
             $user->save();
+
+            return $payment;
         } else {
             $validator = Validator::make($data,
                 [
@@ -300,7 +304,28 @@ class PaymentsController extends Controller
                 'label' => $payment->user->name.'-document',
                 'filename' => $path
             ]);
+            return $payment;
+        }
+    }
 
+    public function cancel($payment)
+    {
+        $payment = Payment::findOrFail($payment);
+        $amountToBeRemoved = $payment->amount;
+        try {
+            $payment->user()->update([
+                'plafond' => (float)$payment->user->plafond - (float)$amountToBeRemoved
+            ]);
+            $payment = $payment->update([
+                'approved' => '-1'
+            ]);
+            if ($payment) {
+                return back()->with(['status' => 'success', 'message' => 'payment canceled successfully, user balance updated!']);
+            } else {
+                return back()->with(['status' => 'error', 'message' => 'could not update payment, updating failed!']);
+            }
+        } catch (\Exception $e) {
+            dd($e->getMessage());
         }
     }
 }

@@ -226,6 +226,7 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::post('/user/approve/{user}', 'UsersController@approve')->name('admin.user.approve');
 			Route::resource('services',  'ServiceController', [ 'names' => 'admin.services' ]);
             Route::get('/payments/export', 'PaymentsController@export')->name('admin.payments.export');
+            Route::put('payments/cancel/{payment}', 'PaymentsController@cancel')->name('admin.payments.cancel');
             Route::put('/payments/approve/{ids}', 'PaymentsController@updatePaymentStatus')->name('admin.payments.updatePaymentStatus');
             Route::get('/payments/pay-user', 'PaymentsController@payUser')->name('admin.payUser');
             Route::post('/payments/pay-user', 'PaymentsController@payUserStore')->name('admin.payments.payUserStore');

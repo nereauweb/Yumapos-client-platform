@@ -24,27 +24,19 @@
             <h1>Payments</h1>
             <div class="uk-padding-small">
                 <dl class="row">
-                    <dt class="col-sm-5">Amount</dt>
+                    <dt class="col-sm-5">{{ $textBeforeAmount }} Amount</dt>
                     <dd class="col-sm-7">{{ $amount }}&euro;</dd>
                 </dl>
                 <dl class="row">
                     <dt class="col-sm-5">Unapproved payments</dt>
                     <dd class="col-sm-7">{{ $unapprovedPayments }}</dd>
                 </dl>
-                <dl class="row">
-                    <dt class="col-sm-5">Positive balance</dt>
-                    <dd class="col-sm-7">{{ $positiveBalance }}&euro;</dd>
-                </dl>
-                <dl class="row">
-                    <dt class="col-sm-5">Negative balance</dt>
-                    <dd class="col-sm-7">&minus;{{ $negativeBalance }}&euro;</dd>
-                </dl>
             </div>
             <div class="row align-items-end">
-                <div class="col-6">
+                <div class="col">
                     @include('livewire.partials.daterange')
                 </div>
-                <div class="col-2">
+                <div class="col">
                     <div>
                         <div class="form-group w-100">
                             <label for="exampleFormControlSelect1">Type</label>
@@ -56,7 +48,20 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-3">
+                <div class="col">
+                    <div>
+                        <div class="form-group w-100">
+                            <label for="exampleFormControlSelect1">State</label>
+                            <select wire:model.defer="stateSelected" class="form-control custom-select" name="state">
+                                <option selected value="null">All</option>
+                                <option value="-1">Canceled</option>
+                                <option value="0">Pending</option>
+                                <option value="1">Approved</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
                     <div>
                         <div class="form-group w-100">
                             <label for="exampleFormControlSelect1">User</label>
@@ -71,9 +76,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-1">
+                <div class="col">
                     <div>
-                        <div class="form-group w-100">
+                        <div class="form-group">
                             <div>
                                 <button wire:click="commit" class="btn btn-success w-100" id="commitData">Commit</button>
                             </div>
@@ -158,14 +163,14 @@
                                                 {!! csrf_field() !!}
                                                 <button class="dropdown-item" type="submit">Reject</button>
                                                 {!! Form::close() !!}
-                                                <a class="dropdown-item" type="button">View details</a>
-                                            @else
-                                                <a href="{{ route('admin.payments.edit', $payment->id) }}" class="dropdown-item" type="button">Edit payment</a>
-                                                <form action="{{ route('admin.payments.destroy', $payment->id) }}" method="post">
-                                                    @method('DELETE')
+                                            @elseif($payment->approved == 1)
+                                                <form action="{{ route('admin.payments.cancel', $payment->id) }}" method="post">
                                                     @csrf
-                                                    <button class="dropdown-item" type="submit">Remove payment</button>
+                                                    @method('PUT')
+                                                    <button class="btn dropdown-item" type="submit">Cancel payment</button>
                                                 </form>
+                                            @else
+                                                NO ACTION
                                             @endif
                                         </div>
                                     </div>
@@ -176,7 +181,11 @@
                                     {{ date('d/m/Y', strtotime($payment->date)) }}
                                 </td>
                                 <td>{{ $payment->user->name ?? '' }}</td>
-                                <td>{{ $payment->amount }}</td>
+                                <td>
+                                    @if (isset($payment->user))
+                                        {{ $payment->amount }}
+                                    @endif
+                                </td>
                                 <td>{{ $payment->details }}</td>
                                 <td>
                                     @if (count($payment->documents) > 0)
@@ -192,7 +201,15 @@
                                         Platform to user
                                     @endif
                                 </td>
-                                <td> {!! $payment->approved == 1 ? '<i class="cil-check-alt"></i>' : '<i class="cil-x"></i>' !!} </td>
+                                <td>
+                                    @if($payment->approved == 1)
+                                        <span class="badge bg-success">Approved</span>
+                                    @elseif($payment->approved == -1)
+                                        <span class="badge bg-danger">Canceled</span>
+                                    @else
+                                        <span class="badge bg-warning">Pending</span>
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
