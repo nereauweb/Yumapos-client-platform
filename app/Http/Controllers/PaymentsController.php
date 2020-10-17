@@ -68,7 +68,7 @@ class PaymentsController extends Controller
             'user_id'	=> $request->input('user_id'),
             'details'	=> $request->input('details'),
             'approved'	=> 1,
-            'type'      => 2
+            'type'      => 1
         ]);
 
         $file = $request->file('document');
@@ -131,7 +131,7 @@ class PaymentsController extends Controller
                 'amount'	=> $request->input('amount'),
                 'details'	=> $request->input('details'),
                 'approved'	=> 1,
-                'type'      => 2
+                'type'      => 1
             ]);
 
             $file = $request->file('document');
@@ -191,6 +191,116 @@ class PaymentsController extends Controller
             return back()->with(['status' => 'success', 'message' => 'file successfully deleted!']);
         } else {
             return back();
+        }
+    }
+
+    public function payUser()
+    {
+        $users = User::where('id', '!=', auth()->id())->pluck('name','id');
+        return view('admin/payments/pay-user', compact('users'));
+    }
+
+    public function payUserStore(Request $request)
+    {
+        if ($request->updateUserBalance) {
+            $this->storePayment($request->all(), true);
+            return redirect()->route('admin.payments.index')->with(['status' => 'success', 'message' => 'Payment added, user balance updated']);
+        } else {
+            $this->storePayment($request->all(), false);
+            return redirect()->route('admin.payments.index')->with(['status' => 'success', 'message' => 'Payment added']);
+        }
+    }
+
+    private function storePayment(array $data, bool $boolean)
+    {
+        if ($boolean) {
+            $validator = Validator::make($data,
+                [
+                    'date'		=> 'required',
+                    'amount'	=> 'required',
+                    'user_id'	=> 'required',
+                    'document'  => 'mimes:jpg,doc,docx,png,pdf'
+                ],
+                [
+                    'date.required'		=> 'Date required',
+                    'amount.required'	=> 'Amount required',
+                    'user_id.required'	=> 'User required',
+                ]
+            );
+
+            if ($validator->fails()) {
+                return back()->withErrors($validator)->withInput();
+            }
+
+            $date = \DateTime::createFromFormat("d/m/Y",$data['date']);
+
+            if (!$date) {
+                return back()->withErrors($validator)->withInput();
+            }
+
+            $payment = Payment::create([
+                'date'		=> $date->format("Y-m-d H:i:s"),
+                'amount'	=> $data['amount'],
+                'user_id'	=> $data['user_id'],
+                'details'	=> $data['details'],
+                'approved'	=> 1,
+                'type'      => $data['type'],
+            ]);
+
+            $file = $data['document'];
+            $filename = 'admin-created-' . time() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('payments', $filename);
+            $payment->documents()->create([
+                'label' => $payment->user->name.'-document',
+                'filename' => $path
+            ]);
+
+            $user = $payment->user;
+
+            $user->plafond = $user->plafond + $data['amount'];
+            $user->save();
+        } else {
+            $validator = Validator::make($data,
+                [
+                    'date'		=> 'required',
+                    'amount'	=> 'required',
+                    'user_id'	=> 'required',
+                    'document'  => 'mimes:jpg,doc,docx,png,pdf'
+                ],
+                [
+                    'date.required'		=> 'Date required',
+                    'amount.required'	=> 'Amount required',
+                    'user_id.required'	=> 'User required',
+                ]
+            );
+
+            if ($validator->fails()) {
+                return back()->withErrors($validator)->withInput();
+            }
+
+            $date = \DateTime::createFromFormat("d/m/Y",$data['date']);
+
+            if (!$date) {
+                return back()->withErrors($validator)->withInput();
+            }
+
+            $payment = Payment::create([
+                'date'		=> $date->format("Y-m-d H:i:s"),
+                'amount'	=> $data['amount'],
+                'user_id'	=> $data['user_id'],
+                'details'	=> $data['details'],
+                'approved'	=> 1,
+                'type'      => $data['type'],
+            ]);
+
+            $file = $data['document'];
+            $filename = 'admin-created-' . time() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('payments', $filename);
+            $payment->document()->create([
+                'label' => $payment->user->name.'-document',
+                'filename' => $path
+            ]);
+
         }
     }
 }

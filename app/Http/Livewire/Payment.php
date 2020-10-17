@@ -25,6 +25,10 @@ class Payment extends Component
     public $filterByModel;
 
     public $unapprovedPayments;
+    public $positiveBalance;
+    public $negativeBalance;
+
+    public $typeSelected;
 
     public function render()
     {
@@ -39,8 +43,14 @@ class Payment extends Component
                                         $query->orderBy('u.name', $this->sortAsc ? 'asc' : 'desc');
                                     })->when($this->userSelected, function ($query) {
                                         $query->where('u.id', $this->userSelected);
-            })->select('payments.*');
+                                    })->when($this->typeSelected, function ($query) {
+                                        $query->where('payments.type', $this->typeSelected);
+            });
         $this->amount = $payments->sum('amount');
+
+//        $this->positiveBalance = $payments->where('payments.type', 1)->sum('amount');
+//        $this->negativeBalance = $payments->sum('amount');
+
         $payments = $payments->paginate(10);
         $users = \App\User::role('user')->get();
         return view('livewire.payment', compact('payments', 'users'));

@@ -7,6 +7,10 @@
                     Payments
                 </span>
                 <div class="btn-group pull-right btn-group-xs">
+                    <a class="dropdown-item" href="{{ route('admin.payUser') }}">
+                        <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
+                        Pay user
+                    </a>
                     <a class="dropdown-item" href="/admin/payments/create">
                         <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
                         Add payment
@@ -27,12 +31,32 @@
                     <dt class="col-sm-5">Unapproved payments</dt>
                     <dd class="col-sm-7">{{ $unapprovedPayments }}</dd>
                 </dl>
+                <dl class="row">
+                    <dt class="col-sm-5">Positive balance</dt>
+                    <dd class="col-sm-7">{{ $positiveBalance }}&euro;</dd>
+                </dl>
+                <dl class="row">
+                    <dt class="col-sm-5">Negative balance</dt>
+                    <dd class="col-sm-7">&minus;{{ $negativeBalance }}&euro;</dd>
+                </dl>
             </div>
             <div class="row align-items-end">
                 <div class="col-6">
                     @include('livewire.partials.daterange')
                 </div>
-                <div class="col-4">
+                <div class="col-2">
+                    <div>
+                        <div class="form-group w-100">
+                            <label for="exampleFormControlSelect1">Type</label>
+                            <select wire:model.defer="typeSelected" class="form-control custom-select" name="user">
+                                <option value="0" selected>All Types</option>
+                                <option value="1">User to platform</option>
+                                <option value="2">Platform to user</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
                     <div>
                         <div class="form-group w-100">
                             <label for="exampleFormControlSelect1">User</label>
@@ -47,11 +71,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-2">
+                <div class="col-1">
                     <div>
-                        <div class="form-group">
+                        <div class="form-group w-100">
                             <div>
-                                <button wire:click="commit" class="btn btn-success" id="commitData">Commit</button>
+                                <button wire:click="commit" class="btn btn-success w-100" id="commitData">Commit</button>
                             </div>
                         </div>
                     </div>
@@ -91,6 +115,14 @@
                             </th>
                             <th>
                                 <span>Document/s</span>
+                            </th>
+                            <th wire:click="sortBy('type')">
+                                <span>Type</span>
+                                @if($sortAsc && $sortField == 'type')
+                                    <i class="cil-arrow-bottom"></i>
+                                @else
+                                    <i class="cil-arrow-top"></i>
+                                @endif
                             </th>
                             <th wire:click="sortBy('approved')">
                                 <span>Approved</span>
@@ -151,6 +183,13 @@
                                         @foreach ($payment->documents as $doc)
                                             <a href="{{url($doc->filename)}}"><svg width="30" height="30" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"></path></svg></a>
                                         @endforeach
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($payment->type == 1)
+                                        User to platform
+                                    @elseif($payment->type == 2)
+                                        Platform to user
                                     @endif
                                 </td>
                                 <td> {!! $payment->approved == 1 ? '<i class="cil-check-alt"></i>' : '<i class="cil-x"></i>' !!} </td>

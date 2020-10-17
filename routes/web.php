@@ -207,7 +207,7 @@ Route::group(['middleware' => ['get.menu']], function () {
     Route::group(['middleware' => ['role:admin']], function () {
 
         Route::prefix('/admin/files')->group(function () {
-            Route::get('/', 'PaymentFilecontroller@index');
+            Route::get('/', 'PaymentFileController@index');
         });
 
 		Route::prefix('/admin/users/groups')->group(function () {
@@ -227,7 +227,9 @@ Route::group(['middleware' => ['get.menu']], function () {
 			Route::resource('services',  'ServiceController', [ 'names' => 'admin.services' ]);
             Route::get('/payments/export', 'PaymentsController@export')->name('admin.payments.export');
             Route::put('/payments/approve/{ids}', 'PaymentsController@updatePaymentStatus')->name('admin.payments.updatePaymentStatus');
-			Route::resource('payments',  'PaymentsController', [ 'names' => 'admin.payments' ]);
+            Route::get('/payments/pay-user', 'PaymentsController@payUser')->name('admin.payUser');
+            Route::post('/payments/pay-user', 'PaymentsController@payUserStore')->name('admin.payments.payUserStore');
+            Route::resource('payments',  'PaymentsController', [ 'names' => 'admin.payments' ]);
         });
 
 		Route::prefix('/admin/services/')->group(function () {

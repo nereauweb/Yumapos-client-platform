@@ -11,11 +11,11 @@
 						<a href="{{ url('/admin/payments/') }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="{{ trans('usersmanagement.tooltips.back-users') }}">
 							<i class="fa fa-fw fa-reply-all" aria-hidden="true"></i>
 							Return to payments list
-						</a> 
+						</a>
 					</div>
 				</div>
 			</div>
-	
+
 			<div class="card-body">
 				{!! Form::open(array('route' => 'admin.payments.store', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation', 'enctype' => 'multipart/form-data')) !!}
 					{!! csrf_field() !!}
@@ -32,7 +32,7 @@
 							@endif
 						</div>
 					</div>
-					
+
 					<div class="form-group has-feedback row {{ $errors->has('user_id') ? ' has-error ' : '' }}">
 						{!! Form::label('user_id', 'User', array('class' => 'col-md-3 control-label','required' => 'required')); !!}
 						<div class="col-md-9">
@@ -46,7 +46,7 @@
 							@endif
 						</div>
 					</div>
-					
+
 					<div class="form-group has-feedback row {{ $errors->has('amount') ? ' has-error ' : '' }}">
 						{!! Form::label('amount', 'Amount (€)', array('class' => 'col-md-3 control-label')); !!}
 						<div class="col-md-9">
@@ -65,7 +65,7 @@
 							@endif
 						</div>
 					</div>
-					
+
 					<div class="form-group has-feedback row {{ $errors->has('details') ? ' has-error ' : '' }}">
 						{!! Form::label('details', 'Details', array('class' => 'col-md-3 control-label')); !!}
 						<div class="col-md-9">
@@ -78,8 +78,8 @@
 								</span>
 							@endif
 						</div>
-					</div>	
-	
+					</div>
+
 					<div class="form-group has-feedback row {{ $errors->has('file') ? ' has-error ' : '' }}">
 						<div class="col-md-3 control-label">
 							File upload
@@ -97,12 +97,12 @@
 								</span>
 							@endif
 						</div>
-					</div>	
-					
+					</div>
+
 					{!! Form::button('Save payment', array('class' => 'btn btn-success margin-bottom-1 mb-1 float-right','type' => 'submit' )) !!}
 				{!! Form::close() !!}
 			</div>
-	
+
 		</div>
 	</div>
 
