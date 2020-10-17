@@ -24,8 +24,11 @@ class Payment extends Component
 
     public $filterByModel;
 
+    public $unapprovedPayments;
+
     public function render()
     {
+        $this->unapprovedPayments = ModelsPayment::where('approved', 0)->count();
 
         $date_begin = ($this->from && !is_null($this->from)) ? $this->from . ' 00:00:00' : date("Y") . '-01-01 00:00:00';
 		$date_end = ($this->to && !is_null($this->to)) ? $this->to . ' 23:59:59' : date("Y") . '-12-31 23:59:59';

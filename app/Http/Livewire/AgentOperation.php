@@ -13,10 +13,17 @@ class AgentOperation extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $date_begin;
-    public $date_end;
+    public $from;
+    public $to;
+
+    public $sortField;
+    public $sortAsc = true;
+
+    public $agentSelected;
 
     public $totalOperations;
+    public $sumOfOperations;
+    public $sumOfCom;
 
     public $user_id;
 
@@ -25,34 +32,48 @@ class AgentOperation extends Component
         $users = User::pluck('name','id');
 		$useridsCollection = User::role('sales')->pluck('id');
         $user_name = "All agents";
-        
+
 		$user_id = 0;
 		if (($this->user_id && !is_null($this->user_id)) && $this->user_id !=0){
-			$user = User::findOrFail($this->user_id);			
+			$user = User::findOrFail($this->user_id);
 			if ($user->role('sales')) {
 				$user_name = $user->name;
 				$user_id = $user->id;
 			}
-        }	
-
-        $date_begin = ($this->date_begin && !is_null($this->date_begin)) ? $this->date_begin . ' 00:00:00' : date("Y-m-d") . ' 00:00:00';
-        
-        $date_end = ($this->date_end && !is_null($this->date_end)) ? $this->date_end . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
-        
-		$operations = ModelsAgentOperation::where('created_at','>=',$date_begin)->where('created_at','<=',$date_end);
-        
-        if($user_id!=0){
-        
-            $operations->where('user_id',$user_id);
-        
         }
 
-        $totalOperations = $operations->count();
-        
+        $date_begin = ($this->from && !is_null($this->from)) ? $this->from . ' 00:00:00' : date("Y") . '-01-01 00:00:00';
+        $date_end = ($this->to && !is_null($this->to)) ? $this->to . ' 23:59:59' : date("Y") . '-12-31 23:59:59';
+
+		$operations = ModelsAgentOperation::where('created_at','>=',$date_begin)->where('created_at','<=',$date_end)->when($this->agentSelected, function ($query) {
+		    $query->where('user_id', $this->agentSelected);
+        })->when($this->sortField, function ($query) {
+            $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
+        });
+
+        if($user_id!=0){
+            $operations->where('user_id',$user_id);
+        }
+
+        $this->totalOperations = $operations->count();
+        $this->sumOfOperations = $operations->sum('original_amount');
+        $this->sumOfCom = $operations->sum('commission');
+
         $operations = $operations->paginate(10);
-        
+
         return view('livewire.agent-operation', compact('operations','date_begin','date_end','users','user_name','user_id'));
     }
 
     public function commit() {}
+
+    public function sortBy($field)
+    {
+        if ($this->sortField === $field) {
+            $this->sortAsc = !$this->sortAsc;
+        } else {
+            $this->sortAsc = true;
+        }
+
+        $this->sortField = $field;
+    }
 }

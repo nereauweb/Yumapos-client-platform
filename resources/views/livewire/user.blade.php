@@ -15,46 +15,52 @@
         {{ session()->get('error') }}
     </div>
     @endif
+    <div class="uk-padding-small">
+        <dl class="row">
+            <dt class="col-sm-5">Balance</dt>
+            <dd class="col-sm-7">{{ $totalBalance }}&euro;</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-5">Unapproved users</dt>
+            <dd class="col-sm-7">{{ $unapprovedUsers }}</dd>
+        </dl>
+    </div>
     <table class="table table-striped table-bordered col-filtered-datatable">
         <thead>
             <tr class="cursorPointer">
                 <th class="no-search"></th>
-                <th wire:click="sortByRelations('company_data.company_name')">
+                <th wire:click="sortByRelations('ucd.company_name')">
                     <span>{{ __('lists.businessname') }}</span>
-                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                        </path>
-                    </svg>
+                    @if($sortAsc && $sortRelations == 'ucd.company_name')
+                        <i class="cil-arrow-bottom"></i>
+                    @else
+                        <i class="cil-arrow-top"></i>
+                    @endif
                 </th>
-                <th wire:click="sortByRelations('company_data.legal_seat_city')">
+                <th wire:click="sortByRelations('ucd.legal_seat_city')">
                     <span>{{ __('lists.city') }}</span>
-                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                        </path>
-                    </svg>
+                    @if($sortAsc && $sortRelations == 'ucd.legal_seat_city')
+                        <i class="cil-arrow-bottom"></i>
+                    @else
+                        <i class="cil-arrow-top"></i>
+                    @endif
                 </th>
                 <th wire:click="sortBy('email')">
                     <span>{{ __('coreuiforms.users.email') }}</span>
-                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                        </path>
-                    </svg>
+                    @if($sortAsc && $sortField == 'email')
+                        <i class="cil-arrow-bottom"></i>
+                    @else
+                        <i class="cil-arrow-top"></i>
+                    @endif
                 </th>
                 <th>{{ __('coreuiforms.users.roles') }}</th>
                 <th wire:click="sortBy('plafond')">
                     <span>Balance (€)</span>
-                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                        </path>
-                    </svg>
+                    @if($sortAsc && $sortField == 'plafond')
+                        <i class="cil-arrow-bottom"></i>
+                    @else
+                        <i class="cil-arrow-top"></i>
+                    @endif
                 </th>
             </tr>
         </thead>
@@ -70,17 +76,17 @@
 									Actions
 								</span>
 							</button>
-							<div class="dropdown-menu dropdown-menu-right">								
+							<div class="dropdown-menu dropdown-menu-right">
 								@if (!$user->state)
 									<button class="dropdown-item btn-success" data-toggle="modal" data-target="#modalApprove"
 										wire:click="approve({{ $user->id }})">Approve</button>
 								@endif
 								<a href="{{ url('/users/' . $user->id) }}" class="dropdown-item btn-primary">{{ __('coreuiforms.view') }}</a>
-								<a href="{{ url('/users/' . $user->id. '/edit') }}" class="dropdown-item btn-success">{{ __('coreuiforms.edit') }}</a>									
-								@if ($you->id !== $user->id)																							
+								<a href="{{ url('/users/' . $user->id. '/edit') }}" class="dropdown-item btn-success">{{ __('coreuiforms.edit') }}</a>
+								@if ($you->id !== $user->id)
 									@if ($user->hasrole('user')||$user->hasrole('sales'))
 									<a href="{{ url('/users/' . $user->id. '/impersonate') }}" class="dropdown-item btn-warning">Impersonate</a>
-									@endif					
+									@endif
 									<button class="dropdown-item btn-danger" data-toggle="modal" data-target="#modalDelete"
 										wire:click="destroy({{ $user->id }})">{{ __('coreuiforms.delete') }}</button>
 								@endif

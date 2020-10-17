@@ -50,61 +50,59 @@
                 <table class="table table-striped table-bordered col-filtered-datatable" id="admin-table">
                     <thead>
                         <tr class="cursorPointer">
-                            <th wire:click="sortBy('operatorId')"><span class="mr-4">ID</span>
-                                <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                    </path>
-                                </svg>
+                            <th wire:click="sortBy('operatorId')">
+                                <span class="mr-4">ID</span>
+                                @if($sortAsc && $sortField == 'operatorId')
+                                    <i class="cil-arrow-bottom"></i>
+                                @else
+                                    <i class="cil-arrow-top"></i>
+                                @endif
                             </th>
-                            <th wire:click="filter('country.name')"><span class="mr-4">Country</span>
-                                <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                    </path>
-                                </svg>
+                            <th wire:click="filter('country.name')">
+                                <span class="mr-4">Country</span>
+                                @if($sortAscCustom && $customSort == 'country.name')
+                                    <i class="cil-arrow-bottom"></i>
+                                @else
+                                    <i class="cil-arrow-top"></i>
+                                @endif
                             </th>
                             <th wire:click="sortBy('name')"><span class="mr-4">Name</span>
-                                <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                    </path>
-                                </svg>
+                                @if($sortAsc && $sortField == 'name')
+                                    <i class="cil-arrow-bottom"></i>
+                                @else
+                                    <i class="cil-arrow-top"></i>
+                                @endif
                             </th>
-                            <th wire:click="sortBy('denominationType')"><span class="mr-4">Type</span>
-                                <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                    </path>
-                                </svg>
+                            <th wire:click="sortBy('denominationType')">
+                                <span class="mr-4">Type</span>
+                                @if($sortAsc && $sortField == 'denominationType')
+                                    <i class="cil-arrow-bottom"></i>
+                                @else
+                                    <i class="cil-arrow-top"></i>
+                                @endif
                             </th>
-                            <th wire:click="filter('fx.currencyCode')"><span class="mr-4">FX currency</span>
-                                <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                    </path>
-                                </svg>
+                            <th wire:click="filter('fx.currencyCode')">
+                                <span class="mr-4">FX currency</span>
+                                @if($sortAscCustom && $customSort == 'fx.currencyCode')
+                                    <i class="cil-arrow-bottom"></i>
+                                @else
+                                    <i class="cil-arrow-top"></i>
+                                @endif
                             </th>
                             <th wire:click="filter('fx.rate')"><span class="mr-4">FX rate</span>
-                                <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                    </path>
-                                </svg>
+                                @if($sortAscCustom && $customSort == 'fx.rate')
+                                    <i class="cil-arrow-bottom"></i>
+                                @else
+                                    <i class="cil-arrow-top"></i>
+                                @endif
                             </th>
-                            <th wire:click="sortBy('commission')"><span class="mr-4">Commission&nbsp;(€)</span>
-                                <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                    </path>
-                                </svg>
+                            <th wire:click="sortBy('commission')">
+                                <span class="mr-4">Commission&nbsp;(€)</span>
+                                @if($sortAsc && $sortField == 'commission')
+                                    <i class="cil-arrow-bottom"></i>
+                                @else
+                                    <i class="cil-arrow-top"></i>
+                                @endif
                             </th>
                         </tr>
                     </thead>

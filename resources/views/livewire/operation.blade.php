@@ -63,12 +63,11 @@
                             <tr class="cursorPointer">
                                 <th wire:click="sortBy('created_at')">
                                     <span>Date</span>
-                                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                        </path>
-                                    </svg>
+                                    @if($sortAsc && $sortField == 'created_at')
+                                        <i class="cil-arrow-bottom"></i>
+                                    @else
+                                        <i class="cil-arrow-top"></i>
+                                    @endif
                                 </th>
                                 <th>
                                     <span>User</span>
@@ -81,49 +80,44 @@
                                 </th>
                                 <th wire:click="sortBy('id')">
                                     <span>Operation ID</span>
-                                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                        </path>
-                                    </svg>
+                                    @if($sortAsc && $sortField == 'id')
+                                        <i class="cil-arrow-bottom"></i>
+                                    @else
+                                        <i class="cil-arrow-top"></i>
+                                    @endif
                                 </th>
                                 <th wire:click="sortBy('reloadly_transactionId')">
                                     <span>Reloadly trans. ID</span>
-                                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                        </path>
-                                    </svg>
+                                    @if($sortAsc && $sortField == 'reloadly_transactionId')
+                                        <i class="cil-arrow-bottom"></i>
+                                    @else
+                                        <i class="cil-arrow-top"></i>
+                                    @endif
                                 </th>
                                 <th wire:click="sortBy('api_reloadly_calls_id')">
                                     <span>API call ID</span>
-                                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                        </path>
-                                    </svg>
+                                    @if($sortAsc && $sortField == 'api_reloadly_calls_id')
+                                        <i class="cil-arrow-bottom"></i>
+                                    @else
+                                        <i class="cil-arrow-top"></i>
+                                    @endif
                                 </th>
                                 <th wire:click="sortBy('request_country_iso')">
                                     <span>Country</span>
-                                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                        </path>
-                                    </svg>
+                                    @if($sortAsc && $sortField == 'request_country_iso')
+                                        <i class="cil-arrow-bottom"></i>
+                                    @else
+                                        <i class="cil-arrow-top"></i>
+                                    @endif
                                 </th>
                                 <th>Operator</th>
                                 <th wire:click="sortBy('request_recipient_phone')">
                                     <span>Phone number</span>
-                                    <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                        </path>
-                                    </svg>
+                                    @if($sortAsc && $sortField == 'request_country_iso')
+                                        <i class="cil-arrow-bottom"></i>
+                                    @else
+                                        <i class="cil-arrow-top"></i>
+                                    @endif
                                 </th>
                                 <th>Expected destination amount</th>
                                 <th>&Delta; Paid/Sent amount</th>

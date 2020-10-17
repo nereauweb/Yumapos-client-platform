@@ -18,45 +18,90 @@
                                 <dd class="col-sm-7">{{ $totalOperations }}</dd>
                                 <dt class="col-sm-5">Total amount
                                 <dt>
-                                <dd class="col-sm-7">{{ $operations->sum('original_amount') }} €</dd>
+                                <dd class="col-sm-7">{{ $sumOfOperations }} €</dd>
                                 <dt class="col-sm-5">Total commissions
                                 <dt>
-                                <dd class="col-sm-7">{{ $operations->sum('commission') }} €</dd>
+                                <dd class="col-sm-7">{{ $sumOfCom }} €</dd>
                             </dl>
                         </div>
-                        <div class="uk-grid-small my-4" uk-grid>
-                            <div wire:ignore class="uk-width-expand">
-                                <fieldset class="form-group">
-                                    <label>DateRangePicker</label>
-                                    <div class="input-group">
-                                        <span class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="cil-calendar"></i>
-                                            </span>
-                                        </span>
-                                        <input class="form-control" id="daterange" type="text">
-                                        <input type="hidden" name="date_begin" id="date_begin">
-                                        <input type="hidden" name="date_end" id="date_end">
-                                    </div>
-                                </fieldset>
+                        <div class="row align-items-end">
+                            <div class="col-6">
+                                @include('livewire.partials.daterange')
                             </div>
-                            <div class="uk-width-auto uk-flex uk-flex-bottom">
-                                <button wire:click="commit" class="btn btn-success"
-                                    id="commitAgentOperationBtn">Commit</button>
+                            <div class="col-4">
+                                <div>
+                                    <div class="form-group w-100">
+                                        <label for="exampleFormControlSelect1">Agent</label>
+                                        <select wire:model.defer="agentSelected" class="form-control custom-select" name="user">
+                                            <option value="0" selected>All agents</option>
+                                            @foreach ($users as $key => $agent)
+                                                @if (!is_null($agent))
+                                                    <option value="{{ $key }}">{{ $agent }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div>
+                                    <div class="form-group">
+                                        <div>
+                                            <button wire:click="commit" class="btn btn-success" id="commitData">Commit</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div style="overflow:auto;">
-                            <table class="table table-striped table-bordered col-filtered-datatable" id="admin-table">
+                            <table class="table table-bordered" id="admin-table">
                                 <thead>
                                     <tr>
-                                        <th>Date</th>
-                                        <th>Operation ID</th>
-                                        <th>Original operation ID</th>
+                                        <th wire:click="sortBy('created_at')">
+                                            <span>Date</span>
+                                            @if($sortAsc && $sortField == 'created_at')
+                                                <i class="cil-arrow-bottom"></i>
+                                            @else
+                                                <i class="cil-arrow-top"></i>
+                                            @endif
+                                        </th>
+                                        <th wire:click="sortBy('id')">
+                                            <span>Operation ID</span>
+                                            @if($sortAsc && $sortField == 'id')
+                                                <i class="cil-arrow-bottom"></i>
+                                            @else
+                                                <i class="cil-arrow-top"></i>
+                                            @endif
+                                        </th>
+                                        <th wire:click="sortBy('service_operation_id')">
+                                            <span>Original operation ID</span>
+                                            @if($sortAsc && $sortField == 'service_operation_id')
+                                                <i class="cil-arrow-bottom"></i>
+                                            @else
+                                                <i class="cil-arrow-top"></i>
+                                            @endif
+                                        </th>
                                         <th>Agent</th>
                                         <th>Point</th>
-                                        <th>Original amount</th>
-                                        <th>Applied percentage</th>
-                                        <th>Agent commission</th>
+                                        <th wire:click="sortBy('original_amount')">
+                                            <span>Original amount</span>
+                                            @if($sortAsc && $sortField == 'original_amount')
+                                                <i class="cil-arrow-bottom"></i>
+                                            @else
+                                                <i class="cil-arrow-top"></i>
+                                            @endif
+                                        </th>
+                                        <th>
+                                            <span>Applied percentage</span>
+                                        </th>
+                                        <th  wire:click="sortBy('commission')">
+                                            <span>Agent commission</span>
+                                            @if($sortAsc && $sortField == 'commission')
+                                                <i class="cil-arrow-bottom"></i>
+                                            @else
+                                                <i class="cil-arrow-top"></i>
+                                            @endif
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -66,7 +111,7 @@
                                                 <td>{{ $operation->created_at }}</td>
                                                 <td>{{ $operation->id }}</td>
                                                 <td>{{ $operation->service_operation_id }}</td>
-                                                <td>{{ $operation->user->name ?? '' }}</td>
+                                                <td>{{ $operation->user->name }}</td>
                                                 <td>{{ $operation->pointOperation->user->name ?? '' }}</td>
                                                 <td>{{ round($operation->original_amount, 2) }}&nbsp;&euro;</td>
                                                 <td>{{ round($operation->applied_percentage, 2) }}&nbsp;%</td>
@@ -83,10 +128,4 @@
             </div>
         </div>
     </div>
-    <script>
-        $('#commitAgentOperationBtn').on('click', function(e) {
-            @this.set('date_begin', $("#date_begin").val());
-            @this.set('date_end', $("#date_end").val());
-        });
 
-    </script>

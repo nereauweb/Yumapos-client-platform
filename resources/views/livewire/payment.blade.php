@@ -18,15 +18,15 @@
         <div class="card-body">
 
             <h1>Payments</h1>
-            <div class="row my-4">
-                <div class="col-md-4">
-                    <ul class="list-group">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Amount
-                            <span class="badge badge-primary badge-pill">{{ $amount }}</span>
-                        </li>
-                    </ul>
-                </div>
+            <div class="uk-padding-small">
+                <dl class="row">
+                    <dt class="col-sm-5">Amount</dt>
+                    <dd class="col-sm-7">{{ $amount }}&euro;</dd>
+                </dl>
+                <dl class="row">
+                    <dt class="col-sm-5">Unapproved payments</dt>
+                    <dd class="col-sm-7">{{ $unapprovedPayments }}</dd>
+                </dl>
             </div>
             <div class="row align-items-end">
                 <div class="col-6">
@@ -64,51 +64,41 @@
                             <th class="no-search"></th>
                             <th wire:click="sortBy('date')">
                                 <span>Date</span>
-                                <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                    </path>
-                                </svg>
+                                @if($sortAsc && $sortField == 'date')
+                                    <i class="cil-arrow-bottom"></i>
+                                @else
+                                    <i class="cil-arrow-top"></i>
+                                @endif
                             </th>
                             <th wire:click="filterBy('users.name')">
                                 <span>User</span>
-                                <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                    </path>
-                                </svg>
+                                @if($sortAsc && $filterByModel == 'users.name')
+                                    <i class="cil-arrow-bottom"></i>
+                                @else
+                                    <i class="cil-arrow-top"></i>
+                                @endif
                             </th>
                             <th wire:click="sortBy('amount')">
                                 <span>Amount</span>
-                                <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                    </path>
-                                </svg>
+                                @if($sortAsc && $sortField == 'amount')
+                                    <i class="cil-arrow-bottom"></i>
+                                @else
+                                    <i class="cil-arrow-top"></i>
+                                @endif
                             </th>
-                            <th wire:click="sortBy('details')">
+                            <th>
                                 <span>Details</span>
-                                <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                    </path>
-                                </svg>
                             </th>
                             <th>
                                 <span>Document/s</span>
                             </th>
                             <th wire:click="sortBy('approved')">
                                 <span>Approved</span>
-                                <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                    </path>
-                                </svg>
+                                @if($sortAsc && $sortField == 'approved')
+                                    <i class="cil-arrow-bottom"></i>
+                                @else
+                                    <i class="cil-arrow-top"></i>
+                                @endif
                             </th>
                         </tr>
                     </thead>

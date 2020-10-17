@@ -27,28 +27,23 @@ class User extends Component
 
     public $sortRelations;
 
+    public $totalBalance;
+
+    public $unapprovedUsers;
+
     public function render()
     {
-        $you = auth()->user();
-        $users = AppUser::when($this->sortField, function ($query) {
-            $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
-        });
 
-        if ($this->sortRelations) {
-            switch ($this->sortRelations) {
-                case 'company_data.company_name':
-                    $users = AppUser::join('users_company_data as cd', 'cd.user_id', 'users.id')->orderBy('cd.company_name', $this->sortAsc ? 'asc' : 'desc')->select('users.*');
-                    break;
-                case 'company_data.legal_seat_city':
-                    $users = AppUser::join('users_company_data as cd', 'cd.user_id', 'users.id')->orderBy('cd.legal_seat_city', $this->sortAsc ? 'asc' : 'desc')->select('users.*');
-                    break;
-                default:
-                    $users = AppUser::when($this->sortField, function ($query) {
-                        $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
-                    });
-                    break;
-            }
-        }
+        $this->unapprovedUsers = AppUser::where('state', 0)->count();
+
+        $you = auth()->user();
+        $users = AppUser::join('users_company_data as ucd', 'ucd.user_id', 'users.id')->when($this->sortField, function ($query) {
+            $query->orderBy('users.'.$this->sortField, $this->sortAsc ? 'asc' : 'desc');
+        })->when($this->sortRelations, function ($query) {
+            $query->orderBy($this->sortRelations, $this->sortAsc ? 'asc' : 'desc');
+        })->select('users.*');
+
+        $this->totalBalance = $users->sum('plafond');
 
         $users = $users->paginate(10);
 
@@ -84,32 +79,32 @@ class User extends Component
         $user = AppUser::findOrFail($this->user_id);
         if ($user) {
             $this->validate([
-                'parent_percent' => 'required', 
+                'parent_percent' => 'required',
                 'groupId' => 'required'
             ]);
 
             try {
-                $notHashedPassword = Str::random(10); 
-                
+                $notHashedPassword = Str::random(10);
+
                 $user->update([
                     'state' => 1,
                     'group_id' => $this->groupId,
                     'parent_percent' => $this->parent_percent,
                     'password' => bcrypt($notHashedPassword),
                 ]);
-                
-                
+
+
                 Mail::to($user->email)->send(new ConfirmationMail($user, $notHashedPassword));
-    
+
                 session()->flash('success', 'User approved successfully!');
                 $this->resetInputFields();
                 $this->emit('userClose');
 
-    
+
             } catch (\Throwable $th) {
                 throw $th;
             }
-            
+
         } else {
             session()->flash('error','User not found in database!');
             $this->resetInputFields();

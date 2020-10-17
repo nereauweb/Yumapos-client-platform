@@ -67,66 +67,54 @@
                                     <tr>
                                         <th wire:click="sortBy('id')">
                                             <span>ID</span>
-                                            <svg width="20" height="20" class="w-6 h-6" fill="currentColor"
-                                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                                </path>
-                                            </svg>
+                                            @if($sortAsc && $sortField == 'id')
+                                                <i class="cil-arrow-bottom"></i>
+                                            @else
+                                                <i class="cil-arrow-top"></i>
+                                            @endif
                                         </th>
                                         <th wire:click="sortBy('created_at')">
                                             <span>Date</span>
-                                            <svg width="20" height="20" class="w-6 h-6" fill="currentColor"
-                                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                                </path>
-                                            </svg>
+                                            @if($sortAsc && $sortField == 'created_at')
+                                                <i class="cil-arrow-bottom"></i>
+                                            @else
+                                                <i class="cil-arrow-top"></i>
+                                            @endif
                                         </th>
                                         <th wire:click="sortBy('user_id')">
                                             <span>User</span>
-                                            <svg width="20" height="20" class="w-6 h-6" fill="currentColor"
-                                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                                </path>
-                                            </svg>
+                                            @if($sortAsc && $sortField == 'user_id')
+                                                <i class="cil-arrow-bottom"></i>
+                                            @else
+                                                <i class="cil-arrow-top"></i>
+                                            @endif
                                         </th>
                                         <th wire:click="sortBy('type')">
                                             <span>Type</span>
-                                            <svg width="20" height="20" class="w-6 h-6" fill="currentColor"
-                                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                                </path>
-                                            </svg>
+                                            @if($sortAsc && $sortField == 'type')
+                                                <i class="cil-arrow-bottom"></i>
+                                            @else
+                                                <i class="cil-arrow-top"></i>
+                                            @endif
                                         </th>
                                         <th wire:click="sortBy('path')">
                                             <span>Path</span>
-                                            <svg width="20" height="20" class="w-6 h-6" fill="currentColor"
-                                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                                </path>
-                                            </svg>
+                                            @if($sortAsc && $sortField == 'path')
+                                                <i class="cil-arrow-bottom"></i>
+                                            @else
+                                                <i class="cil-arrow-top"></i>
+                                            @endif
                                         </th>
                                         <th wire:click="sortBy('parameters')">
                                             <span>Parameters</span>
-                                            <svg width="20" height="20" class="w-6 h-6" fill="currentColor"
-                                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                                </path>
-                                            </svg>
+                                            @if($sortAsc && $sortField == 'parameters')
+                                                <i class="cil-arrow-bottom"></i>
+                                            @else
+                                                <i class="cil-arrow-top"></i>
+                                            @endif
                                         </th>
-                                        <th wire:click="sortBy('log')">
+                                        <th>
                                             <span>Log</span>
-                                            <svg width="20" height="20" class="w-6 h-6" fill="currentColor"
-                                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z">
-                                                </path>
-                                            </svg>
                                         </th>
                                         <th>Answer</th>
                                     </tr>
