@@ -181,13 +181,11 @@ class PaymentsController extends Controller
         if ($payment) {
             if (count($payment->documents) > 0) {
                 foreach ($payment->documents as $doc) {
-                    if (\Storage::exists($doc->filename)) {
-                        \Storage::move($doc->filename, 'archived/'.$doc->filename);
-                    }
                     $doc->delete();
                 }
             }
             $payment->delete();
+
             return back()->with(['status' => 'success', 'message' => 'file successfully deleted!']);
         } else {
             return back();

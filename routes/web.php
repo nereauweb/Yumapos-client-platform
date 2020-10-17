@@ -208,6 +208,9 @@ Route::group(['middleware' => ['get.menu']], function () {
 
         Route::prefix('/admin/files')->group(function () {
             Route::get('/', 'PaymentFileController@index');
+            Route::get('/paymentfile/{payment}', 'PaymentFileController@create')->name('admin.paymentfile.create');
+            Route::post('/paymentfile/{payment}', 'PaymentFileController@store')->name('admin.paymentfile.store');
+            Route::delete('/paymentfile/{paymentfile}', 'PaymentFileController@destroy')->name('admin.paymentfile.destroy');
         });
 
 		Route::prefix('/admin/users/groups')->group(function () {

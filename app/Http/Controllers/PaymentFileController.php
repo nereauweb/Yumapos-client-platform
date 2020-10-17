@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Payment;
 use App\Models\PaymentFile;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class PaymentFileController extends Controller
 {
@@ -20,11 +22,12 @@ class PaymentFileController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function create()
+    public function create($id)
     {
-        //
+        $payment = Payment::findOrFail($id);
+        return view('admin.paymentfiles.create', compact('payment'));
     }
 
     /**
@@ -33,9 +36,22 @@ class PaymentFileController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($payment, Request $request)
     {
-        //
+        $payment = Payment::findOrFail($payment);
+        $file = $request->file('document');
+        if (isset($file)) {
+            $filename = 'admin-added-' . time() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('payments', $filename);
+            $bool = $payment->documents()->create([
+                'label' => $payment->user->name.'-document-'.time(),
+                'filename' => $path
+            ]);
+
+            if ($bool) {
+                return back()->with(['status' => 'success', 'message' => 'File uploaded successfully!']);
+            }
+        }
     }
 
     /**
@@ -72,14 +88,16 @@ class PaymentFileController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\PaymentFile  $paymentFile
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(PaymentFile $paymentFile)
+
+    public function destroy($paymentFile)
     {
-        //
+        $paymentFile = PaymentFile::findOrFail($paymentFile);
+        try {
+            $paymentFile->delete();
+            return back()->with(['status' => 'success','message' => 'file succesfully deleted!']);
+        } catch (\Exception $e)
+        {
+            return $e->getMessage();
+        }
     }
 }
