@@ -11,30 +11,31 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Payment extends Model
 {
     use SoftDeletes;
-	
+
 	/**
      * The database table used by the model.
      *
      * @var string
      */
     protected $table = 'payments';
-	
+
 	protected $fillable = [
 		'date',
 		'user_id',
 		'amount',
 		'details',
 		'approved',
-		'type'
+		'type',
+        'update_balance'
 		];
-	
+
 	public function user() {
 		return $this->hasOne('App\User','id','user_id');
 	}
-	
+
 	public function documents() : HasMany
 	{
 		return $this->hasMany(PaymentFile::class, 'payment_id', 'id');
 	}
-	
+
 }

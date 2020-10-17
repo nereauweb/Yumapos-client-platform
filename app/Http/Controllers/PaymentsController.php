@@ -213,115 +213,100 @@ class PaymentsController extends Controller
 
     private function storePayment(array $data, bool $boolean)
     {
+        $validator = $this->validateData($data);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+        $date = \DateTime::createFromFormat("d/m/Y",$data['date']);
+
+        if (!$date) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $dataToCreate = [
+            'date'		=> $date->format("Y-m-d H:i:s"),
+            'amount'	=> $data['amount'],
+            'user_id'	=> $data['user_id'],
+            'details'	=> $data['details'],
+            'approved'	=> 1,
+            'type'      => $data['type']
+        ];
+
         if ($boolean) {
-            $validator = Validator::make($data,
-                [
-                    'date'		=> 'required',
-                    'amount'	=> 'required',
-                    'user_id'	=> 'required',
-                    'document'  => 'mimes:jpg,doc,docx,png,pdf'
-                ],
-                [
-                    'date.required'		=> 'Date required',
-                    'amount.required'	=> 'Amount required',
-                    'user_id.required'	=> 'User required',
-                ]
-            );
-
-            if ($validator->fails()) {
-                return back()->withErrors($validator)->withInput();
+            try {
+                $dataToCreate['update_balance'] = 1;
+                $payment = Payment::create($dataToCreate);
+                if ($payment) {
+                    $user = $payment->user;
+                    $user->plafond = $user->plafond + $payment->amount;
+                    $user->save();
+                    $this->fileAdd($payment, $data);
+                }
+            } catch (\Exception $e) {
+                return $e->getMessage();
             }
-
-            $date = \DateTime::createFromFormat("d/m/Y",$data['date']);
-
-            if (!$date) {
-                return back()->withErrors($validator)->withInput();
-            }
-
-            $payment = Payment::create([
-                'date'		=> $date->format("Y-m-d H:i:s"),
-                'amount'	=> $data['amount'],
-                'user_id'	=> $data['user_id'],
-                'details'	=> $data['details'],
-                'approved'	=> 1,
-                'type'      => $data['type'],
-            ]);
-
-            $file = $data['document'];
-            $filename = 'admin-created-' . time() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('payments', $filename);
-            $payment->documents()->create([
-                'label' => $payment->user->name.'-document',
-                'filename' => $path
-            ]);
-
-            $user = $payment->user;
-
-            $user->plafond = $user->plafond + $data['amount'];
-            $user->save();
-
-            return $payment;
         } else {
-            $validator = Validator::make($data,
-                [
-                    'date'		=> 'required',
-                    'amount'	=> 'required',
-                    'user_id'	=> 'required',
-                    'document'  => 'mimes:jpg,doc,docx,png,pdf'
-                ],
-                [
-                    'date.required'		=> 'Date required',
-                    'amount.required'	=> 'Amount required',
-                    'user_id.required'	=> 'User required',
-                ]
-            );
-
-            if ($validator->fails()) {
-                return back()->withErrors($validator)->withInput();
+            try {
+                $dataToCreate['update_balance'] = 2;
+                $payment = Payment::create($dataToCreate);
+                $this->fileAdd($payment, $data);
+            } catch (\Exception $e) {
+                return $e->getMessage();
             }
+        }
+        return $payment;
+        }
 
-            $date = \DateTime::createFromFormat("d/m/Y",$data['date']);
 
-            if (!$date) {
-                return back()->withErrors($validator)->withInput();
-            }
-
-            $payment = Payment::create([
-                'date'		=> $date->format("Y-m-d H:i:s"),
-                'amount'	=> $data['amount'],
-                'user_id'	=> $data['user_id'],
-                'details'	=> $data['details'],
-                'approved'	=> 1,
-                'type'      => $data['type'],
+    private function validateData(array $data) {
+        return Validator::make($data,
+            [
+                'date'		=> 'required',
+                'amount'	=> 'required',
+                'user_id'	=> 'required',
+                'document'  => 'mimes:jpg,doc,docx,png,pdf'
+            ],
+            [
+                'date.required'		=> 'Date required',
+                'amount.required'	=> 'Amount required',
+                'user_id.required'	=> 'User required',
             ]);
+    }
 
-            $file = $data['document'];
+    private function fileAdd(Payment $payment, array $data) {
+        $file = $data['document'];
+        if (is_file($file)) {
             $filename = 'admin-created-' . time() . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('payments', $filename);
             $payment->documents()->create([
                 'label' => $payment->user->name.'-document',
                 'filename' => $path
             ]);
-            return $payment;
         }
     }
+
 
     public function cancel($payment)
     {
         $payment = Payment::findOrFail($payment);
         $amountToBeRemoved = $payment->amount;
         try {
-            $payment->user()->update([
-                'plafond' => (float)$payment->user->plafond - (float)$amountToBeRemoved
-            ]);
-            $payment = $payment->update([
-                'approved' => '-1'
-            ]);
-            if ($payment) {
-                return back()->with(['status' => 'success', 'message' => 'payment canceled successfully, user balance updated!']);
+            if ($payment->update_balance == 2) {
+                $payment->update([
+                    'approved' => '-1'
+                ]);
             } else {
-                return back()->with(['status' => 'error', 'message' => 'could not update payment, updating failed!']);
+                $payment->update([
+                    'approved' => '-1'
+                ]);
+                $payment->user()->update([
+                    'plafond' => (float)$payment->user->plafond - (float)$amountToBeRemoved
+                ]);
             }
+
+            return back()->with(['status' => 'success', 'message' => 'payment canceled successfully, user balance updated!']);
+
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
