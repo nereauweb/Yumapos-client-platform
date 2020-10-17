@@ -96,7 +96,7 @@ class UsersController extends Controller
         $user = User::find($id);
         $user->name       = $request->input('name');
         $user->email      = $request->input('email');
-		
+
 		$user->parent_id = $request->input('parent') ? $request->input('parent') : 0;
 		if ($request->input('parent_percent')){
 			$user->parent_percent 	= $request->input('parent_percent');
@@ -107,9 +107,9 @@ class UsersController extends Controller
 		if ($request->input('debt_limit')){
 			$user->debt_limit 	= $request->input('debt_limit');
 		}
-		
-        $user->save();		
-		
+
+        $user->save();
+
 		if ($user->company_data) {
 			$user->company_data->update([
 				'company_name'			=> $request->input('company_name'),
@@ -164,7 +164,7 @@ class UsersController extends Controller
 				'shop_sign'				=> $request->input('shop_sign'),
 			]);
 		}
-		
+
         $request->session()->flash('message', 'Successfully updated user');
 		return redirect('users');
     }
@@ -183,7 +183,7 @@ class UsersController extends Controller
         }
         return redirect()->route('users.index');
     }
-	
+
 	public function recover($id)
     {
         $user = User::withTrashed()->find($id);
@@ -192,14 +192,15 @@ class UsersController extends Controller
         }
         return redirect()->route('users.index');
     }
-	
+
 	public function create(){
 		$users = User::all();
 		$roles = Role::all();
 		$groups = UsersGroup::all();
-		return view('admin.users.create', compact('users','roles','groups'));
+		$sales = User::role('sales')->get();
+		return view('admin.users.create', compact('users','roles','groups', 'sales'));
 	}
-	
+
 	public function store(Request $request)
     {
         $validator = Validator::make($request->all(),
@@ -237,23 +238,23 @@ class UsersController extends Controller
         ]);
 
         $user->assignRole($request->input('role'));
-		
+
 		if($request->input('group')!=0){
 			$user->group_id = $request->input('group');
 		}
-		
+
 		$user->company_data()->create([
             'referent_name'	   => $request->input('first_name'),
-            'referent_surname' => $request->input('last_name'),		
+            'referent_surname' => $request->input('last_name'),
 		]);
         $user->save();
-		
-		if ($user->hasRole('user')) { 
+
+		if ($user->hasRole('user')) {
 			return redirect('users/'.$user->id.'/edit')->with('success', trans('usersmanagement.createSuccess'));
 		}
     }
 
-    public function approve(Request $request, $id) 
+    public function approve(Request $request, $id)
     {
 
         $user = User::FindOrFail($id);
@@ -261,11 +262,11 @@ class UsersController extends Controller
         $request->validate([
             'parent_percent' => 'required',
             'group' => 'required'
-        ]);        
+        ]);
 
         try {
-            
-            $notHashedPassword = Str::random(); 
+
+            $notHashedPassword = Str::random();
 
             $user->update([
                 'state' => 1,
@@ -273,7 +274,7 @@ class UsersController extends Controller
                 'parent_percent' => $request->parent_percent,
                 'password' => bcrypt($notHashedPassword),
             ]);
-            
+
 
             Mail::to($user->email)->send(new ConfirmationMail($user, $notHashedPassword));
 

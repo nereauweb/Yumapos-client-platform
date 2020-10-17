@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-lg-10 offset-lg-1">
                 <div class="card">
@@ -60,15 +60,15 @@
                                     @endif
                                 </div>
                             </div>
-							
+
 							<div class="form-group has-feedback row {{ $errors->has('parent') ? ' has-error ' : '' }}">
                                 {!! Form::label('parent', 'Referente', array('class' => 'col-md-3 control-label')); !!}
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <select class="custom-select form-control" name="parent" id="parent">
                                             <option value="0">Nessuno</option>
-                                            @if ($users)
-                                                @foreach($users as $user)
+                                            @if ($sales)
+                                                @foreach($sales as $user)
                                                     <option value="{{ $user->id }}">{{ $user->name }}</option>
                                                 @endforeach
                                             @endif

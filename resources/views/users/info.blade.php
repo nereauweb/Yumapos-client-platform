@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -12,7 +12,7 @@
 						</div>
                     </div>
 					<div class="uk-padding">
-						<dl class="row">						
+						<dl class="row">
 							<dt class="col-sm-5">Support<dt>
 							<dd class="col-sm-7">
 								<ul class="uk-list">
@@ -20,7 +20,7 @@
 									<li><i class="c-icon cil-phone"></i> +39 342 564 7783 </li>
 									<li><i class="c-icon cil-at"></i> info@yumapos.it </li>
 								</ul>
-							</dd>						
+							</dd>
 							<dt class="col-sm-5">Bank details</dt>
 							<dd class="col-sm-7">IT 70 U 07601 15800 001050287018 <br>AL.MO.MA. DI MANUELA MANCARELLA & C S.A.S</dd>
 						</dl>

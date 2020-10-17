@@ -171,6 +171,8 @@ class PaymentsController extends Controller
                 'approved' => 1
             ]);
         }
+
+        return back()->with(['status' => 'success', 'message' => 'payment approved successfully']);
     }
 
     public function destroy($id, Request $request)

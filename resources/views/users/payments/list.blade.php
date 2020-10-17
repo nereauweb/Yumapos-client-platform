@@ -31,7 +31,7 @@
                 <h1>Payments</h1>
 
                 <div class="table-responsive users-table ">
-                    <table class="table table-striped table-sm col-filtered-datatable">
+                    <table class="table table-bordered col-filtered-datatable">
                         <thead class="thead">
                         <tr>
                             <th>Date</th>

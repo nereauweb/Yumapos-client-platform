@@ -5,7 +5,7 @@
 
 @section('content')
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
                 @if (session()->has('status'))
@@ -146,7 +146,7 @@
                                     </div>
                                     @enderror
                                 </div>
-                            </div>  
+                            </div>
                             <div>
                             <div class="d-flex align-items-end flex-column">
                                 <button type="submit" class="btn btn-success">Update</button>

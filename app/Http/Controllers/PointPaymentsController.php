@@ -81,7 +81,7 @@ class PointPaymentsController extends Controller
             ]);
         }
 
-        return redirect()->route('users.payments.index')->with('success', 'Payment registered');
+        return redirect()->route('users.payments.index')->with(['status' => 'success', 'message' => 'Payment registered']);
     }
 
     public function show($id)
