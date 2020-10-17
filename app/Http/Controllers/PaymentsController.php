@@ -296,7 +296,7 @@ class PaymentsController extends Controller
             $file = $data['document'];
             $filename = 'admin-created-' . time() . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('payments', $filename);
-            $payment->document()->create([
+            $payment->documents()->create([
                 'label' => $payment->user->name.'-document',
                 'filename' => $path
             ]);
