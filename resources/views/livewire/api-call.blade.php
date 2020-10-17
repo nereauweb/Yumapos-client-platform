@@ -32,24 +32,33 @@
                                 </dd>
                             </dl>
                         </div>
-                        <div class="uk-grid-small my-4" uk-grid>
-                            <div wire:ignore class="uk-width-expand">
-                                <fieldset class="form-group">
-                                    <label>DateRangePicker</label>
-                                    <div class="input-group">
-                                        <span class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="cil-calendar"></i>
-                                            </span>
-                                        </span>
-                                        <input class="form-control" id="daterange" type="text">
-                                        <input type="hidden" name="date_begin" id="date_begin">
-                                        <input type="hidden" name="date_end" id="date_end">
-                                    </div>
-                                </fieldset>
+                        <div class="row align-items-end">
+                            <div class="col-6">
+                                @include('livewire.partials.daterange')
                             </div>
-                            <div class="uk-width-auto uk-flex uk-flex-bottom">
-                                <button class="btn btn-success" id="btnCommit" wire:click="commit">Commit</button>
+                            <div class="col-4">
+                                <div>
+                                    <div class="form-group w-100">
+                                        <label for="exampleFormControlSelect1">User</label>
+                                        <select wire:model.defer="userSelected" class="form-control custom-select" name="user">
+                                            <option value="0" selected>All users</option>
+                                            @foreach ($users as $user)
+                                                @if (!is_null($user))
+                                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div>
+                                    <div class="form-group">
+                                        <div>
+                                            <button wire:click="commit" class="btn btn-success" id="commitData">Commit</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div style="overflow:auto;">

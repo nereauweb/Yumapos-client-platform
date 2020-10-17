@@ -9,11 +9,6 @@
     <div id="formData">
         <div class="container-fluid">
             <div class="animated fadeIn">
-              @if (session()->has('status'))
-                <div class="alert @if(session()->get('status') == 'success') alert-success @else alert-danger @endif" role="alert">
-                  {{ session()->get('message') }}
-                </div>
-              @endif
                 <div class="row">
                     <div class="col-12">
                         <div class="card">

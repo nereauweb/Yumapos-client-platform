@@ -17,9 +17,10 @@ class Operation extends Component
     public $sortField;
     public $sortAsc = true;
 
-    public $date_begin;
-    public $date_end;
+    public $to;
+    public $from;
     public $userSelected;
+
 
     public $totalOperationsCount;
 
@@ -34,8 +35,8 @@ class Operation extends Component
             $user_id = $user->id;
         }
 
-        $date_begin = $this->date_begin ? $this->date_begin . ' 00:00:00' : date("Y-m-d") . ' 00:00:00';
-        $date_end = $this->date_end ? $this->date_end . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
+        $date_begin = ($this->from && !is_null($this->from)) ? $this->from . ' 00:00:00' : date("Y") . '-01-01 00:00:00';
+        $date_end = ($this->to && !is_null($this->to)) ? $this->to . ' 23:59:59' : date("Y") . '-12-31 23:59:59';
         $operations = ServiceOperation::where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end)->when($this->sortField, function ($query) {
             $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
         });

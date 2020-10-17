@@ -15,13 +15,13 @@ use Illuminate\Support\Facades\Validator;
 
 class PaymentsController extends Controller
 {
-	
+
     public function index()
     {
 		$payments = Payment::paginate(10);
         return view('admin/payments/list', compact('payments') );
     }
-	
+
 	public function export(Request $request)
     {
 		$payments = Payment::select("payments.id","payments.date","payments.user_id","users.name","payments.amount","payments.details","payments.created_at","payments.updated_at")
@@ -29,13 +29,13 @@ class PaymentsController extends Controller
 			->get();
         return Excel::download(new PaymentsExport($payments), 'payments.xlsx');
     }
-	
+
     public function create()
     {
         $users = User::pluck('name','id');
         return view('admin/payments/create', compact('users') );
     }
-	
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),
@@ -55,13 +55,13 @@ class PaymentsController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-		
+
 		$date = \DateTime::createFromFormat("d/m/Y",$request->input('date'));
-		
+
 		if (!$date) {
             return back()->withErrors($validator)->withInput();
         }
-		
+
         $payment = Payment::create([
             'date'		=> $date->format("Y-m-d H:i:s"),
             'amount'	=> $request->input('amount'),
@@ -80,28 +80,28 @@ class PaymentsController extends Controller
         ]);
 
 		$user = $payment->user;
-		
+
 		$user->plafond = $user->plafond + $request->input('amount');
 		$user->save();
 
-        return redirect()->route('admin.payments.index')->with('success', 'Payment added, user balance updated');
+        return redirect()->route('admin.payments.index')->with(['status' => 'success', 'message' => 'Payment added, user balance updated']);
     }
-    
+
     public function show($id)
 	{
-		
+
     }
-	
+
     public function edit($id)
     {
         $payment = Payment::findOrFail($id);
         return view('admin.payments.edit', compact('payment'));
     }
-	
+
     public function update(Request $request,$id) // approve
     {
 		$payment = Payment::findOrFail($id);
-        
+
         $validator = Validator::make($request->all(),
             [
                 'date'		=> 'required',
@@ -118,13 +118,13 @@ class PaymentsController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-		
+
 		$date = \DateTime::createFromFormat("d/m/Y",$request->input('date'));
-		
+
 		if (!$date) {
             return back()->withErrors($validator)->withInput();
         }
-		
+
         try {
             $payment->update([
                 'date'		=> $date->format("Y-m-d H:i:s"),
@@ -133,7 +133,7 @@ class PaymentsController extends Controller
                 'approved'	=> 1,
                 'type'      => 2
             ]);
-    
+
             $file = $request->file('document');
             if (isset($file)) {
                 if (isset($payment->documents)) {
@@ -152,7 +152,7 @@ class PaymentsController extends Controller
                     ]);
                 }
             }
-            
+
             $payment->user()->update([
                 'plafond' => $payment->user->plafond + $request->amount
             ]);
@@ -160,7 +160,7 @@ class PaymentsController extends Controller
             $e->getMessage();
         }
 
-        return redirect()->route('admin.payments.index')->with('success', 'Payment updated, user balance updated');
+        return redirect()->route('admin.payments.index')->with(['status' => 'success', 'message' => 'Payment updated, user balance updated']);
     }
 
     public function updatePaymentStatus(Request $request, $id)
@@ -172,17 +172,23 @@ class PaymentsController extends Controller
             ]);
         }
     }
-	
+
     public function destroy($id, Request $request)
     {
         $payment = Payment::findOrFail($id);
-
         if ($payment) {
-            \Storage::move($payment->document->filename, 'archived');
-            $payment->document()->delete();
+            if (count($payment->documents) > 0) {
+                foreach ($payment->documents as $doc) {
+                    if (\Storage::exists($doc->filename)) {
+                        \Storage::move($doc->filename, 'archived/'.$doc->filename);
+                    }
+                    $doc->delete();
+                }
+            }
             $payment->delete();
-
-            return back()->with('success', 'file successfully deleted!');
+            return back()->with(['status' => 'success', 'message' => 'file successfully deleted!']);
+        } else {
+            return back();
         }
     }
 }

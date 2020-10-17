@@ -16,7 +16,7 @@
     <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
     <meta name="author" content="Łukasz Holeczek">
     <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
-    <title>Yumapos</title>	
+    <title>Yumapos</title>
     <link rel="apple-touch-icon" sizes="57x57" href="assets/favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/apple-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/apple-icon-72x72.png">
@@ -85,8 +85,14 @@
       <div class="c-body">
 
         <main class="c-main">
-  
-          @yield('content') 
+            @if (session()->has('status'))
+                <div class="container-fluid">
+                    <div class="alert @if(session()->get('status') == 'success') alert-success @else alert-danger @endif" role="alert">
+                        {{ session()->get('message') }}
+                    </div>
+                </div>
+            @endif
+          @yield('content')
 
         </main>
       </div>
@@ -96,7 +102,7 @@
 
 
     <!-- CoreUI and necessary plugins-->
-    <script src="{{ asset('js/pace.min.js') }}"></script> 
+    <script src="{{ asset('js/pace.min.js') }}"></script>
     <script src="{{ asset('js/coreui.bundle.min.js') }}"></script>
     <script src="{{ asset('js/coreui-utils.js') }}"></script>
     <script>

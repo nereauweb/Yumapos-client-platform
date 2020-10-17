@@ -29,24 +29,11 @@
                             {{ $operations->sum('platform_total_gain') - $operations->sum('user_discount') }} €</dd>
                     </dl>
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;"
-                    class="uk-grid-small my-4" uk-grid>
-                    <div wire:ignore class="uk-width-expand">
-                        <fieldset class="form-group">
-                            <label>Date range</label>
-                            <div class="input-group">
-                                <span class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="cil-calendar"></i>
-                                    </span>
-                                </span>
-                                <input class="form-control" id="daterange" type="text">
-                                <input type="hidden" name="date_begin" id="date_begin">
-                                <input type="hidden" name="date_end" id="date_end">
-                            </div>
-                        </fieldset>
+                <div class="row align-items-center">
+                    <div class="col-sm">
+                        @include('livewire.partials.daterange')
                     </div>
-                    <div class="uk-width-auto">
+                    <div class="col-sm">
                         <fieldset class="form-group">
                             <label>User</label>
                             <div class="input-group">
@@ -66,8 +53,8 @@
                             </div>
                         </fieldset>
                     </div>
-                    <div class="uk-width-auto">
-                        <button class="btn btn-success" id="triggerCommit" wire:click="commit">Commit</button>
+                    <div class="col-sm mt-2">
+                        <button class="btn btn-success" id="commitData" wire:click="commit">Commit</button>
                     </div>
                 </div>
                 <div style="overflow:auto;">
@@ -192,15 +179,6 @@
                 </div>
             </div>
         </div>
+        {{ $operations->links() }}
     </div>
-
-    {{ $operations->links() }}
 </div>
-
-<script>
-    $('#triggerCommit').on('click', () => {
-        @this.set('date_begin', $("#date_begin").val());
-        @this.set('date_end', $("#date_end").val());
-    });
-
-</script>

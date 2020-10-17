@@ -24,17 +24,17 @@ Route::group(['middleware' => ['get.menu']], function () {
 			return redirect('/backend');
 		} else {
 			return redirect('login');;
-		}			
+		}
 	})->name('index');
-	
-	
-	Route::get('/users/{id}/impersonate', function($id) {		
+
+
+	Route::get('/users/{id}/impersonate', function($id) {
 		if (Auth::User() && Auth::user()->hasrole('admin')){
             \Auth::user()->impersonate($id);
 		}
 		return redirect('/backend');
 	})->name('admin.users.impersonate');
-	
+
 	Route::get('/page', function () {       return view('frontend.page'); });
     //Route::get('/backend', function () {    return view('dashboard.homepage'); });
 	Route::get('/backend', function () {
@@ -43,7 +43,7 @@ Route::group(['middleware' => ['get.menu']], function () {
             $usersWaitingApprovalNum = User::where('state', 0)->count();
             $usersWithRoleUser = User::role('user')->count();
             $usersWithRoleSales = User::role('sales')->count();
-            
+
             $data = [
                 'users' => $usersWithRoleUser,
                 'sales' => $usersWithRoleSales,
@@ -56,7 +56,7 @@ Route::group(['middleware' => ['get.menu']], function () {
             $paymentsPending = Payment::where('approved', 0)->count();
 
             $totalAmounts = Payment::where('approved', 1)->sum('amount');
-            
+
             $paymentsData = [
                 'payments' => $paymentTotals,
                 'pending' => $paymentsPending,
@@ -64,13 +64,13 @@ Route::group(['middleware' => ['get.menu']], function () {
             ];
 
             $users = User::orderBy('state', 'asc')->paginate(10, ['*'], 'users');
-            return view('welcome', compact('users', 'data', 'payments', 'paymentsData')); 
+            return view('welcome', compact('users', 'data', 'payments', 'paymentsData'));
         } else {
             return view('welcome');
         }
 
     });
-	
+
 	/*
     Route::group(['middleware' => ['role:user']], function () {
         Route::get('/colors', function () {     return view('dashboard.colors'); });
@@ -80,7 +80,7 @@ Route::group(['middleware' => ['get.menu']], function () {
         Route::get('/google-maps', function(){  return view('dashboard.googlemaps'); });
         Route::get('/404', function () {        return view('dashboard.404'); });
         Route::get('/500', function () {        return view('dashboard.500'); });
-        Route::prefix('base')->group(function () {  
+        Route::prefix('base')->group(function () {
             Route::get('/breadcrumb', function(){   return view('dashboard.base.breadcrumb'); });
             Route::get('/cards', function(){        return view('dashboard.base.cards'); });
             Route::get('/carousel', function(){     return view('dashboard.base.carousel'); });
@@ -99,20 +99,20 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::get('/tabs', function () {       return view('dashboard.base.tabs'); });
             Route::get('/tooltips', function () {   return view('dashboard.base.tooltips'); });
         });
-        Route::prefix('buttons')->group(function () {  
+        Route::prefix('buttons')->group(function () {
             Route::get('/buttons', function(){          return view('dashboard.buttons.buttons'); });
             Route::get('/button-group', function(){     return view('dashboard.buttons.button-group'); });
             Route::get('/dropdowns', function(){        return view('dashboard.buttons.dropdowns'); });
             Route::get('/brand-buttons', function(){    return view('dashboard.buttons.brand-buttons'); });
             Route::get('/loading-buttons', function(){  return view('dashboard.buttons.loading-buttons'); });
         });
-        Route::prefix('editors')->group(function () {  
+        Route::prefix('editors')->group(function () {
             Route::get('/code-editor', function(){          return view('dashboard.editors.code-editor'); });
             Route::get('/markdown-editor', function(){      return view('dashboard.editors.markdown-editor'); });
             Route::get('/text-editor', function(){          return view('dashboard.editors.text-editor'); });
         });
 
-        Route::prefix('forms')->group(function () {  
+        Route::prefix('forms')->group(function () {
             Route::get('/basic-forms', function(){          return view('dashboard.forms.basic-forms'); });
             Route::get('/advanced-forms', function(){       return view('dashboard.forms.advanced-forms'); });
             Route::get('/validation', function(){           return view('dashboard.forms.validation'); });
@@ -123,24 +123,24 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::get('/flags', function(){                return view('dashboard.icons.flags'); });
             Route::get('/brands', function(){               return view('dashboard.icons.brands'); });
         });
-        Route::prefix('notifications')->group(function () {  
+        Route::prefix('notifications')->group(function () {
             Route::get('/alerts', function(){               return view('dashboard.notifications.alerts'); });
             Route::get('/badge', function(){                return view('dashboard.notifications.badge'); });
             Route::get('/modals', function(){               return view('dashboard.notifications.modals'); });
             Route::get('/toastr', function(){               return view('dashboard.notifications.toastr'); });
         });
-        Route::prefix('plugins')->group(function () {  
+        Route::prefix('plugins')->group(function () {
             Route::get('/calendar', function(){             return view('dashboard.plugins.calendar'); });
             Route::get('/draggable-cards', function(){      return view('dashboard.plugins.draggable-cards'); });
             Route::get('/spinners', function(){             return view('dashboard.plugins.spinners'); });
         });
-        Route::prefix('tables')->group(function () { 
+        Route::prefix('tables')->group(function () {
             Route::get('/tables', function () {             return view('dashboard.tables.tables'); });
             Route::get('/datatables', function () {         return view('dashboard.tables.datatables'); });
         });
 
-        Route::prefix('apps')->group(function () { 
-            Route::prefix('invoicing')->group(function () { 
+        Route::prefix('apps')->group(function () {
+            Route::prefix('invoicing')->group(function () {
                 Route::get('/invoice', function () {        return view('dashboard.apps.invoicing.invoice'); });
             });
             Route::prefix('email')->group(function () {
@@ -164,12 +164,12 @@ Route::group(['middleware' => ['get.menu']], function () {
         'update'    => 'resource.update',
         'destroy'   => 'resource.destroy'
     ]);
-	
-	Route::group(['middleware' => ['role:user|sales']], function () {	
-		
+
+	Route::group(['middleware' => ['role:user|sales']], function () {
+
 		Route::get('/users/info', function () { return view('users.info'); });
-		
-		Route::prefix('/users/services')->group(function () { 
+
+		Route::prefix('/users/services')->group(function () {
 			Route::get('/input', 'PointServiceController@input')->name('users.services.input');
 			Route::post('/preview', 'ApiReloadlyController@user_input_phone_number')->name('users.services.preview');
 			Route::get('/preview/operator/{id}', 'ApiReloadlyController@user_operator_selected')->name('users.services.preview.operator');
@@ -177,73 +177,73 @@ Route::group(['middleware' => ['get.menu']], function () {
 			Route::get('/transaction/result', 'ApiReloadlyController@user_recharge')->name('users.services.transaction.result');
 			Route::get('/print/{id}', 'PointServiceController@print')->name('users.services.print');
 			Route::get('/print/{id}/small', 'PointServiceController@print_small')->name('users.services.print.small');
-        });	
-		
-		Route::prefix('/users/reports')->group(function () { 
+        });
+
+		Route::prefix('/users/reports')->group(function () {
 			Route::get('/operations', 'PointReportController@operations')->name('users.reports.operations');
-        });	
-		
-		Route::prefix('/users')->group(function () { 
+        });
+
+		Route::prefix('/users')->group(function () {
 			Route::resource('payments',  'PointPaymentsController', [ 'names' => 'users.payments' ]);
 			Route::get('/payments/export', 'PaymentsController@export')->name('users.payments.export');
         });
-		
-		Route::prefix('/users/settings')->group(function () { 
+
+		Route::prefix('/users/settings')->group(function () {
 			Route::get('/account', 'PointSettingsController@account')->name('users.settings.account');
 			Route::post('/update', 'PointSettingsController@update')->name('users.settings.update');
         });
-		
+
 	});
-	
+
 	Route::group(['middleware' => ['role:sales']], function () {
         Route::get('/sales/users', 'AgentController@userIndex')->name('agent.user.index');
         Route::get('/sales/user/create', 'AgentController@userCreate')->name('agent.user.create');
         Route::post('/sales/user', 'AgentController@userStore')->name('agent.user.store');
-		Route::prefix('/sales/reports')->group(function () { 
+		Route::prefix('/sales/reports')->group(function () {
 			Route::get('/operations', 'AgentReportController@operations')->name('agents.reports.operations');
-        });	
+        });
 	});
-	
-    Route::group(['middleware' => ['role:admin']], function () {	
+
+    Route::group(['middleware' => ['role:admin']], function () {
 
         Route::prefix('/admin/files')->group(function () {
             Route::get('/', 'PaymentFilecontroller@index');
         });
-		
-		Route::prefix('/admin/users/groups')->group(function () { 
+
+		Route::prefix('/admin/users/groups')->group(function () {
 			Route::get('', 'UsersGroupsController@list')->name('admin.groups.list');
 			Route::get('/{id}', 'UsersGroupsController@view')->name('admin.groups.view');
 			Route::get('/deleted', 'UsersGroupsController@deleted')->name('admin.groups.deleted');
-			Route::get('/create', 'UsersGroupsController@create')->name('admin.groups.create');	
+			Route::get('/create', 'UsersGroupsController@create')->name('admin.groups.create');
 			Route::post('/store', 'UsersGroupsController@store')->name('admin.groups.store');
 			Route::get('/{id}/edit', 'UsersGroupsController@edit')->name('admin.groups.edit');
 			Route::put('/{id}/update', 'UsersGroupsController@update')->name('admin.groups.update');
 			Route::delete('/{id}', 'UsersGroupsController@delete')->name('admin.groups.delete');
 			Route::put('/{id}/recover', 'UsersGroupsController@recover')->name('admin.groups.recover');
         });
-		
-		Route::prefix('/admin')->group(function () { 
+
+		Route::prefix('/admin')->group(function () {
             Route::post('/user/approve/{user}', 'UsersController@approve')->name('admin.user.approve');
 			Route::resource('services',  'ServiceController', [ 'names' => 'admin.services' ]);
             Route::get('/payments/export', 'PaymentsController@export')->name('admin.payments.export');
             Route::put('/payments/approve/{ids}', 'PaymentsController@updatePaymentStatus')->name('admin.payments.updatePaymentStatus');
 			Route::resource('payments',  'PaymentsController', [ 'names' => 'admin.payments' ]);
         });
-		
-		Route::prefix('/admin/services/')->group(function () { 			
+
+		Route::prefix('/admin/services/')->group(function () {
 			Route::get('/{id}/edit/local', 'ServiceController@edit_local')->name('admin.services.edit.local');
 			Route::put('/{id}/local', 'ServiceController@update_local')->name('admin.services.update.local');
         });
-		
-		Route::prefix('/admin/services/')->group(function () { 
+
+		Route::prefix('/admin/services/')->group(function () {
 			Route::get('/', 'ServiceController@index')->name('admin.services.index');
         });
-		
-		Route::prefix('/admin/ding/services/')->group(function () { 
+
+		Route::prefix('/admin/ding/services/')->group(function () {
 			Route::get('/', 'ApiDingController@products_list')->name('admin.ding.services.products');
         });
-		
-		Route::prefix('/admin/api/reloadly')->group(function () { 
+
+		Route::prefix('/admin/api/reloadly')->group(function () {
 			Route::get('/', 'ApiReloadlyController@index')->name('admin.api.reloadly.index');
             Route::get('/balance', 'ApiReloadlyController@balance')->name('admin.api.reloadly.balance');
             Route::get('/discounts', 'ApiReloadlyController@discounts')->name('admin.api.reloadly.discounts');
@@ -255,8 +255,8 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::post('/recharge', 'ApiReloadlyController@recharge')->name('admin.api.reloadly.recharge');
             Route::get('/operators/save', 'ApiReloadlyController@save_operators')->name('admin.api.reloadly.operators.save');
         });
-		
-		Route::prefix('/admin/api/ding')->group(function () { 
+
+		Route::prefix('/admin/api/ding')->group(function () {
 			Route::get('/', 'ApiDingController@index')->name('admin.api.ding.index');
             Route::get('/ErrorCodeDescriptions', 'ApiDingController@ErrorCodeDescriptions')->name('admin.api.ding.ErrorCodeDescriptions');
             Route::get('/Currencies', 'ApiDingController@Currencies')->name('admin.api.ding.Currencies');
@@ -271,22 +271,22 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::get('/PromotionDescriptions', 'ApiDingController@PromotionDescriptions')->name('admin.api.ding.PromotionDescriptions');
             Route::get('/AccountLookup', 'ApiDingController@AccountLookup')->name('admin.api.ding.AccountLookup');
 		});
-		
-		Route::prefix('/admin/report')->group(function () { 
+
+		Route::prefix('/admin/report')->group(function () {
             Route::get('/', 'ReportController@operations')->name('admin.report.operations');
             Route::get('/agents', 'ReportController@agentOperations')->name('admin.agent.operations');
 			Route::get('/export', 'ReportController@export_operations')->name('admin.report.operations.export');
 			Route::get('/export/simple', 'ReportController@export_operations_simple')->name('admin.report.operations.export.simple');
 			Route::get('/calls', 'ReportController@calls')->name('admin.report.calls');
         });
-		
+
         Route::resource('bread',  'BreadController');
 
 		Route::get('/users/deleted', 'UsersController@deleted')->name('admin.users.deleted');
 		Route::put('users/{id}/recover', 'UsersController@recover')->name('admin.users.recover');
         Route::resource('users', 'UsersController');
-		
-		
+
+
         Route::resource('languages',    'LanguageController');
         Route::resource('mail',        'MailController');
         Route::get('prepareSend/{id}',        'MailController@prepareSend')->name('prepareSend');
@@ -294,7 +294,7 @@ Route::group(['middleware' => ['get.menu']], function () {
         Route::resource('roles',        'RolesController');
         Route::get('/roles/move/move-up',      'RolesController@moveUp')->name('roles.up');
         Route::get('/roles/move/move-down',    'RolesController@moveDown')->name('roles.down');
-        Route::prefix('menu/element')->group(function () { 
+        Route::prefix('menu/element')->group(function () {
             Route::get('/',             'MenuElementController@index')->name('menu.index');
             Route::get('/move-up',      'MenuElementController@moveUp')->name('menu.up');
             Route::get('/move-down',    'MenuElementController@moveDown')->name('menu.down');
@@ -306,7 +306,7 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::get('/show',         'MenuElementController@show')->name('menu.show');
             Route::get('/delete',       'MenuElementController@delete')->name('menu.delete');
         });
-        Route::prefix('menu/menu')->group(function () { 
+        Route::prefix('menu/menu')->group(function () {
             Route::get('/',         'MenuController@index')->name('menu.menu.index');
             Route::get('/create',   'MenuController@create')->name('menu.menu.create');
             Route::post('/store',   'MenuController@store')->name('menu.menu.store');
@@ -331,9 +331,9 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::post('/file/cropp',      'MediaController@cropp');
             Route::get('/file/copy',        'MediaController@fileCopy')->name('media.file.copy');
         });
-		
-		Route::prefix('apps')->group(function () { 
-            Route::prefix('invoicing')->group(function () { 
+
+		Route::prefix('apps')->group(function () {
+            Route::prefix('invoicing')->group(function () {
                 Route::get('/invoice', function () {        return view('dashboard.apps.invoicing.invoice'); });
             });
             Route::prefix('email')->group(function () {
@@ -343,7 +343,7 @@ Route::group(['middleware' => ['get.menu']], function () {
             });
         });
         Route::resource('notes', 'NotesController');
-		
+
     });
 
     Route::group(['middleware' => ['role:user']], function () {
@@ -356,11 +356,13 @@ Route::get('locale', 'LocaleController@locale');
 Route::get('payments/{filename}', function ($filename)
 {
     $path = storage_path() . '/app/payments/'. $filename;
-
     if(!\File::exists($path)) abort(404);
-
     return response()->download($path);
-#    dd($response);
+});
 
-    // return \Response::download($response);
+Route::get('users-added-payments/{filename}', function ($filename)
+{
+    $path = storage_path() . '/app/payments/'. $filename;
+    if(!\File::exists($path)) abort(404);
+    return response()->download($path);
 });

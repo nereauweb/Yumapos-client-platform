@@ -18,6 +18,16 @@
         <div class="card-body">
 
             <h1>Payments</h1>
+            <div class="row my-4">
+                <div class="col-md-4">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Amount
+                            <span class="badge badge-primary badge-pill">{{ $amount }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <div class="row align-items-end">
                 <div class="col-6">
                     @include('livewire.partials.daterange')
@@ -28,9 +38,9 @@
                             <label for="exampleFormControlSelect1">User</label>
                             <select wire:model.defer="userSelected" class="form-control custom-select" name="user">
                                 <option value="0" selected>All users</option>
-                                @foreach ($payments as $payment)
-                                    @if (!is_null($payment->user))
-                                        <option value="{{ $payment->user->id }}">{{ $payment->user->name }}</option>
+                                @foreach ($users as $user)
+                                    @if (!is_null($user))
+                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
                                     @endif
                                 @endforeach
                             </select>
@@ -106,7 +116,7 @@
                         @foreach ($payments as $payment)
                             <tr>
                                 <td>
-                                    <div class="btn-group btn-group-xs">										
+                                    <div class="btn-group btn-group-xs">
 										<button type="button" class="btn btn-table-action dropdown-toggle" data-toggle="dropdown">
 											{{ $payment->id }}
 											<i class="fa fa-ellipsis-v fa-fw" aria-hidden="true"></i>
@@ -150,7 +160,7 @@
                                     @if (count($payment->documents) > 0)
                                         @foreach ($payment->documents as $doc)
                                             <a href="{{url($doc->filename)}}"><svg width="30" height="30" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"></path></svg></a>
-                                        @endforeach    
+                                        @endforeach
                                     @endif
                                 </td>
                                 <td> {!! $payment->approved == 1 ? '<i class="cil-check-alt"></i>' : '<i class="cil-x"></i>' !!} </td>
@@ -186,10 +196,4 @@
     }
 
 </style>
-<script>
-    $('#commitData').on('click', () => {
-        @this.set('from', $("#date_begin").val());
-        @this.set('to', $("#date_end").val());
-    });
 
-</script>
