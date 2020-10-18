@@ -232,6 +232,7 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::put('payments/cancel/{payment}', 'PaymentsController@cancel')->name('admin.payments.cancel');
             Route::put('/payments/approve/{ids}', 'PaymentsController@updatePaymentStatus')->name('admin.payments.updatePaymentStatus');
             Route::put('/payments/recover/{payment}', 'PaymentsController@recover')->name('admin.payments.recover');
+            Route::get('/payments/trashed-payments', 'PaymentsController@trashed')->name('admin.trashedPayments');
             Route::get('/payments/pay-user', 'PaymentsController@payUser')->name('admin.payUser');
             Route::post('/payments/pay-user', 'PaymentsController@payUserStore')->name('admin.payments.payUserStore');
             Route::resource('payments',  'PaymentsController', [ 'names' => 'admin.payments' ]);

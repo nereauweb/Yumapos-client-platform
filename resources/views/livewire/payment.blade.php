@@ -6,12 +6,16 @@
                 <span id="card_title">
                     Payments
                 </span>
-                <div class="btn-group pull-right btn-group-xs">
-                    <a class="dropdown-item" href="{{ route('admin.payUser') }}">
+                <div class="pull-right">
+                    <a class="btn btn-danger" href="{{ route('admin.trashedPayments') }}">
+                        <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
+                        List of trashed payments
+                    </a>
+                    <a class="btn btn-info" href="{{ route('admin.payUser') }}">
                         <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
                         Pay user
                     </a>
-                    <a class="dropdown-item" href="/admin/payments/create">
+                    <a class="btn btn-success" href="/admin/payments/create">
                         <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
                         Add payment
                     </a>

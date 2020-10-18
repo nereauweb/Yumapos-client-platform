@@ -267,6 +267,12 @@ class PaymentsController extends Controller
         return back()->with(['status' => 'warning', 'message' => 'payment not found!']);
     }
 
+    public function trashed()
+    {
+        $trashed = Payment::onlyTrashed()->paginate(10);
+        return view('admin.payments.trashed', compact('trashed'));
+    }
+
 //    HELPERS
     private function storePayment(array $data, bool $boolean)
     {
