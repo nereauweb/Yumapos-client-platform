@@ -234,6 +234,11 @@
                 {!! Form::open(['route' => 'admin.payments.export', 'method' => 'GET', 'role' => 'form', 'class' =>
                 'needs-validation uk-margin-bottom']) !!}
                 {!! csrf_field() !!}
+                <input type="hidden" value="{{ $from }}" name="from">
+                <input type="hidden" value="{{ $to }}" name="to">
+                <input type="hidden" value="{{ $userSelected }}" name="userSelected">
+                <input type="hidden" value="{{ $typeSelected }}" name="typeSelected">
+                <input type="hidden" value="{{ $stateSelected }}" name="stateSelected">
                 {!! Form::button('Export', ['class' => 'btn btn-success', 'type' => 'submit']) !!}
                 {!! Form::close() !!}
             </div>

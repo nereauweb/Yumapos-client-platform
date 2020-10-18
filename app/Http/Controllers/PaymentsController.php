@@ -24,9 +24,20 @@ class PaymentsController extends Controller
 
 	public function export(Request $request)
     {
-		$payments = Payment::select("payments.id","payments.date","payments.user_id","users.name","payments.amount","payments.details","payments.created_at","payments.updated_at")
-			->join('users', 'users.id', '=', 'payments.user_id')
-			->get();
+//        dd($request->all());
+//		$payments = Payment::select("payments.id","payments.date","payments.user_id","users.name","payments.amount","payments.details","payments.created_at","payments.updated_at")
+//			->join('users', 'users.id', '=', 'payments.user_id')
+//			->get();
+        $date_begin = ($request->from && !is_null($request->from)) ? $request->from . ' 00:00:00' : date("Y") . '-01-01 00:00:00';
+        $date_end = ($request->to && !is_null($request->to)) ? $request->to . ' 23:59:59' : date("Y") . '-12-31 23:59:59';
+        $payments = Payment::join('users as u', 'u.id', '=', 'payments.user_id')->where('payments.created_at', '>=', $date_begin)->where('payments.created_at', '<=', $date_end)
+            ->when($request->userSelected, function ($query) use ($request) {
+                $query->where('u.id', $request->userSelected);
+            })->when($request->typeSelected, function ($query) use ($request) {
+                $query->where('payments.type', $request->typeSelected);
+            })->when(!is_null($request->stateSelected), function ($query) use ($request) {
+                $query->where('payments.approved', $request->stateSelected);
+        })->select("payments.id","payments.date","payments.user_id","u.name","payments.amount","payments.details","payments.created_at","payments.updated_at")->get();
         return Excel::download(new PaymentsExport($payments), 'payments.xlsx');
     }
 
@@ -38,19 +49,7 @@ class PaymentsController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),
-            [
-                'date'		=> 'required',
-                'amount'	=> 'required',
-                'user_id'	=> 'required',
-                'document'  => 'mimes:jpg,doc,docx,png,pdf'
-            ],
-            [
-                'date.required'		=> 'Date required',
-                'amount.required'	=> 'Amount required',
-                'user_id.required'	=> 'User required',
-            ]
-        );
+        $validator = $this->validateData($request->all());
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
@@ -102,18 +101,7 @@ class PaymentsController extends Controller
     {
 		$payment = Payment::findOrFail($id);
 
-        $validator = Validator::make($request->all(),
-            [
-                'date'		=> 'required',
-                'amount'	=> 'required',
-                'document'  => 'mimes:jpg,doc,docx,png,pdf'
-            ],
-            [
-                'date.required'		=> 'Date required',
-                'amount.required'	=> 'Amount required',
-                'user_id.required'	=> 'User required',
-            ]
-        );
+        $validator = $this->validateData($request->all());
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
@@ -169,6 +157,10 @@ class PaymentsController extends Controller
         if ($payment) {
             $payment->update([
                 'approved' => 1
+            ]);
+
+            $payment->user()->update([
+                'plafond' => $payment->user->plafond + $payment->amount
             ]);
         }
 
