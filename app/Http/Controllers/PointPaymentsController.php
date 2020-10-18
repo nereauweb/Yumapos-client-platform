@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Payment;
 use App\User;
 
+use Illuminate\Database\QueryException;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PaymentsExport;
 
@@ -62,26 +63,33 @@ class PointPaymentsController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        $payment = Payment::create([
-            'date'		=> $date->format("Y-m-d H:i:s"),
-            'amount'	=> $request->input('amount'),
-            'user_id'	=> \Auth::user()->id,
-            'details'	=> $request->input('details'),
-            'approved'	=> 0,
-            'type'      => 1
-        ]);
-        $file = $request->file('document');
-
-        if ($file) {
-            $filename = 'user-created-' . time() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('users-added-payments', $filename);
-            $payment->documents()->create([
-                'label' => $payment->user->name.'-document-user',
-                'filename' => $path
+        try {
+            DB::beginTransaction();
+            $payment = Payment::create([
+                'date'		=> $date->format("Y-m-d H:i:s"),
+                'amount'	=> $request->input('amount'),
+                'user_id'	=> \Auth::user()->id,
+                'details'	=> $request->input('details'),
+                'approved'	=> 0,
+                'type'      => 1,
+                'update_balance' => 1
             ]);
-        }
+            $file = $request->file('document');
 
-        return redirect()->route('users.payments.index')->with(['status' => 'success', 'message' => 'Payment registered']);
+            if ($file) {
+                $filename = 'document-'.auth()->user()->name.'-'. time() . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('payments', $filename);
+                $payment->documents()->create([
+                    'label' => $payment->user->name.'-document-user-'.time(),
+                    'filename' => $path
+                ]);
+            }
+            DB::commit();
+            return redirect()->route('users.payments.index')->with(['status' => 'success', 'message' => 'Payment registered']);
+        } catch (QueryException $q) {
+		    DB::rollBack();
+            return redirect()->route('users.payments.index')->with(['status' => 'error', 'message' => $q->getMessage()]);
+        }
     }
 
     public function show($id)

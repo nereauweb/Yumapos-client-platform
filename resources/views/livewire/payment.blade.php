@@ -24,12 +24,12 @@
             <h1>Payments</h1>
             <div class="uk-padding-small">
                 <dl class="row">
-                    <dt class="col-sm-5">{{ $textBeforeAmount }} Amount</dt>
-                    <dd class="col-sm-7">{{ $amount }}&euro;</dd>
-                </dl>
-                <dl class="row">
-                    <dt class="col-sm-5">Unapproved payments</dt>
-                    <dd class="col-sm-7">{{ $unapprovedPayments }}</dd>
+                    <dt class="col-sm-5">Total positive balance:</dt>
+                    <dd class="col-sm-7">{{ $positiveBalance }}&euro;</dd>
+                    <dt class="col-sm-5">Total negative balance:</dt>
+                    <dd class="col-sm-7">{{ $negativeBalance }}&euro;</dd>
+                    <dt class="col-sm-5">Difference between positive/negative balance:</dt>
+                    <dd class="col-sm-7">{{ $diffBalance }}&euro;</dd>
                 </dl>
             </div>
             <div class="row align-items-end">
@@ -171,7 +171,11 @@
                                                     <button class="btn dropdown-item" type="submit">Cancel payment</button>
                                                 </form>
                                             @else
-                                                <span class="dropdown-item">NO ACTION</span>
+                                                <form action="{{ route('admin.payments.recover', $payment->id) }}" method="post">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <button class="btn dropdown-item">Recover</button>
+                                                </form>
                                             @endif
                                         </div>
                                     </div>
