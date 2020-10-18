@@ -122,22 +122,24 @@ class PaymentsController extends Controller
         try {
             DB::beginTransaction();
             $payment->update([
-                'date'		=> $date->format("Y-m-d H:i:s"),
-                'amount'	=> $request->input('amount'),
-                'details'	=> $request->input('details'),
-                'approved'	=> 1,
-                'type'      => 1,
+                'date' => $date->format("Y-m-d H:i:s"),
+                'amount' => $request->input('amount'),
+                'details' => $request->input('details'),
+                'approved' => 1,
+                'type' => 1,
                 'update_balance' => 1
             ]);
 
-            $file = $request->file('document');
-            if (isset($file)) {
-                $filename = 'document-'.$payment->user->name.'-' . time() . '.' . $file->getClientOriginalExtension();
-                $path = $file->storeAs('payments', $filename);
-                $payment->documents()->create([
-                    'label' => $payment->user->name.'-document',
-                    'filename' => $path
-                ]);
+            if ($request->hasFile('document')) {
+                $file = $request->file('document');
+                if (isset($file)) {
+                    $filename = 'document-' . $payment->user->name . '-' . time() . '.' . $file->getClientOriginalExtension();
+                    $path = $file->storeAs('payments', $filename);
+                    $payment->documents()->create([
+                        'label' => $payment->user->name . '-document',
+                        'filename' => $path
+                    ]);
+                }
             }
 
             $payment->user()->update([
