@@ -16,14 +16,45 @@
     </div>
     @endif
     <div class="uk-padding-small">
-        <dl class="row">
-            <dt class="col-sm-5">Balance</dt>
-            <dd class="col-sm-7">{{ $totalBalance }}&euro;</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-5">Unapproved users</dt>
-            <dd class="col-sm-7">{{ $unapprovedUsers }}</dd>
-        </dl>
+            <dl class="row">
+                <dt class="col-sm-5">Total Balance</dt>
+                <dd class="col-sm-7">{{ $totalBalance }}&euro;</dd>
+                <dt class="col-sm-5">Users with positive balance</dt>
+                <dd class="col-sm-7">{{ $positiveBalance }}&euro;</dd>
+                <dt class="col-sm-5">Users with negative balance</dt>
+                <dd class="col-sm-7">{{ $negativeBalance }}&euro;</dd>
+            </dl>
+            <dl class="row align-items-center">
+                <dt class="col-sm-5">Pending users</dt>
+                <dd class="col-sm-7"><span class="badge-warning rounded px-3 py-1">{{ $unapprovedUsers }}</span></dd>
+                <dt class="col-sm-5">Rejected users</dt>
+                <dd class="col-sm-7"><span class="badge-danger rounded px-3 py-1">{{ $trashedUsers }}</span></dd>
+                <dt class="col-sm-5">Approved users</dt>
+                <dd class="col-sm-7"><span class="badge-success rounded px-3 py-1">{{ $approvedUsers }}</span></dd>
+            </dl>
+    </div>
+    <div class="mb-4 row align-items-end">
+        <div class="col">
+            <label for="type_of_select">Filter users by their state</label>
+            <select wire:model.defer="stateUserSelected" class="custom-select">
+                <option selected value="null">All users</option>
+                <option value="1">Approved users ({{ $approvedUsers }})</option>
+                <option value="2">Rejected users ({{ $trashedUsers }})</option>
+                <option value="3">Pending users ({{ $unapprovedUsers }})</option>
+            </select>
+        </div>
+        <div class="col">
+            <label for="state_of_select">Filter users by their balance</label>
+            <select wire:model.defer="balanceUserSelected"  class="custom-select">
+                <option selected value="null">All</option>
+                <option value="1">Users with positive balance ({{ $positiveBalanceUsersCount }})</option>
+                <option value="2">Users with negative balance ({{ $negativeBalanceUsersCount }})</option>
+                <option value="3">Users with zero balance ({{ $zeroBalanceUsersCount }})</option>
+            </select>
+        </div>
+        <div class="col">
+            <button class="btn btn-success" wire:click="commit">Commit</button>
+        </div>
     </div>
     <table class="table table-striped table-bordered col-filtered-datatable">
         <thead>

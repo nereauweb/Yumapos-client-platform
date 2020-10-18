@@ -14,7 +14,7 @@
                             <label for="parent_percent" class="col-md-3 control-label">Percentuale referente</label>
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    <input wire:model="parent_percent" id="parent_percent" class="form-control" placeholder="Percentuale referente"
+                                    <input wire:model.defer="parent_percent" id="parent_percent" class="form-control" placeholder="Percentuale referente"
                                         min="0" step="0.01" name="parent_percent" type="number">
                                     <div class="input-group-append">
                                         <label for="parent_percent" class="input-group-text">
@@ -31,7 +31,7 @@
                             <label for="group" class="col-md-3 control-label">Ruolo utente</label>
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    <select wire:model="groupId" class="form-control" id="group" name="groupId">
+                                    <select wire:model.defer="groupId" class="form-control" id="group" name="groupId">
                                         <option value="" selected>Choose a group</option>
                                         @foreach ($groups as $group)
                                             <option value="{{ $group->id }}">{{ $group->name }}</option>

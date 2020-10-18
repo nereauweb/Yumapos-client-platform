@@ -28,22 +28,57 @@ class User extends Component
     public $sortRelations;
 
     public $totalBalance;
+    public $negativeBalance;
+    public $positiveBalance;
+
+    public $positiveBalanceUsersCount;
+    public $negativeBalanceUsersCount;
+    public $zeroBalanceUsersCount;
+
+    public $stateUserSelected;
+    public $balanceUserSelected;
+    public $roleSelected;
 
     public $unapprovedUsers;
+    public $trashedUsers;
+    public $approvedUsers;
 
     public function render()
     {
 
+        $this->approvedUsers = AppUser::where('state', 1)->count();
         $this->unapprovedUsers = AppUser::where('state', 0)->count();
-
+        $this->positiveBalanceUsersCount = AppUser::where('state',1)->where('plafond', '>', 0)->count();
+        $this->negativeBalanceUsersCount = AppUser::where('state',1)->where('plafond', '<', 0)->count();
+        $this->zeroBalanceUsersCount = AppUser::where('state',1)->where('plafond', '-', 0)->count();
+        $this->trashedUsers = AppUser::onlyTrashed()->count();
         $you = auth()->user();
+
         $users = AppUser::join('users_company_data as ucd', 'ucd.user_id', 'users.id')->when($this->sortField, function ($query) {
             $query->orderBy('users.'.$this->sortField, $this->sortAsc ? 'asc' : 'desc');
         })->when($this->sortRelations, function ($query) {
             $query->orderBy($this->sortRelations, $this->sortAsc ? 'asc' : 'desc');
+        })->when($this->stateUserSelected, function ($query) {
+            if ($this->stateUserSelected == 1) {
+                $query->where('users.state', '=', 1);
+            } else if ($this->stateUserSelected  == 2) {
+                $query->onlyTrashed();
+            } else if ($this->stateUserSelected == 3) {
+                $query->where('users.state', '=', 0);
+            }
+        })->when($this->balanceUserSelected, function ($query) {
+            if ($this->balanceUserSelected == 1) {
+                $query->where('users.plafond', '>', 0);
+            } else if ($this->balanceUserSelected == 2) {
+                $query->where('users.plafond', '<', 0);
+            } else if ($this->balanceUserSelected == 3) {
+                $query->where('users.plafond', '=', 0);
+            }
         })->select('users.*');
 
-        $this->totalBalance = $users->sum('plafond');
+        $this->totalBalance = AppUser::where('state', 1)->sum('plafond');
+        $this->negativeBalance = AppUser::where('plafond', '<', 0)->where('state', 1)->sum('plafond');
+        $this->positiveBalance = AppUser::where('plafond', '>', 0)->where('state', 1)->sum('plafond');
 
         $users = $users->paginate(10);
 
@@ -135,6 +170,9 @@ class User extends Component
         $this->parent_percent = '';
         $this->group = '';
         $this->user_id = '';
+    }
+
+    public function commit() {
     }
 
 }
