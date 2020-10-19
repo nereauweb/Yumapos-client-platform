@@ -46,10 +46,18 @@
 							<li class="nav-item">
 								<a class="nav-link" href="{{ url('/admin/api/ding/PromotionDescriptions') }}">Promotions descriptions</a>
 							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="{{ url('/admin/api/ding/AccountLookup') }}">Account lookup</a>
-							</li>
 						</ul>
+						<div class="uk-padding-small" uk-grid>
+							<div class="uk-width-1-4">Account lookup</div>
+							<div class="uk-width-3-4">
+								{!! Form::open(array('route' => 'admin.api.ding.account_lookup', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation')) !!}
+								{!! csrf_field() !!}
+									Phone number
+									<input name="number" class="uk-input uk-form-width-medium uk-form-small" type="text" required >
+									<button type="submit" class="uk-button uk-button-small uk-button-primary">Request</button>
+								{!! Form::close() !!}
+							</div>
+						</div>
 						{{--
 						<div class="uk-padding-small" uk-grid>
 							<div class="uk-width-1-4">Send transfer</div>
@@ -60,7 +68,7 @@
 									<input name="operator_id" class="uk-input uk-form-width-medium uk-form-small" type="number" min="0" step="1" required >
 									Amount
 									<input name="amount" class="uk-input uk-form-width-medium uk-form-small" type="number" min="0" step="0.01" required >
-									<button tpe="submit" class="uk-button uk-button-small uk-button-primary">Request</button>
+									<button type="submit" class="uk-button uk-button-small uk-button-primary">Request</button>
 								{!! Form::close() !!}
 							</div>
 						</div>
@@ -73,7 +81,7 @@
 									<input name="operator_id" class="uk-input uk-form-width-medium uk-form-small" type="number" min="0" step="1" required >
 									Amount
 									<input name="amount" class="uk-input uk-form-width-medium uk-form-small" type="number" min="0" step="0.01" required >
-									<button tpe="submit" class="uk-button uk-button-small uk-button-primary">Request</button>
+									<button type="submit" class="uk-button uk-button-small uk-button-primary">Request</button>
 								{!! Form::close() !!}
 							</div>
 						</div>
@@ -86,7 +94,7 @@
 									<input name="operator_id" class="uk-input uk-form-width-medium uk-form-small" type="number" min="0" step="1" required >
 									Amount
 									<input name="amount" class="uk-input uk-form-width-medium uk-form-small" type="number" min="0" step="0.01" required >
-									<button tpe="submit" class="uk-button uk-button-small uk-button-primary">Request</button>
+									<button type="submit" class="uk-button uk-button-small uk-button-primary">Request</button>
 								{!! Form::close() !!}
 							</div>
 						</div>
@@ -99,7 +107,7 @@
 									<input name="operator_id" class="uk-input uk-form-width-medium uk-form-small" type="number" min="0" step="1" required >
 									Amount
 									<input name="amount" class="uk-input uk-form-width-medium uk-form-small" type="number" min="0" step="0.01" required >
-									<button tpe="submit" class="uk-button uk-button-small uk-button-primary">Request</button>
+									<button type="submit" class="uk-button uk-button-small uk-button-primary">Request</button>
 								{!! Form::close() !!}
 							</div>
 						</div>

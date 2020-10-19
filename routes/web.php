@@ -277,7 +277,7 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::get('/Balance', 'ApiDingController@Balance')->name('admin.api.ding.Balance');
             Route::get('/Promotions', 'ApiDingController@Promotions')->name('admin.api.ding.Promotions');
             Route::get('/PromotionDescriptions', 'ApiDingController@PromotionDescriptions')->name('admin.api.ding.PromotionDescriptions');
-            Route::get('/AccountLookup', 'ApiDingController@AccountLookup')->name('admin.api.ding.AccountLookup');
+            Route::post('/AccountLookup', 'ApiDingController@AccountLookup')->name('admin.api.ding.account_lookup');
 		});
 
 		Route::prefix('/admin/report')->group(function () {
