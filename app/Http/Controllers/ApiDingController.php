@@ -171,7 +171,7 @@ class ApiDingController extends Controller
 	{
 		$request_description = 'Account lookup';
 		try{
-			$result = $this->ding->GetAccountLookup();
+			$result = $this->ding->GetAccountLookup($request->input("number"));
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
