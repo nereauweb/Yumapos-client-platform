@@ -107,7 +107,16 @@ class PaymentsController extends Controller
     {
 		$payment = Payment::findOrFail($id);
 
-        $validator = $this->validateData($request->all());
+        $validator = Validator::make($request->all(),
+        [
+            'date'		=> 'required',
+            'amount'	=> 'required',
+            'document'  => 'mimes:jpg,doc,docx,png,pdf'
+        ],
+        [
+            'date.required'		=> 'Date required',
+            'amount.required'	=> 'Amount required',
+        ]);
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
@@ -125,7 +134,6 @@ class PaymentsController extends Controller
                 'date' => $date->format("Y-m-d H:i:s"),
                 'amount' => $request->input('amount'),
                 'details' => $request->input('details'),
-                'approved' => 1,
                 'type' => 1,
                 'update_balance' => 1
             ]);
@@ -141,10 +149,7 @@ class PaymentsController extends Controller
                     ]);
                 }
             }
-
-            $payment->user()->update([
-                'plafond' => $payment->user->plafond + $request->amount
-            ]);
+            
             DB::commit();
             return redirect()->route('admin.payments.index')->with(['status' => 'success', 'message' => 'Payment updated, user balance updated']);
         } catch (\Exception $e) {

@@ -27,7 +27,7 @@ class ProviderReferent extends Model
 		'skype',
 		];
 	
-	public provider(){
+	public function provider(){
 		return $this->hasOne('App\Models\Provider','id','provider_id');
 	}
 	

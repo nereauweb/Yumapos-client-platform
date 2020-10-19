@@ -39,6 +39,6 @@ class AppServiceProvider extends ServiceProvider
         $menus = new Menus();
         view()->share('menu', $menus->get( $roles ) );
         */
-		\URL::forceScheme('https');
+		// \URL::forceScheme('https');
     }
 }

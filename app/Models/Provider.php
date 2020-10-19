@@ -37,9 +37,9 @@ class Provider extends Model
 		'phone',
 		'website',
 		'support_email',
-		];
+	];
 		
-	public referent(){
+	public function referent(){
 		return $this->hasMany('App\Models\ProviderReferent','provider_id','id');
 	}
 

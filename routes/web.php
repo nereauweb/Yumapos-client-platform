@@ -206,6 +206,14 @@ Route::group(['middleware' => ['get.menu']], function () {
 
     Route::group(['middleware' => ['role:admin']], function () {
 
+        // providers paths
+        Route::prefix('/admin/providers')->group(function () {
+            Route::get('/', 'ProviderController@index')->name('admin.providers.index');
+            Route::get('/create', 'ProviderController@create')->name('admin.providers.create');
+            Route::post('/', 'ProviderController@store')->name('admin.providers.store');
+            Route::get('/{id}', 'ProviderController@edit')->name('admin.providers.edit');
+        });
+
         Route::prefix('/admin/files')->group(function () {
             Route::get('/', 'PaymentFileController@index');
             Route::get('/paymentfile/{payment}', 'PaymentFileController@create')->name('admin.paymentfile.create');
