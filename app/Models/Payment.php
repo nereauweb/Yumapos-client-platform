@@ -22,6 +22,7 @@ class Payment extends Model
 	protected $fillable = [
 		'date',
 		'user_id',
+		'provider_id',
 		'amount',
 		'details',
 		'approved',
@@ -31,6 +32,14 @@ class Payment extends Model
 
 	public function user() {
 		return $this->hasOne('App\User','id','user_id');
+	}
+	
+	public function provider() {
+		return $this->hasOne('App\Provider','id','provider_id');
+	}
+	
+	public function userOrProvider() {
+		return $this->type == 3 ? $this->provider() : $this->user();
 	}
 
 	public function documents() : HasMany
