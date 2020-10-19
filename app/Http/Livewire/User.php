@@ -43,8 +43,19 @@ class User extends Component
     public $trashedUsers;
     public $approvedUsers;
 
+    public $roleUserSelected;
+    public $cityUserSelected;
+
+    public $searchInput;
+
+    private $users;
+
     public function render()
     {
+
+        $users = AppUser::join('users_company_data as ucd', 'ucd.user_id', 'users.id')->when($this->sortField, function ($query) {
+            $query->orderBy('users.'.$this->sortField, $this->sortAsc ? 'asc' : 'desc');
+        })->select('users.*');
 
         $this->approvedUsers = AppUser::where('state', 1)->count();
         $this->unapprovedUsers = AppUser::where('state', 0)->count();
@@ -54,36 +65,20 @@ class User extends Component
         $this->trashedUsers = AppUser::onlyTrashed()->count();
         $you = auth()->user();
 
-        $users = AppUser::join('users_company_data as ucd', 'ucd.user_id', 'users.id')->when($this->sortField, function ($query) {
-            $query->orderBy('users.'.$this->sortField, $this->sortAsc ? 'asc' : 'desc');
-        })->when($this->sortRelations, function ($query) {
-            $query->orderBy($this->sortRelations, $this->sortAsc ? 'asc' : 'desc');
-        })->when($this->stateUserSelected, function ($query) {
-            if ($this->stateUserSelected == 1) {
-                $query->where('users.state', '=', 1);
-            } else if ($this->stateUserSelected  == 2) {
-                $query->onlyTrashed();
-            } else if ($this->stateUserSelected == 3) {
-                $query->where('users.state', '=', 0);
-            }
-        })->when($this->balanceUserSelected, function ($query) {
-            if ($this->balanceUserSelected == 1) {
-                $query->where('users.plafond', '>', 0);
-            } else if ($this->balanceUserSelected == 2) {
-                $query->where('users.plafond', '<', 0);
-            } else if ($this->balanceUserSelected == 3) {
-                $query->where('users.plafond', '=', 0);
-            }
-        })->select('users.*');
+        
+
+        $cities = UserCompanyData::distinct()->get('legal_seat_city');
 
         $this->totalBalance = AppUser::where('state', 1)->sum('plafond');
         $this->negativeBalance = AppUser::where('plafond', '<', 0)->where('state', 1)->sum('plafond');
         $this->positiveBalance = AppUser::where('plafond', '>', 0)->where('state', 1)->sum('plafond');
 
-        $users = $users->paginate(10);
+        $users = !is_null($this->users) ? $this->users->paginate(10) : $users->paginate(10);
 
         $groups = UsersGroup::all();
-        return view('livewire.user', compact('users', 'you', 'groups'));
+        $roles = Role::all();
+
+        return view('livewire.user', compact('users', 'you', 'groups', 'cities', 'roles'));
     }
 
     public function sortBy($field)
@@ -173,6 +168,61 @@ class User extends Component
     }
 
     public function commit() {
+        $this->users = AppUser::join('users_company_data as ucd', 'ucd.user_id', 'users.id')->when($this->sortField, function ($query) {
+            $query->orderBy('users.'.$this->sortField, $this->sortAsc ? 'asc' : 'desc');
+        })->when($this->sortRelations, function ($query) {
+            $query->orderBy($this->sortRelations, $this->sortAsc ? 'asc' : 'desc');
+        })->when($this->stateUserSelected, function ($query) {
+            if ($this->stateUserSelected == 1) {
+                $query->where('users.state', '=', 1);
+            } else if ($this->stateUserSelected  == 2) {
+                $query->onlyTrashed();
+            } else if ($this->stateUserSelected == 3) {
+                $query->where('users.state', '=', 0);
+            }
+        })->when($this->balanceUserSelected, function ($query) {
+            if ($this->balanceUserSelected == 1) {
+                $query->where('users.plafond', '>', 0);
+            } else if ($this->balanceUserSelected == 2) {
+                $query->where('users.plafond', '<', 0);
+            } else if ($this->balanceUserSelected == 3) {
+                $query->where('users.plafond', '=', 0);
+            }
+        })->when($this->roleUserSelected !== 'null' && $this->roleUserSelected, function ($query) {
+            $query->role($this->roleUserSelected);
+        })->when($this->cityUserSelected !== 'null' && $this->cityUserSelected, function ($query) {
+            $query->where('ucd.legal_seat_city', '=', $this->cityUserSelected);
+        })->select('users.*');
+    }
+
+    public function search() {
+        $this->users = AppUser::join('users_company_data as ucd', 'ucd.user_id', 'users.id')->when($this->sortField, function ($query) {
+            $query->orderBy('users.'.$this->sortField, $this->sortAsc ? 'asc' : 'desc');
+        })->when($this->searchInput !== 'null' && $this->searchInput, function ($query) {
+            $query->where('ucd.company_name', 'like', '%'.$this->searchInput.'%')->orWhere('users.email', 'like', '%'.$this->searchInput.'%');
+        })->when($this->sortRelations, function ($query) {
+            $query->orderBy($this->sortRelations, $this->sortAsc ? 'asc' : 'desc');
+        })->when($this->stateUserSelected, function ($query) {
+            if ($this->stateUserSelected == 1) {
+                $query->where('users.state', '=', 1);
+            } else if ($this->stateUserSelected  == 2) {
+                $query->onlyTrashed();
+            } else if ($this->stateUserSelected == 3) {
+                $query->where('users.state', '=', 0);
+            }
+        })->when($this->balanceUserSelected, function ($query) {
+            if ($this->balanceUserSelected == 1) {
+                $query->where('users.plafond', '>', 0);
+            } else if ($this->balanceUserSelected == 2) {
+                $query->where('users.plafond', '<', 0);
+            } else if ($this->balanceUserSelected == 3) {
+                $query->where('users.plafond', '=', 0);
+            }
+        })->when($this->roleUserSelected !== 'null' && $this->roleUserSelected, function ($query) {
+            $query->role($this->roleUserSelected);
+        })->when($this->cityUserSelected !== 'null' && $this->cityUserSelected, function ($query) {
+            $query->where('ucd.legal_seat_city', '=', $this->cityUserSelected);
+        })->select('users.*');
     }
 
 }

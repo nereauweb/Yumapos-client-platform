@@ -16,22 +16,35 @@
     </div>
     @endif
     <div class="uk-padding-small">
-            <dl class="row">
+        <dl class="row">
+            <div class="col-6 row justify-content-between">
                 <dt class="col-sm-5">Total Balance</dt>
                 <dd class="col-sm-7">{{ $totalBalance }}&euro;</dd>
                 <dt class="col-sm-5">Users with positive balance</dt>
                 <dd class="col-sm-7">{{ $positiveBalance }}&euro;</dd>
                 <dt class="col-sm-5">Users with negative balance</dt>
                 <dd class="col-sm-7">{{ $negativeBalance }}&euro;</dd>
-            </dl>
-            <dl class="row align-items-center">
+            </div>
+            <div class="col-6">
+                <label for="search">Search by Email or Ragione sociale</label>
+                <div class="input-group mb-3">
+                    <input wire:model.defer="searchInput" type="text" class="form-control" placeholder="Email or Ragione sociale" aria-label="Email or Ragione sociale" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button wire:click="search" class="btn btn-primary" type="button">Search</button>
+                    </div>
+                </div>
+            </div>
+        </dl>
+        <dl class="row align-items-center">
+            <div class="col-6 row justify-content-between">
                 <dt class="col-sm-5">Pending users</dt>
                 <dd class="col-sm-7"><span class="badge-warning rounded px-3 py-1">{{ $unapprovedUsers }}</span></dd>
                 <dt class="col-sm-5">Rejected users</dt>
                 <dd class="col-sm-7"><span class="badge-danger rounded px-3 py-1">{{ $trashedUsers }}</span></dd>
                 <dt class="col-sm-5">Approved users</dt>
                 <dd class="col-sm-7"><span class="badge-success rounded px-3 py-1">{{ $approvedUsers }}</span></dd>
-            </dl>
+            </div>
+        </dl>
     </div>
     <div class="mb-4 row align-items-end">
         <div class="col">
@@ -50,6 +63,24 @@
                 <option value="1">Users with positive balance ({{ $positiveBalanceUsersCount }})</option>
                 <option value="2">Users with negative balance ({{ $negativeBalanceUsersCount }})</option>
                 <option value="3">Users with zero balance ({{ $zeroBalanceUsersCount }})</option>
+            </select>
+        </div>
+        <div class="col">
+            <label for="state_of_select">Filter users by their role</label>
+            <select wire:model.defer="roleUserSelected"  class="custom-select">
+                <option selected value="null">All</option>
+                @foreach ($roles as $role)
+                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col">
+            <label for="state_of_select">Filter users by their city</label>
+            <select wire:model.defer="cityUserSelected"  class="custom-select">
+                <option selected value="null">All</option>
+                @foreach ($cities as $city)
+                    <option value="{{ $city->legal_seat_city }}">{{ ucfirst($city->legal_seat_city) }}</option>
+                @endforeach
             </select>
         </div>
         <div class="col">
@@ -100,14 +131,15 @@
                 <tr>
                     <td>
 						<div class="btn-group btn-group-xs">
+                            @if (!$user->trashed())
 							<button type="button" class="btn btn-table-action dropdown-toggle" data-toggle="dropdown">
 								{{ $user->id }}
 								<i class="fa fa-ellipsis-v fa-fw" aria-hidden="true"></i>
 								<span class="sr-only">
 									Actions
 								</span>
-							</button>
-							<div class="dropdown-menu dropdown-menu-right">
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
 								@if (!$user->state)
 									<button class="dropdown-item btn-success" data-toggle="modal" data-target="#modalApprove"
 										wire:click="approve({{ $user->id }})">Approve</button>
@@ -121,7 +153,10 @@
 									<button class="dropdown-item btn-danger" data-toggle="modal" data-target="#modalDelete"
 										wire:click="destroy({{ $user->id }})">{{ __('coreuiforms.delete') }}</button>
 								@endif
-							</div>
+                            </div>
+                            @else
+                                <span>{{ $user->id }}</span>
+                            @endif
 						</div>
                     </td>
                     <td>{{ ucfirst($user->company_data->company_name ?? '') }}</td>
