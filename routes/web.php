@@ -219,6 +219,19 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::put('/restore/{provider}', 'ProviderController@restore')->name('admin.providers.restore');
         });
 
+        // referents paths
+        Route::prefix('/admin/referents')->group(function () {
+            Route::get('/', 'ProviderReferentController@index')->name('admin.referents.index');
+            Route::get('/create', 'ProviderReferentController@create')->name('admin.referents.create');
+            Route::post('/', 'ProviderReferentController@store')->name('admin.referents.store');
+            Route::get('/{id}/edit', 'ProviderReferentController@edit')->name('admin.referents.edit');
+            Route::put('/{id}', 'ProviderReferentController@update')->name('admin.referents.update');
+            Route::delete('/{id}', 'ProviderReferentController@destroy')->name('admin.referents.destroy');
+            // deleted providers
+            Route::get('/trash', 'ProviderReferentController@trash')->name('admin.referents.trash');
+            Route::put('/restore/{provider}', 'ProviderReferentController@restore')->name('admin.referents.restore');
+        });
+
         Route::prefix('/admin/files')->group(function () {
             Route::get('/', 'PaymentFileController@index');
             Route::get('/paymentfile/{payment}', 'PaymentFileController@create')->name('admin.paymentfile.create');
