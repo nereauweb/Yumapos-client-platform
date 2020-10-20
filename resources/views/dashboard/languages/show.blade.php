@@ -36,7 +36,7 @@
                                     Is default
                                 </th>
                                 <td>
-                                    <?php 
+                                    <?php
                                         if($lang->is_default == true){
                                             echo 'YES';
                                         }else{
@@ -54,7 +54,6 @@
       </div>
     </div>
   </div>
-</div>
 
 @endsection
 

@@ -21,7 +21,7 @@
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>    
+                    <tbody>
                         @foreach($menulist as $menu1)
                             <tr>
                                 <td>
@@ -45,7 +45,6 @@
         </div>
       </div>
     </div>
-  </div>
 </div>
 
 @endsection

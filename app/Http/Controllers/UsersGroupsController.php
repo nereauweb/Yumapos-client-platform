@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Validator;
 
 class UsersGroupsController extends Controller
-{   
+{
 
 	/**
      * Create a new controller instance.
@@ -29,7 +29,7 @@ class UsersGroupsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-	
+
 	/**
      * Store a newly created resource in storage.
      *
@@ -64,12 +64,12 @@ class UsersGroupsController extends Controller
             'discount' 				=> $request->input('discount'),
             'description'		=> $request->input('description') ? $request->input('description') : "",
         ]);
-		
+
         $group->save();
 
-        return redirect()->route('admin.groups.list')->with('success', 'Gruppo creato correttamente!');
+        return redirect()->route('admin.groups.list')->with(['status' => 'success', 'message' => 'Gruppo creato correttamente!']);
     }
-	
+
 	/**
      * Update the specified resource in storage.
      *
@@ -81,7 +81,7 @@ class UsersGroupsController extends Controller
     public function update(Request $request, $id)
     {
         $group = UsersGroup::find($id);
-		
+
 		$validator = Validator::make($request->all(),
             [
                 'name'                  => 'required|max:127',
@@ -100,60 +100,60 @@ class UsersGroupsController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-		
+
         $group->name 		= $request->input('name');
         $group->slug 		= $request->input('slug');
         $group->discount	= $request->input('discount');
         $group->description = $request->input('description') ? $request->input('description') : "";
-		
+
 		$group->save();
-		
+
 		if($request->input('users')){
 			foreach($request->input('users') as $user_id){
 				$user = User::find($user_id);
-				if ($user->group_id != $group->id){ 
+				if ($user->group_id != $group->id){
 					$user->group_id = $group->id;
 					$user->save();
 				}
 			}
 		}
 
-        return back()->with('success', 'Gruppo aggiornato con successo');
+        return back()->with(['status' => 'success', 'message' => 'Gruppo aggiornato con successo']);
 	}
-	
+
 	public function delete(Request $request, $id)
     {
 		$group = UsersGroup::find($id);
 		$group->delete();
 		return back()->with('success', 'Gruppo eliminato con successo');
 	}
-	
+
 	public function deleted()
-    {	
-		$groups = UsersGroup::onlyTrashed()->get();	
+    {
+		$groups = UsersGroup::onlyTrashed()->get();
         return view('admin/users/groups-deleted', ['groups' => $groups]);
     }
-	
+
 	public function recover(Request $request, $id)
     {
 		$group = UsersGroup::withTrashed()->find($id);
 		$group->restore();
-		return redirect()->route('admin.groups.list')->with('success', 'Gruppo ripristinato con successo!');
+		return redirect()->route('admin.groups.list')->with(['status' => 'success', 'message' => 'Gruppo ripristinato con successo!']);
 	}
-	
+
     public function list()
-    {			
+    {
 	/*
 		$paginationEnabled = true;
 		$paginationListSize = 15;
         if ($paginationEnabled) {
             $providers = $providers = DB::table('providers')->paginate($paginationListSize);
         } else {
-			
+
             $providers = DB::table('providers')->get();
         }
 	*/
-		$groups = UsersGroup::all();	
+		$groups = UsersGroup::all();
         return view('admin/users/groups-list', compact('groups'));
     }
     /**
@@ -162,10 +162,10 @@ class UsersGroupsController extends Controller
      * @return \Illuminate\Http\Response
      */
 	public function create()
-    {	
+    {
 		return view('admin/users/group-create');
 	}
-	
+
 	/**
      * Show the form for editing the specified resource.
      *
@@ -179,7 +179,7 @@ class UsersGroupsController extends Controller
 		$users = User::all();
         return view('admin/users/group-edit',compact('group','users'));
     }
-	
+
 	/**
      * Show the resource.
      *

@@ -47,8 +47,7 @@ class MailController extends Controller
         $template->subject = $request->input('subject');
         $template->content = $request->input('content');
         $template->save();
-        $request->session()->flash('message', 'Successfully created Email Template');
-        return redirect()->route('mail.index');
+        return redirect()->route('mail.index')->with(['status' => 'success', 'message' => 'Successfully created Email Template']);
     }
 
     /**
@@ -94,8 +93,7 @@ class MailController extends Controller
         $template->subject = $request->input('subject');
         $template->content = $request->input('content');
         $template->save();
-        $request->session()->flash('message', 'Successfully updated Email Template');
-        return redirect()->route('mail.index');
+        return redirect()->route('mail.index')->with(['status' => 'success', 'message' => 'Successfully updated Email Template']);
     }
 
     /**
@@ -127,7 +125,7 @@ class MailController extends Controller
             $message->subject($template->subject);
             $message->setBody($template->content,'text/html');
         });
-        $request->session()->flash('message', 'Successfully sended Email');
-        return redirect()->route('mail.index');
+
+        return redirect()->route('mail.index')->with(['status' => 'success', 'message' => 'Successfully sended Email']);
     }
 }

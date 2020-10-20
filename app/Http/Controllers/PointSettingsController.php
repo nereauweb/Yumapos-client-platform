@@ -20,10 +20,10 @@ class PointSettingsController extends Controller
     {
         return view('users/settings/account' );
     }
-	
+
 	public function update(Request $request)
     {
-		
+
 		$validator = Validator::make($request->all(),
             [
                 'gain'          => 'required|numeric',
@@ -37,16 +37,16 @@ class PointSettingsController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-		
+
         $configuration = Auth::user()->configuration;
 		if (!$configuration){
 			Auth::user()->configuration()->create(['default_gain' => $request->input('gain') ]);
-		} else {			
+		} else {
 			$configuration->default_gain = $request->input('gain');
 			$configuration->save();
 		}
 
-        return back()->with('success', 'Impostazione aggiornata con successo');
+        return back()->with(['status' => 'success', 'success' => 'Impostazione aggiornata con successo']);
 	}
-	
+
 }

@@ -30,7 +30,7 @@
 					Gruppi utenti
 				</span>
 
-                    <div class="btn-group pull-right btn-group-xs">
+                    <div class="btn-group btn-success pull-right btn-group-xs">
 
                         <a class="dropdown-item" href="/admin/users/groups/create">
                             <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
@@ -68,14 +68,6 @@
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right">
                                             <div class="uk-width-small">
-                                                <a class="btn btn-success details dropdown-item" href="#"
-                                                   data-operator-id="{{ $group->id }}">
-                                                    <svg class="c-icon">
-                                                        <use
-                                                            xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-magnifying-glass">
-                                                        </use>
-                                                    </svg>
-                                                </a>
                                                 <a class="btn btn-sm btn-success btn-block dropdown-item" href="{{ URL::to('admin/users/groups/' . $group->id) }}" data-toggle="tooltip" title="Show">
                                                     Mostra gruppo utenti
                                                 </a>

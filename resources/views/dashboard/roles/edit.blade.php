@@ -10,9 +10,6 @@
         <div class="card">
           <div class="card-header"><h4>{{ __('coreuiforms.roles.edit_role') }}</h4></div>
             <div class="card-body">
-                @if(Session::has('message'))
-                    <div class="alert alert-success" role="alert">{{ Session::get('message') }}</div>
-                @endif
                 <form method="POST" action="{{ route('roles.update', $role->id) }}">
                     @csrf
                     @method('PUT')
@@ -38,8 +35,6 @@
       </div>
     </div>
   </div>
-</div>
-
 @endsection
 
 @section('javascript')

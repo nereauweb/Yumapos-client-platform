@@ -37,7 +37,7 @@
             echo '<tr>';
             echo '<td>';
             if($data['hasIcon'] === true && $data['iconType'] === 'coreui'){
-                echo '<svg class="c-nav-icon edit-menu-icon"><use xlink:href="/assets/icons/coreui/free-symbol-defs.svg#' . $data['icon'] . '"></use></svg>';    
+                echo '<svg class="c-nav-icon edit-menu-icon"><use xlink:href="/assets/icons/coreui/free-symbol-defs.svg#' . $data['icon'] . '"></use></svg>';
                 echo '<i class="' . $data['icon'] . '"></i>';
             }
             echo '</td>';
@@ -115,7 +115,7 @@
                         </tr>
                     </thead>
                     <tbody>
-            
+
                 @foreach($menuToEdit as $menuel)
                     @if($menuel['slug'] === 'link')
                         <tr>
@@ -124,10 +124,10 @@
                                     @if($menuel['iconType'] === 'coreui')
                                     <svg class="c-nav-icon edit-menu-icon">
                                         <use xlink:href="/assets/icons/coreui/free-symbol-defs.svg#{{ $menuel['icon'] }}"></use>
-                                    </svg> 
-                                    <i class="{{ $menuel['icon'] }}"></i> 
+                                    </svg>
+                                    <i class="{{ $menuel['icon'] }}"></i>
                                     @endif
-                                @endif 
+                                @endif
                             </td>
                             <td>
                                 {{ $menuel['slug'] }}
@@ -143,12 +143,12 @@
                             </td>
                             <td>
                                 <a class="btn btn-success" href="{{ route('menu.up', ['id' => $menuel['id']]) }}">
-                                    <i class="cil-arrow-thick-top"></i> 
+                                    <i class="cil-arrow-thick-top"></i>
                                 </a>
                             </td>
                             <td>
                                 <a class="btn btn-success" href="{{ route('menu.down', ['id' => $menuel['id']]) }}">
-                                    <i class="cil-arrow-thick-bottom"></i>  
+                                    <i class="cil-arrow-thick-bottom"></i>
                                 </a>
                             </td>
                             <td>
@@ -170,10 +170,10 @@
                                     @if($menuel['iconType'] === 'coreui')
                                         <svg class="c-nav-icon edit-menu-icon">
                                             <use xlink:href="/assets/icons/coreui/free-symbol-defs.svg#{{ $menuel['icon'] }}"></use>
-                                        </svg> 
-                                        <i class="{{ $menuel['icon'] }}"></i> 
+                                        </svg>
+                                        <i class="{{ $menuel['icon'] }}"></i>
                                     @endif
-                                @endif 
+                                @endif
                             </td>
                             <td>
                                 {{ $menuel['slug'] }}
@@ -182,19 +182,19 @@
                                 {{ $menuel['name'] }}
                             </td>
                             <td>
-                                
+
                             </td>
                             <td>
                                 {{ $menuel['sequence'] }}
                             </td>
                             <td>
                                 <a class="btn btn-success" href="{{ route('menu.up', ['id' => $menuel['id']]) }}">
-                                    <i class="cil-arrow-thick-top"></i> 
+                                    <i class="cil-arrow-thick-top"></i>
                                 </a>
                             </td>
                             <td>
                                 <a class="btn btn-success" href="{{ route('menu.down', ['id' => $menuel['id']]) }}">
-                                    <i class="cil-arrow-thick-bottom"></i>  
+                                    <i class="cil-arrow-thick-bottom"></i>
                                 </a>
                             </td>
                             <td>
@@ -218,7 +218,6 @@
         </div>
       </div>
     </div>
-  </div>
 </div>
 
 @endsection

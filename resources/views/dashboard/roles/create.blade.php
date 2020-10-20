@@ -10,9 +10,6 @@
         <div class="card">
           <div class="card-header"><h4>{{ __('coreuiforms.roles.create_new_role') }}</h4></div>
             <div class="card-body">
-                @if(Session::has('message'))
-                    <div class="alert alert-success" role="alert">{{ Session::get('message') }}</div>
-                @endif
                 <form method="POST" action="{{ route('roles.store') }}">
                     @csrf
                     <table class="table table-bordered datatable">
@@ -36,7 +33,6 @@
       </div>
     </div>
   </div>
-</div>
 
 @endsection
 

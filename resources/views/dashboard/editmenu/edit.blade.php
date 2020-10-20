@@ -83,7 +83,7 @@
                                         @foreach($langs as $lang)
                                             <tr>
                                                 <td>
-                                                    {{ $lang->name }}   
+                                                    {{ $lang->name }}
                                                 </td>
                                                 <td>
                                                     <?php
@@ -97,20 +97,20 @@
                                                         }
                                                     ?>
                                                     @if($temp === true)
-                                                        <input 
-                                                            class="form-control" 
-                                                            type="text" 
-                                                            name="lang_{{ $lang->short_name }}" 
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            name="lang_{{ $lang->short_name }}"
                                                             placeholder="Name {{ $lang->name }}"
-                                                            value="{{ $menuLangs[$menuLangId]->name }}" 
+                                                            value="{{ $menuLangs[$menuLangId]->name }}"
                                                             required
                                                         />
                                                     @else
-                                                        <input 
-                                                            class="form-control" 
-                                                            type="text" 
-                                                            name="lang_{{ $lang->short_name }}" 
-                                                            placeholder="Name {{ $lang->name }}" 
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            name="lang_{{ $lang->short_name }}"
+                                                            placeholder="Name {{ $lang->name }}"
                                                             required
                                                         />
                                                     @endif
@@ -151,10 +151,10 @@
                                 <td>
                                     <div id="div-href">
                                         {{ __('coreuiforms.menu.href') }}:
-                                        <input 
-                                            type="text" 
-                                            name="href" 
-                                            class="form-control" 
+                                        <input
+                                            type="text"
+                                            name="href"
+                                            class="form-control"
                                             placeholder="href"
                                             value="{{ $menuElement->href }}"
                                         />
@@ -169,18 +169,18 @@
                                     </div>
                                     <br><br>
                                     <div id="div-icon">
-                                        {{ __('coreuiforms.menu.icon') }} - {{ __('coreuiforms.menu.find_icon_class_in') }}: 
-                                        <a 
+                                        {{ __('coreuiforms.menu.icon') }} - {{ __('coreuiforms.menu.find_icon_class_in') }}:
+                                        <a
                                             href="https://coreui.io/docs/icons/icons-list/#coreui-icons-free-502-icons"
                                             target="_blank"
                                         >
                                             {{ __('coreuiforms.menu.coreui_icons_docs') }}
                                         </a>
                                         <br>
-                                        <input 
-                                            class="form-control" 
-                                            name="icon" 
-                                            type="text" 
+                                        <input
+                                            class="form-control"
+                                            name="icon"
+                                            type="text"
                                             placeholder="CoreUI Icon class - example: cil-bell"
                                             value="{{ $menuElement->icon }}"
                                         >
@@ -197,14 +197,13 @@
         </div>
       </div>
     </div>
-  </div>
 </div>
 
 @endsection
 
 @section('javascript')
-<script src="{{ asset('js/axios.min.js') }}"></script> 
-<script src="{{ asset('js/menu-edit.js') }}"></script> 
+<script src="{{ asset('js/axios.min.js') }}"></script>
+<script src="{{ asset('js/menu-edit.js') }}"></script>
 
 
 

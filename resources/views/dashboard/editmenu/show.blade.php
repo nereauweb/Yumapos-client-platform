@@ -55,7 +55,7 @@
                                         @foreach($langs as $lang)
                                             <tr>
                                                 <td>
-                                                    {{ $lang->name }}   
+                                                    {{ $lang->name }}
                                                 </td>
                                                 <td>
                                                     <?php
@@ -119,7 +119,6 @@
         </div>
       </div>
     </div>
-  </div>
 </div>
 
 @endsection

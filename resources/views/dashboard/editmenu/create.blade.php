@@ -57,7 +57,7 @@
                                         @foreach($langs as $lang)
                                             <tr>
                                                 <td>
-                                                    {{ $lang->name }}   
+                                                    {{ $lang->name }}
                                                 </td>
                                                 <td>
                                                     <input class="form-control" type="text" name="lang_{{ $lang->short_name }}" placeholder="Name {{ $lang->name }}" required/>
@@ -98,7 +98,7 @@
                                     <br><br>
                                     <div id="div-icon">
                                         {{ __('coreuiforms.menu.icon') }} - {{ __('coreuiforms.menu.find_icon_class_in') }}:
-                                        <a 
+                                        <a
                                             href="https://coreui.io/docs/icons/icons-list/#coreui-icons-free-502-icons"
                                             target="_blank"
                                         >
@@ -119,13 +119,12 @@
         </div>
       </div>
     </div>
-  </div>
 </div>
 
 @endsection
 
 @section('javascript')
-<script src="{{ asset('js/axios.min.js') }}"></script> 
+<script src="{{ asset('js/axios.min.js') }}"></script>
 <script src="{{ asset('js/menu-create.js') }}"></script>
 
 

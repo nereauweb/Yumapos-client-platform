@@ -24,7 +24,7 @@
                                 </a>
                             @endif
                             <a class="btn btn-primary mt-2" href="{{ route('media.folder.add', [ 'thisFolder' => $thisFolder ]) }}">
-                                <i class="cil-plus"></i> 
+                                <i class="cil-plus"></i>
                                 <i class="cil-folder"></i>
                                 {{ __('coreuiforms.media.new_folder') }}
                             </a>
@@ -32,13 +32,13 @@
                         <div style="float:left;">
                             <form method="POST" action="{{ route('media.file.add') }}" enctype="multipart/form-data" id="file-file-form">
                                 @csrf
-                                <input type="hidden" name="thisFolder" value="{{ $thisFolder }}" id="this-folder-id"/> 
+                                <input type="hidden" name="thisFolder" value="{{ $thisFolder }}" id="this-folder-id"/>
                                 <label class="btn btn-primary mt-2 ml-1">
                                     <i class="cil-plus"></i>
                                     <i class="cil-file"></i>
                                     {{ __('coreuiforms.media.new_file') }} <input type="file" name="file" id="file-file-input" hidden>
-                                </label> 
-                                
+                                </label>
+
                             </form>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                                     <tr>
                                         <td>
                                             <a href="{{ route('media.folder.index', [ 'id' => $mediaFolder->id ]) }}">
-                                                <i class="cil-folder"></i> 
+                                                <i class="cil-folder"></i>
                                                 {{ $mediaFolder->name }}
                                             </a>
                                         </td>
@@ -70,7 +70,7 @@
 
                                         </td>
                                         <td>
-                                            <button 
+                                            <button
                                                 class="btn btn-primary file-move-folder"
                                                 atr="{{ $mediaFolder->id }}"
                                             >
@@ -81,7 +81,7 @@
 
                                         </td>
                                         <td>
-                                            <button 
+                                            <button
                                                 class="btn btn-danger file-delete-folder"
                                                 atr="{{ $mediaFolder->id }}"
                                             >
@@ -93,11 +93,11 @@
                                 @foreach($medias as $media)
                                     <tr>
                                         <td class="click-file" atr="{{ $media->id }}">
-                                            <i class="cil-file"></i> 
+                                            <i class="cil-file"></i>
                                             {{ $media->name }}
                                         </td>
                                         <td>
-                                            <a 
+                                            <a
                                                 href="<?php echo $media->getUrl(); ?>"
                                                 class="btn btn-primary"
                                             >
@@ -113,15 +113,15 @@
                                             </button>
                                         </td>
                                         <td>
-                                            <a 
+                                            <a
                                                 href="{{ route('media.file.copy', ['id' => $media->id, 'thisFolder' => $thisFolder]) }}"
                                                 class="btn btn-primary"
-                                            >   
+                                            >
                                                 {{ __('coreuiforms.media.copy') }}
                                             </a>
                                         </td>
                                         <td>
-                                            <button 
+                                            <button
                                                 class="btn btn-primary file-move-file"
                                                 atr="{{ $media->id }}"
                                             >
@@ -129,22 +129,22 @@
                                             </button>
                                         </td>
                                         <td>
-                                            <?php 
+                                            <?php
                                                 $mime = explode('/', $media->mime_type);
                                                 if($mime[0] === 'image'){
                                             ?>
-                                                <button 
+                                                <button
                                                     class="btn btn-success file-cropp-file"
                                                     atr="{{ $media->id }}"
                                                 >
                                                     {{ __('coreuiforms.media.cropp') }}
                                                 </button>
-                                            <?php 
+                                            <?php
                                                 }
                                             ?>
                                         </td>
                                         <td>
-                                            <button 
+                                            <button
                                                 class="btn btn-danger file-delete-file"
                                                 atr="{{ $media->id }}"
                                             >
@@ -152,8 +152,8 @@
                                             </button>
 
                                             <!--
-                                            <a 
-                                                class="btn btn-danger" 
+                                            <a
+                                                class="btn btn-danger"
                                                 href="{{ route('media.file.delete', ['id' => $media->id, 'thisFolder' => $thisFolder]) }}"
                                             >
                                                 Delete
@@ -190,9 +190,9 @@
                                         @foreach($mediaFolders as $mediaFolder)
                                             <tr>
                                                 <td>
-                                                    <input 
-                                                        type="radio" 
-                                                        name="folder" 
+                                                    <input
+                                                        type="radio"
+                                                        name="folder"
                                                         value="{{ $mediaFolder->id }}"
                                                         class="file-move-folder-radio"
                                                     >
@@ -255,9 +255,9 @@
                                     @csrf
                                     <input type="hidden" name="thisFolder" value="{{ $thisFolder }}">
                                     <input type="hidden" name="id" value="" id="file-rename-file-id">
-                                    <input 
-                                        type="text" 
-                                        name="name" 
+                                    <input
+                                        type="text"
+                                        name="name"
                                         id="file-rename-file-name"
                                         class="form-control"
                                     >
@@ -275,9 +275,9 @@
                                     @csrf
                                     <input type="hidden" name="thisFolder" value="{{ $thisFolder }}">
                                     <input type="hidden" name="id" value="" id="file-rename-folder-id">
-                                    <input 
-                                        type="text" 
-                                        name="name" 
+                                    <input
+                                        type="text"
+                                        name="name"
                                         id="file-rename-folder-name"
                                         class="form-control"
                                     >
@@ -298,7 +298,7 @@
                                             {{ __('coreuiforms.media.name') }}
                                         </td>
                                         <td id="file-div-name">
-                                            
+
                                         </td>
                                     </tr>
                                     <tr>
@@ -349,7 +349,7 @@
 
                                         </td>
                                     </tr>
-                                </table> 
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -412,7 +412,7 @@
                                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                                 </div>
                                 <div class="modal-body">
-                                    
+
                                     <img src="" id="cropp-img-img" />
 
 
@@ -435,7 +435,6 @@
       </div>
     </div>
   </div>
-</div>
 
 
 <style>
@@ -449,9 +448,9 @@
 @endsection
 
 @section('javascript')
-<script src="{{ asset('js/axios.min.js') }}"></script> 
+<script src="{{ asset('js/axios.min.js') }}"></script>
 <script src="{{ asset('js/cropper.js') }}"></script>
-<script src="{{ asset('js/media.js') }}"></script> 
+<script src="{{ asset('js/media.js') }}"></script>
 <script src="{{ asset('js/media-cropp.js') }}"></script>
 
 @endsection

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 //use App\Services\EditMenuViewService;
-use App\Models\Menurole;    
+use App\Models\Menurole;
 use App\Http\Menus\GetSidebarMenu;
 use App\Models\Menulist;
 use App\Models\MenuLangList;
@@ -87,7 +87,7 @@ class MenuElementController extends Controller
             ->orderBy('menus.sequence', 'asc')->get();
         return response()->json(
             $result
-        ); 
+        );
     }
 
     public function create(){
@@ -151,7 +151,7 @@ class MenuElementController extends Controller
             $menusLang->save();
         }
         $request->session()->flash('message', 'Successfully created menu element');
-        return redirect()->route('menu.create'); 
+        return redirect()->route('menu.create');
     }
 
     public function edit(Request $request){
@@ -199,7 +199,7 @@ class MenuElementController extends Controller
             $menusLang->save();
         }
         $request->session()->flash('message', 'Successfully update menu element');
-        return redirect()->route('menu.edit', ['id'=>$request->input('id')]); 
+        return redirect()->route('menu.edit', ['id'=>$request->input('id')])->with(['status' => 'success','message' => 'Successfully update menu element']);
     }
 
     public function show(Request $request){
@@ -229,7 +229,7 @@ class MenuElementController extends Controller
         $request->session()->flash('message', 'Successfully deleted menu element');
         $request->session()->flash('back', 'menu.index');
         $request->session()->flash('backParams', ['menu' => $menuId]);
-        return view('dashboard.shared.universal-info');
+        return view('dashboard.shared.universal-info')->with(['status' => 'success', 'message' => 'Successfully deleted menu element']);
     }
 
 }

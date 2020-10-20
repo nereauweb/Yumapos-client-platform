@@ -166,7 +166,7 @@ class UsersController extends Controller
 		}
 
         $request->session()->flash('message', 'Successfully updated user');
-		return redirect('users');
+		return redirect('users')->with(['status' => 'success', 'message' => 'Successfully updated user']);
     }
 
     /**
@@ -250,7 +250,7 @@ class UsersController extends Controller
         $user->save();
 
 		if ($user->hasRole('user')) {
-			return redirect('users/'.$user->id.'/edit')->with('success', trans('usersmanagement.createSuccess'));
+			return redirect('users/'.$user->id.'/edit')->with(['status' => 'success', 'message' => trans('usersmanagement.createSuccess')]);
 		}
     }
 

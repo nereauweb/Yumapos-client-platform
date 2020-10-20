@@ -67,7 +67,7 @@ class NotesController extends Controller
         $note->users_id = $user->id;
         $note->save();
         $request->session()->flash('message', 'Successfully created note');
-        return redirect()->route('notes.index');
+        return redirect()->route('notes.index')->with(['status' => 'success', 'message' => 'Successfully created note']);
     }
 
     /**
@@ -121,7 +121,7 @@ class NotesController extends Controller
         $note->applies_to_date = $request->input('applies_to_date');
         $note->save();
         $request->session()->flash('message', 'Successfully edited note');
-        return redirect()->route('notes.index');
+        return redirect()->route('notes.index')->with(['status' => 'success', 'message' => 'Successfully edited note']);
     }
 
     /**

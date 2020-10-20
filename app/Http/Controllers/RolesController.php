@@ -95,7 +95,7 @@ class RolesController extends Controller
         $roleHierarchy->hierarchy = $hierarchy;
         $roleHierarchy->save();
         $request->session()->flash('message', 'Successfully created role');
-        return redirect()->route('roles.create');
+        return redirect()->route('roles.create')->with(['status' => 'success', 'message' => 'Successfully created role']);
     }
 
     /**
@@ -137,7 +137,7 @@ class RolesController extends Controller
         $role->name = $request->input('name');
         $role->save();
         $request->session()->flash('message', 'Successfully updated role');
-        return redirect()->route('roles.edit', $id); 
+        return redirect()->route('roles.edit', $id)->with(['status' => 'success', 'message' => 'Successfully updated role']);
     }
 
     /**
@@ -150,17 +150,17 @@ class RolesController extends Controller
     {
         $role = Role::where('id', '=', $id)->first();
         $roleHierarchy = RoleHierarchy::where('role_id', '=', $id)->first();
-        $menuRole = Menurole::where('role_name', '=', $role->name)->first();  
+        $menuRole = Menurole::where('role_name', '=', $role->name)->first();
         if(!empty($menuRole)){
             $request->session()->flash('message', "Can't delete. Role has assigned one or more menu elements.");
             $request->session()->flash('back', 'roles.index');
-            return view('dashboard.shared.universal-info');
+            return view('dashboard.shared.universal-info')->with(['status' => 'warning', 'message' => "Can't delete. Role has assigned one or more menu elements."]);
         }else{
             $role->delete();
             $roleHierarchy->delete();
             $request->session()->flash('message', "Successfully deleted role");
             $request->session()->flash('back', 'roles.index');
-            return view('dashboard.shared.universal-info');
+            return view('dashboard.shared.universal-info')->with(['status' => 'success', 'message' => "Successfully deleted role"]);
         }
     }
 }

@@ -87,8 +87,11 @@
         <main class="c-main">
             @if (session()->has('status'))
                 <div class="container-fluid">
-                    <div class="alert @if(session()->get('status') == 'success') alert-success @else alert-danger @endif" role="alert">
-                        {{ session()->get('message') }}
+                    <div class="alert @if(session()->get('status') == 'success') alert-success @else alert-danger @endif alert-dismissible fade show" role="alert">
+                        <span>{{ session()->get('message') }}</span>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
                 </div>
             @endif
