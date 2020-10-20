@@ -5,6 +5,14 @@
 
 @section('content')
     <div class="container-fluid" id="app">
+        @if (session()->has('success'))
+            <div class="alert alert-success">
+                {{ session('success.message') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
         <div class="card">
             <div class="card-header" style="display: flex;justify-content: space-between;align-items: center">
                 <div>
@@ -21,7 +29,7 @@
                     <ul class="uk-tab-left" uk-tab="connect: #form-boxes;">
                         <li class="uk-active"><a href="#">Provider</a></li>
                         @foreach($provider->referents as $referent)
-                            <li><a href="#">{{ $referent->name }}</a></li>
+                            <li><a href="#">{{ $referent->surname }}</a></li>
                         @endforeach
                     </ul>
                 </div>
@@ -43,7 +51,7 @@
                         <ul id="form-boxes" class="uk-switcher">
                             <li class="uk-active">
                                 <div style="display: flex;justify-content: flex-end;" class="my-4">
-                                    <a class="btn btn-info" href="{{ route('admin.referents.create') }}">Add a referent</a>
+                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addReferentModal">Add a referent</button>
                                 </div>
                                 <div class="form-group row">
                                     <label for="company_name" class="col-sm-2 col-form-label">Ragione sociale</label>
@@ -73,7 +81,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="legal_seat_zip" class="col-sm-2 col-form-label">SSede legale - CAP</label>
+                                    <label for="legal_seat_zip" class="col-sm-2 col-form-label">Sede legale - CAP</label>
                                     <div class="col-sm-10">
                                         <input value="{{ old('legal_seat_zip') ?? $provider->legal_seat_zip }}" type="text" class="form-control @error('legal_seat_zip') is-invalid @enderror" id="legal_seat_zip" name="legal_seat_zip" placeholder="Sede legale - CAP">
                                         @error('legal_seat_zip')
@@ -176,7 +184,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="vat" class="col-sm-2 col-form-label">SPartita IVA</label>
+                                    <label for="vat" class="col-sm-2 col-form-label">Partita IVA</label>
                                     <div class="col-sm-10">
                                         <input value="{{  old('vat') ?? $provider->vat }}" class="form-control @error('vat') is-invalid @enderror" id="vat" name="vat" placeholder="Partita IVA">
                                         @error('vat')
@@ -187,17 +195,8 @@
                                 <div class="form-group row">
                                     <label for="tax_unique_code" class="col-sm-2 col-form-label">Codice unico destinatario</label>
                                     <div class="col-sm-10">
-                                        <input value="{{  old('tax_unique_code') ?? $provider->tax_unique_code }}" class="form-control @error('tax_unique_code') is-invalid @enderror" id="tax_unique_code" name="tax_unique_code" placeholder="Partita IVA">
+                                        <input value="{{  old('tax_unique_code') ?? $provider->tax_unique_code }}" class="form-control @error('tax_unique_code') is-invalid @enderror" id="tax_unique_code" name="tax_unique_code" placeholder="Codice unico destinatario">
                                         @error('vat')
-                                        <em class="invalid-feedback">{{ $message }}</em>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="pec" class="col-sm-2 col-form-label">Codice unico destinatario</label>
-                                    <div class="col-sm-10">
-                                        <input value="{{  old('pec') ?? $provider->pec }}" class="form-control @error('pec') is-invalid @enderror" id="pec" name="pec" placeholder="PEC">
-                                        @error('pec')
                                         <em class="invalid-feedback">{{ $message }}</em>
                                         @enderror
                                     </div>
@@ -337,11 +336,37 @@
             </div>
         </div>
     </div>
+
+    <!-- Add referent modal -->
+    <div class="modal fade" id="addReferentModal" tabindex="-1" role="dialog" aria-labelledby="addReferentModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addReferentModalTitle">Adding referent to: {{ $provider->company_name }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="referentAlerts" style="display: none;" class="mx-4 my-2 alert alert-danger alert-dismissible fade show" role="alert">
+                    <div id="appendErrors"></div>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @include('admin.providers.partials._referent_form', $provider)
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @section('javascript')
     <script>
-        const copyBtn = document.querySelector('#btnCopy');
+        const copy_btn = document.querySelector('#btnCopy');
+
+        // add referent form wrapper
+        const submit_referent_form = document.querySelector('#addReferentForm');
+
 
         // delete related data
         const delete_modal_id = document.querySelector('#modalReferentId');
@@ -374,10 +399,37 @@
             operative_seat_country.value = legal_seat_country !== null ? legal_seat_country.value : '';
         }
 
+        function beforeSubmitReferent()
+        {
+            fetch("{{ route('admin.referents.store') }}", {
+                method: 'POST',
+                body: new FormData(submit_referent_form),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            }).then((response) => response.json())
+            .then((responseJSON) => {
+                if (responseJSON.errors) {
+                    document.querySelector('#referentAlerts').style.display = 'block';
+                    for (const [key, value] of Object.entries(responseJSON.errors)) {
+                        const element = document.createElement('p');
+                        element.textContent = value[0];
+                        document.querySelector('#appendErrors').appendChild(element);
+                    }
+                } else {
+                    window.location = responseJSON.url;
+                }
+
+            }).catch(error => {
+                console.log(error);
+            });
+        }
+
 
 
         window.onload = (e) => {
-            copyBtn.onclick = () => {
+            copy_btn.onclick = () => {
                 copy();
             }
             // when modal opens
@@ -386,6 +438,12 @@
                 delete_modal_surname.textContent = el.relatedTarget.getAttribute('data-surname');
                 delete_modal_form.setAttribute('action', `/admin/referents/${delete_modal_id.textContent}`);
             });
+
+            submit_referent_form.onsubmit = (event) => {
+                event.preventDefault();
+                beforeSubmitReferent();
+            }
+
         }
 
     </script>

@@ -7,7 +7,6 @@ use App\Models\ProviderReferent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
-
 class ProviderReferentController extends Controller
 {
     private $regions;
@@ -49,7 +48,15 @@ class ProviderReferentController extends Controller
     public function store(Request $request)
     {
         $data = $this->validateReferentForm($request);
-
+        if (request()->ajax()) {
+            try {
+                ProviderReferent::create($data);
+                session()->flash('success', ['message' => 'referent added successfully']);
+                return response()->json(['url' => url('/admin/providers/'.$data['provider_id'].'/edit')]);;
+            } catch (\Exception $e) {
+                return response()->json($e->getMessage(), 400);
+            }
+        }
         try {
             ProviderReferent::create($data);
             return redirect()->route('admin.referents.index')->with(['status' => 'success', 'message' => 'Successfully registered the referent']);

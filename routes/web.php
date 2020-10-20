@@ -221,10 +221,10 @@ Route::group(['middleware' => ['get.menu']], function () {
 
         // referents paths
         Route::prefix('/admin/referents')->group(function () {
-            Route::get('/', 'ProviderReferentController@index')->name('admin.referents.index');
-            Route::get('/create', 'ProviderReferentController@create')->name('admin.referents.create');
+//            Route::get('/', 'ProviderReferentController@index')->name('admin.referents.index');
             Route::post('/', 'ProviderReferentController@store')->name('admin.referents.store');
-            Route::get('/{id}/edit', 'ProviderReferentController@edit')->name('admin.referents.edit');
+            Route::get('/create', 'ProviderReferentController@create')->name('admin.referents.create');
+//            Route::get('/{id}/edit', 'ProviderReferentController@edit')->name('admin.referents.edit');
             Route::put('/{id}', 'ProviderReferentController@update')->name('admin.referents.update');
             Route::delete('/{id}', 'ProviderReferentController@destroy')->name('admin.referents.destroy');
             // deleted providers

@@ -11,35 +11,16 @@
                     <h3>Referents trashed data</h3>
                 </div>
                 <div>
-                    <a href="{{ route('admin.providers.create') }}" class="btn btn-info" id="create">Add Referent</a>
-                    <a href="{{ route('admin.providers.index') }}" class="btn btn-success" id="list">Available Referents list</a>
+                    <a href="{{ route('admin.providers.index') }}" class="btn btn-info" id="list">Return back</a>
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-responsive table-bordered" style="overflow-y: auto;">
+                <table class="table table-bordered" style="overflow-y: auto;">
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>company_name</th>
-                        <th>legal_seat</th>
-                        <th>legal_seat_address</th>
-                        <th>legal_seat_zip</th>
-                        <th>legal_seat_city</th>
-                        <th>legal_seat_region</th>
-                        <th>legal_seat_country</th>
-                        <th>operative_seat</th>
-                        <th>operative_seat_address</th>
-                        <th>operative_seat_zip</th>
-                        <th>operative_seat_city</th>
-                        <th>operative_seat_region</th>
-                        <th>operative_seat_country</th>
-                        <th>vat</th>
-                        <th>tax_unique_code</th>
-                        <th>pec</th>
-                        <th>email</th>
-                        <th>phone</th>
-                        <th>website</th>
-                        <th>support_email</th>
+                        <th>Referent surname</th>
+                        <th>Referent role</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -63,26 +44,8 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>{{ $referent->company_name }}</td>
-                            <td>{{ $referent->legal_seat }}</td>
-                            <td>{{ $referent->legal_seat_address }}</td>
-                            <td>{{ $referent->legal_seat_zip }}</td>
-                            <td>{{ $referent->legal_seat_city }}</td>
-                            <td>{{ $referent->legal_seat_region }}</td>
-                            <td>{{ $referent->legal_seat_country }}</td>
-                            <td>{{ $referent->operative_seat }}</td>
-                            <td>{{ $referent->operative_seat_address }}</td>
-                            <td>{{ $referent->operative_seat_zip }}</td>
-                            <td>{{ $referent->operative_seat_city }}</td>
-                            <td>{{ $referent->operative_seat_region }}</td>
-                            <td>{{ $referent->operative_seat_country }}</td>
-                            <td>{{ $referent->vat }}</td>
-                            <td>{{ $referent->tax_unique_code }}</td>
-                            <td>{{ $referent->pec }}</td>
-                            <td>{{ $referent->email }}</td>
-                            <td>{{ $referent->phone }}</td>
-                            <td>{{ $referent->website }}</td>
-                            <th>{{ $referent->support_email }}</th>
+                            <td>{{ $referent->surname }}</td>
+                            <td>{{ $referent->role }}</td>
                         </tr>
                     @endforeach
                     </tbody>

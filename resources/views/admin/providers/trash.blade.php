@@ -16,30 +16,15 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-responsive table-bordered" style="overflow-y: auto;">
+                <table class="table table-bordered" style="overflow-y: auto;">
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>company_name</th>
-                        <th>legal_seat</th>
-                        <th>legal_seat_address</th>
-                        <th>legal_seat_zip</th>
-                        <th>legal_seat_city</th>
-                        <th>legal_seat_region</th>
-                        <th>legal_seat_country</th>
-                        <th>operative_seat</th>
-                        <th>operative_seat_address</th>
-                        <th>operative_seat_zip</th>
-                        <th>operative_seat_city</th>
-                        <th>operative_seat_region</th>
-                        <th>operative_seat_country</th>
-                        <th>vat</th>
-                        <th>tax_unique_code</th>
-                        <th>pec</th>
-                        <th>email</th>
-                        <th>phone</th>
-                        <th>website</th>
-                        <th>support_email</th>
+                        <th>Company Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Website</th>
+                        <th>Support Email</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -64,21 +49,6 @@
                                 </div>
                             </td>
                             <td>{{ $provider->company_name }}</td>
-                            <td>{{ $provider->legal_seat }}</td>
-                            <td>{{ $provider->legal_seat_address }}</td>
-                            <td>{{ $provider->legal_seat_zip }}</td>
-                            <td>{{ $provider->legal_seat_city }}</td>
-                            <td>{{ $provider->legal_seat_region }}</td>
-                            <td>{{ $provider->legal_seat_country }}</td>
-                            <td>{{ $provider->operative_seat }}</td>
-                            <td>{{ $provider->operative_seat_address }}</td>
-                            <td>{{ $provider->operative_seat_zip }}</td>
-                            <td>{{ $provider->operative_seat_city }}</td>
-                            <td>{{ $provider->operative_seat_region }}</td>
-                            <td>{{ $provider->operative_seat_country }}</td>
-                            <td>{{ $provider->vat }}</td>
-                            <td>{{ $provider->tax_unique_code }}</td>
-                            <td>{{ $provider->pec }}</td>
                             <td>{{ $provider->email }}</td>
                             <td>{{ $provider->phone }}</td>
                             <td>{{ $provider->website }}</td>

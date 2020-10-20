@@ -290,7 +290,7 @@
                                         </div>
                                     </form>
                         @else
-                            @include('admin.referents.partials._referent_form')
+                            @include('admin.providers.partials._referent_form')
                         @endif
                     </div>
                 </div>

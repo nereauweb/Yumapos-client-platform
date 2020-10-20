@@ -1,1 +1,1 @@
-@include('admin.referents.partials._form')
+@include('admin.referents.partials._referent_form')
