@@ -5,30 +5,22 @@
 
 @section('content')
     <div class="container-fluid" id="app">
-        @if(!isset($provider))
-            @php
-                $provider = false;
-            @endphp
-        @endif
         <div class="card">
             <div class="card-header" style="display: flex;justify-content: space-between;align-items: center">
                 <div>
-                    <h3>{{ $provider ? 'Update Provider' : 'Add Provider' }}</h3>
+                    <h3>Create a provider</h3>
                 </div>
                 <div>
                     <a href="{{ route('admin.providers.index') }}" class="btn btn-info" id="index">Providers List</a>
                     <a href="#" class="btn btn-danger" id="create">Deleted Providers</a>
                 </div>
             </div>
-                <form method="POST" action="{{ $provider ? route('admin.providers.update', $provider) : route('admin.providers.store')  }}">
-                    @if($provider)
-                        @method('PUT')
-                    @endif
+                <form method="POST" action="{{ route('admin.providers.store')  }}">
                     @csrf
                     <div class="card-body">
                         <div class="form-group">
                             <label for="companyName">Ragione sociale</label>
-                            <input value="{{ old('company_name') ?? ($provider ? $provider->company_name : '') }}" type="text" name="company_name" class="form-control @error('company_name') is-invalid @enderror" id="companyName" placeholder="Ragione sociale">
+                            <input value="{{ old('company_name') }}" type="text" name="company_name" class="form-control @error('company_name') is-invalid @enderror" id="companyName" placeholder="Ragione sociale">
                             @error('company_name')
                             <em class="invalid-feedback">{{ $message }}</em>
                             @enderror
@@ -37,21 +29,21 @@
                             <div class="form-group row">
                                 <div class="col-4">
                                     <label for="legal_seat">Sede legale</label>
-                                    <input value="{{ old('legal_seat') ?? ($provider ? $provider->legal_seat : '') }}" type="text" name="legal_seat" class="form-control @error('legal_seat') is-invalid @enderror" id="legal_seat" placeholder="Sede legale">
+                                    <input value="{{ old('legal_seat') }}" type="text" name="legal_seat" class="form-control @error('legal_seat') is-invalid @enderror" id="legal_seat" placeholder="Sede legale">
                                     @error('legal_seat')
                                     <em class="invalid-feedback">{{ $message }}</em>
                                     @enderror
                                 </div>
                                 <div class="col-4">
                                     <label for="legal_seat_address">Sede legale - indirizzo</label>
-                                    <input value="{{ old('legal_seat_address') ?? ($provider ? $provider->legal_seat_address : '') }}" type="email" class="form-control @error('legal_seat_address') is-invalid @enderror" id="legal_seat_address" name="legal_seat_address" placeholder="Sede legale - indirizzo">
+                                    <input value="{{ old('legal_seat_address') }}" type="email" class="form-control @error('legal_seat_address') is-invalid @enderror" id="legal_seat_address" name="legal_seat_address" placeholder="Sede legale - indirizzo">
                                     @error('legal_seat_address')
                                     <em class="invalid-feedback">{{ $message }}</em>
                                     @enderror
                                 </div>
                                 <div class="col-4">
                                     <label for="legal_seat_zip">Sede legale - CAP</label>
-                                    <input value="{{ old('legal_seat_zip') ?? ($provider ? $provider->legal_seat_zip : '') }}" type="text" class="form-control @error('legal_seat_zip') is-invalid @enderror" id="legal_seat_zip" name="legal_seat_zip" placeholder="Sede legale - CAP">
+                                    <input value="{{ old('legal_seat_zip') }}" type="text" class="form-control @error('legal_seat_zip') is-invalid @enderror" id="legal_seat_zip" name="legal_seat_zip" placeholder="Sede legale - CAP">
                                     @error('legal_seat_zip')
                                     <em class="invalid-feedback">{{ $message }}</em>
                                     @enderror
@@ -60,7 +52,7 @@
                             <div class="form-group row">
                                 <div class="col-4">
                                     <label for="legal_seat_city">Sede legale - Città</label>
-                                    <input value="{{ old('legal_seat_city') ?? ($provider ? $provider->legal_seat_city : '') }}" type="text" name="legal_seat_city" class="form-control @error('legal_seat_city') is-invalid @enderror" id="legal_seat_city" placeholder="Sede legale - Città">
+                                    <input value="{{ old('legal_seat_city') }}" type="text" name="legal_seat_city" class="form-control @error('legal_seat_city') is-invalid @enderror" id="legal_seat_city" placeholder="Sede legale - Città">
                                     @error('legal_seat_city')
                                     <em class="invalid-feedback">{{ $message }}</em>
                                     @enderror
@@ -70,7 +62,7 @@
                                     <select class="form-control @error('legal_seat_region') is-invalid @enderror" id="legal_seat_region" name="legal_seat_region">
                                         <option>---</option>
                                         @foreach($regions as $region)
-                                            <option value="{{ $region }}" @if($region == $provider->legal_seat_region) selected @endif>{{ $region }}</option>
+                                            <option value="{{ $region }}" @if($region == old('legal_seat_region')) selected @endif>{{ $region }}</option>
                                         @endforeach
                                     </select>
                                     @error('legal_seat_region')
@@ -79,7 +71,7 @@
                                 </div>
                                 <div class="col-4">
                                     <label for="legal_seat_country">Sede legale - Nazione</label>
-                                    <input value="{{ old('legal_seat_country') ?? ($provider ? $provider->legal_seat_country : '') }}" type="text" class="form-control @error('legal_seat_country') is-invalid @enderror" id="legal_seat_country" name="legal_seat_country" placeholder="Sede legale - Nazione">
+                                    <input value="{{ old('legal_seat_country') }}" type="text" class="form-control @error('legal_seat_country') is-invalid @enderror" id="legal_seat_country" name="legal_seat_country" placeholder="Sede legale - Nazione">
                                     @error('legal_seat_country')
                                     <em class="invalid-feedback">{{ $message }}</em>
                                     @enderror
@@ -91,21 +83,21 @@
                             <div class="form-group row">
                                 <div class="col-4">
                                     <label for="operative_seat">Sede operativa</label>
-                                    <input value="{{  old('operative_seat') ?? ($provider ? $provider->operative_seat : '') }}" type="text" name="operative_seat" class="form-control @error('operative_seat') is-invalid @enderror" id="operative_seat" placeholder="Sede operativa">
+                                    <input value="{{  old('operative_seat') }}" type="text" name="operative_seat" class="form-control @error('operative_seat') is-invalid @enderror" id="operative_seat" placeholder="Sede operativa">
                                     @error('operative_seat')
                                     <em class="invalid-feedback">{{ $message }}</em>
                                     @enderror
                                 </div>
                                 <div class="col-4">
                                     <label for="operative_seat_address">Sede operativa - indirizzo</label>
-                                    <input value="{{  old('operative_seat_address') ?? ($provider ? $provider->operative_seat_address : '') }}" type="email" class="form-control @error('operative_seat_address') is-invalid @enderror" id="operative_seat_address" name="operative_seat_address" placeholder="Sede operativa - indirizzo">
+                                    <input value="{{  old('operative_seat_address') }}" type="email" class="form-control @error('operative_seat_address') is-invalid @enderror" id="operative_seat_address" name="operative_seat_address" placeholder="Sede operativa - indirizzo">
                                     @error('operative_seat_address')
                                     <em class="invalid-feedback">{{ $message }}</em>
                                     @enderror
                                 </div>
                                 <div class="col-4">
                                     <label for="operative_seat_zip">Sede operativa - CAP</label>
-                                    <input value="{{  old('operative_seat_zip') ?? ($provider ? $provider->operative_seat_zip : '') }}" type="text" class="form-control @error('operative_seat_zip') is-invalid @enderror" id="operative_seat_zip" name="operative_seat_zip" placeholder="Sede operativa - CAP">
+                                    <input value="{{  old('operative_seat_zip') }}" type="text" class="form-control @error('operative_seat_zip') is-invalid @enderror" id="operative_seat_zip" name="operative_seat_zip" placeholder="Sede operativa - CAP">
                                     @error('operative_seat_zip')
                                     <em class="invalid-feedback">{{ $message }}</em>
                                     @enderror
@@ -114,7 +106,7 @@
                             <div class="form-group row">
                                 <div class="col-4">
                                     <label for="operative_seat_city">Sede operativa - Città</label>
-                                    <input value="{{  old('operative_seat_city') ?? ($provider ? $provider->operative_seat_city : '') }}" type="text" name="operative_seat_city" class="form-control @error('operative_seat_city') is-invalid @enderror" id="operative_seat_city" placeholder="Sede operativa - Città">
+                                    <input value="{{  old('operative_seat_city') }}" type="text" name="operative_seat_city" class="form-control @error('operative_seat_city') is-invalid @enderror" id="operative_seat_city" placeholder="Sede operativa - Città">
                                     @error('operative_seat_city')
                                     <em class="invalid-feedback">{{ $message }}</em>
                                     @enderror
@@ -124,7 +116,7 @@
                                     <select class="form-control @error('operative_seat_region') is-invalid @enderror" id="operative_seat_region" name="operative_seat_region">
                                         <option>---</option>
                                         @foreach($regions as $region)
-                                            <option value="{{ $region }}" @if($region == $provider->operative_seat_region) selected @endif>{{ $region }}</option>
+                                            <option value="{{ $region }}" @if($region == old('operative_seat_region')) selected @endif>{{ $region }}</option>
                                         @endforeach
                                     </select>
                                     @error('operative_seat_region')
@@ -133,7 +125,7 @@
                                 </div>
                                 <div class="col-4">
                                     <label for="operative_seat_country">Sede operativa - Nazione</label>
-                                    <input value="{{  old('operative_seat_country') ?? ($provider ? $provider->operative_seat_country : '') }}" type="text" class="form-control @error('operative_seat_country') is-invalid @enderror" id="operative_seat_country" name="operative_seat_country" placeholder="Sede operativa - Nazione">
+                                    <input value="{{  old('operative_seat_country') }}" type="text" class="form-control @error('operative_seat_country') is-invalid @enderror" id="operative_seat_country" name="operative_seat_country" placeholder="Sede operativa - Nazione">
                                     @error('operative_seat_country')
                                     <em class="invalid-feedback">{{ $message }}</em>
                                     @enderror
@@ -144,21 +136,21 @@
                             <div class="form-group row">
                                 <div class="col">
                                     <label for="vat">Partita IVA</label>
-                                    <input value="{{  old('vat') ?? ($provider ? $provider->vat : '') }}" class="form-control @error('vat') is-invalid @enderror" id="vat" name="vat" placeholder="Partita IVA">
+                                    <input value="{{  old('vat') }}" class="form-control @error('vat') is-invalid @enderror" id="vat" name="vat" placeholder="Partita IVA">
                                     @error('vat')
                                     <em class="invalid-feedback">{{ $message }}</em>
                                     @enderror
                                 </div>
                                 <div class="col">
                                     <label for="tax_unique_code">Codice unico destinatario</label>
-                                    <input value="{{  old('tax_unique_code') ?? ($provider ? $provider->tax_unique_code : '') }}" class="form-control @error('tax_unique_code') is-invalid @enderror" id="tax_unique_code" name="tax_unique_code" placeholder="Codice unico destinatario">
+                                    <input value="{{  old('tax_unique_code') }}" class="form-control @error('tax_unique_code') is-invalid @enderror" id="tax_unique_code" name="tax_unique_code" placeholder="Codice unico destinatario">
                                     @error('tax_unique_code')
                                     <em class="invalid-feedback">{{ $message }}</em>
                                     @enderror
                                 </div>
                                 <div class="col">
                                     <label for="pec">PEC</label>
-                                    <input value="{{  old('pec') ?? ($provider ? $provider->pec : '') }}" class="form-control @error('pec') is-invalid @enderror" id="pec" name="pec" placeholder="PEC">
+                                    <input value="{{  old('pec') }}" class="form-control @error('pec') is-invalid @enderror" id="pec" name="pec" placeholder="PEC">
                                     @error('pec')
                                     <em class="invalid-feedback">{{ $message }}</em>
                                     @enderror
@@ -169,28 +161,28 @@
                             <div class="form-group row">
                                 <div class="col">
                                     <label for="email">E-mail</label>
-                                    <input value="{{  old('email') ?? ($provider ? $provider->email : '') }}" type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Email">
+                                    <input value="{{  old('email') }}" type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Email">
                                     @error('email')
                                     <em class="invalid-feedback">{{ $message }}</em>
                                     @enderror
                                 </div>
                                 <div class="col">
                                     <label for="phone">Phone</label>
-                                    <input value="{{  old('phone') ?? ($provider ? $provider->phone : '') }}" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" placeholder="Phone">
+                                    <input value="{{  old('phone') }}" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" placeholder="Phone">
                                     @error('phone')
                                     <em class="invalid-feedback">{{ $message }}</em>
                                     @enderror
                                 </div>
                                 <div class="col">
                                     <label for="website">Insegna negozio</label>
-                                    <input value="{{  old('website') ?? ($provider ? $provider->website : '') }}" class="form-control @error('website') is-invalid @enderror" id="website" name="website" placeholder="Insegna negozio">
+                                    <input value="{{  old('website') }}" class="form-control @error('website') is-invalid @enderror" id="website" name="website" placeholder="Insegna negozio">
                                     @error('website')
                                     <em class="invalid-feedback">{{ $message }}</em>
                                     @enderror
                                 </div>
                                 <div class="col">
                                     <label for="support_email">Support Email</label>
-                                    <input value="{{  old('support_email') ?? ($provider ? $provider->support_email : '') }}" type="email" class="form-control @error('support_email') is-invalid @enderror" id="support_email" name="support_email" placeholder="Support Email">
+                                    <input value="{{  old('support_email') }}" type="email" class="form-control @error('support_email') is-invalid @enderror" id="support_email" name="support_email" placeholder="Support Email">
                                     @error('support_email')
                                     <em class="invalid-feedback">{{ $message }}</em>
                                     @enderror
@@ -199,7 +191,7 @@
                         </div>
                     </div>
                     <div class="card-footer" style="display: flex;justify-content: flex-end;align-items: center">
-                        <button class="btn btn-success">{{ $provider ? ' Salva modifiche' : 'Salva' }}</button>
+                        <button class="btn btn-success">Salva</button>
                     </div>
                 </form>
         </div>

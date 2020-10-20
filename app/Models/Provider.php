@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Provider extends Model
 {
     use SoftDeletes;
-	
+
 	/**
      * The database table used by the model.
      *
      * @var string
      */
     protected $table = 'providers';
-	
+
 	protected $fillable = [
 		'company_name',
 		'legal_seat',
@@ -38,8 +38,8 @@ class Provider extends Model
 		'website',
 		'support_email',
 	];
-		
-	public function referent(){
+
+	public function referents(){
 		return $this->hasMany('App\Models\ProviderReferent','provider_id','id');
 	}
 

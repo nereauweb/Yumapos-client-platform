@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Provider;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ProviderController extends Controller
@@ -46,7 +47,7 @@ class ProviderController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $this->validateForm($request);
+        $data = $this->validateProviderForm($request);
 
         try {
             Provider::create($data);
@@ -80,11 +81,18 @@ class ProviderController extends Controller
     public function update(Request $request, $id)
     {
         $provider = Provider::findOrFail($id);
-        $data = $this->validateForm($request);
+        $data = $this->validateProviderForm($request);
+        $referentsData = $this->validateReferentsForm($request);
         try {
+            DB::beginTransaction();
             $provider->update($data);
+            foreach ($referentsData as $referent) {
+                $provider->referents->find($referent['id'])->update($referent);
+            }
+            DB::commit();
             return redirect()->route('admin.providers.index')->with(['status' => 'success', 'message' => 'Successfully updated the provider']);
         } catch (QueryException $e) {
+            DB::rollBack();
             return redirect()->route('admin.providers.index')->with(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
@@ -136,7 +144,7 @@ class ProviderController extends Controller
     }
 
     //    helpers
-    private function validateForm(Request $request)
+    private function validateProviderForm(Request $request)
     {
         return $request->validate([
             'company_name' => 'required',
@@ -160,5 +168,24 @@ class ProviderController extends Controller
             'website' => '',
             'support_email' => 'required'
         ]);
+    }
+
+    private function validateReferentsForm(Request $request)
+    {
+        $data = [];
+        $request->validate([
+            'referents.*.surname' => [
+                'required'
+            ],
+            'referents.*.role' => [
+                'required',
+            ]
+        ]);
+        foreach($request->referents as $key => $referent) {
+            $data[$key] = $referent;
+            $data[$key]['id'] = $key;
+        }
+
+        return $data;
     }
 }

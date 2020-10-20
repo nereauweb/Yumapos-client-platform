@@ -1,1 +1,1 @@
-@include('admin.providers.partials._form', ['provider' => $provider])
+@include('admin.providers.partials._edit', ['provider' => $provider])

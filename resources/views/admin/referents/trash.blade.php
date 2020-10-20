@@ -55,7 +55,7 @@
                                                 </span>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <form action="{{ route('admin.providers.restore', $referent->id) }}" method="post">
+                                        <form action="{{ route('admin.referents.restore', $referent->id) }}" method="post">
                                             @csrf
                                             @method('PUT')
                                             <button class="dropdown-item btn-danger">Restore</button>

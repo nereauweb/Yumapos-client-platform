@@ -107,7 +107,7 @@ class ProviderReferentController extends Controller
         $referent = ProviderReferent::findOrFail($id);
         try {
             $referent->delete();
-            return redirect()->route('admin.referents.index')->with(['status' => 'success', 'message' => 'Successfully added to trash bin the referent']);
+            return redirect()->back()->with(['status' => 'success', 'message' => 'Successfully added to trash bin the referent']);
         } catch (\Exception $e) {
             return redirect()->route('admin.referents.index')->with(['status' => 'error', 'message' => $e->getMessage()]);
         }
@@ -136,9 +136,9 @@ class ProviderReferentController extends Controller
         $referent = ProviderReferent::withTrashed()->findOrFail($id);
         try {
             $referent->restore();
-            return redirect()->route('admin.referents.index')->with(['status' => 'success', 'message' => 'Successfully restored the referent from trash']);
+            return redirect()->route('admin.providers.index')->with(['status' => 'success', 'message' => 'Successfully restored the referent from trash']);
         } catch (QueryException $e) {
-            return redirect()->route('admin.referents.index')->with(['status' => 'error', 'message' => $e->getMessage()]);
+            return redirect()->route('admin.providers.index')->with(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
 
@@ -172,6 +172,7 @@ class ProviderReferentController extends Controller
     private function validateReferentForm(Request $request)
     {
         $data = $request->validate([
+            'provider_id' => '',
             'name' => '',
             'surname' => 'required',
             'referent_pec' => '',
