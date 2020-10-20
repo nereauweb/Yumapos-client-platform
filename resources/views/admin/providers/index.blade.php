@@ -12,7 +12,7 @@
                 </div>
                 <div>
                     <a href="{{ route('admin.providers.create') }}" class="btn btn-info" id="create">Add Provider</a>
-                    <a href="#" class="btn btn-danger" id="create">Deleted Providers</a>
+                    <a href="{{ route('admin.providers.trash') }}" class="btn btn-danger" id="trash">Deleted Providers</a>
                 </div>
             </div>
             <div class="card-body">
@@ -56,7 +56,11 @@
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right">
                                                 <a href="{{ route('admin.providers.edit', $provider->id) }}" class="dropdown-item btn-success">{{ __('coreuiforms.edit') }}</a>
-                                                <a href="#" class="dropdown-item btn-danger">{{ __('coreuiforms.delete') }}</a>
+                                                <form action="{{ route('admin.providers.destroy', $provider->id) }}" method="post">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="dropdown-item btn-danger">{{ __('coreuiforms.delete') }}</button>
+                                                </form>
                                             </div>
                                     </div>
                                 </td>

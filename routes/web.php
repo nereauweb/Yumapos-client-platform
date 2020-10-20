@@ -211,7 +211,12 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::get('/', 'ProviderController@index')->name('admin.providers.index');
             Route::get('/create', 'ProviderController@create')->name('admin.providers.create');
             Route::post('/', 'ProviderController@store')->name('admin.providers.store');
-            Route::get('/{id}', 'ProviderController@edit')->name('admin.providers.edit');
+            Route::get('/{id}/edit', 'ProviderController@edit')->name('admin.providers.edit');
+            Route::put('/{id}', 'ProviderController@update')->name('admin.providers.update');
+            Route::delete('/{id}', 'ProviderController@destroy')->name('admin.providers.destroy');
+            // deleted providers
+            Route::get('/trash', 'ProviderController@trash')->name('admin.providers.trash');
+            Route::put('/restore/{provider}', 'ProviderController@restore')->name('admin.providers.restore');
         });
 
         Route::prefix('/admin/files')->group(function () {

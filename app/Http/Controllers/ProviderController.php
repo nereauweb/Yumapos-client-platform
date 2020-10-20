@@ -9,6 +9,12 @@ use Illuminate\View\View;
 
 class ProviderController extends Controller
 {
+    private $regions;
+
+    public function __construct()
+    {
+        $this->regions = ['Abruzzo' => 'Abruzzo', 'Basilicata' => 'Basilicata', 'Calabria' => 'Calabria', 'Campania' => 'Campania', 'Emilia-Romagna' => 'Emilia-Romagna', 'Friuli Venezia Giulia' => 'Friuli Venezia Giulia', 'Lazio' => 'Lazio', 'Liguria' => 'Liguria', 'Lombardia' => 'Lombardia', 'Marche' => 'Marche', 'Molise' => 'Molise', 'Piemonte' => 'Piemonte', 'Puglia' => 'Puglia', 'Sardegna' => 'Sardegna', 'Sicilia' => 'Sicilia', 'Toscana' => 'Toscana'];
+    }
 
     /**
      * Display a listing of the resource.
@@ -28,7 +34,7 @@ class ProviderController extends Controller
      */
     public function create() :View
     {
-        $regions = ['Abruzzo' => 'Abruzzo', 'Basilicata' => 'Basilicata', 'Calabria' => 'Calabria', 'Campania' => 'Campania', 'Emilia-Romagna' => 'Emilia-Romagna', 'Friuli Venezia Giulia' => 'Friuli Venezia Giulia', 'Lazio' => 'Lazio', 'Liguria' => 'Liguria', 'Lombardia' => 'Lombardia', 'Marche' => 'Marche', 'Molise' => 'Molise', 'Piemonte' => 'Piemonte', 'Puglia' => 'Puglia', 'Sardegna' => 'Sardegna', 'Sicilia' => 'Sicilia', 'Toscana' => 'Toscana'];
+        $regions = $this->regions;
         return view('admin.providers.create', compact('regions'));
     }
 
@@ -40,7 +46,99 @@ class ProviderController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $data = $this->validateForm($request);
+
+        try {
+            Provider::create($data);
+            return redirect()->route('admin.providers.index')->with(['status' => 'success', 'message' => 'Successfully registered the provider']);
+        } catch (QueryException $e) {
+            return redirect()->route('admin.providers.index')->with(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return View
+     */
+    public function edit($id) :View
+    {
+        $provider = Provider::findOrFail($id);
+        $regions = $this->regions;
+        return view('admin.providers.edit', compact('provider', 'regions'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $provider = Provider::findOrFail($id);
+        $data = $this->validateForm($request);
+        try {
+            $provider->update($data);
+            return redirect()->route('admin.providers.index')->with(['status' => 'success', 'message' => 'Successfully updated the provider']);
+        } catch (QueryException $e) {
+            return redirect()->route('admin.providers.index')->with(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $provider = Provider::findOrFail($id);
+        try {
+            $provider->delete();
+            return redirect()->route('admin.providers.index')->with(['status' => 'success', 'message' => 'Successfully added to trash bin the provider']);
+        } catch (\Exception $e) {
+            return redirect()->route('admin.providers.index')->with(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return View
+     */
+    public function trash() :View
+    {
+        $providers = Provider::onlyTrashed()->paginate(10);
+        return view('admin.providers.trash', compact('providers'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function restore(Request $request, $id)
+    {
+        $provider = Provider::withTrashed()->findOrFail($id);
+        try {
+            $provider->restore();
+            return redirect()->route('admin.providers.index')->with(['status' => 'success', 'message' => 'Successfully restored the provider from trash']);
+        } catch (QueryException $e) {
+            return redirect()->route('admin.providers.index')->with(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+    //    helpers
+    private function validateForm(Request $request)
+    {
+        return $request->validate([
             'company_name' => 'required',
             'legal_seat' => 'required',
             'legal_seat_address' => 'required',
@@ -62,49 +160,5 @@ class ProviderController extends Controller
             'website' => 'required',
             'support_email' => 'required'
         ]);
-
-        try {
-            Provider::create($data);
-            return redirect()->route('admin.providers.index')->with(['status' => 'success', 'message' => 'Successfully registered the provider']);
-        } catch (QueryException $e) {
-            return redirect()->route('admin.providers.index')->with(['status' => 'error', 'message' => $e->getMessage()]);
-        }
-    }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return View
-     */
-    public function edit($id) :View
-    {
-        $provider = Provider::findOrFail($id);
-        $regions = ['Abruzzo' => 'Abruzzo', 'Basilicata' => 'Basilicata', 'Calabria' => 'Calabria', 'Campania' => 'Campania', 'Emilia-Romagna' => 'Emilia-Romagna', 'Friuli Venezia Giulia' => 'Friuli Venezia Giulia', 'Lazio' => 'Lazio', 'Liguria' => 'Liguria', 'Lombardia' => 'Lombardia', 'Marche' => 'Marche', 'Molise' => 'Molise', 'Piemonte' => 'Piemonte', 'Puglia' => 'Puglia', 'Sardegna' => 'Sardegna', 'Sicilia' => 'Sicilia', 'Toscana' => 'Toscana'];
-        return view('admin.providers.edit', compact('provider', 'regions'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }
