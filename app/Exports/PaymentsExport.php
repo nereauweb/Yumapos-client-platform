@@ -12,17 +12,17 @@ class PaymentsExport implements FromCollection, WithHeadings
     {
         $this->payments = $payments;
     }
-	
+
     public function collection()
     {
         return $this->payments;
     }
-	
+
 	public function headings(): array
     {
         return [
-            "id","date","user_id","user name","amount","details","created_at","updated_at"
+            "id","date","user_id","user name","provider company name","amount","details","created_at","updated_at"
         ];
     }
-	
+
 }

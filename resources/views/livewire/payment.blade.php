@@ -15,6 +15,10 @@
                         <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
                         Pay user
                     </a>
+                    <a class="btn btn-info" href="{{ route('admin.payProvider') }}">
+                        <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
+                        Pay provider
+                    </a>
                     <a class="btn btn-success" href="/admin/payments/create">
                         <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
                         Add payment
@@ -48,6 +52,7 @@
                                 <option value="0" selected>All Types</option>
                                 <option value="1">User to platform</option>
                                 <option value="2">Platform to user</option>
+                                <option value="3">Platform to provider</option>
                             </select>
                         </div>
                     </div>
@@ -189,11 +194,15 @@
                                         style="display:none;">{{ date('Y-m-d H:i:s', strtotime($payment->date)) }}</span>
                                     {{ date('d/m/Y', strtotime($payment->date)) }}
                                 </td>
-                                <td>{{ $payment->user->name ?? '' }}</td>
                                 <td>
-                                    @if (isset($payment->user))
-                                        {{ $payment->amount }}
+                                    @if($payment->isProvider())
+                                        {{ $payment->provider->company_name }}
+                                    @else
+                                        {{ $payment->user->name ?? '' }}
                                     @endif
+                                </td>
+                                <td>
+                                    {{ $payment->amount }}
                                 </td>
                                 <td>{{ $payment->details }}</td>
                                 <td>
@@ -220,6 +229,8 @@
                                         User to platform
                                     @elseif($payment->type == 2)
                                         Platform to user
+                                    @else
+                                        Platform to provider
                                     @endif
                                 </td>
                                 <td>

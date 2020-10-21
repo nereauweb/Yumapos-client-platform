@@ -1,5 +1,5 @@
 
-      
+
     <div class="c-wrapper">
       <header class="c-header c-header-light c-header-fixed c-header-with-subheader">
         <button class="c-header-toggler c-class-toggler d-lg-none mr-auto" type="button" data-target="#sidebar" data-class="c-sidebar-show"><span class="c-header-toggler-icon"></span></button>
@@ -15,7 +15,7 @@
             if(isset($appMenus['top menu'])){
                 FreelyPositionedMenus::render( $appMenus['top menu'] , 'c-header-', 'd-md-down-none');
             }
-        ?>       
+        ?>
         <ul class="c-header-nav ml-auto">
           <li class="c-header-nav-item">
               <form id="select-locale-form" action="/locale" method="GET">
@@ -193,14 +193,17 @@
                 </svg> <form action="/logout" method="POST"> @csrf <button type="submit" class="btn btn-ghost-dark btn-block uk-dark">Logout</button></form></a>
             </div>
 				--}}
+            @hasanyrole('sales|user')
+            <li class="c-header-nav-item px-3">
+                Balance {{ Auth::user()->plafond }} €
+            </li>
+            <li class="c-header-nav-item-px-3">
+                <a href="{{ route('users.payments.create') }}" class="btn btn-success">Payment</a>
+            </li>
+            @endrole
 			<li class="c-header-nav-item px-3">
 				<form action="/logout" method="POST"> @csrf <button type="submit" class="btn btn-ghost-dark btn-block light">Logout</button></form>
 			</li>
-          <li class="c-header-nav-item px-3">
-			@role('user')
-			Balance {{ Auth::user()->plafond }} €
-			@endrole
-          </li>
 			{{--
           <li class="c-header-nav-item px-3">
             <button class="c-class-toggler c-header-nav-btn" type="button" data-target="#aside" data-class="c-sidebar-show">
@@ -209,8 +212,8 @@
               </svg>
             </button>
           </li>
-			--}}
           </li>
+        --}}
         </ul>
 
 

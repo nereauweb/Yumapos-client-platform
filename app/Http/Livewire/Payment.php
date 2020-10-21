@@ -36,10 +36,10 @@ class Payment extends Component
     public function render()
     {
         $this->unapprovedPayments = ModelsPayment::where('approved', 0)->count();
-
         $date_begin = ($this->from && !is_null($this->from)) ? $this->from . ' 00:00:00' : date("Y") . '-01-01 00:00:00';
 		$date_end = ($this->to && !is_null($this->to)) ? $this->to . ' 23:59:59' : date("Y") . '-12-31 23:59:59';
-		$payments = ModelsPayment::join('users as u', 'u.id', '=', 'payments.user_id')->where('payments.created_at', '>=', $date_begin)->where('payments.created_at', '<=', $date_end)
+		$payments = ModelsPayment::leftJoin('users as u', 'u.id', '=', 'payments.user_id')->where('payments.date', '>=', $date_begin)->where('payments.date', '<=', $date_end)
+                                    ->leftJoin('providers as p', 'p.id', '=', 'payments.provider_id')
                                     ->when($this->sortField, function ($query) {
                                         $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
                                     })->when(($this->filterByModel && !is_null($this->filterByModel) && is_null($this->sortField)) && $this->filterByModel == 'users.name', function ($query) {
@@ -53,8 +53,8 @@ class Payment extends Component
             })->select('payments.*');
 
         $this->amount = $payments->sum('payments.amount');
-        $this->positiveBalance = ModelsPayment::where('type', 1)->where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end)->sum('amount');
-        $this->negativeBalance = ModelsPayment::where('type', 2)->where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end)->sum('amount');
+        $this->positiveBalance = ModelsPayment::where('type', 1)->where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end)->where('approved', 1)->sum('amount');
+        $this->negativeBalance = ModelsPayment::where('type', 2)->orWhere('type', 3)->where('approved', 1)->where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end)->sum('amount');
         $this->diffBalance = $this->positiveBalance - $this->negativeBalance;
         $payments = $payments->paginate(10);
         $users = \App\User::role('user')->get();

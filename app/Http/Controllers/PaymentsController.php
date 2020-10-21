@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Models\Provider;
 use App\User;
 
 use Illuminate\Database\QueryException;
@@ -31,14 +32,15 @@ class PaymentsController extends Controller
 //			->get();
         $date_begin = ($request->from && !is_null($request->from)) ? $request->from . ' 00:00:00' : date("Y") . '-01-01 00:00:00';
         $date_end = ($request->to && !is_null($request->to)) ? $request->to . ' 23:59:59' : date("Y") . '-12-31 23:59:59';
-        $payments = Payment::join('users as u', 'u.id', '=', 'payments.user_id')->where('payments.created_at', '>=', $date_begin)->where('payments.created_at', '<=', $date_end)
+        $payments = Payment::leftJoin('users as u', 'u.id', '=', 'payments.user_id')->where('payments.date', '>=', $date_begin)->where('payments.date', '<=', $date_end)
+            ->leftJoin('providers as p', 'p.id' ,'=', 'payments.provider_id')
             ->when($request->userSelected, function ($query) use ($request) {
                 $query->where('u.id', $request->userSelected);
             })->when($request->typeSelected, function ($query) use ($request) {
                 $query->where('payments.type', $request->typeSelected);
             })->when(!is_null($request->stateSelected), function ($query) use ($request) {
                 $query->where('payments.approved', $request->stateSelected);
-        })->select("payments.id","payments.date","payments.user_id","u.name","payments.amount","payments.details","payments.created_at","payments.updated_at")->get();
+        })->select("payments.id","payments.date","payments.user_id","u.name","p.company_name","payments.amount","payments.details","payments.created_at","payments.updated_at")->get();
         return Excel::download(new PaymentsExport($payments), 'payments.xlsx');
     }
 
@@ -149,7 +151,7 @@ class PaymentsController extends Controller
                     ]);
                 }
             }
-            
+
             DB::commit();
             return redirect()->route('admin.payments.index')->with(['status' => 'success', 'message' => 'Payment updated, user balance updated']);
         } catch (\Exception $e) {
@@ -204,6 +206,48 @@ class PaymentsController extends Controller
         return view('admin/payments/pay-user', compact('users'));
     }
 
+    public function payProvider()
+    {
+        $providers = Provider::all();
+        return view('admin/payments/pay-provider', compact('providers'));
+    }
+
+    public function payProviderStore(Request $request)
+    {
+        // type = 3 (stores payments made from admin to provider, and it reduces the total sum of payments (inside the view))
+
+
+        $data = $request->validate([
+            'date' => '',
+            'provider_id' => 'required',
+            'amount' => 'required',
+            'details' => '',
+            'document' => '',
+            'approved' => '',
+            'type' => '',
+            'update_balance' => ''
+        ]);
+        $date = \DateTime::createFromFormat("d/m/Y",$request->date);
+        $date->format("Y-m-d H:i:s");
+
+        if (!$date) {
+            return back()->withErrors($data)->withInput();
+        }
+
+        $data['date'] = $date;
+
+        try {
+            DB::beginTransaction();
+            $payment = Payment::create($data);
+            $this->fileAdd($payment, $data);
+            DB::commit();
+            return back()->with(['status' => 'success', 'message' => 'Payment added to provider successfully!']);
+        } catch (\Exception $e) {
+            return back()->with(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+
+    }
+
     public function payUserStore(Request $request)
     {
         if ($request->updateUserBalance) {
@@ -224,7 +268,8 @@ class PaymentsController extends Controller
                 $payment->update([
                     'approved' => '-1'
                 ]);
-                return back()->with(['status' => 'success', 'message' => 'payment canceled successfully, user balance remains the same!']);
+                $updatedRelation = $payment->type == 3 ? 'Provider' : 'User';
+                return back()->with(['status' => 'success', 'message' => 'payment canceled successfully,'.$updatedRelation.' balance remains the same!']);
             } else {
                 try {
                     DB::beginTransaction();
@@ -253,7 +298,8 @@ class PaymentsController extends Controller
             $payment->update([
                 'approved' => 1
             ]);
-            return back()->with(['status' => 'success', 'message' => 'payment recovered, user balance remains the same!']);
+            $updatedRelation = $payment->type == 3 ? 'Provider' : 'User';
+            return back()->with(['status' => 'success', 'message' => 'payment recovered, '.$updatedRelation.' balance remains the same!']);
         } else if ($payment->update_balance === 1) {
             try {
                 DB::beginTransaction();
@@ -350,7 +396,7 @@ class PaymentsController extends Controller
             $filename = 'admin-created-' . time() . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('payments', $filename);
             $payment->documents()->create([
-                'label' => $payment->user->name.'-document',
+                'label' => $payment->provider->company_data.'-provider-document',
                 'filename' => $path
             ]);
         }

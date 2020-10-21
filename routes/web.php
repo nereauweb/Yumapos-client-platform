@@ -260,6 +260,8 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::put('/payments/recover/{payment}', 'PaymentsController@recover')->name('admin.payments.recover');
             Route::get('/payments/trashed-payments', 'PaymentsController@trashed')->name('admin.trashedPayments');
             Route::get('/payments/pay-user', 'PaymentsController@payUser')->name('admin.payUser');
+            Route::get('/payments/pay-provider', 'PaymentsController@payProvider')->name('admin.payProvider');
+            Route::post('/payments/pay-provider', 'PaymentsController@payProviderStore')->name('admin.payProviderStore');
             Route::post('/payments/pay-user', 'PaymentsController@payUserStore')->name('admin.payments.payUserStore');
             Route::resource('payments',  'PaymentsController', [ 'names' => 'admin.payments' ]);
         });

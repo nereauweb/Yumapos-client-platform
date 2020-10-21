@@ -33,14 +33,19 @@ class Payment extends Model
 	public function user() {
 		return $this->hasOne('App\User','id','user_id');
 	}
-	
+
 	public function provider() {
-		return $this->hasOne('App\Provider','id','provider_id');
+		return $this->hasOne(Provider::class,'id','provider_id');
 	}
-	
+
 	public function userOrProvider() {
 		return $this->type == 3 ? $this->provider() : $this->user();
 	}
+
+	public function isProvider()
+    {
+        return $this->type === 3;
+    }
 
 	public function documents() : HasMany
 	{
