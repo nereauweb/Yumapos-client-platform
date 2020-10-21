@@ -54,6 +54,7 @@ class Payment extends Component
 
         $this->amount = $payments->sum('payments.amount');
         $this->positiveBalance = ModelsPayment::where('type', 1)->where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end)->where('approved', 1)->sum('amount');
+        $this->positiveBalance -= ModelsPayment::where('type',3)->where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end)->where('approved', 1)->sum('amount');
         $this->negativeBalance = ModelsPayment::where('type', 2)->orWhere('type', 3)->where('approved', 1)->where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end)->sum('amount');
         $this->diffBalance = $this->positiveBalance - $this->negativeBalance;
         $payments = $payments->paginate(10);
