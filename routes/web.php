@@ -184,8 +184,8 @@ Route::group(['middleware' => ['get.menu']], function () {
         });
 
 		Route::prefix('/users')->group(function () {
-			Route::resource('payments',  'PointPaymentsController', [ 'names' => 'users.payments' ]);
-			Route::get('/payments/export', 'PointPaymentsController@export')->name('users.payments.export');
+            Route::get('/payments/export', 'PointPaymentsController@export')->name('users.payments.export');
+            Route::resource('payments',  'PointPaymentsController', [ 'names' => 'users.payments' ]);
         });
 
 		Route::prefix('/users/settings')->group(function () {

@@ -14,10 +14,10 @@ class ShowServices extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public $search;
-    public $searchData; 
+    public $searchData;
     public $sortField;
     public $customSort = null;
-    public $sortAscCustom = true; 
+    public $sortAscCustom = true;
     public $start;
     public $end;
     public $type;
@@ -28,7 +28,7 @@ class ShowServices extends Component
 
     public function render()
     {
-        $operators = ApiReloadlyOperator::join('api_reloadly_operators_countries as country', 'country.parent_id', '=', 'api_reloadly_operators.id')
+        $livewireOperators = ApiReloadlyOperator::join('api_reloadly_operators_countries as country', 'country.parent_id', '=', 'api_reloadly_operators.id')
         ->join('api_reloadly_operators_fxs as fx', 'fx.parent_id', '=', 'api_reloadly_operators.id')
         ->select('api_reloadly_operators.*')->when($this->countryName, function ($query) {
             $query->where('country.name', $this->countryName);
@@ -41,14 +41,14 @@ class ShowServices extends Component
         })->when($this->type, function ($query) {
             $query->where('api_reloadly_operators.denominationType', $this->type);
         });
-        
+
         $countriesList = DB::table('api_reloadly_operators_countries')->select(DB::raw('count(*) as countries_count, name'))->groupBy('name')->get();
         $typesList = ApiReloadlyOperator::select('denominationType')->distinct('denominationType')->get();
-    
-        $operators = $operators->paginate(10);
+
+        $livewireOperators = $livewireOperators->paginate(10);
 
         return view('livewire.show-services', [
-            'operators' => $operators,
+            'livewireOperators' => $livewireOperators,
             'countriesList' => $countriesList,
             'typesList' => $typesList
         ]);
@@ -77,7 +77,7 @@ class ShowServices extends Component
         $this->customSort = $type;
     }
 
-    public function resetDate() 
+    public function resetDate()
     {
         $this->start = '';
         $this->end = '';

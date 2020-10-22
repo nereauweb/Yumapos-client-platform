@@ -25,8 +25,8 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script>
         $('#commitData').on('click', () => {
-        @this.set('from', $("#date_begin").val());
-        @this.set('to', $("#date_end").val());
+            @this.set('from', $("#date_begin").val());
+            @this.set('to', $("#date_end").val());
         });
     </script>
     <script type="text/javascript">

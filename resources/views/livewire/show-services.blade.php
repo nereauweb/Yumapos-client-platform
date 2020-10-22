@@ -29,7 +29,7 @@
                     <div>
                         <select wire:model.defer="countryName" name="countryName" id="countryId" class="custom-select">
                             <option value="-">All countries</option>
-                            @foreach ($countriesList as $item)
+                            @foreach ($countries as $item)
                                 <option value="{{$item->name}}">{{$item->name}}</option>
                             @endforeach
                         </select>
@@ -107,7 +107,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($operators as $operator)
+                        @foreach ($livewireOperators as $operator)
                             <tr>
                                 <td>
                                     <div class="btn-group btn-group-xs">
@@ -159,7 +159,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $operators->links() }}
+                {{ $livewireOperators->links() }}
             </div>
         </div>
     </div>

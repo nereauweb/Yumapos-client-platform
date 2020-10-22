@@ -21,6 +21,9 @@ class Operation extends Component
     public $from;
     public $userSelected;
 
+    public $selectedCountry;
+    public $selectedOperator;
+
 
     public $totalOperationsCount;
 
@@ -39,6 +42,10 @@ class Operation extends Component
         $date_end = ($this->to && !is_null($this->to)) ? $this->to . ' 23:59:59' : date("Y") . '-12-31 23:59:59';
         $operations = ServiceOperation::where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end)->when($this->sortField, function ($query) {
             $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
+        })->when($this->selectedCountry, function ($query) {
+            $query->where('request_country_iso', '=', $this->selectedCountry);
+        })->when($this->selectedOperator, function ($query) {
+            $query->where('request_operatorId', '=', $this->selectedOperator);
         });
         $this->totalOperationsCount = $operations->count();
         if ($user_id != 0) {

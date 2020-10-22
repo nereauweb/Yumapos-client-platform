@@ -174,7 +174,7 @@ class PaymentsController extends Controller
                     'plafond' => $payment->user->plafond + $payment->amount
                 ]);
                 DB::commit();
-                return back()->with(['status' => 'success', 'message' => 'payment approved successfully']);
+                return back()->with(['status' => 'success', 'message' => 'payment approved successfully, user balance updated']);
             } catch (QueryException $q) {
                 DB::rollBack();
                 return back()->with(['status' => 'error', 'message' => $q->getMessage()]);
@@ -215,8 +215,6 @@ class PaymentsController extends Controller
     public function payProviderStore(Request $request)
     {
         // type = 3 (stores payments made from admin to provider, and it reduces the total sum of payments (inside the view))
-
-
         $data = $request->validate([
             'date' => '',
             'provider_id' => 'required',

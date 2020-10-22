@@ -27,11 +27,20 @@ class PointPaymentsController extends Controller
 
 	public function export(Request $request)
     {
-		$payments = Payment::select("payments.id","payments.date","payments.user_id","users.name","payments.amount","payments.details","payments.created_at","payments.updated_at")
-			->join('users', 'users.id', '=', 'payments.user_id')
-			->where('users.id',\Auth::user()->id)
-			->get();
-        return Excel::download(new PaymentsExport($payments), 'payments.xlsx');
+        $payments = auth()->user()->payments()->when(($request->from !== null && !empty($request->from)), function ($query) use ($request) {
+            $query->where('date', '>=', $request->from);
+        })->when(($request->to !== null && !empty($request->to)), function ($query) use ($request) {
+            $query->where('date', '<=', $request->to);
+        })->when($request->state, function ($query) use ($request) {
+            if ($request->state == '00') $request->state = 0;
+            $query->where('approved', '=', $request->state);
+        })->select('id', 'date', 'amount', 'type', 'details', 'approved', 'created_at', 'updated_at')->get();
+
+//		$payments = Payment::select("payments.id","payments.date","payments.user_id","users.name","payments.amount","payments.details","payments.created_at","payments.updated_at")
+//			->join('users', 'users.id', '=', 'payments.user_id')
+//			->where('users.id',\Auth::user()->id)
+//			->get();
+        return Excel::download(new PaymentsExport($payments, 'user'), 'payments.xlsx');
     }
 
     public function create()

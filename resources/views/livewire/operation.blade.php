@@ -53,6 +53,28 @@
                             </div>
                         </fieldset>
                     </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="js-select-countries">Choose country</label>
+                            <select wire:model.defer="selectedCountry" class="form-control">
+                                <option value="0" selected>All</option>
+                                @foreach($countries as $country)
+                                    <option value="{{ $country->isoName }}">{{ $country->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="js-select-countries">Choose operator</label>
+                            <select wire:model.defer="selectedOperator" class="form-control">
+                                <option value="0" selected>All</option>
+                                @foreach($operators as $operator)
+                                    <option value="{{ $operator->operatorId }}">{{ $operator->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <div class="col-sm mt-2">
                         <button class="btn btn-success" id="commitData" wire:click="commit">Commit</button>
                     </div>
@@ -138,7 +160,7 @@
                                         <td>{{ $operation->reloadly_transactionId }}</td>
                                         <td>{{ $operation->api_reloadly_calls_id }}</td>
                                         <td>{{ $operation->request_country_iso }}</td>
-                                        <td>{{ $operation->reloadly_operation->operatorName ?? '' }}</td>
+                                        <td>{{ $operation->operator->name ?? '' }}</td>
                                         <td>{{ $operation->request_recipient_phone }}</td>
                                         <td>{{ round($operation->final_expected_destination_amount, 2) ?? '' }}&nbsp;{{ $operation->reloadly_operation->deliveredAmountCurrencyCode ?? '' }}
                                         </td>
@@ -162,6 +184,8 @@
                     {!! Form::button('Export', ['class' => 'btn btn-success', 'type' => 'submit']) !!}
                     <input type="hidden" name="date_begin" value="{{ date('Y-m-d', strtotime($date_begin)) }}">
                     <input type="hidden" name="date_end" value="{{ date('Y-m-d', strtotime($date_end)) }}">
+                    <input type="hidden" name="isoName" value="{{ $selectedCountry }}">
+                    <input type="hidden" name="operatorId" value="{{ $selectedOperator }}">
                     {!! Form::close() !!}
                     {!! Form::open(['route' => 'admin.report.operations.export.simple', 'method' => 'GET', 'role' =>
                     'form', 'class' => 'needs-validation uk-margin-bottom']) !!}

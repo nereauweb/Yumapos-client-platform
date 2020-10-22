@@ -2,7 +2,10 @@
 
 namespace App;
 
+use App\Models\Payment;
+use App\Models\ServiceOperation;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,7 +16,7 @@ class User extends Authenticatable
     use Notifiable;
     use SoftDeletes;
     use HasRoles;
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -45,32 +48,42 @@ class User extends Authenticatable
         'deleted_at'
     ];
 
-    protected $attributes = [ 
+    protected $attributes = [
         'menuroles' => 'user',
     ];
-	
+
 	public function referent() {
 		return $this->hasOne('App\Models\User','id','parent_id');
     }
-	
+
 	public function referenced() {
 		return $this->hasMany('App\User','parent_id','id');
     }
-	
+
 	public function company_data() {
 		return $this->hasOne('App\Models\UserCompanyData','user_id','id');
     }
-	
+
 	public function group() {
 		return $this->hasOne('App\Models\UsersGroup','id','group_id');
     }
-	
+
 	public function configuration() {
 		return $this->hasOne('App\Models\UserConfiguration','user_id');
     }
-	
+
+    public function payments() :HasMany
+    {
+        return $this->hasMany(Payment::class, 'user_id', 'id');
+    }
+
+    public function serviceOperations() :HasMany
+    {
+        return $this->hasMany(ServiceOperation::class, 'user_id', 'id');
+    }
+
 	public function impersonate($user_id){
-		if (\Auth::user()->hasrole('admin')){			
+		if (\Auth::user()->hasrole('admin')){
 			\Auth::loginUsingId($user_id, true);
 			return redirect()->route('index')->with('success', 'User identity changed');
 		}

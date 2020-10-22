@@ -37,23 +37,26 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}" />
 	<!-- UIkit CSS -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.5.5/dist/css/uikit.min.css" />
-	<link rel="stylesheet" href="/css/reset.css" />
+{{--	<link rel="stylesheet" href="/css/reset.css" />--}}
     <!-- Icons-->
     <link href="{{ asset('css/free.min.css') }}" rel="stylesheet"  crossorigin> <!-- icons -->
     <!-- Main styles for this application-->
-	<link rel="stylesheet" href="https://unpkg.com/@coreui/coreui/dist/css/coreui.min.css" crossorigin>
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/pace.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/flag.min.css') }}" rel="stylesheet">
+      <link rel="stylesheet" href="https://unpkg.com/@coreui/coreui/dist/css/coreui.min.css" crossorigin>
+      <link rel="stylesheet" href="{{ asset('css/coreui-chartjs.css') }}">
+      <link href="{{ asset('css/pace.min.css') }}" rel="stylesheet">
+      <link href="{{ asset('css/flag.min.css') }}" rel="stylesheet">
+      <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
+      <link rel="stylesheet" href="{{ asset('css/select2-coreui.css') }}">
+      <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     @yield('css')
 	<!-- Custom CSS -->
-	<link rel="stylesheet" href="/css/layout.css" />
+{{--	<link rel="stylesheet" href="/css/layout.css" />--}}
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 	<!-- UIkit JS -->
 	<script src="https://cdn.jsdelivr.net/npm/uikit@3.5.5/dist/js/uikit.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.5/dist/js/uikit-icons.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.5/dist/js/uikit-icons.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 	{{--
     <!-- Global site tag (gtag.js) - Google Analytics-->
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
@@ -107,7 +110,12 @@
     <!-- CoreUI and necessary plugins-->
     <script src="{{ asset('js/pace.min.js') }}"></script>
     <script src="{{ asset('js/coreui.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/tooltips.js') }}"></script>
+    <script src="{{ asset('js/Chart.min.js') }}"></script>
+    <script src="{{ asset('js/coreui-chartjs.js') }}"></script>
     <script src="{{ asset('js/coreui-utils.js') }}"></script>
+    <script src="{{ asset('js/select2.min.js') }}"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
     <script>
       /* 16.12.2019 */
       let selectLocale = document.getElementById("select-locale")
@@ -117,9 +125,5 @@
     </script>
 
     @yield('javascript')
-
-
-
-
   </body>
 </html>
