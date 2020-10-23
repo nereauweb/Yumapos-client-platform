@@ -89,6 +89,16 @@
                             </table>
                             {!! $operations->links() !!}
                         </div>
+                        <form action="{{ route('user.operations.export') }}" method="get">
+                            @csrf
+                            <input type="hidden" name="to" value="{{ $to }}">
+                            <input type="hidden" name="from" value="{{ $from }}">
+                            <input type="hidden" name="selectedCountry" value="{{ $selectedCountry }}">
+                            <input type="hidden" name="selectedOperator" value="{{ $selectedOperator }}">
+                            <button class="btn btn-success">
+                                Export
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

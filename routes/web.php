@@ -168,9 +168,8 @@ Route::group(['middleware' => ['get.menu']], function () {
     Route::group(['middleware' => ['role:user']], function () {
         Route::put('/user/update-password', 'ApprovedUserController@updatePassword')->name('user.updatePassword');
     });
-	
-	Route::group(['middleware' => ['role:user|sales']], function () {
 
+	Route::group(['middleware' => ['role:user|sales']], function () {
 		Route::get('/users/info', function () { return view('users.info'); });
 
 		Route::prefix('/users/services')->group(function () {
@@ -185,6 +184,7 @@ Route::group(['middleware' => ['get.menu']], function () {
 
 		Route::prefix('/users/reports')->group(function () {
 			Route::get('/operations', 'PointReportController@operations')->name('users.reports.operations');
+            Route::get('/users/operations/export', 'PointReportController@export')->name('user.operations.export');
         });
 
 		Route::prefix('/users')->group(function () {
@@ -322,6 +322,7 @@ Route::group(['middleware' => ['get.menu']], function () {
 		Route::prefix('/admin/report')->group(function () {
             Route::get('/', 'ReportController@operations')->name('admin.report.operations');
             Route::get('/agents', 'ReportController@agentOperations')->name('admin.agent.operations');
+            Route::get('/agents/export', 'ReportController@agentOperationsExport')->name('admin.report.agent.export');
 			Route::get('/export', 'ReportController@export_operations')->name('admin.report.operations.export');
 			Route::get('/export/simple', 'ReportController@export_operations_simple')->name('admin.report.operations.export.simple');
 			Route::get('/calls', 'ReportController@calls')->name('admin.report.calls');

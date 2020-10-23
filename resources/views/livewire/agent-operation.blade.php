@@ -108,10 +108,10 @@
                                     @if ($operations->count() > 0)
                                         @foreach ($operations as $operation)
                                             <tr>
-                                                <td>{{ $operation->created_at }}</td>
+                                                <td>{{ date('d/m/Y', strtotime($operation->created_at)) }}</td>
                                                 <td>{{ $operation->id }}</td>
                                                 <td>{{ $operation->service_operation_id }}</td>
-                                                <td>{{ $operation->user->name }}</td>
+                                                <td>{{ $operation->user->name ?? 'not set' }}</td>
                                                 <td>{{ $operation->pointOperation->user->name ?? '' }}</td>
                                                 <td>{{ round($operation->original_amount, 2) }}&nbsp;&euro;</td>
                                                 <td>{{ round($operation->applied_percentage, 2) }}&nbsp;%</td>
@@ -123,6 +123,13 @@
                             </table>
                             {{ $operations->links() }}
                         </div>
+                        <form action="{{ route('admin.report.agent.export') }}" method="GET">
+                            @csrf
+                            <input type="hidden" name="to" value="{{ $to }}">
+                            <input type="hidden" name="from" value="{{ $from }}">
+                            <input type="hidden" name="agentSelected" value="{{ $agentSelected }}">
+                            <button class="btn btn-success">Export</button>
+                        </form>
                     </div>
                 </div>
             </div>

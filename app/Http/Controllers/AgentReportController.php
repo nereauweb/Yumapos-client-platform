@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 
 class AgentReportController extends Controller
-{	
+{
 	public function operations(Request $request)
     {
 		$date_begin = $request->input('date_begin') ? $request->input('date_begin') . ' 00:00:00' : date("Y-m-d") . ' 00:00:00';
@@ -19,6 +19,6 @@ class AgentReportController extends Controller
 		$operations = AgentOperation::where('created_at','>=',$date_begin)->where('created_at','<=',$date_end)->where('user_id',Auth::user()->id)->orderBy('id','DESC')->get();
         return view('agents/report/operations',compact('operations','date_begin','date_end'));
     }
-	
-	
+
+
 }
