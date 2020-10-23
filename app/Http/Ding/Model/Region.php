@@ -191,6 +191,10 @@ class Region implements ModelInterface, ArrayAccess
         $this->container['region_name'] = isset($data['region_name']) ? $data['region_name'] : null;
         $this->container['country_iso'] = isset($data['country_iso']) ? $data['country_iso'] : null;
     }
+	
+	public function getData(){
+		return $this->container;
+	}
 
     /**
      * Show all the invalid properties with reasons.

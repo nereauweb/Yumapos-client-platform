@@ -1,0 +1,62 @@
+.c-dark-theme .custom-select option {
+    color: black;
+}
+.uk-tab > li.uk-active > a {
+    color: white;
+}
+.uk-modal {
+	z-index: 1040;
+}
+.form-control-dark {
+    background: #595959 !important;
+    color: white;
+}
+.iti__country-list {
+    background: black;
+}
+.c-dark-theme .c-sidebar .c-sidebar-nav-title {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+.c-dark-theme a {
+    color: #5ed926;
+}
+.c-dark-theme .btn.btn-ghost-dark.btn-block.light {
+    color: white;
+}
+dl.light {
+    color: #464646;
+}
+.c-dark-theme h1 {
+    color: white;
+}
+html:not([dir="rtl"]) .custom-select-sm {
+    padding-right: 1rem;
+}
+.c-main {
+	padding-top: 1rem;
+}
+.uk-description-list > dt {
+    color: #888;
+}
+.dropdown-menu {
+	z-index: 1200;
+}
+.dropdown-menu.dropdown-menu-right {
+	transform: translate(8px, 32px) !important;
+	padding: 4px;
+}
+.dropdown-menu.dropdown-menu-right {
+	transform: translate(8px, 32px) !important;
+	padding: 4px 4px 1px 4px;
+}
+.dropdown-menu.dropdown-menu-right .dropdown-item{
+	margin-bottom: 3px;
+}
+.dropdown-item span {
+	margin-left: 10px;
+}
+.btn.btn-table-action.dropdown-toggle {
+	color: white;
+	font-size: 15px;
+	padding-top: 0;
+}

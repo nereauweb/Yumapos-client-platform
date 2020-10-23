@@ -185,7 +185,11 @@ class Currency implements ModelInterface, ArrayAccess
         $this->container['currency_iso'] = isset($data['currency_iso']) ? $data['currency_iso'] : null;
         $this->container['currency_name'] = isset($data['currency_name']) ? $data['currency_name'] : null;
     }
-
+	
+	public function getData(){
+		return $this->container;
+	}
+	
     /**
      * Show all the invalid properties with reasons.
      *

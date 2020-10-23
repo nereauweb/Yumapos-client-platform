@@ -197,6 +197,10 @@ class Country implements ModelInterface, ArrayAccess
         $this->container['international_dialing_information'] = isset($data['international_dialing_information']) ? $data['international_dialing_information'] : null;
         $this->container['region_codes'] = isset($data['region_codes']) ? $data['region_codes'] : null;
     }
+	
+	public function getData(){
+		return $this->container;
+	}
 
     /**
      * Show all the invalid properties with reasons.

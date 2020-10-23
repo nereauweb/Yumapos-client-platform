@@ -191,6 +191,10 @@ class InternationalDialingInfo implements ModelInterface, ArrayAccess
         $this->container['minimum_length'] = isset($data['minimum_length']) ? $data['minimum_length'] : null;
         $this->container['maximum_length'] = isset($data['maximum_length']) ? $data['maximum_length'] : null;
     }
+	
+	public function getData(){
+		return $this->container;
+	}
 
     /**
      * Show all the invalid properties with reasons.

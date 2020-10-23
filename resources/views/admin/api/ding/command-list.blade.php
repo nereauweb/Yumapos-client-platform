@@ -12,24 +12,38 @@
                         </div>
                     </div>
                     <div class="card-body">						
-						<ul class="nav flex-column">
+						<ul class="nav uk-text-default flex-column">
 							<li class="nav-item">
-								<a class="nav-link" href="{{ url('/admin/api/ding/ErrorCodeDescriptions') }}">Error code descriptions</a>
+								Error code descriptions 
+								<a href="{{ url('/admin/api/ding/ErrorCodeDescriptions') }}">TEST</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="{{ url('/admin/api/ding/Currencies') }}">Currencies</a>
+								Currencies 
+								<a href="{{ url('/admin/api/ding/Currencies') }}">TEST</a>
+								|
+								<a href="{{ url('/admin/api/ding/Currencies/save') }}">SAVE</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="{{ url('/admin/api/ding/Regions') }}">Regions</a>
+								Regions 
+								<a href="{{ url('/admin/api/ding/Regions') }}">TEST</a>
+								|
+								<a href="{{ url('/admin/api/ding/Regions/save') }}">SAVE</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="{{ url('/admin/api/ding/Countries') }}">Countries</a>
+								Countries 
+								<a href="{{ url('/admin/api/ding/Countries') }}">TEST</a>
+								|
+								<a href="{{ url('/admin/api/ding/Countries/save') }}">SAVE</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="{{ url('/admin/api/ding/Providers') }}">Providers</a>
+								Providers 
+								<a href="{{ url('/admin/api/ding/Providers') }}">TEST</a>
+								|
+								<a href="{{ url('/admin/api/ding/Providers/save') }}">SAVE</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="{{ url('/admin/api/ding/ProviderStatus') }}">Providers status</a>
+								ProviderStatus 
+								<a href="{{ url('/admin/api/ding/ProviderStatus') }}">TEST</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="{{ url('/admin/api/ding/Products') }}">Products</a>

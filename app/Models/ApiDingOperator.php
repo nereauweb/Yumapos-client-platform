@@ -40,7 +40,7 @@ class ApiDingOperator extends Model
         );
 	}
 	
-	public function PaymentTypes(){ return $this->hasMany('App\Models\ApiDingOperatorPaymentType','operator_id'); }
+	public function payment_types(){ return $this->hasMany('App\Models\ApiDingOperatorPaymentType','ProviderCode'); }
 	
 	
 }

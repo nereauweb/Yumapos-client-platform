@@ -165,6 +165,10 @@ Route::group(['middleware' => ['get.menu']], function () {
         'destroy'   => 'resource.destroy'
     ]);
 
+    Route::group(['middleware' => ['role:user']], function () {
+        Route::put('/user/update-password', 'ApprovedUserController@updatePassword')->name('user.updatePassword');
+    });
+	
 	Route::group(['middleware' => ['role:user|sales']], function () {
 
 		Route::get('/users/info', function () { return view('users.info'); });
@@ -296,9 +300,13 @@ Route::group(['middleware' => ['get.menu']], function () {
 			Route::get('/', 'ApiDingController@index')->name('admin.api.ding.index');
             Route::get('/ErrorCodeDescriptions', 'ApiDingController@ErrorCodeDescriptions')->name('admin.api.ding.ErrorCodeDescriptions');
             Route::get('/Currencies', 'ApiDingController@Currencies')->name('admin.api.ding.Currencies');
+            Route::get('/Currencies/save', 'ApiDingController@Currencies_save')->name('admin.api.ding.Currencies.save');
             Route::get('/Regions', 'ApiDingController@Regions')->name('admin.api.ding.Regions');
+            Route::get('/Regions/save', 'ApiDingController@Regions_save')->name('admin.api.ding.Regions.save');
             Route::get('/Countries', 'ApiDingController@Countries')->name('admin.api.ding.Countries');
+            Route::get('/Countries/save', 'ApiDingController@Countries_save')->name('admin.api.ding.Countries.save');
             Route::get('/Providers', 'ApiDingController@Providers')->name('admin.api.ding.Providers');
+            Route::get('/Providers/save', 'ApiDingController@Providers_save')->name('admin.api.ding.Providers.save');
             Route::get('/ProviderStatus', 'ApiDingController@ProviderStatus')->name('admin.api.ding.ProviderStatus');
             Route::get('/Products', 'ApiDingController@Products')->name('admin.api.ding.Products');
             Route::get('/ProductDescriptions', 'ApiDingController@ProductDescriptions')->name('admin.api.ding.ProductDescriptions');
@@ -382,9 +390,6 @@ Route::group(['middleware' => ['get.menu']], function () {
 
     });
 
-    Route::group(['middleware' => ['role:user']], function () {
-        Route::put('/user/update-password', 'ApprovedUserController@updatePassword')->name('user.updatePassword');
-    });
 });
 
 Route::get('locale', 'LocaleController@locale');
