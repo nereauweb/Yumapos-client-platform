@@ -28,8 +28,8 @@ class ShowServices extends Component
 
     public function render()
     {
-        $livewireOperators = ApiReloadlyOperator::join('api_reloadly_operators_countries as country', 'country.parent_id', '=', 'api_reloadly_operators.id')
-        ->join('api_reloadly_operators_fxs as fx', 'fx.parent_id', '=', 'api_reloadly_operators.id')
+        $livewireOperators = ApiReloadlyOperator::leftJoin('api_reloadly_operators_countries as country', 'country.parent_id', '=', 'api_reloadly_operators.id')
+        ->leftJoin('api_reloadly_operators_fxs as fx', 'fx.parent_id', '=', 'api_reloadly_operators.id')
         ->select('api_reloadly_operators.*')->when($this->countryName, function ($query) {
             $query->where('country.name', $this->countryName);
         })->when($this->sortField, function ($query) {
@@ -45,7 +45,7 @@ class ShowServices extends Component
         $countriesList = DB::table('api_reloadly_operators_countries')->select(DB::raw('count(*) as countries_count, name'))->groupBy('name')->get();
         $typesList = ApiReloadlyOperator::select('denominationType')->distinct('denominationType')->get();
 
-        $livewireOperators = $livewireOperators->paginate(10);
+        $livewireOperators = $livewireOperators->distinct()->paginate(10);
 
         return view('livewire.show-services', [
             'livewireOperators' => $livewireOperators,

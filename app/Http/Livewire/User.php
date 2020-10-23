@@ -55,6 +55,8 @@ class User extends Component
 
         $users = AppUser::join('users_company_data as ucd', 'ucd.user_id', 'users.id')->when($this->sortField, function ($query) {
             $query->orderBy('users.'.$this->sortField, $this->sortAsc ? 'asc' : 'desc');
+        })->when($this->sortRelations, function ($query) {
+            $query->orderBy($this->sortRelations, $this->sortAsc ? 'asc' : 'desc');
         })->select('users.*');
 
         $this->approvedUsers = AppUser::where('state', 1)->count();
@@ -65,7 +67,7 @@ class User extends Component
         $this->trashedUsers = AppUser::onlyTrashed()->count();
         $you = auth()->user();
 
-        
+
 
         $cities = UserCompanyData::distinct()->get('legal_seat_city');
 
@@ -88,6 +90,7 @@ class User extends Component
         } else {
             $this->sortAsc = true;
         }
+        $this->sortRelations = '';
         $this->sortField = $field;
     }
 
@@ -98,6 +101,7 @@ class User extends Component
         } else {
             $this->sortAsc = true;
         }
+        $this->sortField = '';
         $this->sortRelations = $field;
     }
 
@@ -196,32 +200,8 @@ class User extends Component
     }
 
     public function search() {
-        $this->users = AppUser::join('users_company_data as ucd', 'ucd.user_id', 'users.id')->when($this->sortField, function ($query) {
-            $query->orderBy('users.'.$this->sortField, $this->sortAsc ? 'asc' : 'desc');
-        })->when($this->searchInput !== 'null' && $this->searchInput, function ($query) {
+        $this->users = AppUser::join('users_company_data as ucd', 'ucd.user_id', 'users.id')->when($this->searchInput !== 'null' && $this->searchInput, function ($query) {
             $query->where('ucd.company_name', 'like', '%'.$this->searchInput.'%')->orWhere('users.email', 'like', '%'.$this->searchInput.'%');
-        })->when($this->sortRelations, function ($query) {
-            $query->orderBy($this->sortRelations, $this->sortAsc ? 'asc' : 'desc');
-        })->when($this->stateUserSelected, function ($query) {
-            if ($this->stateUserSelected == 1) {
-                $query->where('users.state', '=', 1);
-            } else if ($this->stateUserSelected  == 2) {
-                $query->onlyTrashed();
-            } else if ($this->stateUserSelected == 3) {
-                $query->where('users.state', '=', 0);
-            }
-        })->when($this->balanceUserSelected, function ($query) {
-            if ($this->balanceUserSelected == 1) {
-                $query->where('users.plafond', '>', 0);
-            } else if ($this->balanceUserSelected == 2) {
-                $query->where('users.plafond', '<', 0);
-            } else if ($this->balanceUserSelected == 3) {
-                $query->where('users.plafond', '=', 0);
-            }
-        })->when($this->roleUserSelected !== 'null' && $this->roleUserSelected, function ($query) {
-            $query->role($this->roleUserSelected);
-        })->when($this->cityUserSelected !== 'null' && $this->cityUserSelected, function ($query) {
-            $query->where('ucd.legal_seat_city', '=', $this->cityUserSelected);
         })->select('users.*');
     }
 

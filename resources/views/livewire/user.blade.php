@@ -169,4 +169,13 @@
         </tbody>
     </table>
     {{ $users->links() }}
+
+    <form action="{{ route('admin.user.export') }}" method="GET">
+        @csrf
+        <input type="hidden" name="stateUserSelected" value="{{ $stateUserSelected }}">
+        <input type="hidden" name="balanceUserSelected" value="{{ $balanceUserSelected }}">
+        <input type="hidden" name="roleUserSelected" value="{{ $roleUserSelected }}">
+        <input type="hidden" name="cityUserSelected" value="{{ $cityUserSelected }}">
+        <button class="btn btn-success">Export</button>
+    </form>
 </div>

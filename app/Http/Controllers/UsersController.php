@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UsersExport;
 use App\Mail\ConfirmationMail;
 use Illuminate\Http\Request;
 use App\User;
 use App\Models\UserCompanyData;
 use App\Models\UsersGroup;
 
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
@@ -283,5 +285,34 @@ class UsersController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
+
+
+    //    export function
+    public function export(Request $request)
+    {
+        $collection = User::join('users_company_data as ucd', 'ucd.user_id', 'users.id')->when($request->stateUserSelected, function ($query) use ($request) {
+            if ($request->stateUserSelected == 1) {
+                $query->where('users.state', '=', 1);
+            } else if ($request->stateUserSelected  == 2) {
+                $query->onlyTrashed();
+            } else if ($request->stateUserSelected == 3) {
+                $query->where('users.state', '=', 0);
+            }
+        })->when($request->balanceUserSelected, function ($query) use ($request) {
+            if ($request->balanceUserSelected == 1) {
+                $query->where('users.plafond', '>', 0);
+            } else if ($request->balanceUserSelected == 2) {
+                $query->where('users.plafond', '<', 0);
+            } else if ($request->balanceUserSelected == 3) {
+                $query->where('users.plafond', '=', 0);
+            }
+        })->when($request->roleUserSelected !== 'null' && $request->roleUserSelected, function ($query) use ($request) {
+            $query->role($request->roleUserSelected);
+        })->when($request->cityUserSelected !== 'null' && $request->cityUserSelected, function ($query) use ($request) {
+            $query->where('ucd.legal_seat_city', '=', $request->cityUserSelected);
+        })->select('ucd.shop_sign', 'ucd.company_name', 'ucd.vat', 'ucd.operative_seat_address', 'ucd.operative_seat_zip', 'ucd.operative_seat_city', 'ucd.email', 'ucd.phone')->get();
+
+        return Excel::download(new UsersExport($collection), 'users.xlsx');
     }
 }

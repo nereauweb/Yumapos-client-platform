@@ -268,6 +268,9 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::post('/payments/pay-provider', 'PaymentsController@payProviderStore')->name('admin.payProviderStore');
             Route::post('/payments/pay-user', 'PaymentsController@payUserStore')->name('admin.payments.payUserStore');
             Route::resource('payments',  'PaymentsController', [ 'names' => 'admin.payments' ]);
+
+            Route::get('/users/export', 'UsersController@export')->name('admin.user.export');
+
         });
 
 		Route::prefix('/admin/services/')->group(function () {
