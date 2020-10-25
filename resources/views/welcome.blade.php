@@ -103,7 +103,76 @@
                                     </div>
 
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-header">Traffic &amp; Sales</div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <div class="c-callout c-callout-info"><small class="text-muted">New Clients</small>
+                                                                    <div class="text-value-lg">9,123</div>
+                                                                </div>
+                                                            </div>
 
+                                                            <div class="col-6">
+                                                                <div class="c-callout c-callout-danger"><small class="text-muted">Recuring Clients</small>
+                                                                    <div class="text-value-lg">22,643</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <table class="table table-responsive-sm table-hover table-outline mb-0">
+                                                    <thead class="thead-light">
+                                                    <tr>
+                                                        <th class="text-center">
+                                                            <svg class="c-icon">
+                                                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-people"></use>
+                                                            </svg>
+                                                        </th>
+                                                        <th>User</th>
+                                                        <th>Cost</th>
+                                                        <th>Amount</th>
+                                                        <th>Gain</th>
+                                                        <th>Activity</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach(auth()->user()->adminAccessServices() as $service)
+                                                            <tr>
+                                                                <td class="text-center">
+                                                                    {{ date('d/m/Y h:s', strtotime($service->created_at)) }}
+                                                                </td>
+                                                                <td>
+                                                                    <div>{{ $service->user->name ?? '' }}</div>
+                                                                    <div class="small text-muted"><span>New</span> | Registered: Jan 1, 2015</div>
+                                                                </td>
+                                                                <td>
+                                                                    {{ $service->sent_amount - $service->platform_commission }}
+                                                                </td>
+                                                                <td>
+                                                                    <div>
+                                                                        {{ $service->sent_amount }}
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    {{ $service->platform_total_gain - $service->user_discount }}
+                                                                </td>
+                                                                <td>
+                                                                   // todo show calculations
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between">
@@ -130,9 +199,42 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="c-chart-wrapper" style="height:300px;margin-top:40px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                                        <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
+                                            <div class="chartjs-size-monitor">
+                                                <div class="chartjs-size-monitor-expand">
+                                                    <div class=""></div>
+                                                </div>
+                                                <div class="chartjs-size-monitor-shrink">
+                                                    <div class=""></div>
+                                                </div>
+                                            </div>
                                             <canvas class="chart chartjs-render-monitor" id="main-chart" height="300" width="1549" style="display: block;"></canvas>
-                                            <div id="main-chart-tooltip" class="c-chartjs-tooltip center" style="opacity: 0; left: 1004.14px; top: 302.554px;"><div class="c-tooltip-header"><div class="c-tooltip-header-item">T</div></div><div class="c-tooltip-body"><div class="c-tooltip-body-item"><span class="c-tooltip-body-item-color" style="background-color: rgba(3, 9, 15, 0.1);"></span><span class="c-tooltip-body-item-label">My First dataset</span><span class="c-tooltip-body-item-value">163</span></div><div class="c-tooltip-body-item"><span class="c-tooltip-body-item-color" style="background-color: transparent;"></span><span class="c-tooltip-body-item-label">My Second dataset</span><span class="c-tooltip-body-item-value">97</span></div><div class="c-tooltip-body-item"><span class="c-tooltip-body-item-color" style="background-color: transparent;"></span><span class="c-tooltip-body-item-label">My Third dataset</span><span class="c-tooltip-body-item-value">65</span></div></div></div></div>
+                                            <div id="main-chart-tooltip" class="c-chartjs-tooltip center" style="opacity: 0; left: 1004.14px; top: 302.554px;">
+                                                <div class="c-tooltip-header">
+                                                    <div class="c-tooltip-header-item">
+                                                        T
+                                                    </div>
+                                                </div>
+                                                <div class="c-tooltip-body">
+                                                    <div class="c-tooltip-body-item">
+                                                        <span class="c-tooltip-body-item-color" style="background-color: rgba(3, 9, 15, 0.1);">
+                                                        </span>
+                                                        <span class="c-tooltip-body-item-label">My First dataset</span>
+                                                        <span class="c-tooltip-body-item-value">163</span>
+                                                    </div>
+                                                    <div class="c-tooltip-body-item">
+                                                        <span class="c-tooltip-body-item-color" style="background-color: transparent;"></span>
+                                                        <span class="c-tooltip-body-item-label">My Second dataset</span>
+                                                        <span class="c-tooltip-body-item-value">97</span>
+                                                    </div>
+                                                    <div class="c-tooltip-body-item">
+                                                        <span class="c-tooltip-body-item-color" style="background-color: transparent;"></span>
+                                                        <span class="c-tooltip-body-item-label">My Third dataset</span>
+                                                        <span class="c-tooltip-body-item-value">65</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="card-footer">
                                         <div class="row text-center">

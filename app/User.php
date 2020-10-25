@@ -89,4 +89,11 @@ class User extends Authenticatable
 		}
 		return back()->withError('Not authorized');
 	}
+
+	public function adminAccessServices()
+    {
+        if (auth()->user()->hasRole('admin')) {
+            return ServiceOperation::paginate(10);
+        }
+    }
 }
