@@ -30,10 +30,10 @@ class ShowServices extends Component
     {
         $livewireOperators = ApiReloadlyOperator::leftJoin('api_reloadly_operators_countries as country', 'country.parent_id', '=', 'api_reloadly_operators.id')
         ->leftJoin('api_reloadly_operators_fxs as fx', 'fx.parent_id', '=', 'api_reloadly_operators.id')
-        ->select('api_reloadly_operators.*')->when($this->countryName, function ($query) {
-            $query->where('country.name', $this->countryName);
+        ->select('api_reloadly_operators.*', 'fx.currencyCode as currencyCode', 'fx.rate as rate', 'country.name as countryName', 'country.isoName as isoName')->when($this->countryName, function ($query) {
+            $query->where('name', $this->countryName);
         })->when($this->sortField, function ($query) {
-            $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
+            $query->orderBy('api_reloadly_operators.'.$this->sortField, $this->sortAsc ? 'asc' : 'desc');
         })->when(($this->start && $this->end), function ($query) {
             $query->where('api_reloadly_operators.created_at','>=', \Carbon\Carbon::parse($this->start))->where('api_reloadly_operators.created_at','<=', \Carbon\Carbon::parse($this->end));
         })->when($this->customSort, function ($query) {
@@ -73,7 +73,7 @@ class ShowServices extends Component
         } else {
             $this->sortAscCustom = true;
         }
-
+        $this->sortField = '';
         $this->customSort = $type;
     }
 

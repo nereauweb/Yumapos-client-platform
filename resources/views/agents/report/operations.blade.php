@@ -7,7 +7,7 @@
 
 @section('content')
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -18,7 +18,7 @@
                     </div>
                     <div class="card-body">
 						<div class="uk-padding-small">
-							<dl class="row">						
+							<dl class="row">
 								<dt class="col-sm-5">Operations<dt><dd class="col-sm-7">{{ $operations->count() }}</dd>
 								<dt class="col-sm-5">Total amount<dt><dd class="col-sm-7">{{ $operations->sum('original_amount') }} €</dd>
 								<dt class="col-sm-5">Total commissions<dt><dd class="col-sm-7">{{ $operations->sum('commission') }} €</dd>
@@ -38,9 +38,9 @@
 										</span>
 										<input class="form-control" id="daterange" type="text">
 										<input type="hidden" name="date_begin" id="date_begin">
-										<input type="hidden" name="date_end" id="date_end">										
+										<input type="hidden" name="date_end" id="date_end">
 									</div>
-									</fieldset>	
+									</fieldset>
 								</div>
 								<div class="uk-width-auto uk-flex uk-flex-bottom">
 									{!! Form::button('Commit', array('class' => 'btn btn-success','type' => 'submit' )) !!}

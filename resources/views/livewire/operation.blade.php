@@ -11,23 +11,21 @@
             <div class="card-body">
                 <div class="uk-padding-small">
                     <dl class="row">
-                        <dt class="col-sm-5">Operations
-                        <dt>
+                        <dt class="col-sm-5">Operations</dt>
                         <dd class="col-sm-7">{{ $totalOperationsCount }}</dd>
-                        <dt class="col-sm-5">Total User discounts
-                        <dt>
+                        <dt class="col-sm-5">Total User discounts</dt>
                         <dd class="col-sm-7">{{ $operations->sum('user_discount') }} €</dd>
-                        <dt class="col-sm-5">Total Commissions
-                        <dt>
+                        <dt class="col-sm-5">Total Commissions</dt>
                         <dd class="col-sm-7">{{ $operations->sum('platform_commission') }} €</dd>
-                        <dt class="col-sm-5">Total gross Plaform gains
-                        <dt>
+                        <dt class="col-sm-5">Total gross Plaform gains</dt>
                         <dd class="col-sm-7">{{ $operations->sum('platform_total_gain') }} €</dd>
-                        <dt class="col-sm-5">Total net Platform gains
-                        <dt>
-                        <dd class="col-sm-7">
-                            {{ $operations->sum('platform_total_gain') - $operations->sum('user_discount') }} €</dd>
-                    </dl>
+                        <dt class="col-sm-5">Total net Platform gains</dt>
+                        <dd class="col-sm-7">{{ $operations->sum('platform_total_gain') - $operations->sum('user_discount') }} €</dd>
+                        <dt class="col-sm-5">Volume (user amount) {{ $selectedCountry ? 'Country ISO '.$selectedCountry : 'country' }}</dt>
+{{--                        at final amount should be used: user_amount --}}
+                        <dd class="col-sm-7">{{ $operations->sum('sent_amount') }} €</dd>
+                        <dt class="col-sm-5">Platform total gain {{ $selectedOperator ? 'Operator id '.$selectedOperator : 'operator' }}</dt>
+                        <dd class="col-sm-7">{{ $operations->sum('platform_total_gain') - $operations->sum('user_discount') }} €</dd>
                 </div>
                 <div class="row align-items-center">
                     <div class="col-sm">

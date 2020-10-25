@@ -26,29 +26,21 @@ class UserOperationsExport implements FromCollection, WithHeadings, WithMapping
     public function headings(): array
     {
         return [
-            "Date","Nome Commerciale","Nome Utente","Città","Nome Listino","Numero Ricaricato","Operatore Mobile","Importo Ricarica Euro","Sconto utente","Sovrapprezzo applicato da utente","Guadagno totale utente","Vendita finale ricarica","Costo ricarica a Yuma","Sconto fornitore","Profitto Lordo Yuma","Profitto Netto Yuma"
+            "Operatore","Numero Ricaricato","Importo Ricarica", "Sovrapprezzo al cliente", "Totale Ricarica", "Sconto piattaforma", "Guadagno totale", "data"
         ];
     }
 
     public function map($row): array
     {
         return [
-            $row->created_at,
-            $row->user->company_data->company_name,
-            $row->user->name,
-            $row->user->company_data->operative_seat_city,
-            $row->user->group->name,
-            $row->request_recipent_phone,
-            $row->operator->name,
-            $row->user_old_plafond - $row->user_new_plafond + $row->user_discount,
-            $row->user_discount,
+            $row->operator->name.' ('.$row->operator->country->name.')',
+            $row->request_recipient_phone,
+            $row->user_amount,
             $row->user_gain,
+            $row->final_amount,
+            $row->user_discount,
             $row->user_total_gain,
-            $row->user->final_amount,
-            $row->sent_amount,
-            $row->platform_commission,
-            $row->platform_total_gain,
-            $row->platform_total_gain - $row->user_discount
+            date('d/m/Y H:i', strtotime($row->created_at)),
         ];
     }
 }

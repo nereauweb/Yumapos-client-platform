@@ -28,7 +28,7 @@
                     </div>
                     <div>
                         <select wire:model.defer="countryName" name="countryName" id="countryId" class="custom-select">
-                            <option value="-">All countries</option>
+                            <option value="0">All countries</option>
                             @foreach ($countries as $item)
                                 <option value="{{$item->name}}">{{$item->name}}</option>
                             @endforeach
@@ -58,9 +58,9 @@
                                     <i class="cil-arrow-top"></i>
                                 @endif
                             </th>
-                            <th wire:click="filter('country.name')">
+                            <th wire:click="filter('countryName')">
                                 <span class="mr-4">Country</span>
-                                @if($sortAscCustom && $customSort == 'country.name')
+                                @if($sortAscCustom && $customSort == 'countryName')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
                                     <i class="cil-arrow-top"></i>
@@ -81,16 +81,16 @@
                                     <i class="cil-arrow-top"></i>
                                 @endif
                             </th>
-                            <th wire:click="filter('fx.currencyCode')">
+                            <th wire:click="filter('currencyCode')">
                                 <span class="mr-4">FX currency</span>
-                                @if($sortAscCustom && $customSort == 'fx.currencyCode')
+                                @if($sortAscCustom && $customSort == 'currencyCode')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
                                     <i class="cil-arrow-top"></i>
                                 @endif
                             </th>
-                            <th wire:click="filter('fx.rate')"><span class="mr-4">FX rate</span>
-                                @if($sortAscCustom && $customSort == 'fx.rate')
+                            <th wire:click="filter('rate')"><span class="mr-4">FX rate</span>
+                                @if($sortAscCustom && $customSort == 'rate')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
                                     <i class="cil-arrow-top"></i>
@@ -107,7 +107,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($livewireOperators as $operator)
+                        @foreach ($livewireOperators->unique() as $operator)
                             <tr>
                                 <td>
                                     <div class="btn-group btn-group-xs">
@@ -152,11 +152,11 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>{{ $operator->country->name }} ({{ $operator->country->isoName }})</td>
+                                <td>{{ $operator->countryName }} ({{ $operator->isoName }})</td>
                                 <td>{{ $operator->name }}</td>
                                 <td>{{ $operator->denominationType }}</td>
-                                <td>{{ $operator->fx->currencyCode }}</td>
-                                <td>{{ $operator->fx->rate }}</td>
+                                <td>{{ $operator->currencyCode }}</td>
+                                <td>{{ $operator->rate }}</td>
                                 <td>{{ $operator->commission }}</td>
                             </tr>
                         @endforeach

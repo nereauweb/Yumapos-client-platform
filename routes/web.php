@@ -210,6 +210,8 @@ Route::group(['middleware' => ['get.menu']], function () {
 
     Route::group(['middleware' => ['role:admin']], function () {
 
+        Route::get('/reloadly_balance', 'ApiReloadlyController@getBalance');
+
         // providers paths
         Route::prefix('/admin/providers')->group(function () {
             Route::get('/', 'ProviderController@index')->name('admin.providers.index');
