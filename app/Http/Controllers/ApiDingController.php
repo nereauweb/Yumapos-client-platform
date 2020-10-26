@@ -284,15 +284,110 @@ class ApiDingController extends Controller
 		return view('admin/api/ding/test', compact('request_description','result'));	
 	}
 	
-	public function products_list(Request $request)
+	public function Products_save(Request $request)
 	{
-		$request_description = 'Products';
+		$request_description = 'Providers save';
+		$result = "Products saved:<br><ol>";
 		try{
-			$result = $this->ding->GetProducts();
+			$data = $this->ding->GetProducts();
+			$index = 0;
+			foreach ($data->getItems() as $item){
+				$index ++;
+				$product_data = $item->getData();
+				$product = ApiDingProduct::updateOrCreate(
+					[
+						'SkuCode'	 			=> $product_data['sku_code'],
+					],
+					[
+						'ProviderCode' 			=> $product_data['provider_code'],
+						'LocalizationKey' 		=> $product_data['localization_key'],
+						'CommissionRate' 		=> $product_data['commission_rate'],
+						'ProcessingMode' 		=> $product_data['processing_mode'],
+						'RedemptionMechanism'	=> $product_data['redemption_mechanism'],
+						'ValidityPeriodIso' 	=> $product_data['validity_period_iso'],
+						'UatNumber' 			=> $product_data['uat_number'],
+						'AdditionalInformation' => $product_data['additional_information'],
+						'DefaultDisplayText' 	=> $product_data['default_display_text'],
+						'RegionCode' 			=> $product_data['region_code'],
+						'LookupBillsRequired' 	=> $product_data['lookup_bills_required'],
+					]
+				);				
+				$product->setting_definitions()->delete();
+				if (!empty($product_data['setting_definitions'])){
+					foreach ($product_data['setting_definitions'] as $setting_definition) {
+						$product->setting_definitions()->create([
+							'Name' => $setting_definition['name'],
+							'Description' => $setting_definition['description'],
+							'IsMandatory' => $setting_definition['is_mandatory'],
+						]);
+					}
+				}
+				$product->maximum()->delete();
+				if (!empty($product_data['maximum'])){
+					foreach ($product_data['maximum'] as $maximum) {
+						$product->maximum()->create([
+							'CustomerFee' 				=> $maximum['customer_fee'],
+							'DistributorFee' 			=> $maximum['distributor_fee'],
+							'ReceiveValue' 				=> $maximum['receive_value'],
+							'ReceiveCurrencyIso' 		=> $maximum['receive_currency_iso'],
+							'ReceiveValueExcludingTax' 	=> $maximum['receive_value_excluding_tax'],
+							'TaxRate' 					=> $maximum['tax_rate'],
+							'TaxName' 					=> $maximum['tax_name'],
+							'TaxCalculation' 			=> $maximum['tax_calculation'],
+							'SendValue' 				=> $maximum['send_value'],
+							'SendCurrencyIso' 			=> $maximum['send_currency_iso'],
+						]);
+					}
+				}
+				$product->minimum()->delete();
+				if (!empty($product_data['minimum'])){
+					foreach ($product_data['minimum'] as $minimum) {
+						$product->minimum()->create([
+							'CustomerFee' 				=> $minimum['customer_fee'],
+							'DistributorFee' 			=> $minimum['distributor_fee'],
+							'ReceiveValue' 				=> $minimum['receive_value'],
+							'ReceiveCurrencyIso' 		=> $minimum['receive_currency_iso'],
+							'ReceiveValueExcludingTax' 	=> $minimum['receive_value_excluding_tax'],
+							'TaxRate' 					=> $minimum['tax_rate'],
+							'TaxName' 					=> $minimum['tax_name'],
+							'TaxCalculation' 			=> $minimum['tax_calculation'],
+							'SendValue' 				=> $minimum['send_value'],
+							'SendCurrencyIso' 			=> $minimum['send_currency_iso'],
+						]);
+					}
+				}
+				$product->benefits()->delete();
+				if (!empty($product_data['payment_types'])){
+					foreach ($product_data['benefits'] as $benefit) {
+						$product->benefits()->create(['benefit' => $benefit]);
+					}
+				}
+				$product->payment_types()->delete();
+				if (!empty($product_data['payment_types'])){
+					foreach ($product_data['payment_types'] as $payment_type) {
+						$product->payment_types()->create(['payment_type' => $payment_type]);
+					}
+				}
+				$result.= "<li> $product_data[sku_code]  $product_data[default_display_text] Provider $product_data[provider_code]";			
+				/*
+				$product_description_data = $this->ding->GetProductDescriptions(['en'],$product_data['sku_code']);
+				if ($product_description_data){
+					$product->DisplayText 			= $product_description_data->getItems()[0]['display_text'];
+					$product->DescriptionMarkdown 	= $product_description_data->getItems()[0]['description_markdown'];
+					$product->ReadMoreMarkdown 		= $product_description_data->getItems()[0]['read_more_markdown'];
+					$product->description_localization_key = $product_description_data->getItems()[0]['localization_key'];
+					$product->description_language_code =  $product_description_data->getItems()[0]['language_code'];
+					$product->save();
+					$result.= "<br> + description saved ".$product_description_data->getItems()[0]['display_text'];		
+				}
+				*/
+				$result.= "</li>";
+			}
+			$result.= "</ol><br>Total: " . $index;
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
-		return view('admin/api/ding/products', compact('request_description','result'));	
+		return view('admin/api/ding/test', compact('request_description','result'));	
 	}
 	
 	public function ProductDescriptions(Request $request)
@@ -332,7 +427,7 @@ class ApiDingController extends Controller
 	{
 		$request_description = 'Promotion descriptions';
 		try{
-			$result = $this->ding->GetPromotionDescriptions();
+			$result = $this->ding->GetPromotionDescriptions(['en']);
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}

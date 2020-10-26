@@ -275,6 +275,10 @@ class Product implements ModelInterface, ArrayAccess
         $this->container['payment_types'] = isset($data['payment_types']) ? $data['payment_types'] : null;
         $this->container['lookup_bills_required'] = isset($data['lookup_bills_required']) ? $data['lookup_bills_required'] : null;
     }
+	
+	public function getData(){
+		return $this->container;
+	}
 
     /**
      * Show all the invalid properties with reasons.

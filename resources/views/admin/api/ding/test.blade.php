@@ -16,15 +16,20 @@
 							{!! $result !!}
 						@else
 							<dl class="uk-description-list">
-								<dt>Result code</dt><dd>{{ $result->getResultCode() }}</dd>
-								<dt>Error codes</dt><dd>{{ implode(',',$result->getErrorCodes()) }}</dd>
-								<dt>Items #{{ count($result->getItems()) }}</dt>
-								<dd>
-									<br>
-									@foreach ($result->getItems() as $item)
-										<pre>{!! var_dump($item) !!}</pre>
-									@endforeach
-								</dd>
+								@if (method_exists($result,'getItems'))
+									<dt>Result code</dt><dd>{{ $result->getResultCode() }}</dd>
+									<dt>Error codes</dt><dd>{{ implode(',',$result->getErrorCodes()) }}</dd>
+									<dt>Items #{{ count($result->getItems()) }}</dt>
+									<dd>
+										<br>
+										@foreach ($result->getItems() as $item)
+											<pre>{!! var_dump($item) !!}</pre>
+										@endforeach
+									</dd>
+								@else
+									<dt>Dump</dt>
+									<dd><pre>@php var_dump($result) @endphp</pre></dd>
+								@endif
 							</dl>
 						@endif
 						{{--

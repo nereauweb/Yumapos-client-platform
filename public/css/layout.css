@@ -18,6 +18,9 @@
     color: rgba(255, 255, 255, 0.9) !important;
 }
 .c-dark-theme a {
+    color: #4fd213;
+}
+.c-dark-theme a:hover {
     color: #5ed926;
 }
 .c-dark-theme .btn.btn-ghost-dark.btn-block.light {
@@ -59,4 +62,15 @@ html:not([dir="rtl"]) .custom-select-sm {
 	color: white;
 	font-size: 15px;
 	padding-top: 0;
+}
+.c-sidebar .c-sidebar-nav-title {
+	color: rgba(255, 255, 255, 0.8);
+}
+.c-sidebar-nav-dropdown-toggle {
+	padding: 0.75rem 1rem;
+	margin-top: 1rem;
+	font-size: 80%;
+	font-weight: 700;
+	text-transform: uppercase;
+	transition: 0.3s;
 }

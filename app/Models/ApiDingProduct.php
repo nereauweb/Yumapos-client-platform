@@ -30,6 +30,11 @@ class ApiDingProduct extends Model
 		'DefaultDisplayText',
 		'RegionCode',
 		'LookupBillsRequired',
+		'DisplayText',
+		'DescriptionMarkdown',
+		'ReadMoreMarkdown',
+		'description_localization_key',
+		'description_language_code',
 		];
 	
 	public function setting_definitions(){ return $this->hasMany('App\Models\ApiDingProductSettingDefinition','product_id'); }

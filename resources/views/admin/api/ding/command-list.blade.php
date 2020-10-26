@@ -15,50 +15,63 @@
 						<ul class="nav uk-text-default flex-column">
 							<li class="nav-item">
 								Error code descriptions 
-								<a href="{{ url('/admin/api/ding/ErrorCodeDescriptions') }}">TEST</a>
+								<a href="{{ url('/admin/api/ding/ErrorCodeDescriptions') }}">READ</a>
 							</li>
 							<li class="nav-item">
 								Currencies 
-								<a href="{{ url('/admin/api/ding/Currencies') }}">TEST</a>
+								<a href="{{ url('/admin/api/ding/Currencies') }}">READ</a>
 								|
 								<a href="{{ url('/admin/api/ding/Currencies/save') }}">SAVE</a>
 							</li>
 							<li class="nav-item">
 								Regions 
-								<a href="{{ url('/admin/api/ding/Regions') }}">TEST</a>
+								<a href="{{ url('/admin/api/ding/Regions') }}">READ</a>
 								|
 								<a href="{{ url('/admin/api/ding/Regions/save') }}">SAVE</a>
 							</li>
 							<li class="nav-item">
 								Countries 
-								<a href="{{ url('/admin/api/ding/Countries') }}">TEST</a>
+								<a href="{{ url('/admin/api/ding/Countries') }}">READ</a>
 								|
 								<a href="{{ url('/admin/api/ding/Countries/save') }}">SAVE</a>
 							</li>
 							<li class="nav-item">
 								Providers 
-								<a href="{{ url('/admin/api/ding/Providers') }}">TEST</a>
+								<a href="{{ url('/admin/api/ding/Providers') }}">READ</a>
 								|
 								<a href="{{ url('/admin/api/ding/Providers/save') }}">SAVE</a>
 							</li>
 							<li class="nav-item">
 								ProviderStatus 
-								<a href="{{ url('/admin/api/ding/ProviderStatus') }}">TEST</a>
+								<a href="{{ url('/admin/api/ding/ProviderStatus') }}">READ</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="{{ url('/admin/api/ding/Products') }}">Products</a>
+								Products 
+								<a href="{{ url('/admin/api/ding/Products') }}">READ</a>
+								|
+								<a href="{{ url('/admin/api/ding/Products/save') }}">SAVE</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="{{ url('/admin/api/ding/ProductDescriptions') }}">Products descriptions</a>
+								Products descriptions
+								<a href="{{ url('/admin/api/ding/ProductDescriptions') }}">READ</a>
+								|
+								<a href="{{ url('/admin/api/ding/ProductDescriptions/save') }}">SAVE</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="{{ url('/admin/api/ding/Balance') }}">Balance</a>
+								Balance
+								<a href="{{ url('/admin/api/ding/Balance') }}">READ</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="{{ url('/admin/api/ding/Promotions') }}">Promotions</a>
+								Promotions 
+								<a href="{{ url('/admin/api/ding/Promotions') }}">READ</a>
+								|
+								<a href="{{ url('/admin/api/ding/Promotions/save') }}">SAVE</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="{{ url('/admin/api/ding/PromotionDescriptions') }}">Promotions descriptions</a>
+								Promotions descriptions 
+								<a href="{{ url('/admin/api/ding/PromotionDescriptions') }}">READ</a>
+								|
+								<a href="{{ url('/admin/api/ding/PromotionDescriptions/save') }}">SAVE</a>
 							</li>
 						</ul>
 						<div class="uk-padding-small" uk-grid>

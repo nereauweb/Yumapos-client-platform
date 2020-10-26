@@ -283,7 +283,23 @@ Route::group(['middleware' => ['get.menu']], function () {
 		Route::prefix('/admin/services/')->group(function () {
 			Route::get('/', 'ServiceController@index')->name('admin.services.index');
         });
-
+		
+		
+		Route::prefix('/admin/package/')->group(function () {
+			Route::get('categories', 'PackageController@categories')->name('admin.package.category.manage');
+			Route::post('categories/create', 'PackageController@category_create')->name('admin.package.category.create');
+			Route::post('categories/update', 'PackageController@categories_update')->name('admin.package.category.update');
+			Route::get('list', 'PackageController@index')->name('admin.package.list');
+			Route::get('{id}/view', 'PackageController@view')->name('admin.package.view');
+			Route::get('create', 'PackageController@create')->name('admin.package.create');
+			Route::post('store', 'PackageController@store')->name('admin.package.store');
+			Route::get('{id}/edit', 'PackageController@edit')->name('admin.package.edit');
+			Route::put('{id}/update', 'PackageController@update')->name('admin.package.update');
+			Route::delete('{id}/delete', 'PackageController@delete')->name('admin.package.delete');
+			Route::get('deleted', 'PackageController@deleted')->name('admin.package.deleted');
+			Route::put('{id}/recover', 'PackageController@recover')->name('admin.package.recover');
+        });
+		
 		Route::prefix('/admin/ding/services/')->group(function () {
 			Route::get('/', 'ApiDingController@products_list')->name('admin.ding.services.products');
         });
@@ -314,6 +330,7 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::get('/Providers/save', 'ApiDingController@Providers_save')->name('admin.api.ding.Providers.save');
             Route::get('/ProviderStatus', 'ApiDingController@ProviderStatus')->name('admin.api.ding.ProviderStatus');
             Route::get('/Products', 'ApiDingController@Products')->name('admin.api.ding.Products');
+            Route::get('/Products/save', 'ApiDingController@Products_save')->name('admin.api.ding.Products.save');
             Route::get('/ProductDescriptions', 'ApiDingController@ProductDescriptions')->name('admin.api.ding.ProductDescriptions');
             Route::get('/Balance', 'ApiDingController@Balance')->name('admin.api.ding.Balance');
             Route::get('/Promotions', 'ApiDingController@Promotions')->name('admin.api.ding.Promotions');
