@@ -355,50 +355,49 @@ var cardChart4 = new Chart(document.getElementById('card-chart4'), {
 //     }
 //   }
 // });
-
-var mainChart = new Chart(document.getElementById('main-chart'), {
-  type: 'line',
-  data: {
-    labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S'],
-    datasets: [{
-      label: 'My First dataset',
-      backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--info'), 10),
-      borderColor: coreui.Utils.getStyle('--info'),
-      pointHoverBackgroundColor: '#fff',
-      borderWidth: 2,
-      data: [165, 180, 70, 69, 77, 57, 125, 165, 172, 91, 173, 138, 155, 89, 50, 161, 65, 163, 160, 103, 114, 185, 125, 196, 183, 64, 137, 95, 112, 175]
-    }]
-  },
-  options: {
-    maintainAspectRatio: false,
-    legend: {
-      display: false
-    },
-    scales: {
-      xAxes: [{
-        gridLines: {
-          drawOnChartArea: false
-        }
-      }],
-      yAxes: [{
-        ticks: {
-          beginAtZero: true,
-          maxTicksLimit: 5,
-          stepSize: Math.ceil(250 / 5),
-          max: 250
-        }
-      }]
-    },
-    elements: {
-      point: {
-        radius: 0,
-        hitRadius: 10,
-        hoverRadius: 4,
-        hoverBorderWidth: 3
-      }
+const arrayWithData = [];
+const totalGains = [];
+fetch('/admin/api/services').then(response => response.json()).then(data => {
+    for (const mainChartElement of data.data) {
+        console.log(mainChartElement);
+        totalGains.push(mainChartElement.user_total_gain);
+        const dateUnformed = new Date(mainChartElement.created_at);
+        const date = dateUnformed.toLocaleString('default', { month: 'narrow' });
+        arrayWithData.push(date);
     }
-  }
+}).then(test => {
+    var mainChart = new Chart(document.getElementById('main-chart'), {
+        type: 'line',
+        data: {
+            // labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S'],
+            labels: arrayWithData,
+            datasets: [{
+                label: 'User total gain',
+                backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--info'), 10),
+                borderColor: coreui.Utils.getStyle('--info'),
+                pointHoverBackgroundColor: '#fff',
+                borderWidth: 2,
+                data: totalGains
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            legend: {
+                display: false
+            },
+            elements: {
+                point: {
+                    radius: 0,
+                    hitRadius: 10,
+                    hoverRadius: 4,
+                    hoverBorderWidth: 3
+                }
+            }
+        }
+    });
 });
+
+
 
 /***/ }),
 

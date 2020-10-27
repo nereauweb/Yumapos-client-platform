@@ -273,6 +273,8 @@ Route::group(['middleware' => ['get.menu']], function () {
 
             Route::get('/users/export', 'UsersController@export')->name('admin.user.export');
 
+            Route::get('/api/services', 'ServiceOperationController@index');
+
         });
 
 		Route::prefix('/admin/services/')->group(function () {
@@ -283,8 +285,8 @@ Route::group(['middleware' => ['get.menu']], function () {
 		Route::prefix('/admin/services/')->group(function () {
 			Route::get('/', 'ServiceController@index')->name('admin.services.index');
         });
-		
-		
+
+
 		Route::prefix('/admin/package/')->group(function () {
 			Route::get('categories', 'PackageController@categories')->name('admin.package.category.manage');
 			Route::post('categories/create', 'PackageController@category_create')->name('admin.package.category.create');
@@ -299,7 +301,7 @@ Route::group(['middleware' => ['get.menu']], function () {
 			Route::get('deleted', 'PackageController@deleted')->name('admin.package.deleted');
 			Route::put('{id}/recover', 'PackageController@recover')->name('admin.package.recover');
         });
-		
+
 		Route::prefix('/admin/ding/services/')->group(function () {
 			Route::get('/', 'ApiDingController@products_list')->name('admin.ding.services.products');
         });
