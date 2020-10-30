@@ -4,123 +4,101 @@
 @endsection
 
 @section('content')
-
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-				<div class="uk-modal-dialog uk-modal-body" id="content">
-					<button class="uk-modal-close-default" type="button" uk-close></button>
-					<h2>{{ $operator->name }} | Configuration</h2>					
-					<div class="uk-margin-small-top" id="modal-submit-response"></div>
-					{!! Form::open(array('route' => ['admin.services.update', $operator->id], 'method' => 'PUT', 'role' => 'form', 'class' => 'needs-validation')) !!}
-
-					{!! csrf_field() !!}
-					
-					@if($operator->denominationType=="RANGE")
-						<div  uk-overflow-auto>
-							<table class="table light">
-								<thead>
-									<tr>
-										<th>User group</th>
-										<th>% FX variation</th>
-										<th>% Discount</th>
-										<th>Enabled</th>
-									</tr>
-								</thead>
-								<tbody>
-								@foreach($groups as $group)
-									@php
-										$configuration = $operator->configurations->where('group_id', $group->id)->first();
-									@endphp
-									<tr>
-										<td>
-											{{ $group->name }} {{ $group->id }}
-										</td>
-										<td>
-											<input name="group[{{$group->id}}][fx_delta]" type="number" class="form-control form-control-sm form-control-dark range_rate_input" step="0.01" value="{{ $configuration ? $configuration->fx_delta_percent : 0 }}" data-group-id="{{$group->id}}" data-original-rate="{{ $operator->fx->rate }}">
-											<input id="ranged_rate_{{$group->id}}_final" type="text" class="form-control form-control-sm uk-dark" readonly value="{{ $configuration ? $operator->fx->rate - $operator->fx->rate * $configuration->fx_delta_percent / 100 : $operator->fx->rate }}">
-										</td>
-										<td>
-											<input name="group[{{$group->id}}][discount]" type="number" class="form-control form-control-sm form-control-dark" step="0.01" value="{{ $configuration ? $configuration->discount_percent : 0 }}">
-										</td>
-										<td>
-											<select name="group[{{$group->id}}][enabled]" class="form-control form-control-sm form-control-dark is-visible">
-												<option value="1" {{ $configuration&&$configuration->enabled==1 ? 'selected' : '' }}>Yes</option>
-												<option value="0" {{ $configuration&&$configuration->enabled==0 ? 'selected' : '' }}>No</option>
-											</select>
-										</td>
-									</tr>
-								@endforeach
-								</tbody>
-							</table>
-						</div>
-						{!! Form::button(trans('forms.save-changes'), array('class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => trans('modals.edit_user__modal_text_confirm_title'), 'data-message' => trans('modals.edit_user__modal_text_confirm_message'))) !!}
-					@elseif($operator->denominationType=="FIXED")
-						<div uk-overflow-auto>				
-							<table class="table light">
-								<thead>
-									<tr>
-										<th>Enabled</th>
-										@foreach($groups as $group)
-											@php
-												$configuration = $operator->configurations->where('group_id', $group->id)->first();	
-											@endphp
-											<th>
-												{{ $group->name }}<br>
-												<select name="group[{{$group->id}}][enabled]" class="form-control form-control-sm form-control-dark is-visible">
-													<option value="1" {{ $configuration&&$configuration->enabled==1 ? 'selected' : '' }}>Yes</option>
-													<option value="0" {{ $configuration&&$configuration->enabled==0 ? 'selected' : '' }}>No</option>
-												</select>												
-											</th>
-										@endforeach
-									</tr>
-								</thead>
-								<tbody>
-								@foreach($operator->fixedAmounts as $element)
-									<tr>
-										<td><strong>{{round($element->amount,3)}}&nbsp;€</strong><br><small>{{round($element->amount * $operator->fx->rate,3)}}&nbsp;{{$operator->destinationCurrencySymbol}}</td>
-										@foreach($groups as $group)									
-											@php
-												$configuration = $operator->configurations->where('group_id', $group->id)->first();	
-												if ($configuration) {
-													$amount_configuration = $configuration->amounts->where('original_amount',$element->amount)->first();
-												}
-											@endphp
-											<td>
-												Amount €
-												<input name="group[{{$group->id}}][{{$element->amount}}][amount]" type="number" class="form-control form-control-sm form-control-dark" step="0.01" value="{{ isset($amount_configuration)&&$amount_configuration ? $amount_configuration->final_amount : 0 }}">
-												Discount %
-												<input name="group[{{$group->id}}][{{$element->amount}}][discount]" type="number" class="form-control form-control-sm form-control-dark" step="0.01" value="{{ isset($amount_configuration)&&$amount_configuration ? $amount_configuration->discount : 0 }}">
-												Visible
-												<select name="group[{{$group->id}}][{{$element->amount}}][visible]" class="form-control form-control-sm form-control-dark is-visible">
-													<option value="1" {{ isset($amount_configuration)&&$amount_configuration&&$amount_configuration->visible==1 ? 'selected' : '' }}>Yes</option>
-													<option value="0" {{ isset($amount_configuration)&&$amount_configuration&&$amount_configuration->visible==0 ? 'selected' : '' }}>No</option>
-												</select>
-											</td>
-										@endforeach
-									</tr>
-								@endforeach
-								</tbody>
-							</table>
-						</div>
-						<div class="uk-width-1-1 uk-flex uk-flex-center uk-margin-top">
-							<div>
-								<a class="uk-button" id="all-visible">All visibile</a>
-								<a class="uk-button" id="none-visible">None visible</a>
-							</div>
-						</div>
-						{!! Form::button(trans('forms.save-changes'), array('class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => trans('modals.edit_user__modal_text_confirm_title'), 'data-message' => trans('modals.edit_user__modal_text_confirm_message'))) !!}
-					@else
-						- Error: denomination type "{{$operator->denominationType}}" not recognized
-					@endif
-					
-					{!! Form::close() !!}
-				</div>	
+	<div class="card">
+		<div class="card-header">
+			<div style="display: flex; justify-content: space-between; align-items: center;">
+				<span id="card_title">
+					<h1>Modifica servizio</h1>
+				</span>
+				<div class="pull-right">
+					<a href="{{ route('admin.service.list') }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="top" title="Torna alla lista servizi">
+						<i class="fa fa-fw fa-reply-all" aria-hidden="true"></i>
+						Torna alla lista servizi
+					</a>
+				</div>
 			</div>
 		</div>
-	</div>
+		<div class="card-body">
+			{!! Form::open(array('route' => ['admin.service.update', $service->id], 'method' => 'PUT', 'role' => 'form', 'class' => 'needs-validation')) !!}
 
+				{!! csrf_field() !!}
+
+				<div class="form-group has-feedback row {{ $errors->has('name') ? ' has-error ' : '' }}">
+					{!! Form::label('name', 'Nome', array('class' => 'col-md-3 control-label')); !!}
+					<div class="col-md-9">
+						<div class="input-group">
+							{!! Form::text('name', $service->name, array('id' => 'name', 'class' => 'form-control', 'placeholder' => 'Nome')) !!}
+						</div>
+						@if ($errors->has('name'))
+							<span class="help-block">
+								<strong>{{ $errors->first('name') }}</strong>
+							</span>
+						@endif
+					</div>
+				</div>
+
+				<div class="form-group has-feedback row {{ $errors->has('category') ? ' has-error ' : '' }}">
+					{!! Form::label('category', 'Categoria', array('class' => 'col-md-3 control-label')); !!}
+					<div class="col-md-9">
+						<div class="input-group">
+							@if(!empty($categories))
+							<div class="uk-width-1-1 uk-child-width-1-2 uk-grid-collapse" uk-grid>
+								<div>
+									{!! Form::select('category_id', $categories, $service->category_id, array('id' => 'category_id', 'class' => 'form-control', 'placeholder' => 'Seleziona categoria')) !!}
+								</div>
+								<div>
+							@else
+								<input type="hidden" name="category_id" value="0">
+							@endif
+									{!! Form::text('category', NULL, array('id' => 'category', 'class' => 'form-control', 'placeholder' => 'Categoria', 'disabled' => 'disabled')) !!}
+							@if(!empty($categories))
+								</div>
+							</div>
+							@endif
+						</div>
+						@if ($errors->has('category'))
+							<span class="help-block">
+								<strong>{{ $errors->first('category') }}</strong>
+							</span>
+						@endif
+					</div>
+				</div>
+
+				<div class="form-group has-feedback row {{ $errors->has('description') ? ' has-error ' : '' }}">
+					{!! Form::label('description', 'Descrizione', array('class' => 'col-md-3 control-label')); !!}
+					<div class="col-md-9">
+						<div class="input-group">
+							{!! Form::textarea('description', $service->description, array('id' => 'description', 'class' => 'form-control', 'placeholder' => 'Nome')) !!}
+						</div>
+						@if ($errors->has('description'))
+							<span class="help-block">
+								<strong>{{ $errors->first('description') }}</strong>
+							</span>
+						@endif
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-6 col-sm-6 offset-6">
+						{!! Form::button('<i class="fa fa-fw fa-save" aria-hidden="true"></i> Salva', array('class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave')) !!}
+					</div>
+				</div>
+			{!! Form::close() !!}
+		</div>
+
+	</div>
 @endsection
 
 @section('javascript')
+	<script>
+		$(document).ready(function(){
+			$("#category_id").change(function(){
+				if ($("#category_id").val()==0){
+					$("#category").prop('disabled',false);
+				} else {
+					$("#category").prop('disabled',true);				
+				}
+			});
+		});
+	</script>
 @endsection
