@@ -18,6 +18,7 @@ class UsersGroup extends Model
     protected $table = 'users_groups';
 	
 	protected $fillable = [
+		'type',
 		'name',
 		'slug',
 		'description',

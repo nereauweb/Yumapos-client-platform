@@ -5,11 +5,11 @@
 	<div class="card">
 		<div class="card-header">
 			<div style="display: flex; justify-content: space-between; align-items: center;">
-				Crea nuovo gruppo utenti
+				Crea nuovo gruppo agenti
 				<div class="pull-right">
 					<a href="{{ url('/admin/groups/') }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="{{ trans('usersmanagement.tooltips.back-users') }}">
 						<i class="fa fa-fw fa-reply-all" aria-hidden="true"></i>
-						Torna alla lista gruppi utenti
+						Torna alla lista gruppi
 					</a>
 				</div>
 			</div>
@@ -81,9 +81,9 @@
 					</div>
 				</div>	
 				
-				<input type="hidden" name="type" value="1">
+				<input type="hidden" name="type" value="2">
 				
-				{!! Form::button('Crea nuovo gruppo utenti', array('class' => 'btn btn-success margin-bottom-1 mb-1 float-right','type' => 'submit' )) !!}
+				{!! Form::button('Crea nuovo gruppo agenti', array('class' => 'btn btn-success margin-bottom-1 mb-1 float-right','type' => 'submit' )) !!}
 			{!! Form::close() !!}
 		</div>
 

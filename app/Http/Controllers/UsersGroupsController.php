@@ -41,10 +41,12 @@ class UsersGroupsController extends Controller
     {
         $validator = Validator::make($request->all(),
             [
+                'type'                  => 'required',
                 'name'                  => 'required|max:127|unique:users_groups',
                 'slug'                  => 'required|max:63|unique:users_groups',
             ],
             [
+                'type.required'       	=> 'tipo richiesto',
                 'name.unique'         	=> 'nome già in uso',
                 'name.required'       	=> 'nome richiesto',
                 'name.max'       		=> 'nome troppo lungo',
@@ -59,6 +61,7 @@ class UsersGroupsController extends Controller
         }
 
         $group = UsersGroup::create([
+            'type'             	=> $request->input('type'),
             'name'             	=> $request->input('name'),
             'slug' 				=> $request->input('slug'),
             'discount' 				=> $request->input('discount'),
@@ -165,6 +168,12 @@ class UsersGroupsController extends Controller
     {
 		return view('admin/users/group-create');
 	}
+	
+	public function create_agent()
+    {
+		return view('admin/users/group-create-agent');
+	}
+
 
 	/**
      * Show the form for editing the specified resource.
@@ -176,7 +185,12 @@ class UsersGroupsController extends Controller
     public function edit($id)
     {
         $group = UsersGroup::findOrFail($id);
-		$users = User::all();
+		if ($group->type == 1) {
+			$users = User::whereHas("roles", function($q){ $q->where("name", "user"); })->get();
+		}
+		if ($group->type == 2) {
+			$users = User::whereHas("roles", function($q){ $q->where("name", "sales"); })->get();
+		}
         return view('admin/users/group-edit',compact('group','users'));
     }
 

@@ -246,11 +246,13 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::delete('/paymentfile/{paymentfile}', 'PaymentFileController@destroy')->name('admin.paymentfile.destroy');
         });
 
+			
 		Route::prefix('/admin/users/groups')->group(function () {
 			Route::get('', 'UsersGroupsController@list')->name('admin.groups.list');
+			Route::get('/create', 'UsersGroupsController@create')->name('admin.groups.create');
+			Route::get('/create-agent', 'UsersGroupsController@create_agent')->name('admin.groups.create_agent');
 			Route::get('/{id}', 'UsersGroupsController@view')->name('admin.groups.view');
 			Route::get('/deleted', 'UsersGroupsController@deleted')->name('admin.groups.deleted');
-			Route::get('/create', 'UsersGroupsController@create')->name('admin.groups.create');
 			Route::post('/store', 'UsersGroupsController@store')->name('admin.groups.store');
 			Route::get('/{id}/edit', 'UsersGroupsController@edit')->name('admin.groups.edit');
 			Route::put('/{id}/update', 'UsersGroupsController@update')->name('admin.groups.update');
@@ -258,25 +260,23 @@ Route::group(['middleware' => ['get.menu']], function () {
 			Route::put('/{id}/recover', 'UsersGroupsController@recover')->name('admin.groups.recover');
         });
 
-		Route::prefix('/admin')->group(function () {
-            Route::post('/user/approve/{user}', 'UsersController@approve')->name('admin.user.approve');
-            Route::get('/payments/export', 'PaymentsController@export')->name('admin.payments.export');
+        Route::post('/admin/user/approve/{user}', 'UsersController@approve')->name('admin.user.approve');
+        Route::get('/admin/users/export', 'UsersController@export')->name('admin.user.export');
+		
+		Route::prefix('/admin/payments')->group(function () {
+            Route::get('/export', 'PaymentsController@export')->name('admin.payments.export');
             Route::put('payments/cancel/{payment}', 'PaymentsController@cancel')->name('admin.payments.cancel');
-            Route::put('/payments/approve/{ids}', 'PaymentsController@updatePaymentStatus')->name('admin.payments.updatePaymentStatus');
-            Route::put('/payments/recover/{payment}', 'PaymentsController@recover')->name('admin.payments.recover');
-            Route::get('/payments/trashed-payments', 'PaymentsController@trashed')->name('admin.trashedPayments');
-            Route::get('/payments/pay-user', 'PaymentsController@payUser')->name('admin.payUser');
-            Route::get('/payments/pay-provider', 'PaymentsController@payProvider')->name('admin.payProvider');
-            Route::post('/payments/pay-provider', 'PaymentsController@payProviderStore')->name('admin.payProviderStore');
-            Route::post('/payments/pay-user', 'PaymentsController@payUserStore')->name('admin.payments.payUserStore');
-            Route::resource('payments',  'PaymentsController', [ 'names' => 'admin.payments' ]);
-
-            Route::get('/users/export', 'UsersController@export')->name('admin.user.export');
-
-            Route::get('/api/services', 'ServiceOperationController@index');
-
+            Route::put('/approve/{ids}', 'PaymentsController@updatePaymentStatus')->name('admin.payments.updatePaymentStatus');
+            Route::put('/recover/{payment}', 'PaymentsController@recover')->name('admin.payments.recover');
+            Route::get('/trashed-payments', 'PaymentsController@trashed')->name('admin.trashedPayments');
+            Route::get('/pay-user', 'PaymentsController@payUser')->name('admin.payUser');
+            Route::get('/pay-provider', 'PaymentsController@payProvider')->name('admin.payProvider');
+            Route::post('/pay-provider', 'PaymentsController@payProviderStore')->name('admin.payProviderStore');
+            Route::post('/pay-user', 'PaymentsController@payUserStore')->name('admin.payments.payUserStore');
+            Route::resource('/',  'PaymentsController', [ 'names' => 'admin.payments' ]);
         });
 
+        Route::get('/admin/api/services', 'ServiceOperationController@index');  // ?
 
 		Route::prefix('/admin/service')->group(function () {
 			Route::get('/categories', 'ServiceController@categories')->name('admin.service.category.manage');
