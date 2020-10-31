@@ -31,7 +31,7 @@ class ReloadlyOperators extends Component
         $livewireOperators = ApiReloadlyOperator::leftJoin('api_reloadly_operators_countries as country', 'country.parent_id', '=', 'api_reloadly_operators.id')
         ->leftJoin('api_reloadly_operators_fxs as fx', 'fx.parent_id', '=', 'api_reloadly_operators.id')
         ->select('api_reloadly_operators.*', 'fx.currencyCode as currencyCode', 'fx.rate as rate', 'country.name as countryName', 'country.isoName as isoName')->when($this->countryName, function ($query) {
-            $query->where('name', $this->countryName);
+            $query->where('country.name', $this->countryName);
         })->when($this->sortField, function ($query) {
             $query->orderBy('api_reloadly_operators.'.$this->sortField, $this->sortAsc ? 'asc' : 'desc');
         })->when(($this->start && $this->end), function ($query) {
