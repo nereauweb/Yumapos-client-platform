@@ -12,7 +12,7 @@
 					<button class="uk-modal-close-default" type="button" uk-close></button>
 					<h2>{{ $operator->name }} | Configuration</h2>					
 					<div class="uk-margin-small-top" id="modal-submit-response"></div>
-					{!! Form::open(array('route' => ['admin.services.update.local', $operator->id], 'method' => 'PUT', 'role' => 'form', 'class' => 'needs-validation')) !!}
+					{!! Form::open(array('route' => ['admin.reloadly.update.local', $operator->id], 'method' => 'PUT', 'role' => 'form', 'class' => 'needs-validation')) !!}
 
 					{!! csrf_field() !!}
 					

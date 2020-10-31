@@ -16,6 +16,9 @@
 
 				<div class="btn-group pull-right btn-group-xs">
 					<div>
+						<a href="/admin/service/associations" class="btn btn-danger btn-save uk-margin-right">
+							<span class="uk-margin-small-right" uk-icon="settings"></span>Associazioni
+						</a>
 						<a href="/admin/service/categories" class="btn btn-primary btn-save uk-margin-right">
 							<span class="uk-margin-small-right" uk-icon="list"></span>Categorie
 						</a>

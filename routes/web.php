@@ -276,46 +276,6 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::resource('/',  'PaymentsController', [ 'names' => 'admin.payments' ]);
         });
 
-        Route::get('/admin/api/services', 'ServiceOperationController@index');  // ?
-
-		Route::prefix('/admin/service')->group(function () {
-			Route::get('/categories', 'ServiceController@categories')->name('admin.service.category.manage');
-			Route::post('/categories/create', 'ServiceController@category_create')->name('admin.service.category.create');
-			Route::post('/categories/update', 'ServiceController@categories_update')->name('admin.service.category.update');			
-			Route::get('/deleted', 'ServiceController@deleted')->name('admin.service.deleted');
-			Route::put('/{id}/recover', 'ServiceController@recover')->name('admin.service.recover');			
-			Route::resource('/',  'ServiceController', [ 'names' => 'admin.service' ]);
-	        });
-			
-		Route::prefix('/admin/service/reloadly')->group(function () {
-			Route::get('/{id}/edit/local', 'ReloadlyController@edit_local')->name('admin.reloadly.edit.local');
-			Route::put('/{id}/local', 'ReloadlyController@update_local')->name('admin.reloadly.update.local');
-			Route::resource('/',  'ReloadlyController', [ 'names' => 'admin.reloadly' ]);
-        	});		
-				
-		Route::prefix('/admin/service/ding')->group(function () {			
-			Route::resource('/',  'DingController', [ 'names' => 'admin.ding' ]);
-		});
-
-		Route::prefix('/admin/service')->group(function () {
-			Route::get('/categories', 'ServiceController@categories')->name('admin.service.category.manage');
-			Route::post('/categories/create', 'ServiceController@category_create')->name('admin.service.category.create');
-			Route::post('/categories/update', 'ServiceController@categories_update')->name('admin.service.category.update');
-			Route::get('/deleted', 'ServiceController@deleted')->name('admin.service.deleted');
-			Route::put('/{id}/recover', 'ServiceController@recover')->name('admin.service.recover');
-			Route::resource('/',  'ServiceController', [ 'names' => 'admin.service' ]);
-        });
-
-		Route::prefix('/admin/service/reloadly')->group(function () {
-			Route::get('/{id}/edit/local', 'ReloadlyController@edit_local')->name('admin.reloadly.edit.local');
-			Route::put('/{id}/local', 'ReloadlyController@update_local')->name('admin.reloadly.update.local');
-			Route::resource('/',  'ReloadlyController', [ 'names' => 'admin.reloadly' ]);
-        });
-
-		Route::prefix('/admin/service/ding')->group(function () {
-			Route::resource('/',  'DingController', [ 'names' => 'admin.ding' ]);
-        });
-
 		Route::prefix('/admin/api/reloadly')->group(function () {
 			Route::get('/', 'ApiReloadlyController@index')->name('admin.api.reloadly.index');
             Route::get('/balance', 'ApiReloadlyController@balance')->name('admin.api.reloadly.balance');
@@ -349,6 +309,28 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::get('/PromotionDescriptions', 'ApiDingController@PromotionDescriptions')->name('admin.api.ding.PromotionDescriptions');
             Route::post('/AccountLookup', 'ApiDingController@AccountLookup')->name('admin.api.ding.account_lookup');
 		});
+		
+		Route::prefix('/admin/service/reloadly')->group(function () {
+			Route::get('/{id}/edit/local', 'ReloadlyController@edit_local')->name('admin.reloadly.edit.local');
+			Route::put('/{id}/local', 'ReloadlyController@update_local')->name('admin.reloadly.update.local');
+        	});		
+		Route::resource('/admin/service/reloadly',  'ReloadlyController', [ 'names' => 'admin.reloadly' ]);
+				
+		Route::resource('/admin/service/ding',  'DingController', [ 'names' => 'admin.ding' ]);
+		
+		Route::get('/admin/api/services', 'ServiceOperationController@index');  // charts 
+		
+		Route::prefix('/admin/service')->group(function () {
+			Route::get('/associations', 'ServiceController@associations')->name('admin.service.associations');
+			Route::post('admin/service/associations/setMaster', 'ServiceController@associations_set_master')->name('admin.service.associations.set_master');
+			
+			Route::get('/categories', 'ServiceController@categories')->name('admin.service.category.manage');
+			Route::post('/categories/create', 'ServiceController@category_create')->name('admin.service.category.create');
+			Route::post('/categories/update', 'ServiceController@categories_update')->name('admin.service.category.update');			
+			Route::get('/deleted', 'ServiceController@deleted')->name('admin.service.deleted');
+			Route::put('/{id}/recover', 'ServiceController@recover')->name('admin.service.recover');	
+	        });
+		Route::resource('/admin/service',  'ServiceController', [ 'names' => 'admin.service' ]);
 
 		Route::prefix('/admin/report')->group(function () {
             Route::get('/', 'ReportController@operations')->name('admin.report.operations');

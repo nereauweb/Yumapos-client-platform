@@ -169,19 +169,19 @@
 			$('#admin-table').on('click','.details',function(e){
 				e.preventDefault();
 				operatorID = $(this).data('operator-id');
-				$('#details-modal').load('/admin/services/'+operatorID+' #content');
+				$('#details-modal').load('/admin/service/reloadly/'+operatorID+' #content');
 				UIkit.modal('#details-modal').show();
 			});
 			$('#admin-table').on('click','.edit',function(e){
 				e.preventDefault();
 				operatorID = $(this).data('operator-id');
-				$('#edit-modal').load('/admin/services/'+operatorID+'/edit #content');
+				$('#edit-modal').load('/admin/service/reloadly/'+operatorID+'/edit #content');
 				UIkit.modal('#edit-modal').show();
 			});
 			$('#admin-table').on('click','.edit-local',function(e){
 				e.preventDefault();
 				operatorID = $(this).data('operator-id');
-				$('#edit-local-modal').load('/admin/services/'+operatorID+'/edit/local #content');
+				$('#edit-local-modal').load('/admin/service/reloadly/'+operatorID+'/edit/local #content');
 				UIkit.modal('#edit-local-modal').show();
 			});
 		});

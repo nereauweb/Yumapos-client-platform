@@ -80,15 +80,29 @@
 					</div>
 				</div>
 				
-				<div class="form-group has-feedback row {{ $errors->has('name') ? ' has-error ' : '' }}">
-					{!! Form::label('prodotti', 'Prodotti', array('class' => 'col-md-3 control-label')); !!}
+				<div class="form-group has-feedback row {{ $errors->has('countries') ? ' has-error ' : '' }}">
+					{!! Form::label('countries', 'Paesi', array('class' => 'col-md-3 control-label')); !!}
 					<div class="col-md-9">
 						<div class="input-group">
-							{!! Form::text('name', NULL, array('id' => 'name', 'class' => 'form-control', 'placeholder' => 'Nome', 'required'=>'required')) !!}
+							{!! Form::select('countries[]', $countries, NULL, array('id' => 'countries', 'class' => 'form-control multiple-select', 'required'=>'required', 'multiple' => 'multiple')) !!}
 						</div>
-						@if ($errors->has('name'))
+						@if ($errors->has('countries'))
 							<span class="help-block">
-								<strong>{{ $errors->first('name') }}</strong>
+								<strong>{{ $errors->first('countries') }}</strong>
+							</span>
+						@endif
+					</div>
+				</div>
+				
+				<div class="form-group has-feedback row {{ $errors->has('operators') ? ' has-error ' : '' }}">
+					{!! Form::label('operators', 'Operatori', array('class' => 'col-md-3 control-label')); !!}
+					<div class="col-md-9">
+						<div class="input-group">
+							{!! Form::select('operators[]', $operators, NULL, array('id' => 'operators', 'class' => 'form-control multiple-select', 'required'=>'required', 'multiple' => 'multiple')) !!}
+						</div>
+						@if ($errors->has('operators'))
+							<span class="help-block">
+								<strong>{{ $errors->first('operators') }}</strong>
 							</span>
 						@endif
 					</div>
@@ -111,6 +125,7 @@
 				$("#category").prop('disabled',true);				
 			}
 		});
+		$('.multiple-select').select2();
 	});
 </script>
 @endsection

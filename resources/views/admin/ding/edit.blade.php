@@ -10,13 +10,13 @@
             <div class="col-lg-12">
 				<div class="uk-modal-dialog uk-modal-body" id="content">
 					<button class="uk-modal-close-default" type="button" uk-close></button>
-					<h2>{{ $operator->name }} | Configuration</h2>					
+					<h2>{{ $product->operator->Name }} | {{ $product->SkuCode }} | Configuration</h2>					
 					<div class="uk-margin-small-top" id="modal-submit-response"></div>
-					{!! Form::open(array('route' => ['admin.services.update', $operator->id], 'method' => 'PUT', 'role' => 'form', 'class' => 'needs-validation')) !!}
+					{!! Form::open(array('route' => ['admin.ding.update', $product->id], 'method' => 'PUT', 'role' => 'form', 'class' => 'needs-validation')) !!}
 
 					{!! csrf_field() !!}
 					
-					@if($operator->denominationType=="RANGE")
+					@if($product->type()=="RANGE")
 						<div  uk-overflow-auto>
 							<table class="table light">
 								<thead>
@@ -30,15 +30,15 @@
 								<tbody>
 								@foreach($groups as $group)
 									@php
-										$configuration = $operator->configurations->where('group_id', $group->id)->first();
+										$configuration = $product->configurations->where('group_id', $group->id)->first();
 									@endphp
 									<tr>
 										<td>
 											{{ $group->name }} {{ $group->id }}
 										</td>
 										<td>
-											<input name="group[{{$group->id}}][fx_delta]" type="number" class="form-control form-control-sm form-control-dark range_rate_input" step="0.01" value="{{ $configuration ? $configuration->fx_delta_percent : 0 }}" data-group-id="{{$group->id}}" data-original-rate="{{ $operator->fx->rate }}">
-											<input id="ranged_rate_{{$group->id}}_final" type="text" class="form-control form-control-sm uk-dark" readonly value="{{ $configuration ? $operator->fx->rate - $operator->fx->rate * $configuration->fx_delta_percent / 100 : $operator->fx->rate }}">
+											<input name="group[{{$group->id}}][fx_delta]" type="number" class="form-control form-control-sm form-control-dark range_rate_input" step="0.01" value="{{ $configuration ? $configuration->fx_delta_percent : 0 }}" data-group-id="{{$group->id}}" data-original-rate="{{ $product->fx_rate() }}">
+											<input id="ranged_rate_{{$group->id}}_final" type="text" class="form-control form-control-sm uk-dark" readonly value="{{ $configuration ? $product->fx_rate() - $product->fx_rate() * $configuration->fx_delta_percent / 100 : $product->fx_rate() }}">
 										</td>
 										<td>
 											<input name="group[{{$group->id}}][discount]" type="number" class="form-control form-control-sm form-control-dark" step="0.01" value="{{ $configuration ? $configuration->discount_percent : 0 }}">
@@ -55,7 +55,7 @@
 							</table>
 						</div>
 						{!! Form::button(trans('forms.save-changes'), array('class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => trans('modals.edit_user__modal_text_confirm_title'), 'data-message' => trans('modals.edit_user__modal_text_confirm_message'))) !!}
-					@elseif($operator->denominationType=="FIXED")
+					@elseif($product->type()=="FIXED")
 						<div uk-overflow-auto>				
 							<table class="table light">
 								<thead>
@@ -63,7 +63,7 @@
 										<th>Enabled</th>
 										@foreach($groups as $group)
 											@php
-												$configuration = $operator->configurations->where('group_id', $group->id)->first();	
+												$configuration = $product->configurations->where('group_id', $group->id)->first();	
 											@endphp
 											<th>
 												{{ $group->name }}<br>
@@ -76,30 +76,28 @@
 									</tr>
 								</thead>
 								<tbody>
-								@foreach($operator->fixedAmounts as $element)
 									<tr>
-										<td><strong>{{round($element->amount,3)}}&nbsp;€</strong><br><small>{{round($element->amount * $operator->fx->rate,3)}}&nbsp;{{$operator->destinationCurrencySymbol}}</td>
+										<td><strong>{{round($product->minimum->SendValue,3)}}&nbsp;€</strong><br><small>{{round($product->minimum->SendValue * $product->fx_rate(),3)}}&nbsp;{{$product->destinationCurrencySymbol}}</td>
 										@foreach($groups as $group)									
 											@php
-												$configuration = $operator->configurations->where('group_id', $group->id)->first();	
+												$configuration = $product->configurations->where('group_id', $group->id)->first();	
 												if ($configuration) {
-													$amount_configuration = $configuration->amounts->where('original_amount',$element->amount)->first();
+													$amount_configuration = $configuration->amounts->where('original_amount',$product->minimum->SendValue)->first();
 												}
 											@endphp
 											<td>
 												Amount €
-												<input name="group[{{$group->id}}][{{$element->amount}}][amount]" type="number" class="form-control form-control-sm form-control-dark" step="0.01" value="{{ isset($amount_configuration)&&$amount_configuration ? $amount_configuration->final_amount : 0 }}">
+												<input name="group[{{$group->id}}][{{$product->minimum->SendValue}}][amount]" type="number" class="form-control form-control-sm form-control-dark" step="0.01" value="{{ isset($amount_configuration)&&$amount_configuration ? $amount_configuration->final_amount : 0 }}">
 												Discount %
-												<input name="group[{{$group->id}}][{{$element->amount}}][discount]" type="number" class="form-control form-control-sm form-control-dark" step="0.01" value="{{ isset($amount_configuration)&&$amount_configuration ? $amount_configuration->discount : 0 }}">
+												<input name="group[{{$group->id}}][{{$product->minimum->SendValue}}][discount]" type="number" class="form-control form-control-sm form-control-dark" step="0.01" value="{{ isset($amount_configuration)&&$amount_configuration ? $amount_configuration->discount : 0 }}">
 												Visible
-												<select name="group[{{$group->id}}][{{$element->amount}}][visible]" class="form-control form-control-sm form-control-dark is-visible">
+												<select name="group[{{$group->id}}][{{$product->minimum->SendValue}}][visible]" class="form-control form-control-sm form-control-dark is-visible">
 													<option value="1" {{ isset($amount_configuration)&&$amount_configuration&&$amount_configuration->visible==1 ? 'selected' : '' }}>Yes</option>
 													<option value="0" {{ isset($amount_configuration)&&$amount_configuration&&$amount_configuration->visible==0 ? 'selected' : '' }}>No</option>
 												</select>
 											</td>
 										@endforeach
 									</tr>
-								@endforeach
 								</tbody>
 							</table>
 						</div>
@@ -111,7 +109,7 @@
 						</div>
 						{!! Form::button(trans('forms.save-changes'), array('class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => trans('modals.edit_user__modal_text_confirm_title'), 'data-message' => trans('modals.edit_user__modal_text_confirm_message'))) !!}
 					@else
-						- Error: denomination type "{{$operator->denominationType}}" not recognized
+						- Error: denomination type "{{$product->denominationType}}" not recognized
 					@endif
 					
 					{!! Form::close() !!}

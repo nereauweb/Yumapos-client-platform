@@ -10,139 +10,69 @@
             <div class="col-lg-12">
 				<div class="uk-modal-dialog uk-modal-body" id="content">
 					<button class="uk-modal-close-default" type="button" uk-close></button>
-					<h2>{{ $operator->name }} | Details</h2>
+					<h2>{{ $product->SkuCode }} | Details</h2>
 					<dl class="row light">
 					
-						<dt class="col-sm-5">Operator ID</dt>
-						<dd class="col-sm-7">{{ $operator->operatorId }}</dd>
+						<dt class="col-sm-5">ProductSKU</dt>
+						<dd class="col-sm-7">{{ $product->SkuCode }}</dd>
+						
+						<dt class="col-sm-5">Operator</dt>
+						<dd class="col-sm-7">{{ $product->operator->Name }}</dd>
 					
 						<dt class="col-sm-5">Type</dt>
-						<dd class="col-sm-7">{{ $operator->denominationType }}</dd>
-					
-						<dt class="col-sm-5">Country</dt>
-						<dd class="col-sm-7">{{ $operator->country->name }} {{ $operator->country->isoName }}</dd>
-					
-						<dt class="col-sm-5">Fx rate</dt>
-						<dd class="col-sm-7">{{ $operator->fx->rate }} {{ $operator->fx->currencyCode }}</dd>
-					
-						<dt class="col-sm-5">Bundle</dt>
-						<dd class="col-sm-7">{!! $operator->bundle == 1 ? '<i class="cil-check-alt"></i>' : '<i class="cil-x"></i>' !!}</dd>
-					
-						<dt class="col-sm-5">Data</dt>
-						<dd class="col-sm-7">{!! $operator->data == 1 ? '<i class="cil-check-alt"></i>' : '<i class="cil-x"></i>' !!}</dd>
-					
-						<dt class="col-sm-5">PIN</dt>
-						<dd class="col-sm-7">{!! $operator->pin == 1 ? '<i class="cil-check-alt"></i>' : '<i class="cil-x"></i>' !!}</dd>
-					
-						<dt class="col-sm-5">Supports locals amounts</dt>
-						<dd class="col-sm-7">{!! $operator->	supportsLocalAmounts == 1 ? '<i class="cil-check-alt"></i>' : '<i class="cil-x"></i>' !!}</dd>
-					
-						<dt class="col-sm-5">Sender currency</dt>
-						<dd class="col-sm-7">{{ $operator->senderCurrencyCode }} {{ $operator->senderCurrencySymbol }}</dd>
-					
-						<dt class="col-sm-5">Destination currency</dt>
-						<dd class="col-sm-7">{{ $operator->destinationCurrencyCode }} {{ $operator->destinationCurrencySymbol }}</dd>
-					
-						<dt class="col-sm-5">Commission</dt>
-						<dd class="col-sm-7">{{ $operator->commission }}</dd>
-					
-						<dt class="col-sm-5">International discount</dt>
-						<dd class="col-sm-7">{{ $operator->internationalDiscount }}</dd>
-					
-						<dt class="col-sm-5">Local discount</dt>
-						<dd class="col-sm-7">{{ $operator->localDiscount }}</dd>
-					
-						<dt class="col-sm-5">Most popular amount</dt>
-						<dd class="col-sm-7">{{ $operator->mostPopularAmount }}</dd>
-					
-						<dt class="col-sm-5">Minimum amount</dt>
-						<dd class="col-sm-7">{{ $operator->minAmount }}</dd>
-					
-						<dt class="col-sm-5">Maximum amount</dt>
-						<dd class="col-sm-7">{{ $operator->maxAmount }}</dd>
-					
-						<dt class="col-sm-5">Local minimum amount</dt>
-						<dd class="col-sm-7">{{ $operator->localMinAmount }}</dd>
-					
-						<dt class="col-sm-5">Local maximum amount</dt>
-						<dd class="col-sm-7">{{ $operator->localMaxAmount }}</dd>
-					
-						@if($operator->logoUrls->count()>0)
-						<dt class="col-sm-5">Logos</dt>
-						<dd class="col-sm-7">
-							<div class="uk-child-width-1-2" uk-grid>
-								@foreach($operator->logoUrls as $element)
-									<div><img src="{{$element->url}}"></div>
-								@endforeach
-							</div>
-						</dd>
-						@endif
+						<dd class="col-sm-7">{{ $product->type() }}</dd>		
 						
-						@if($operator->fixedAmounts&&$operator->fixedAmounts->count()>0)
-						<dt class="col-sm-5">Fixed amounts</dt>
-						<dd class="col-sm-7">
-							<ul class="uk-list">
-							@foreach($operator->fixedAmounts as $element)
-								<li>{{$element->amount}}</li>
-							@endforeach
-							</ul>
-						</dd>
-						@endif
-					
-						@if($operator->fixedAmountsDescriptions&&$operator->fixedAmountsDescriptions->count()>0)
-						<dt class="col-sm-5">Fixed amounts descriptions</dt>
-						<dd class="col-sm-7">
-							<ul class="uk-list">
-							@foreach($operator->localFixedAmountsDescriptions as $element)
-								<li>{{$element->amount}} => {{$element->description}}</li>
-							@endforeach
-							</ul>
-						</dd>
-						@endif	
+						<dt class="col-sm-5">FX rate</dt>
+						<dd class="col-sm-7">{{ $product->fx_rate() }}</dd>	
 						
-						@if($operator->localFixedAmounts&&$operator->localFixedAmounts->count()>0)
-						<dt class="col-sm-5">Local fixed amounts</dt>
+						@if($product->minimum)
+						<dt class="col-sm-5">Minimum</dt>
 						<dd class="col-sm-7">
 							<ul class="uk-list">
-							@foreach($operator->localFixedAmounts as $element)
-								<li>{{$element->amount}}</li>
-							@endforeach
-							</ul>
-						</dd>
-						@endif
-					
-						@if($operator->localFixedAmountsDescriptions&&$operator->localFixedAmountsDescriptions->count()>0)
-						<dt class="col-sm-5">Local fixed amounts descriptions</dt>
-						<dd class="col-sm-7">
-							<ul class="uk-list">
-							@foreach($operator->localFixedAmountsDescriptions as $element)
-								<li>{{$element->amount}} => {{$element->description}}</li>
-							@endforeach
+								<li><strong>Customer Fee</strong>{{$product->minimum->CustomerFee}}</li>
+								<li><strong>Distributor Fee</strong>{{$product->minimum->DistributorFee}}</li>
+								<li><strong>Receive Value</strong>{{$product->minimum->ReceiveValue}}</li>
+								<li><strong>Receive Currency Iso</strong>{{$product->minimum->ReceiveCurrencyIso}}</li>
+								<li><strong>Receive Value Excluding Tax</strong>{{$product->minimum->ReceiveValueExcludingTax}}</li>
+								<li><strong>Tax Rate</strong>{{$product->minimum->TaxRate}}</li>
+								<li><strong>Tax Name</strong>{{$product->minimum->TaxName}}</li>
+								<li><strong>Tax Calculation</strong>{{$product->minimum->TaxCalculation}}</li>
+								<li><strong>Send Value</strong>{{$product->minimum->SendValue}}</li>
+								<li><strong>Send CurrencyIso</strong>{{$product->minimum->SendCurrencyIso}}</li>
 							</ul>
 						</dd>
 						@endif
 						
-						@if($operator->suggestedAmounts&&$operator->suggestedAmounts->count()>0)
-						<dt class="col-sm-5">Suggested amounts</dt>
+						@if($product->maximum)
+						<dt class="col-sm-5">Maximum</dt>
 						<dd class="col-sm-7">
 							<ul class="uk-list">
-							@foreach($operator->suggestedAmounts as $element)
-								<li>{{$element->amount}}</li>
+								<li><strong>Customer Fee</strong>{{$product->maximum->CustomerFee}}</li>
+								<li><strong>Distributor Fee</strong>{{$product->maximum->DistributorFee}}</li>
+								<li><strong>Receive Value</strong>{{$product->maximum->ReceiveValue}}</li>
+								<li><strong>Receive Currency Iso</strong>{{$product->maximum->ReceiveCurrencyIso}}</li>
+								<li><strong>Receive Value Excluding Tax</strong>{{$product->maximum->ReceiveValueExcludingTax}}</li>
+								<li><strong>Tax Rate</strong>{{$product->maximum->TaxRate}}</li>
+								<li><strong>Tax Name</strong>{{$product->maximum->TaxName}}</li>
+								<li><strong>Tax Calculation</strong>{{$product->maximum->TaxCalculation}}</li>
+								<li><strong>Send Value</strong>{{$product->maximum->SendValue}}</li>
+								<li><strong>Send CurrencyIso</strong>{{$product->maximum->SendCurrencyIso}}</li>
+							</ul>
+						</dd>
+						@endif
+						
+						{{--
+						@if($product->maximum&&$product->maximum->count()>0)
+						<dt class="col-sm-5">Maximum</dt>
+						<dd class="col-sm-7">
+							<ul class="uk-list">
+							@foreach($product->maximum as $element)
+								<li>{{$element->sendAmount}}</li>
 							@endforeach
 							</ul>
 						</dd>
 						@endif
-					
-						@if($operator->suggestedAmountsMap&&$operator->suggestedAmountsMap->count()>0)
-						<dt class="col-sm-5">Suggested amounts descriptions</dt>
-						<dd class="col-sm-7">
-							<ul class="uk-list">
-							@foreach($operator->suggestedAmountsMap as $element)
-								<li>{{$element->amount_sender}} => {{$element->amount_recipient}}</li>
-							@endforeach
-							</ul>
-						</dd>
-						@endif
+						--}}
 						
 					</dl>
 				</div>	

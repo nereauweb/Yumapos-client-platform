@@ -67,10 +67,10 @@
                                 @endif
                             </th>
                             <th>
-                                <span class="mr-4">Max - Min</span>
+                                <span class="mr-4">Min - Max</span>
                             </th>
                             <th>
-                                <span class="mr-4">Benifits</span>
+                                <span class="mr-4">Benefits</span>
                             </th>
                         </tr>
                     </thead>
@@ -105,17 +105,6 @@
                                                     </svg>
 													<span>Edit<span>
                                                 </a>
-                                                @if ($product->denominationType == 'FIXED' && $product->localFixedAmounts->count() > 0)
-                                                    <a class="btn btn-info edit-local dropdown-item" href="#"
-                                                       data-product-id="{{ $product->id }}">
-                                                        <svg class="c-icon">
-                                                            <use
-                                                                xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-description">
-                                                            </use>
-                                                        </svg>
-														<span>Edit local</span>
-                                                    </a>
-                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -128,7 +117,7 @@
                                         @if ($product->maximum->SendValue == $product->minimum->SendValue)
                                             {{ $product->maximum->SendValue }}
                                         @else
-                                            Max: {{ $product->maximum->SendValue }} - Min: {{ $product->minimum->SendValue }}
+                                            {{ $product->minimum->SendValue }} - {{ $product->maximum->SendValue }}
                                         @endif
                                     @endif
                                 </td>

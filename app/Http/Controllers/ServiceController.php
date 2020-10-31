@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Service;
 use App\Models\ServiceCategory;
+use App\Models\ServiceCountry;
+use App\Models\ServiceOperator;
+use App\Models\ApiDingOperator;
+use App\Models\ApiReloadlyOperator;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -80,8 +84,10 @@ class ServiceController extends Controller
 	
 	public function create()
     {
-		$categories = ServiceCategory::pluck('name','id');		
-        return view('admin/service/create', compact('categories'));
+		$categories = ServiceCategory::orderBy('name')->pluck('name','id');		
+		$operators = ServiceOperator::orderBy('name')->pluck('name','id');	
+		$countries = ServiceCountry::orderBy('name')->pluck('name','id');	
+        return view('admin/service/create', compact('categories','operators','countries'));
     }
 	
 	public function store()
@@ -140,5 +146,51 @@ class ServiceController extends Controller
 		
         return redirect('admin.service.list')->with('success','Service created');
     }
+	
+	public function associations()
+    {
+		$ding_operators = ApiDingOperator::pluck('ProviderCode','Name');
+		foreach($ding_operators as $ding_operator_name => $ding_ProviderCode){
+			$service_operator = ServiceOperator::where('name',$ding_operator_name)->first();
+			if ($service_operator){
+				$service_operator->ding_providerCode = $ding_ProviderCode;
+				$service_operator->save();
+			} else {
+				$country = ApiDingOperator::where('ProviderCode',$ding_ProviderCode)->first()->country;
+				$service_country = ServiceCountry::updateOrCreate(['iso'=>$country->CountryIso],['name'=>$country->CountryName]);
+				ServiceOperator::create([
+					'name' => $ding_operator_name,
+					'country_id' => $service_country->id,
+					'master' => 'ding',
+					'ding_ProviderCode' => $ding_ProviderCode,
+				]);
+			}
+		}
+		$reloadly_operators = ApiReloadlyOperator::pluck('operatorId','name');
+		foreach($reloadly_operators as $reloadly_operator_name => $reloadly_operatorId){
+			$service_operator = ServiceOperator::where('name',$reloadly_operator_name)->first();
+			if ($service_operator){
+				$service_operator->reloadly_operatorId = $reloadly_operatorId;
+				$service_operator->save();
+			} else {
+				$country = ApiReloadlyOperator::where('operatorId',$reloadly_operatorId)->first()->country;
+				$service_country = ServiceCountry::updateOrCreate(['iso'=>$country->isoName],['name'=>$country->name]);
+				ServiceOperator::create([
+					'name' => $reloadly_operator_name,
+					'country_id' => $service_country->id,
+					'master' => 'reloadly',
+					'reloadly_operatorId' => $reloadly_operatorId,
+				]);
+			}
+		}
+		$service_operators = ServiceOperator::orderBy('name')->get();
+        return view('admin/service/associations', compact('service_operators','ding_operators','reloadly_operators'));
+    }
+	
+	public function associations_set_master(Request $request){
+		$service_operator = ServiceOperator::findOrFail($request->input('operator'));
+		$service_operator->master = $request->input('master');
+		$service_operator->save();
+	}
 	
 }

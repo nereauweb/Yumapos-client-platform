@@ -32,6 +32,19 @@ dl.light {
 .c-dark-theme h1 {
     color: white;
 }
+.c-dark-theme .select2-selection.select2-selection--multiple {
+	background-color: rgba(255, 255, 255, 0.1);
+}
+.c-dark-theme .select2-results__options {
+	background-color: rgb(53, 52, 52);
+}
+.c-dark-theme .select2-container--default .select2-results__option[aria-selected="true"] {
+	background-color: #6f6e6e !important;
+}
+.c-dark-theme .select2-selection__choice {
+	color: #1e1e1e;
+}
+
 html:not([dir="rtl"]) .custom-select-sm {
     padding-right: 1rem;
 }

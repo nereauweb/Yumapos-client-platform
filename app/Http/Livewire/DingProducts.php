@@ -50,7 +50,7 @@ class DingProducts extends Component
 //
 //        $livewireOperators = $livewireOperators->distinct()->paginate(10);
 
-            $this->livewireOperators = ApiDingProduct::when($this->countryName, function ($query) {
+            $this->livewireOperators = ApiDingProduct::select('api_ding_products.*')->when($this->countryName, function ($query) {
                 $query->join('api_ding_operators as ado', 'api_ding_products.ProviderCode', 'ado.ProviderCode')->where('ado.CountryIso','=', $this->countryName);
             })->when($this->sortField, function ($query) {
                 $query->orderBy('api_ding_products.'.$this->sortField, $this->sortAsc ? 'asc' : 'desc');

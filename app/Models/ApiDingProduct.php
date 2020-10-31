@@ -43,4 +43,30 @@ class ApiDingProduct extends Model
 	public function benefits(){ return $this->hasMany('App\Models\ApiDingProductBenefit','product_id', 'id'); }
 	public function payment_types(){ return $this->hasMany('App\Models\ApiDingProductPaymentType','product_id'); }
 	public function operator(){ return $this->hasOne('App\Models\ApiDingOperator','ProviderCode','ProviderCode'); }
+	
+	public function type(){
+		if ($this->minimum->SendValue==$this->maximum->SendValue){
+			return 'FIXED';
+		}
+		return 'RANGE';
+	}
+	
+	public function configurations(){ 
+		return $this->hasMany('App\Models\ApiDingProductConfiguration','product_id','id'); 
+	}
+	
+	public function configuration($group_id){
+		return $this->configurations->where('group_id', $group_id)->first();
+	}
+	
+	public function config_rate($group_id){
+		$configuration = $this->configurations->where('group_id', $group_id)->first();
+		return $configuration && $configuration->fx_delta_percent != 0 ? $this->fx->rate - $this->fx->rate * $configuration->fx_delta_percent / 100 : $this->fx->rate;
+	}
+	
+	
+	public function fx_rate(){
+		return $this->minimum->ReceiveValue / $this->minimum->SendValue;
+	}
+	
 }
