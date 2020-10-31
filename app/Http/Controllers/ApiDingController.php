@@ -324,40 +324,36 @@ class ApiDingController extends Controller
 				}
 				$product->maximum()->delete();
 				if (!empty($product_data['maximum'])){
-					foreach ($product_data['maximum'] as $maximum) {
 						$product->maximum()->create([
-							'CustomerFee' 				=> $maximum['customer_fee'],
-							'DistributorFee' 			=> $maximum['distributor_fee'],
-							'ReceiveValue' 				=> $maximum['receive_value'],
-							'ReceiveCurrencyIso' 		=> $maximum['receive_currency_iso'],
-							'ReceiveValueExcludingTax' 	=> $maximum['receive_value_excluding_tax'],
-							'TaxRate' 					=> $maximum['tax_rate'],
-							'TaxName' 					=> $maximum['tax_name'],
-							'TaxCalculation' 			=> $maximum['tax_calculation'],
-							'SendValue' 				=> $maximum['send_value'],
-							'SendCurrencyIso' 			=> $maximum['send_currency_iso'],
+							'CustomerFee' 				=> $product_data['maximum']['customer_fee'],
+							'DistributorFee' 			=> $product_data['maximum']['distributor_fee'],
+							'ReceiveValue' 				=> $product_data['maximum']['receive_value'],
+							'ReceiveCurrencyIso' 		=> $product_data['maximum']['receive_currency_iso'],
+							'ReceiveValueExcludingTax' 	=> $product_data['maximum']['receive_value_excluding_tax'],
+							'TaxRate' 					=> $product_data['maximum']['tax_rate'],
+							'TaxName' 					=> $product_data['maximum']['tax_name'],
+							'TaxCalculation' 			=> $product_data['maximum']['tax_calculation'],
+							'SendValue' 				=> $product_data['maximum']['send_value'],
+							'SendCurrencyIso' 			=> $product_data['maximum']['send_currency_iso'],
 						]);
-					}
 				}
 				$product->minimum()->delete();
 				if (!empty($product_data['minimum'])){
-					foreach ($product_data['minimum'] as $minimum) {
 						$product->minimum()->create([
-							'CustomerFee' 				=> $minimum['customer_fee'],
-							'DistributorFee' 			=> $minimum['distributor_fee'],
-							'ReceiveValue' 				=> $minimum['receive_value'],
-							'ReceiveCurrencyIso' 		=> $minimum['receive_currency_iso'],
-							'ReceiveValueExcludingTax' 	=> $minimum['receive_value_excluding_tax'],
-							'TaxRate' 					=> $minimum['tax_rate'],
-							'TaxName' 					=> $minimum['tax_name'],
-							'TaxCalculation' 			=> $minimum['tax_calculation'],
-							'SendValue' 				=> $minimum['send_value'],
-							'SendCurrencyIso' 			=> $minimum['send_currency_iso'],
+							'CustomerFee' 				=> $product_data['minimum']['customer_fee'],
+							'DistributorFee' 			=> $product_data['minimum']['distributor_fee'],
+							'ReceiveValue' 				=> $product_data['minimum']['receive_value'],
+							'ReceiveCurrencyIso' 		=> $product_data['minimum']['receive_currency_iso'],
+							'ReceiveValueExcludingTax' 	=> $product_data['minimum']['receive_value_excluding_tax'],
+							'TaxRate' 					=> $product_data['minimum']['tax_rate'],
+							'TaxName' 					=> $product_data['minimum']['tax_name'],
+							'TaxCalculation' 			=> $product_data['minimum']['tax_calculation'],
+							'SendValue' 				=> $product_data['minimum']['send_value'],
+							'SendCurrencyIso' 			=> $product_data['minimum']['send_currency_iso'],
 						]);
-					}
 				}
 				$product->benefits()->delete();
-				if (!empty($product_data['payment_types'])){
+				if (!empty($product_data['benefits'])){
 					foreach ($product_data['benefits'] as $benefit) {
 						$product->benefits()->create(['benefit' => $benefit]);
 					}
