@@ -66,7 +66,7 @@
                                     <i class="cil-arrow-top"></i>
                                 @endif
                             </th>
-                            <th wire:click="sortBy('name')"><span class="mr-4">Name</span>
+                            <th wire:click="sortBy('name')"><span class="mr-4">Operator name</span>
                                 @if($sortAsc && $sortField == 'name')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
@@ -74,7 +74,7 @@
                                 @endif
                             </th>
                             <th wire:click="sortBy('denominationType')">
-                                <span class="mr-4">Type</span>
+                                <span class="mr-4">Sku</span>
                                 @if($sortAsc && $sortField == 'denominationType')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
@@ -82,23 +82,15 @@
                                 @endif
                             </th>
                             <th wire:click="filter('currencyCode')">
-                                <span class="mr-4">FX currency</span>
+                                <span class="mr-4">Max - Min</span>
                                 @if($sortAscCustom && $customSort == 'currencyCode')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
                                     <i class="cil-arrow-top"></i>
                                 @endif
                             </th>
-                            <th wire:click="filter('rate')"><span class="mr-4">FX rate</span>
+                            <th wire:click="filter('rate')"><span class="mr-4">Benifits</span>
                                 @if($sortAscCustom && $customSort == 'rate')
-                                    <i class="cil-arrow-bottom"></i>
-                                @else
-                                    <i class="cil-arrow-top"></i>
-                                @endif
-                            </th>
-                            <th wire:click="sortBy('commission')">
-                                <span class="mr-4">Commission&nbsp;(€)</span>
-                                @if($sortAsc && $sortField == 'commission')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
                                     <i class="cil-arrow-top"></i>
@@ -107,12 +99,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($livewireProducts->unique() as $product)
+                        @foreach ($livewireProducts as $product)
                             <tr>
                                 <td>
                                     <div class="btn-group btn-group-xs">
                                         <button type="button" class="btn btn-table-action dropdown-toggle" data-toggle="dropdown">
-                                            {{ $product->productId }}
+                                            {{ $product->id }}
                                             <i class="fa fa-ellipsis-v fa-fw" aria-hidden="true"></i>
                                             <span class="sr-only">
 									            Actions
@@ -152,12 +144,21 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>{{ $product->countryName }} ({{ $product->isoName }})</td>
-                                <td>{{ $product->name }}</td>
-                                <td>{{ $product->denominationType }}</td>
-                                <td>{{ $product->currencyCode }}</td>
-                                <td>{{ $product->rate }}</td>
-                                <td>{{ $product->commission }}</td>
+                                <td>{{ isset($product->operator) && isset($product->operator->country) ? $product->operator->country->CountryName : 'Not set yet' }}</td>
+                                <td>{{ isset($product->operator) ? $product->operator->Name : 'returning null' }}</td>
+                                <td>{{ $product->SkuCode }}</td>
+                                <td>
+                                    @if(isset($product->maximum) && isset($product->minimum))
+                                        @if ($product->maximum->SendValue == $product->minimum->SendValue)
+                                            {{ $product->maximum->SendValue }}
+                                        @else
+                                            Max: {{ $product->maximum->SendValue }} - Min: {{ $product->minimum->SendValue }}
+                                        @endif
+                                    @endif
+                                </td>
+                                <td>
+                                    {{ $product->benefits->pluck('benefit')->implode(', ') }}
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
