@@ -273,7 +273,10 @@ Route::group(['middleware' => ['get.menu']], function () {
 
             Route::get('/users/export', 'UsersController@export')->name('admin.user.export');
 
+            Route::get('/api/services', 'ServiceOperationController@index');
+
         });
+
 
 		Route::prefix('/admin/service')->group(function () {
 			Route::get('/categories', 'ServiceController@categories')->name('admin.service.category.manage');
@@ -282,17 +285,46 @@ Route::group(['middleware' => ['get.menu']], function () {
 			Route::get('/deleted', 'ServiceController@deleted')->name('admin.service.deleted');
 			Route::put('/{id}/recover', 'ServiceController@recover')->name('admin.service.recover');			
 			Route::resource('/',  'ServiceController', [ 'names' => 'admin.service' ]);
-        });
+	        });
 			
 		Route::prefix('/admin/service/reloadly')->group(function () {
 			Route::get('/{id}/edit/local', 'ReloadlyController@edit_local')->name('admin.reloadly.edit.local');
 			Route::put('/{id}/local', 'ReloadlyController@update_local')->name('admin.reloadly.update.local');
 			Route::resource('/',  'ReloadlyController', [ 'names' => 'admin.reloadly' ]);
-        });		
-		
+        	});		
+				
 		Route::prefix('/admin/service/ding')->group(function () {			
 			Route::resource('/',  'DingController', [ 'names' => 'admin.ding' ]);
-        });
+		});
+
+		Route::prefix('/admin/services/')->group(function () {
+			Route::get('/{id}/edit/local', 'ServiceController@edit_local')->name('admin.services.edit.local');
+			Route::put('/{id}/local', 'ServiceController@update_local')->name('admin.services.update.local');
+        	});
+
+		Route::prefix('/admin/services/')->group(function () {
+			Route::get('/', 'ServiceController@index')->name('admin.services.index');
+        	});
+
+
+		Route::prefix('/admin/package/')->group(function () {
+			Route::get('categories', 'PackageController@categories')->name('admin.package.category.manage');
+			Route::post('categories/create', 'PackageController@category_create')->name('admin.package.category.create');
+			Route::post('categories/update', 'PackageController@categories_update')->name('admin.package.category.update');
+			Route::get('list', 'PackageController@index')->name('admin.package.list');
+			Route::get('{id}/view', 'PackageController@view')->name('admin.package.view');
+			Route::get('create', 'PackageController@create')->name('admin.package.create');
+			Route::post('store', 'PackageController@store')->name('admin.package.store');
+			Route::get('{id}/edit', 'PackageController@edit')->name('admin.package.edit');
+			Route::put('{id}/update', 'PackageController@update')->name('admin.package.update');
+			Route::delete('{id}/delete', 'PackageController@delete')->name('admin.package.delete');
+			Route::get('deleted', 'PackageController@deleted')->name('admin.package.deleted');
+			Route::put('{id}/recover', 'PackageController@recover')->name('admin.package.recover');
+        	});
+
+		Route::prefix('/admin/ding/services/')->group(function () {
+			Route::get('/', 'ApiDingController@products_list')->name('admin.ding.services.products');
+        	});
 
 		Route::prefix('/admin/api/reloadly')->group(function () {
 			Route::get('/', 'ApiReloadlyController@index')->name('admin.api.reloadly.index');
