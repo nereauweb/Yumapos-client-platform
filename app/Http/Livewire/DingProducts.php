@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Http\Ding\Model\Country;
+use App\Models\ApiDingCountry;
 use App\Models\ApiDingProduct;
 use App\Models\ApiReloadlyOperator;
 use App\Models\ApiReloadlyOperatorCountry;
@@ -23,6 +24,8 @@ class DingProducts extends Component
     public $end;
     public $type;
     public $sortAsc = true;
+    private $livewireOperators;
+    public $countryFilter = false;
 
     public $countryId;
     public $countryName;
@@ -42,15 +45,18 @@ class DingProducts extends Component
 //            $query->where('api_reloadly_operators.denominationType', $this->type);
 //        });
 
-        $countriesList = DB::table('api_reloadly_operators_countries')->select(DB::raw('count(*) as countries_count, name'))->groupBy('name')->get();
+        $countriesList = ApiDingCountry::all();
         $typesList = ApiReloadlyOperator::select('denominationType')->distinct('denominationType')->get();
 //
 //        $livewireOperators = $livewireOperators->distinct()->paginate(10);
 
-        $livewireOperators = ApiDingProduct::paginate(10);
+            $this->livewireOperators = ApiDingProduct::when($this->countryFilter, function ($query) {
+                $query->join('api_ding_operators as ado', 'ado.ProviderCode', 'api_ding_products.id')->where('ado.CountryIso','=', $this->countryName);
+            })->paginate(10);
+
         return view('livewire.ding-products', [
-            'livewireProducts' => $livewireOperators,
-            'countriesList' => $countriesList,
+            'livewireProducts' => $this->livewireOperators,
+            'dingCountries' => $countriesList,
             'typesList' => $typesList
         ]);
     }
@@ -96,8 +102,8 @@ class DingProducts extends Component
     }
 
     public function commit() {
-        if (isset($this->countryId)) {
-            $countries = ApiReloadlyOperatorCountry::where('name', '=', $this->countryName);
+        if (isset($this->countryName) && !is_null($this->countryName)) {
+            $this->countryFilter = true;
         }
     }
 }

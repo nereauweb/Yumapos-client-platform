@@ -11,32 +11,17 @@
             </div>
             <div class="card-body">
                 <div class="uk-grid-small my-4 d-flex align-items-end" uk-grid>
-                    <div class="uk-width-expand">
-                        <fieldset>
-                            <label>Date range</label>
-                            <div class="input-group">
-                                <span class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="cil-calendar"></i>
-                                    </span>
-                                </span>
-                                <input class="form-control" id="daterange" type="text">
-                                <input type="hidden" id="date_begin">
-                                <input type="hidden" id="date_end">
-                            </div>
-                        </fieldset>
-                    </div>
                     <div>
                         <select wire:model.defer="countryName" name="countryName" id="countryId" class="custom-select">
                             <option value="0">All countries</option>
-                            @foreach ($countries as $item)
-                                <option value="{{$item->name}}">{{$item->name}}</option>
+                            @foreach ($dingCountries as $item)
+                                <option value="{{$item->CountryIso}}">{{$item->CountryName}}</option>
                             @endforeach
                         </select>
                     </div>
                     <div>
                         <select wire:model.defer="type" name="typesList" id="typesId" class="custom-select">
-                            <option value="-">Every typye</option>
+                            <option value="-">Every type</option>
                             @foreach ($typesList as $item)
                                 <option value="{{$item->denominationType}}">{{$item->denominationType}}</option>
                             @endforeach
@@ -48,17 +33,17 @@
                     </div>
                 </div>
                 <table class="table table-striped table-bordered col-filtered-datatable" id="admin-table">
-                    <thead>
+                        <thead>
                         <tr class="cursorPointer">
-                            <th wire:click="sortBy('productId')">
+                            <th wire:click="sortBy('id')">
                                 <span class="mr-4">ID</span>
-                                @if($sortAsc && $sortField == 'productId')
+                                @if($sortAsc && $sortField == 'id')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
                                     <i class="cil-arrow-top"></i>
                                 @endif
                             </th>
-                            <th wire:click="filter('countryName')">
+                            <th wire:click="filter('ApiDingCountry')">
                                 <span class="mr-4">Country</span>
                                 @if($sortAscCustom && $customSort == 'countryName')
                                     <i class="cil-arrow-bottom"></i>
@@ -98,7 +83,7 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                        <tbody>
                         @foreach ($livewireProducts as $product)
                             <tr>
                                 <td>
@@ -162,15 +147,9 @@
                             </tr>
                         @endforeach
                     </tbody>
-                </table>
+                    </table>
                 {{ $livewireProducts->links() }}
             </div>
         </div>
     </div>
 </div>
-<script>
-    $('#commitBtn').on('click', function(e) {
-        @this.set('start', $("#date_begin").val());
-        @this.set('end', $("#date_end").val());
-    });
-</script>
