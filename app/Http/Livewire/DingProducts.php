@@ -22,7 +22,7 @@ class DingProducts extends Component
     public $sortAscCustom = true;
     public $start;
     public $end;
-    public $type;
+    public $type = false;
     public $sortAsc = true;
     private $livewireOperators;
     public $countryFilter = false;
@@ -50,8 +50,16 @@ class DingProducts extends Component
 //
 //        $livewireOperators = $livewireOperators->distinct()->paginate(10);
 
-            $this->livewireOperators = ApiDingProduct::when($this->countryFilter, function ($query) {
-                $query->join('api_ding_operators as ado', 'ado.ProviderCode', 'api_ding_products.id')->where('ado.CountryIso','=', $this->countryName);
+            $this->livewireOperators = ApiDingProduct::when($this->countryName, function ($query) {
+                $query->join('api_ding_operators as ado', 'api_ding_products.ProviderCode', 'ado.ProviderCode')->where('ado.CountryIso','=', $this->countryName);
+            })->when($this->sortField, function ($query) {
+                $query->orderBy('api_ding_products.'.$this->sortField, $this->sortAsc ? 'asc' : 'desc');
+            })->when($this->customSort, function ($query) {
+                if ($this->customSort == 'CountryName') {
+                    $query->join('api_ding_operators as ado', 'api_ding_products.ProviderCode', 'ado.ProviderCode')->join('api_ding_countries as adc', 'adc.CountryIso', 'ado.CountryIso')->orderBy('adc.'.$this->customSort, $this->sortAscCustom ? 'asc' : 'desc');
+                } else {
+                    $query->join('api_ding_operators as ado', 'api_ding_products.ProviderCode', 'ado.ProviderCode')->orderBy('ado.'.$this->customSort, $this->sortAscCustom ? 'asc' : 'desc');
+                }
             })->paginate(10);
 
         return view('livewire.ding-products', [
@@ -101,9 +109,5 @@ class DingProducts extends Component
         $this->searchData = '';
     }
 
-    public function commit() {
-        if (isset($this->countryName) && !is_null($this->countryName)) {
-            $this->countryFilter = true;
-        }
-    }
+    public function commit() {}
 }

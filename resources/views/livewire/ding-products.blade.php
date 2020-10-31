@@ -21,7 +21,7 @@
                     </div>
                     <div>
                         <select wire:model.defer="type" name="typesList" id="typesId" class="custom-select">
-                            <option value="-">Every type</option>
+                            <option value="0">Every type</option>
                             @foreach ($typesList as $item)
                                 <option value="{{$item->denominationType}}">{{$item->denominationType}}</option>
                             @endforeach
@@ -43,43 +43,34 @@
                                     <i class="cil-arrow-top"></i>
                                 @endif
                             </th>
-                            <th wire:click="filter('ApiDingCountry')">
+                            <th wire:click="filter('CountryName')">
                                 <span class="mr-4">Country</span>
-                                @if($sortAscCustom && $customSort == 'countryName')
+                                @if($sortAscCustom && $customSort == 'CountryName')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
                                     <i class="cil-arrow-top"></i>
                                 @endif
                             </th>
-                            <th wire:click="sortBy('name')"><span class="mr-4">Operator name</span>
-                                @if($sortAsc && $sortField == 'name')
+                            <th wire:click="filter('Name')"><span class="mr-4">Operator name</span>
+                                @if($sortAscCustom && $customSort == 'Name')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
                                     <i class="cil-arrow-top"></i>
                                 @endif
                             </th>
-                            <th wire:click="sortBy('denominationType')">
+                            <th wire:click="sortBy('SkuCode')">
                                 <span class="mr-4">Sku</span>
-                                @if($sortAsc && $sortField == 'denominationType')
+                                @if($sortAsc && $sortField == 'SkuCode')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
                                     <i class="cil-arrow-top"></i>
                                 @endif
                             </th>
-                            <th wire:click="filter('currencyCode')">
+                            <th>
                                 <span class="mr-4">Max - Min</span>
-                                @if($sortAscCustom && $customSort == 'currencyCode')
-                                    <i class="cil-arrow-bottom"></i>
-                                @else
-                                    <i class="cil-arrow-top"></i>
-                                @endif
                             </th>
-                            <th wire:click="filter('rate')"><span class="mr-4">Benifits</span>
-                                @if($sortAscCustom && $customSort == 'rate')
-                                    <i class="cil-arrow-bottom"></i>
-                                @else
-                                    <i class="cil-arrow-top"></i>
-                                @endif
+                            <th>
+                                <span class="mr-4">Benifits</span>
                             </th>
                         </tr>
                     </thead>
