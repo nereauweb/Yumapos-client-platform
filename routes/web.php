@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Contracts\Role;
 
 Route::group(['middleware' => ['get.menu']], function () {
+
 	Route::get('/', function () {
 		if (Auth::User()){
             //return view('dashboard.homepage');
@@ -259,7 +260,6 @@ Route::group(['middleware' => ['get.menu']], function () {
 
 		Route::prefix('/admin')->group(function () {
             Route::post('/user/approve/{user}', 'UsersController@approve')->name('admin.user.approve');
-			Route::resource('services',  'ServiceController', [ 'names' => 'admin.services' ]);
             Route::get('/payments/export', 'PaymentsController@export')->name('admin.payments.export');
             Route::put('payments/cancel/{payment}', 'PaymentsController@cancel')->name('admin.payments.cancel');
             Route::put('/payments/approve/{ids}', 'PaymentsController@updatePaymentStatus')->name('admin.payments.updatePaymentStatus');
@@ -276,6 +276,7 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::get('/api/services', 'ServiceOperationController@index');
 
         });
+
 
 		Route::prefix('/admin/services/')->group(function () {
 			Route::get('/{id}/edit/local', 'ServiceController@edit_local')->name('admin.services.edit.local');
@@ -304,6 +305,24 @@ Route::group(['middleware' => ['get.menu']], function () {
 
 		Route::prefix('/admin/ding/services/')->group(function () {
 			Route::get('/', 'ApiDingController@products_list')->name('admin.ding.services.products');
+
+		Route::prefix('/admin/service')->group(function () {
+			Route::get('/categories', 'ServiceController@categories')->name('admin.service.category.manage');
+			Route::post('/categories/create', 'ServiceController@category_create')->name('admin.service.category.create');
+			Route::post('/categories/update', 'ServiceController@categories_update')->name('admin.service.category.update');
+			Route::get('/deleted', 'ServiceController@deleted')->name('admin.service.deleted');
+			Route::put('/{id}/recover', 'ServiceController@recover')->name('admin.service.recover');
+			Route::resource('/',  'ServiceController', [ 'names' => 'admin.service' ]);
+        });
+
+		Route::prefix('/admin/service/reloadly')->group(function () {
+			Route::get('/{id}/edit/local', 'ReloadlyController@edit_local')->name('admin.reloadly.edit.local');
+			Route::put('/{id}/local', 'ReloadlyController@update_local')->name('admin.reloadly.update.local');
+			Route::resource('/',  'ReloadlyController', [ 'names' => 'admin.reloadly' ]);
+        });
+
+		Route::prefix('/admin/service/ding')->group(function () {
+			Route::resource('/',  'DingController', [ 'names' => 'admin.ding' ]);
         });
 
 		Route::prefix('/admin/api/reloadly')->group(function () {
@@ -428,7 +447,7 @@ Route::get('payments/{filename}', function ($filename)
 
 Route::get('users-added-payments/{filename}', function ($filename)
 {
-    $path = storage_path() . '/app/payments/'. $filename;
-    if(!\File::exists($path)) abort(404);
+    $path = storage_path() . '/app/payments/' . $filename;
+    if (!\File::exists($path)) abort(404);
     return response()->download($path);
 });
