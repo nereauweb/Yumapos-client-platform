@@ -277,7 +277,7 @@ Route::group(['middleware' => ['get.menu']], function () {
 
         });
 
-D
+
 		Route::prefix('/admin/service')->group(function () {
 			Route::get('/categories', 'ServiceController@categories')->name('admin.service.category.manage');
 			Route::post('/categories/create', 'ServiceController@category_create')->name('admin.service.category.create');
@@ -297,35 +297,6 @@ D
 			Route::resource('/',  'DingController', [ 'names' => 'admin.ding' ]);
 		});
 
-		Route::prefix('/admin/services/')->group(function () {
-			Route::get('/{id}/edit/local', 'ServiceController@edit_local')->name('admin.services.edit.local');
-			Route::put('/{id}/local', 'ServiceController@update_local')->name('admin.services.update.local');
-        	});
-
-		Route::prefix('/admin/services/')->group(function () {
-			Route::get('/', 'ServiceController@index')->name('admin.services.index');
-        	});
-
-
-		Route::prefix('/admin/package/')->group(function () {
-			Route::get('categories', 'PackageController@categories')->name('admin.package.category.manage');
-			Route::post('categories/create', 'PackageController@category_create')->name('admin.package.category.create');
-			Route::post('categories/update', 'PackageController@categories_update')->name('admin.package.category.update');
-			Route::get('list', 'PackageController@index')->name('admin.package.list');
-			Route::get('{id}/view', 'PackageController@view')->name('admin.package.view');
-			Route::get('create', 'PackageController@create')->name('admin.package.create');
-			Route::post('store', 'PackageController@store')->name('admin.package.store');
-			Route::get('{id}/edit', 'PackageController@edit')->name('admin.package.edit');
-			Route::put('{id}/update', 'PackageController@update')->name('admin.package.update');
-			Route::delete('{id}/delete', 'PackageController@delete')->name('admin.package.delete');
-			Route::get('deleted', 'PackageController@deleted')->name('admin.package.deleted');
-			Route::put('{id}/recover', 'PackageController@recover')->name('admin.package.recover');
-        	});
-
-		Route::prefix('/admin/ding/services/')->group(function () {
-			Route::get('/', 'ApiDingController@products_list')->name('admin.ding.services.products');D
-        	});
-
 		Route::prefix('/admin/service')->group(function () {
 			Route::get('/categories', 'ServiceController@categories')->name('admin.service.category.manage');
 			Route::post('/categories/create', 'ServiceController@category_create')->name('admin.service.category.create');
@@ -344,7 +315,6 @@ D
 		Route::prefix('/admin/service/ding')->group(function () {
 			Route::resource('/',  'DingController', [ 'names' => 'admin.ding' ]);
         });
->>>>>>> 18e2e3600acc16a47bda39457102989928486955
 
 		Route::prefix('/admin/api/reloadly')->group(function () {
 			Route::get('/', 'ApiReloadlyController@index')->name('admin.api.reloadly.index');
