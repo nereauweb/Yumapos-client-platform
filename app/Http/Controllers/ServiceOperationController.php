@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ServiceOperation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ServiceOperationController extends Controller
 {
@@ -15,10 +16,14 @@ class ServiceOperationController extends Controller
      */
     public function index()
     {
-//        $months = ServiceOperation::get()->groupBy(function($d) {
-//            return Carbon::parse($d->created_at)->format('m');
-//        });
-        return response()->json(ServiceOperation::paginate(30), 200);
+        $platformMonthlyGain = ServiceOperation::select([
+            DB::raw('sum(platform_total_gain) as platformTotalGain'),
+            DB::raw('day(created_at) as day'),
+            DB::raw('month(created_at) as month')
+        ])
+            ->groupBy(['month', 'day'])
+            ->limit(30)->orderBy('month', 'desc')->get();
+        return response()->json($platformMonthlyGain, 200);
     }
 
     /**

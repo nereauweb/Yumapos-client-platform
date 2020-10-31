@@ -357,27 +357,29 @@ var cardChart4 = new Chart(document.getElementById('card-chart4'), {
 // });
 const arrayWithData = [];
 const totalGains = [];
+const arrayLabels = [];
+const arrayDays = [];
+const arrayPlatformGain = [];
 fetch('/admin/api/services').then(response => response.json()).then(data => {
-    for (const mainChartElement of data.data) {
-        console.log(mainChartElement);
-        totalGains.push(mainChartElement.user_total_gain);
-        const dateUnformed = new Date(mainChartElement.created_at);
-        const date = dateUnformed.toLocaleString('default', { month: 'narrow' });
-        arrayWithData.push(date);
-    }
+    console.log(data);
+    data.map(item => {
+       arrayLabels.push(item.month);
+       arrayPlatformGain.push(item.platformTotalGain);
+       arrayDays.push(item.day);
+    });
 }).then(test => {
     var mainChart = new Chart(document.getElementById('main-chart'), {
         type: 'line',
         data: {
             // labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S'],
-            labels: arrayWithData,
+            labels: arrayDays,
             datasets: [{
-                label: 'User total gain',
+                label: 'Platform total gain',
                 backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--info'), 10),
                 borderColor: coreui.Utils.getStyle('--info'),
                 pointHoverBackgroundColor: '#fff',
                 borderWidth: 2,
-                data: totalGains
+                data: arrayPlatformGain
             }]
         },
         options: {

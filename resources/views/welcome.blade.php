@@ -177,27 +177,26 @@
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between">
                                             <div>
-                                                <h4 class="card-title mb-0">Traffic</h4>
-                                                <div class="small text-muted">September 2019</div>
+                                                <h4 class="card-title mb-0">Latest 30 days platform gain</h4>
                                             </div>
-                                            <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
-                                                <div class="btn-group btn-group-toggle mx-3" data-toggle="buttons">
-                                                    <label class="btn btn-outline-secondary">
-                                                        <input id="option1" type="radio" name="options" autocomplete="off"> Day
-                                                    </label>
-                                                    <label class="btn btn-outline-secondary active">
-                                                        <input id="option2" type="radio" name="options" autocomplete="off" checked=""> Month
-                                                    </label>
-                                                    <label class="btn btn-outline-secondary">
-                                                        <input id="option3" type="radio" name="options" autocomplete="off"> Year
-                                                    </label>
-                                                </div>
-                                                <button class="btn btn-primary" type="button">
-                                                    <svg class="c-icon">
-                                                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-cloud-download"></use>
-                                                    </svg>
-                                                </button>
-                                            </div>
+{{--                                            <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">--}}
+{{--                                                <div class="btn-group btn-group-toggle mx-3" data-toggle="buttons">--}}
+{{--                                                    <label class="btn btn-outline-secondary">--}}
+{{--                                                        <input id="option1" type="radio" name="options" autocomplete="off"> Day--}}
+{{--                                                    </label>--}}
+{{--                                                    <label class="btn btn-outline-secondary active">--}}
+{{--                                                        <input id="option2" type="radio" name="options" autocomplete="off" checked=""> Month--}}
+{{--                                                    </label>--}}
+{{--                                                    <label class="btn btn-outline-secondary">--}}
+{{--                                                        <input id="option3" type="radio" name="options" autocomplete="off"> Year--}}
+{{--                                                    </label>--}}
+{{--                                                </div>--}}
+{{--                                                <button class="btn btn-primary" type="button">--}}
+{{--                                                    <svg class="c-icon">--}}
+{{--                                                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-cloud-download"></use>--}}
+{{--                                                    </svg>--}}
+{{--                                                </button>--}}
+{{--                                            </div>--}}
                                         </div>
                                         <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
                                             <div class="chartjs-size-monitor">
