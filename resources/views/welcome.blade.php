@@ -18,20 +18,26 @@
                                         <div class="card text-white bg-gradient-primary">
                                             <div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
                                                 <div>
-                                                    <div class="text-value-lg">9.823</div>
-                                                    <div>Members online</div>
+                                                    <div class="text-value-lg">
+                                                        @if(Cache::has('reloadly_cache'))
+                                                            {{ Cache::get('reloadly_cache')['balance'] }}
+                                                        @else
+                                                            /api/reloadly/balance not visited yet!
+                                                        @endif
+                                                    </div>
+                                                    <div>Api reloadly balance</div>
                                                 </div>
-                                                <div class="btn-group">
-                                                    <button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <svg class="c-icon">
-                                                            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
-                                                        </svg>
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
-                                                </div>
+{{--                                                <div class="btn-group">--}}
+{{--                                                    <button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--}}
+{{--                                                        <svg class="c-icon">--}}
+{{--                                                            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>--}}
+{{--                                                        </svg>--}}
+{{--                                                    </button>--}}
+{{--                                                    <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>--}}
+{{--                                                </div>--}}
                                             </div>
                                             <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                                                <canvas class="chart chartjs-render-monitor" id="card-chart1" height="70" style="display: block; width: 343px; height: 70px;" width="343"></canvas>
+                                                <canvas id="card-chart1" height="70" style="display: block; width: 343px; height: 70px;" width="343"></canvas>
                                                 <div id="card-chart1-tooltip" class="c-chartjs-tooltip top" style="opacity: 0; left: 243.667px; top: 127.858px;"><div class="c-tooltip-header"><div class="c-tooltip-header-item">May</div></div><div class="c-tooltip-body"><div class="c-tooltip-body-item"><span class="c-tooltip-body-item-color" style="background-color: rgb(50, 31, 219);"></span><span class="c-tooltip-body-item-label">My First dataset</span><span class="c-tooltip-body-item-value">51</span></div></div></div></div>
                                         </div>
                                     </div>

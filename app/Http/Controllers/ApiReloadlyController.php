@@ -9,6 +9,7 @@ use App\Models\ApiReloadlyOperator;
 use App\Models\ServiceOperation;
 use Auth;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -108,6 +109,7 @@ class ApiReloadlyController extends Controller
 		curl_close($ch);
 		$this->call_id = $this->log_call('get',$full_path,'',$response);
 		$data = json_decode($response, true);
+        Cache::put('reloadly_cache', $data); // to store current value of the api reloadly balance, currently you have to visit the balance route to go through the request and only after that we get to see the result in dashboard
 		if ($return_data) { return $data; }
 		return view('admin/api/reloadly/dump', ['log' => $this->log, 'data' => $data] );
 	}
@@ -165,13 +167,6 @@ class ApiReloadlyController extends Controller
 		return view('admin/api/reloadly/command-list', ['log' => $this->log] );
 	}
 
-    //    build a new function which gets the result of $this->>get_call, and get only balance (should go also in dashboard)
-    public function getBalance() {
-        if (is_null($this->balanceString)) {
-            $this->get_call('/accounts/balance');
-        }
-        dd($this->balanceString);
-    }
 
 
     public function balance(Request $request)
