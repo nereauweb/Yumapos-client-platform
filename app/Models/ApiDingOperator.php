@@ -3,20 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 class ApiDingOperator extends Model
 {
     use SoftDeletes;
-	
+
 	/**
      * The database table used by the model.
      *
      * @var string
      */
     protected $table = 'api_ding_operators';
-	
+
 	protected $fillable = [
 		'ProviderCode',
 		'CountryIso',
@@ -26,24 +27,28 @@ class ApiDingOperator extends Model
 		'CustomerCareNumber',
 		'LogoUrl',
 		];
-	
+
 	public function region_codes(){ return $this->hasMany('App\Models\ApiDingOperatorRegionCode','ProviderCode','ProviderCode'); }
-	
-	public function regions(){ 
+
+	public function regions(){
 		return $this->hasManyThrough(
             'App\Models\ApiDingRegion',
             'App\Models\ApiDingOperatorRegionCode',
-            'RegionCode', 
+            'RegionCode',
             'RegionCode',
             'id',
-            'operator_id' 
+            'operator_id'
         );
 	}
-	
+
 	public function payment_types(){ return $this->hasMany('App\Models\ApiDingOperatorPaymentType','ProviderCode'); }
-	
-	
+
+
 	public function products(){ return $this->hasMany('App\Models\ApiDingOperatorProduct','ProviderCode'); }
-	
-	
+
+	public function country()
+    {
+        return $this->hasOne(ApiDingCountry::class, 'CountryIso', 'CountryIso');
+    }
+
 }
