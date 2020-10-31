@@ -43,4 +43,7 @@ class ApiDingOperator extends Model
 	public function payment_types(){ return $this->hasMany('App\Models\ApiDingOperatorPaymentType','ProviderCode'); }
 	
 	
+	public function products(){ return $this->hasMany('App\Models\ApiDingOperatorProduct','ProviderCode'); }
+	
+	
 }

@@ -42,4 +42,5 @@ class ApiDingProduct extends Model
 	public function minimum(){ return $this->hasOne('App\Models\ApiDingProductMinimum','product_id'); }
 	public function benefits(){ return $this->hasMany('App\Models\ApiDingProductBenefit','product_id'); }
 	public function payment_types(){ return $this->hasMany('App\Models\ApiDingProductPaymentType','product_id'); }
+	public function provider(){ return $this->hasOne('App\Models\ApiDingProvider','ProviderCode'); }
 }
