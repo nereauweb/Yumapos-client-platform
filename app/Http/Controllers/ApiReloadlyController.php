@@ -109,7 +109,11 @@ class ApiReloadlyController extends Controller
 		curl_close($ch);
 		$this->call_id = $this->log_call('get',$full_path,'',$response);
 		$data = json_decode($response, true);
-        Cache::put('reloadly_cache', $data); // to store current value of the api reloadly balance, currently you have to visit the balance route to go through the request and only after that we get to see the result in dashboard
+		if (Cache::has('reloadly_cache_balance')) {
+		 Cache::forget('reloadly_cache_balance');
+		 Cache::forget('reloadly_cache');
+        }
+        Cache::forever('reloadly_cache_balance', $data); // to store current value of the api reloadly balance, currently you have to visit the balance route to go through the request and only after that we get to see the result in dashboard
 		if ($return_data) { return $data; }
 		return view('admin/api/reloadly/dump', ['log' => $this->log, 'data' => $data] );
 	}

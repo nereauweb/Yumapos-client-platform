@@ -25,33 +25,34 @@ use App\Models\ApiDingRegion;
 use Auth;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 
 class ApiDingController extends Controller
 {
-	
+
 	private $token = '';
-	
-	public $log = '';	
+
+	public $log = '';
 	public $call_id = 0;
-	
+
 	private $ding = null;
-	
+
     public function __construct()
     {
         $this->middleware('auth');
         $this->middleware('role:admin|user|sales');
-		
+
         $this->ding = new \App\Http\Ding\Api\V1Api();
     }
-	
+
 	public function index(Request $request)
 	{
-		return view('admin/api/ding/command-list');	
+		return view('admin/api/ding/command-list');
 	}
-	
+
 	public function ErrorCodeDescriptions(Request $request)
 	{
 		$request_description = 'Error code descriptions';
@@ -60,9 +61,9 @@ class ApiDingController extends Controller
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
-		return view('admin/api/ding/test', compact('request_description','result'));	
+		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-	
+
 	public function Currencies(Request $request)
 	{
 		$request_description = 'Currencies';
@@ -71,9 +72,9 @@ class ApiDingController extends Controller
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
-		return view('admin/api/ding/test', compact('request_description','result'));	
+		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-	
+
 	public function Currencies_save(Request $request)
 	{
 		$request_description = 'Currencies save';
@@ -98,9 +99,9 @@ class ApiDingController extends Controller
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
-		return view('admin/api/ding/test', compact('request_description','result'));	
+		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-	
+
 	public function Regions(Request $request)
 	{
 		$request_description = 'Regions';
@@ -109,9 +110,9 @@ class ApiDingController extends Controller
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
-		return view('admin/api/ding/test', compact('request_description','result'));	
+		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-	
+
 	public function Regions_save(Request $request)
 	{
 		$request_description = 'Regions save';
@@ -122,7 +123,7 @@ class ApiDingController extends Controller
 			foreach ($data->getItems() as $item){
 				$index ++;
 				$region_data = $item->getData();
-				
+
 				$region = ApiDingRegion::updateOrCreate(
 					[
 						'RegionCode' 			=> $region_data['region_code'],
@@ -138,9 +139,9 @@ class ApiDingController extends Controller
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
-		return view('admin/api/ding/test', compact('request_description','result'));	
+		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-	
+
 	public function Countries(Request $request)
 	{
 		$request_description = 'Countries';
@@ -149,9 +150,9 @@ class ApiDingController extends Controller
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
-		return view('admin/api/ding/test', compact('request_description','result'));	
+		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-	
+
 	public function Countries_save(Request $request)
 	{
 		$request_description = 'Countries save';
@@ -193,20 +194,20 @@ class ApiDingController extends Controller
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
-		return view('admin/api/ding/test', compact('request_description','result'));	
+		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-	
+
 	protected $fillable = [
 		'CountryIso',
 		'CountryName',
-		];	
-	
+		];
+
 	public function int_dial_infos(){
 		return $this->hasMany('App\Models\ApiDingCountryInternationalDialingInformation','CountryIso','CountryIso');
 	}
-	
+
 	public function region_codes(){ return $this->hasMany('App\Models\ApiDingCountryRegionCode','CountryIso','CountryIso'); }
-	
+
 	public function Providers(Request $request)
 	{
 		$request_description = 'Providers';
@@ -215,9 +216,9 @@ class ApiDingController extends Controller
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
-		return view('admin/api/ding/test', compact('request_description','result'));	
+		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-	
+
 	public function Providers_save(Request $request)
 	{
 		$request_description = 'Providers save';
@@ -259,9 +260,9 @@ class ApiDingController extends Controller
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
-		return view('admin/api/ding/test', compact('request_description','result'));	
+		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-	
+
 	public function ProviderStatus(Request $request)
 	{
 		$request_description = 'Providers status';
@@ -270,9 +271,9 @@ class ApiDingController extends Controller
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
-		return view('admin/api/ding/test', compact('request_description','result'));	
+		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-	
+
 	public function Products(Request $request)
 	{
 		$request_description = 'Products';
@@ -281,9 +282,9 @@ class ApiDingController extends Controller
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
-		return view('admin/api/ding/test', compact('request_description','result'));	
+		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-	
+
 	public function Products_save(Request $request)
 	{
 		$request_description = 'Providers save';
@@ -311,7 +312,7 @@ class ApiDingController extends Controller
 						'RegionCode' 			=> $product_data['region_code'],
 						'LookupBillsRequired' 	=> $product_data['lookup_bills_required'],
 					]
-				);				
+				);
 				$product->setting_definitions()->delete();
 				if (!empty($product_data['setting_definitions'])){
 					foreach ($product_data['setting_definitions'] as $setting_definition) {
@@ -364,7 +365,7 @@ class ApiDingController extends Controller
 						$product->payment_types()->create(['payment_type' => $payment_type]);
 					}
 				}
-				$result.= "<li> $product_data[sku_code]  $product_data[default_display_text] Provider $product_data[provider_code]";			
+				$result.= "<li> $product_data[sku_code]  $product_data[default_display_text] Provider $product_data[provider_code]";
 				/*
 				$product_description_data = $this->ding->GetProductDescriptions(['en'],$product_data['sku_code']);
 				if ($product_description_data){
@@ -374,7 +375,7 @@ class ApiDingController extends Controller
 					$product->description_localization_key = $product_description_data->getItems()[0]['localization_key'];
 					$product->description_language_code =  $product_description_data->getItems()[0]['language_code'];
 					$product->save();
-					$result.= "<br> + description saved ".$product_description_data->getItems()[0]['display_text'];		
+					$result.= "<br> + description saved ".$product_description_data->getItems()[0]['display_text'];
 				}
 				*/
 				$result.= "</li>";
@@ -383,9 +384,9 @@ class ApiDingController extends Controller
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
-		return view('admin/api/ding/test', compact('request_description','result'));	
+		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-	
+
 	public function ProductDescriptions(Request $request)
 	{
 		$request_description = 'Products descriptions';
@@ -394,20 +395,24 @@ class ApiDingController extends Controller
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
-		return view('admin/api/ding/test', compact('request_description','result'));	
+		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-	
+
 	public function Balance(Request $request)
 	{
 		$request_description = 'Balance';
 		try{
 			$result = $this->ding->getBalance();
+            if (Cache::has('ding_cache_balance')) {
+                Cache::forget('ding_cache_balance');
+            }
+            Cache::forever('ding_cache_balance', $result); // to store current value of the api ding balance, currently you have to visit the balance route to go through the request and only after that we get to see the re
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
-		return view('admin/api/ding/test', compact('request_description','result'));	
+		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-	
+
 	public function Promotions(Request $request)
 	{
 		$request_description = 'Promotions';
@@ -416,9 +421,9 @@ class ApiDingController extends Controller
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
-		return view('admin/api/ding/test', compact('request_description','result'));	
+		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-	
+
 	public function PromotionDescriptions(Request $request)
 	{
 		$request_description = 'Promotion descriptions';
@@ -427,9 +432,9 @@ class ApiDingController extends Controller
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
-		return view('admin/api/ding/test', compact('request_description','result'));	
+		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-	
+
 	public function AccountLookup(Request $request)
 	{
 		$request_description = 'Account lookup';
@@ -438,7 +443,7 @@ class ApiDingController extends Controller
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
-		return view('admin/api/ding/test', compact('request_description','result'));	
+		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-    
+
 }
