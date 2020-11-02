@@ -246,7 +246,7 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::delete('/paymentfile/{paymentfile}', 'PaymentFileController@destroy')->name('admin.paymentfile.destroy');
         });
 
-			
+
 		Route::prefix('/admin/users/groups')->group(function () {
 			Route::get('', 'UsersGroupsController@list')->name('admin.groups.list');
 			Route::get('/create', 'UsersGroupsController@create')->name('admin.groups.create');
@@ -262,7 +262,7 @@ Route::group(['middleware' => ['get.menu']], function () {
 
         Route::post('/admin/user/approve/{user}', 'UsersController@approve')->name('admin.user.approve');
         Route::get('/admin/users/export', 'UsersController@export')->name('admin.user.export');
-		
+
 		Route::prefix('/admin/payments')->group(function () {
             Route::get('/export', 'PaymentsController@export')->name('admin.payments.export');
             Route::put('payments/cancel/{payment}', 'PaymentsController@cancel')->name('admin.payments.cancel');
@@ -309,26 +309,29 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::get('/PromotionDescriptions', 'ApiDingController@PromotionDescriptions')->name('admin.api.ding.PromotionDescriptions');
             Route::post('/AccountLookup', 'ApiDingController@AccountLookup')->name('admin.api.ding.account_lookup');
 		});
-		
+
 		Route::prefix('/admin/service/reloadly')->group(function () {
 			Route::get('/{id}/edit/local', 'ReloadlyController@edit_local')->name('admin.reloadly.edit.local');
 			Route::put('/{id}/local', 'ReloadlyController@update_local')->name('admin.reloadly.update.local');
-        	});		
+        	});
 		Route::resource('/admin/service/reloadly',  'ReloadlyController', [ 'names' => 'admin.reloadly' ]);
-				
+
 		Route::resource('/admin/service/ding',  'DingController', [ 'names' => 'admin.ding' ]);
-		
-		Route::get('/admin/api/services', 'ServiceOperationController@index');  // charts 
-		
+
+		Route::get('/admin/internal/services/operations/{type}', 'ServiceOperationController@operationStats');  // data for operations
+        Route::get('/admin/internal/services/gain/{type}', 'ServiceOperationController@gainStats');  // data for gains
+        Route::get('/admin/internal/services/cost/{type}', 'ServiceOperationController@costStats');  // data for cost
+        Route::get('/admin/internal/services/amount/{type}', 'ServiceOperationController@amountStats');  // data for amount
+
 		Route::prefix('/admin/service')->group(function () {
 			Route::get('/associations', 'ServiceController@associations')->name('admin.service.associations');
 			Route::post('admin/service/associations/setMaster', 'ServiceController@associations_set_master')->name('admin.service.associations.set_master');
-			
+
 			Route::get('/categories', 'ServiceController@categories')->name('admin.service.category.manage');
 			Route::post('/categories/create', 'ServiceController@category_create')->name('admin.service.category.create');
-			Route::post('/categories/update', 'ServiceController@categories_update')->name('admin.service.category.update');			
+			Route::post('/categories/update', 'ServiceController@categories_update')->name('admin.service.category.update');
 			Route::get('/deleted', 'ServiceController@deleted')->name('admin.service.deleted');
-			Route::put('/{id}/recover', 'ServiceController@recover')->name('admin.service.recover');	
+			Route::put('/{id}/recover', 'ServiceController@recover')->name('admin.service.recover');
 	        });
 		Route::resource('/admin/service',  'ServiceController', [ 'names' => 'admin.service' ]);
 

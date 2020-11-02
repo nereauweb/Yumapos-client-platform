@@ -181,56 +181,56 @@ document.body.addEventListener('classtoggle', function (event) {
 //   }
 // }); // eslint-disable-next-line no-unused-vars
 
-var cardChart2 = new Chart(document.getElementById('card-chart2'), {
-  type: 'line',
-  data: {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    datasets: [{
-      label: 'My First dataset',
-      backgroundColor: 'transparent',
-      borderColor: 'rgba(255,255,255,.55)',
-      pointBackgroundColor: coreui.Utils.getStyle('--info'),
-      data: [1, 18, 9, 17, 34, 22, 11]
-    }]
-  },
-  options: {
-    maintainAspectRatio: false,
-    legend: {
-      display: false
-    },
-    scales: {
-      xAxes: [{
-        gridLines: {
-          color: 'transparent',
-          zeroLineColor: 'transparent'
-        },
-        ticks: {
-          fontSize: 2,
-          fontColor: 'transparent'
-        }
-      }],
-      yAxes: [{
-        display: false,
-        ticks: {
-          display: false,
-          min: -4,
-          max: 39
-        }
-      }]
-    },
-    elements: {
-      line: {
-        tension: 0.00001,
-        borderWidth: 1
-      },
-      point: {
-        radius: 4,
-        hitRadius: 10,
-        hoverRadius: 4
-      }
-    }
-  }
-}); // eslint-disable-next-line no-unused-vars
+// var cardChart2 = new Chart(document.getElementById('card-chart2'), {
+//   type: 'line',
+//   data: {
+//     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+//     datasets: [{
+//       label: 'My First dataset',
+//       backgroundColor: 'transparent',
+//       borderColor: 'rgba(255,255,255,.55)',
+//       pointBackgroundColor: coreui.Utils.getStyle('--info'),
+//       data: [1, 18, 9, 17, 34, 22, 11]
+//     }]
+//   },
+//   options: {
+//     maintainAspectRatio: false,
+//     legend: {
+//       display: false
+//     },
+//     scales: {
+//       xAxes: [{
+//         gridLines: {
+//           color: 'transparent',
+//           zeroLineColor: 'transparent'
+//         },
+//         ticks: {
+//           fontSize: 2,
+//           fontColor: 'transparent'
+//         }
+//       }],
+//       yAxes: [{
+//         display: false,
+//         ticks: {
+//           display: false,
+//           min: -4,
+//           max: 39
+//         }
+//       }]
+//     },
+//     elements: {
+//       line: {
+//         tension: 0.00001,
+//         borderWidth: 1
+//       },
+//       point: {
+//         radius: 4,
+//         hitRadius: 10,
+//         hoverRadius: 4
+//       }
+//     }
+//   }
+// }); // eslint-disable-next-line no-unused-vars
 
 var cardChart3 = new Chart(document.getElementById('card-chart3'), {
   type: 'line',
@@ -355,50 +355,256 @@ var cardChart4 = new Chart(document.getElementById('card-chart4'), {
 //     }
 //   }
 // });
-const arrayWithData = [];
-const totalGains = [];
-const arrayLabels = [];
-const arrayDays = [];
-const arrayPlatformGain = [];
-fetch('/admin/api/services').then(response => response.json()).then(data => {
-    console.log(data);
-    data.map(item => {
-       arrayLabels.push(item.month);
-       arrayPlatformGain.push(item.platformTotalGain);
-       arrayDays.push(item.day);
+var mainChart = new Chart(document.getElementById('main-chart'), {
+    type: 'line',
+    options: {
+        maintainAspectRatio: false,
+        legend: {
+            display: false
+        },
+        elements: {
+            point: {
+                radius: 0,
+                hitRadius: 10,
+                hoverRadius: 4,
+                hoverBorderWidth: 3
+            }
+        }
+    }
+});
+
+let customData = {
+    'arrayLabels': [],
+    'label': '',
+    'values': []
+};
+
+function fetchData(url, type, identifier) {
+    mainChart.destroy();
+    fetch(`${url}/${type}`).then(response => response.json()).then(response => {
+        customData = {
+            'arrayLabels': [],
+            'label': '',
+            'values': []
+        };
+        response.map(element => {
+            switch (identifier) {
+                case 'gain':
+                    customData.arrayLabels.push(element.gain);
+                    break;
+                case 'operations':
+                    customData.arrayLabels.push(element.operations);
+                    break;
+                case 'amount':
+                    customData.arrayLabels.push(element.amount);
+                    break;
+                case 'cost':
+                    customData.arrayLabels.push(element.cost);
+                    break;
+                default:
+                    alert('this type does not exist!');
+            }
+            customData.values.push(element.hour);
+        });
+        console.log(customData);
+        console.log(response);
+    }).then(res => {
+            var mainChart = new Chart(document.getElementById('main-chart'), {
+                type: 'line',
+                data: {
+                    labels: customData.values,
+                    datasets: [{
+                        label: 'Operations by hour',
+                        backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--info'), 10),
+                        borderColor: coreui.Utils.getStyle('--info'),
+                        pointHoverBackgroundColor: '#fff',
+                        borderWidth: 2,
+                        data: customData.arrayLabels
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    legend: {
+                        display: false
+                    },
+                    elements: {
+                        point: {
+                            radius: 0,
+                            hitRadius: 10,
+                            hoverRadius: 4,
+                            hoverBorderWidth: 3
+                        }
+                    }
+                }
+            });
+    }).catch(error => {
+        alert(error);
     });
-}).then(test => {
-    var mainChart = new Chart(document.getElementById('main-chart'), {
-        type: 'line',
-        data: {
-            // labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S'],
-            labels: arrayDays,
-            datasets: [{
-                label: 'Platform total gain',
+}
+
+const initialData = () => {
+    customData = {
+        'arrayLabels': [],
+        'label': '',
+        'values': []
+    };
+    fetch('/admin/internal/services/operations/day').then(response => response.json()).then(response => {
+        response.map(element => {
+            customData.arrayLabels.push(element.operations);
+            customData.values.push(element.hour);
+        });
+    }).then(res => {
+        mainChart.data = {
+            labels: customData.values,
+                datasets: [{
+                label: 'Operations by hour',
                 backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--info'), 10),
                 borderColor: coreui.Utils.getStyle('--info'),
                 pointHoverBackgroundColor: '#fff',
                 borderWidth: 2,
-                data: arrayPlatformGain
+                data: customData.arrayLabels
             }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            legend: {
-                display: false
-            },
-            elements: {
-                point: {
-                    radius: 0,
-                    hitRadius: 10,
-                    hoverRadius: 4,
-                    hoverBorderWidth: 3
-                }
-            }
         }
+        mainChart.update();
+    }).catch(error => {
+        alert(error);
     });
-});
+}
+initialData();
 
+function loadGainData(url, type) {
+    fetchData(url, type, 'gain');
+}
+
+function loadCostData(url, type) {
+    fetchData(url, type, 'cost');
+}
+
+function loadAmountData(url, type) {
+    fetchData(url, type, 'amount');
+}
+
+function loadOperationsData(url, type) {
+    fetchData(url, type, 'operations');
+}
+
+
+let arrayLabels = [];
+let arrayPlatformGain = [];
+let value = document.querySelector('input[name="filterSelected"]:checked').value;
+
+const dropdownMenu = document.getElementById('select_1');
+dropdownMenu.onchange = (element) => {
+    let value = document.querySelector('input[name="filterSelected"]:checked').value;
+    element.preventDefault();
+    const selectedItem = dropdownMenu.options[dropdownMenu.selectedIndex].value;
+    switch (selectedItem) {
+        case 'amount':
+            loadAmountData('/admin/internal/services/cost', value);
+            break;
+        case 'cost':
+            //call function that loads the cost
+            loadCostData('/admin/internal/services/cost', value);
+            break;
+        case 'gain':
+            //call function that loads the gain
+            loadGainData('/admin/internal/services/cost', value);
+            break;
+        case 'number_of_operations':
+            loadOperationsData('/admin/internal/services/operations', value);
+            break;
+        default:
+        console.log(value);
+    }
+};
+
+// const fetchByDay = document.getElementById('option1day');
+// fetchByDay.onchange = (e) => {
+//     e.preventDefault();
+//     e.stopPropagation();
+//     arrayLabels = [];
+//     arrayPlatformGain = [];
+//     fetch('/admin/api/services/daily').then(response => response.json()).then(data => {
+//         data.map(item => {
+//             arrayLabels.push(`${item.hour}:00h`);
+//             arrayPlatformGain.push(item.operations);
+//         });
+//     }).then(test => {
+//         var mainChart = new Chart(document.getElementById('main-chart'), {
+//             type: 'line',
+//             data: {
+//                 // labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S'],
+//                 labels: arrayLabels,
+//                 datasets: [{
+//                     label: 'Operations by hour',
+//                     backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--info'), 10),
+//                     borderColor: coreui.Utils.getStyle('--info'),
+//                     pointHoverBackgroundColor: '#fff',
+//                     borderWidth: 2,
+//                     data: arrayPlatformGain
+//                 }]
+//             },
+//             options: {
+//                 maintainAspectRatio: false,
+//                 legend: {
+//                     display: false
+//                 },
+//                 elements: {
+//                     point: {
+//                         radius: 0,
+//                         hitRadius: 10,
+//                         hoverRadius: 4,
+//                         hoverBorderWidth: 3
+//                     }
+//                 }
+//             }
+//         });
+//     });
+// }
+//
+// const fetchByMonth = document.getElementById('option2month');
+// fetchByMonth.onchange = (e) => {
+//     e.preventDefault();
+//     e.stopPropagation();
+//     arrayLabels = [];
+//     arrayPlatformGain = [];
+//     fetch('/admin/api/services/monthly').then(response => response.json()).then(data => {
+//         data.map(item => {
+//             arrayLabels.push(item.dayD);
+//             arrayPlatformGain.push(item.operations);
+//         });
+//     }).then(test => {
+//         var mainChart = new Chart(document.getElementById('main-chart'), {
+//             type: 'line',
+//             data: {
+//                 // labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S'],
+//                 labels: arrayLabels,
+//                 datasets: [{
+//                     label: 'Operations by day',
+//                     backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--info'), 10),
+//                     borderColor: coreui.Utils.getStyle('--info'),
+//                     pointHoverBackgroundColor: '#fff',
+//                     borderWidth: 2,
+//                     data: arrayPlatformGain
+//                 }]
+//             },
+//             options: {
+//                 maintainAspectRatio: false,
+//                 legend: {
+//                     display: false
+//                 },
+//                 elements: {
+//                     point: {
+//                         radius: 0,
+//                         hitRadius: 10,
+//                         hoverRadius: 4,
+//                         hoverBorderWidth: 3
+//                     }
+//                 }
+//             }
+//         });
+//     });
+// }
 
 
 /***/ }),

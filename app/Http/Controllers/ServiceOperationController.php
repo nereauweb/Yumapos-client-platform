@@ -14,60 +14,95 @@ class ServiceOperationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function operationStats($type)
     {
-        $platformMonthlyGain = ServiceOperation::select([
-            DB::raw('sum(platform_total_gain) as platformTotalGain'),
-            DB::raw('day(created_at) as day'),
-            DB::raw('month(created_at) as month')
-        ])
-            ->groupBy(['month', 'day'])
-            ->limit(30)->orderBy('month', 'desc')->get();
-        return response()->json($platformMonthlyGain, 200);
+        if ($type == 'day') {
+            $platformTotalOperations = DB::table('service_operations')
+                ->select(DB::raw('count(id) as operations, HOUR(created_at) as hour'))
+                ->whereDate('created_at', '=', '2020-09-20')
+//            ->whereDate('created_at', '=', Carbon::now()->toDateString())
+                ->groupBy('hour')
+                ->get();
+            return response()->json($platformTotalOperations, 200);
+        } else if ($type == 'month') {
+            $platformMonthlyTotalOperations = DB::table('service_operations')
+                ->select(DB::raw('count(id) as operations, DAY(created_at) as day ,DATE_FORMAT(created_at, "%D") as dayD'))
+                ->whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3))
+//            ->whereDate('created_at', '=', Carbon::now()->toDateString())
+                ->groupBy(['dayD', 'day'])
+                ->get();
+            return response()->json($platformMonthlyTotalOperations, 200);
+        }
+
+        return response()->json("ERROR", 500);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function gainStats($type)
     {
-        //
+        if ($type == 'day') {
+            $platformTotalOperations = DB::table('service_operations')
+                ->select(DB::raw('sum(platform_total_gain) - sum(user_discount) as gain, HOUR(created_at) as hour'))
+                ->whereDate('created_at', '=', '2020-09-20')
+//            ->whereDate('created_at', '=', Carbon::now()->toDateString())
+                ->groupBy('hour')
+                ->get();
+            return response()->json($platformTotalOperations, 200);
+        } else if ($type == 'month') {
+            $platformMonthlyTotalOperations = DB::table('service_operations')
+                ->select(DB::raw('sum(platform_total_gain) - sum(user_discount) as gain, DAY(created_at) as day ,DATE_FORMAT(created_at, "%D") as dayD'))
+                ->whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3))
+//            ->whereDate('created_at', '=', Carbon::now()->toDateString())
+                ->groupBy(['dayD', 'day'])
+                ->get();
+            return response()->json($platformMonthlyTotalOperations, 200);
+        }
+
+        return response()->json("ERROR", 500);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function costStats($type)
     {
-        //
+        if ($type == 'day') {
+            $platformTotalOperations = DB::table('service_operations')
+                ->select(DB::raw('sum(sent_amount) - sum(platform_commission)  as cost, HOUR(created_at) as hour'))
+                ->whereDate('created_at', '=', '2020-09-20')
+//            ->whereDate('created_at', '=', Carbon::now()->toDateString())
+                ->groupBy('hour')
+                ->get();
+            return response()->json($platformTotalOperations, 200);
+        } else if ($type == 'month') {
+            $platformMonthlyTotalOperations = DB::table('service_operations')
+                ->select(DB::raw('sum(sent_amount) - sum(platform_commission) as cost, DAY(created_at) as day ,DATE_FORMAT(created_at, "%D") as dayD'))
+                ->whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3))
+//            ->whereDate('created_at', '=', Carbon::now()->toDateString())
+                ->groupBy(['dayD', 'day'])
+                ->get();
+            return response()->json($platformMonthlyTotalOperations, 200);
+        }
+
+        return response()->json("ERROR", 500);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function amountStats($type)
     {
-        //
-    }
+        if ($type == 'day') {
+            $platformTotalOperations = DB::table('service_operations')
+                ->select(DB::raw('sum(user_amount) as amount, HOUR(created_at) as hour'))
+                ->whereDate('created_at', '=', '2020-09-20')
+//            ->whereDate('created_at', '=', Carbon::now()->toDateString())
+                ->groupBy('hour')
+                ->get();
+            return response()->json($platformTotalOperations, 200);
+        } else if ($type == 'month') {
+            $platformMonthlyTotalOperations = DB::table('service_operations')
+                ->select(DB::raw('sum(user_amount) as amount, DAY(created_at) as day ,DATE_FORMAT(created_at, "%D") as dayD'))
+                ->whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3))
+//            ->whereDate('created_at', '=', Carbon::now()->toDateString())
+                ->groupBy(['dayD', 'day'])
+                ->get();
+            return response()->json($platformMonthlyTotalOperations, 200);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return response()->json("ERROR", 500);
     }
 }
