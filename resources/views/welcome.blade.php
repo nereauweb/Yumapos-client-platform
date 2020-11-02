@@ -207,6 +207,12 @@
                                                             <input id="option1day" value="day" name="filterSelected" type="radio" autocomplete="off" checked> Day
                                                         </label>
                                                         <label class="btn btn-outline-secondary">
+                                                            <input id="option_yesterday" value="yesterday" name="filterSelected" type="radio" autocomplete="off"> Yesterday
+                                                        </label>
+                                                        <label class="btn btn-outline-secondary">
+                                                            <input id="option_week" value="week" name="filterSelected" type="radio" autocomplete="off"> Week
+                                                        </label>
+                                                        <label class="btn btn-outline-secondary">
                                                             <input id="option2month" value="month" name="filterSelected" type="radio" autocomplete="off"> Month
                                                         </label>
                                                     </div>
@@ -258,33 +264,27 @@
                                     <div class="card-footer">
                                         <div class="row text-center">
                                             <div class="col-sm-12 col-md mb-sm-2 mb-0">
-                                                <div class="text-muted">Visits</div><strong>29.703 Users (40%)</strong>
+                                                <div class="text-muted">Number of operations</div><strong>29.703 Users (40%)</strong>
                                                 <div class="progress progress-xs mt-2">
                                                     <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-md mb-sm-2 mb-0">
-                                                <div class="text-muted">Unique</div><strong>24.093 Users (20%)</strong>
+                                                <div class="text-muted">Amount</div><strong>24.093 Users (20%)</strong>
                                                 <div class="progress progress-xs mt-2">
                                                     <div class="progress-bar bg-gradient-info" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-md mb-sm-2 mb-0">
-                                                <div class="text-muted">Pageviews</div><strong>78.706 Views (60%)</strong>
+                                                <div class="text-muted">Cost</div><strong>78.706 Views (60%)</strong>
                                                 <div class="progress progress-xs mt-2">
                                                     <div class="progress-bar bg-gradient-warning" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-md mb-sm-2 mb-0">
-                                                <div class="text-muted">New Users</div><strong>22.123 Users (80%)</strong>
+                                                <div class="text-muted">Gain</div><strong>22.123 Users (80%)</strong>
                                                 <div class="progress progress-xs mt-2">
                                                     <div class="progress-bar bg-gradient-danger" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 col-md mb-sm-2 mb-0">
-                                                <div class="text-muted">Bounce Rate</div><strong>40.15%</strong>
-                                                <div class="progress progress-xs mt-2">
-                                                    <div class="progress-bar" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
                                             </div>
                                         </div>

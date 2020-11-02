@@ -380,7 +380,6 @@ let customData = {
 };
 
 function fetchData(url, type, identifier) {
-    mainChart.destroy();
     fetch(`${url}/${type}`).then(response => response.json()).then(response => {
         customData = {
             'arrayLabels': [],
@@ -390,53 +389,43 @@ function fetchData(url, type, identifier) {
         response.map(element => {
             switch (identifier) {
                 case 'gain':
-                    customData.arrayLabels.push(element.gain);
+                    customData.arrayLabels.push(element.gain_data);
+                    customData.values.push(element.label);
+                    customData.label  = 'Gain: ';
                     break;
                 case 'operations':
                     customData.arrayLabels.push(element.operations);
+                    customData.values.push(element.label);
+                    customData.label  = 'Operations: ';
                     break;
                 case 'amount':
-                    customData.arrayLabels.push(element.amount);
+                    customData.arrayLabels.push(element.amount_data);
+                    customData.values.push(element.label);
+                    customData.label  = 'Amount: ';
                     break;
                 case 'cost':
                     customData.arrayLabels.push(element.cost);
+                    customData.values.push(element.label);
+                    customData.label  = 'Cost: ';
                     break;
                 default:
                     alert('this type does not exist!');
             }
-            customData.values.push(element.hour);
         });
-        console.log(customData);
-        console.log(response);
     }).then(res => {
-            var mainChart = new Chart(document.getElementById('main-chart'), {
-                type: 'line',
-                data: {
+            mainChart.data = {
                     labels: customData.values,
                     datasets: [{
-                        label: 'Operations by hour',
+                        lineTension: 0,
+                        label: customData.label,
                         backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--info'), 10),
                         borderColor: coreui.Utils.getStyle('--info'),
                         pointHoverBackgroundColor: '#fff',
                         borderWidth: 2,
                         data: customData.arrayLabels
                     }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    legend: {
-                        display: false
-                    },
-                    elements: {
-                        point: {
-                            radius: 0,
-                            hitRadius: 10,
-                            hoverRadius: 4,
-                            hoverBorderWidth: 3
-                        }
-                    }
-                }
-            });
+            }
+            mainChart.update();
     }).catch(error => {
         alert(error);
     });
@@ -451,12 +440,13 @@ const initialData = () => {
     fetch('/admin/internal/services/operations/day').then(response => response.json()).then(response => {
         response.map(element => {
             customData.arrayLabels.push(element.operations);
-            customData.values.push(element.hour);
+            customData.values.push(element.label);
         });
     }).then(res => {
         mainChart.data = {
             labels: customData.values,
                 datasets: [{
+                lineTension: 0,
                 label: 'Operations by hour',
                 backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--info'), 10),
                 borderColor: coreui.Utils.getStyle('--info'),
@@ -489,123 +479,55 @@ function loadOperationsData(url, type) {
 }
 
 
-let arrayLabels = [];
-let arrayPlatformGain = [];
-let value = document.querySelector('input[name="filterSelected"]:checked').value;
+let checkedFilter = document.querySelector('input[name="filterSelected"]:checked');
+checkedFilter.parentElement.classList.add('active');
 
 const dropdownMenu = document.getElementById('select_1');
 dropdownMenu.onchange = (element) => {
-    let value = document.querySelector('input[name="filterSelected"]:checked').value;
+    let checkedFilter = document.querySelector('input[name="filterSelected"]:checked');
+    let valueOfCheckedFilter = checkedFilter.value;
     element.preventDefault();
     const selectedItem = dropdownMenu.options[dropdownMenu.selectedIndex].value;
     switch (selectedItem) {
         case 'amount':
-            loadAmountData('/admin/internal/services/cost', value);
+            loadAmountData('/admin/internal/services/amount', valueOfCheckedFilter);
             break;
         case 'cost':
-            //call function that loads the cost
-            loadCostData('/admin/internal/services/cost', value);
+            loadCostData('/admin/internal/services/cost', valueOfCheckedFilter);
             break;
         case 'gain':
-            //call function that loads the gain
-            loadGainData('/admin/internal/services/cost', value);
+            loadGainData('/admin/internal/services/gain', valueOfCheckedFilter);
             break;
         case 'number_of_operations':
-            loadOperationsData('/admin/internal/services/operations', value);
+            loadOperationsData('/admin/internal/services/operations', valueOfCheckedFilter);
             break;
         default:
-        console.log(value);
+            alert(`alert select item from dropdown!`);
     }
 };
 
-// const fetchByDay = document.getElementById('option1day');
-// fetchByDay.onchange = (e) => {
-//     e.preventDefault();
-//     e.stopPropagation();
-//     arrayLabels = [];
-//     arrayPlatformGain = [];
-//     fetch('/admin/api/services/daily').then(response => response.json()).then(data => {
-//         data.map(item => {
-//             arrayLabels.push(`${item.hour}:00h`);
-//             arrayPlatformGain.push(item.operations);
-//         });
-//     }).then(test => {
-//         var mainChart = new Chart(document.getElementById('main-chart'), {
-//             type: 'line',
-//             data: {
-//                 // labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S'],
-//                 labels: arrayLabels,
-//                 datasets: [{
-//                     label: 'Operations by hour',
-//                     backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--info'), 10),
-//                     borderColor: coreui.Utils.getStyle('--info'),
-//                     pointHoverBackgroundColor: '#fff',
-//                     borderWidth: 2,
-//                     data: arrayPlatformGain
-//                 }]
-//             },
-//             options: {
-//                 maintainAspectRatio: false,
-//                 legend: {
-//                     display: false
-//                 },
-//                 elements: {
-//                     point: {
-//                         radius: 0,
-//                         hitRadius: 10,
-//                         hoverRadius: 4,
-//                         hoverBorderWidth: 3
-//                     }
-//                 }
-//             }
-//         });
-//     });
-// }
-//
-// const fetchByMonth = document.getElementById('option2month');
-// fetchByMonth.onchange = (e) => {
-//     e.preventDefault();
-//     e.stopPropagation();
-//     arrayLabels = [];
-//     arrayPlatformGain = [];
-//     fetch('/admin/api/services/monthly').then(response => response.json()).then(data => {
-//         data.map(item => {
-//             arrayLabels.push(item.dayD);
-//             arrayPlatformGain.push(item.operations);
-//         });
-//     }).then(test => {
-//         var mainChart = new Chart(document.getElementById('main-chart'), {
-//             type: 'line',
-//             data: {
-//                 // labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S'],
-//                 labels: arrayLabels,
-//                 datasets: [{
-//                     label: 'Operations by day',
-//                     backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--info'), 10),
-//                     borderColor: coreui.Utils.getStyle('--info'),
-//                     pointHoverBackgroundColor: '#fff',
-//                     borderWidth: 2,
-//                     data: arrayPlatformGain
-//                 }]
-//             },
-//             options: {
-//                 maintainAspectRatio: false,
-//                 legend: {
-//                     display: false
-//                 },
-//                 elements: {
-//                     point: {
-//                         radius: 0,
-//                         hitRadius: 10,
-//                         hoverRadius: 4,
-//                         hoverBorderWidth: 3
-//                     }
-//                 }
-//             }
-//         });
-//     });
-// }
-
+const filters = document.getElementsByName("filterSelected");
+filters.forEach(filter => {
+    filter.onchange = (e) => {
+        e.preventDefault();
+        switch (dropdownMenu.value) {
+            case 'number_of_operations':
+                loadOperationsData('/admin/internal/services/operations', filter.value);
+                break;
+            case 'gain':
+                loadGainData('/admin/internal/services/gain', filter.value);
+                break;
+            case 'cost':
+                loadCostData('/admin/internal/services/cost', filter.value);
+                break;
+            case 'amount':
+                loadAmountData('/admin/internal/services/amount', filter.value);
+                break;
+            default:
+                alert('error');
+        }
+    }
+});
 
 /***/ }),
 
