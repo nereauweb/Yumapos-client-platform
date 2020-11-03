@@ -169,4 +169,48 @@ class ServiceOperationController extends Controller
 
         return response()->json("ERROR", 500);
     }
+
+    public function totals($type)
+    {
+
+        switch ($type) {
+            case 'day':
+                $totalsForOperations = ServiceOperation::whereDate('created_at', '=', '2020-09-20')->count();
+                $totalsForGain = ServiceOperation::whereDate('created_at', '=', '2020-09-20')->select(DB::raw('sum(platform_total_gain - user_discount) as gainSumPerDay'))->first();
+                $totalsForCost = ServiceOperation::whereDate('created_at', '=', '2020-09-20')->select(DB::raw('sum(sent_amount - platform_commission) as costSumPerDay'))->first();
+                $totalsForAmount = ServiceOperation::whereDate('created_at', '=', '2020-09-20')->sum('user_amount');
+                break;
+            case 'yesterday':
+                $totalsForOperations = ServiceOperation::whereDate('created_at', '=', '2020-09-19')->count();
+                $totalsForGain = ServiceOperation::whereDate('created_at', '=', '2020-09-19')->select(DB::raw('sum(platform_total_gain - user_discount) as gainSumPerDay'))->first();
+                $totalsForCost = ServiceOperation::whereDate('created_at', '=', '2020-09-19')->select(DB::raw('sum(sent_amount - platform_commission) as costSumPerDay'))->first();
+                $totalsForAmount = ServiceOperation::whereDate('created_at', '=', '2020-09-19')->sum('user_amount');
+                break;
+            case 'week':
+                $totalsForOperations = ServiceOperation::whereBetween('created_at', [Carbon::createFromDate('2020', '09', '2')->startOfWeek(), Carbon::createFromDate('2020', '09', '2')->endOfWeek()])->count();
+                $totalsForGain = ServiceOperation::whereBetween('created_at', [Carbon::createFromDate('2020', '09', '2')->startOfWeek(), Carbon::createFromDate('2020', '09', '2')->endOfWeek()])->select(DB::raw('sum(platform_total_gain - user_discount) as gainSumPerDay'))->first();
+                $totalsForCost = ServiceOperation::whereBetween('created_at', [Carbon::createFromDate('2020', '09', '2')->startOfWeek(), Carbon::createFromDate('2020', '09', '2')->endOfWeek()])->select(DB::raw('sum(sent_amount - platform_commission) as costSumPerDay'))->first();
+                $totalsForAmount = ServiceOperation::whereBetween('created_at', [Carbon::createFromDate('2020', '09', '2')->startOfWeek(), Carbon::createFromDate('2020', '09', '2')->endOfWeek()])->sum('user_amount');
+                break;
+            case 'month':
+                $totalsForOperations = ServiceOperation::whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3))->count();
+                $totalsForGain = ServiceOperation::whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3))->select(DB::raw('sum(platform_total_gain - user_discount) as gainSumPerDay'))->first();
+                $totalsForCost = ServiceOperation::whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3))->select(DB::raw('sum(sent_amount - platform_commission) as costSumPerDay'))->first();
+                $totalsForAmount = ServiceOperation::whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3))->sum('user_amount');
+                break;
+            default:
+                $totalsForOperations = 'NOT SET!';
+                $totalsForGain = 'NOT SET!';
+                $totalsForCost = 'NOT SET!';
+                $totalsForAmount = 'NOT SET!';
+        }
+
+
+        return response()->json([
+            'totalsForOperations' => $totalsForOperations,
+            'totalsForGain' => $totalsForGain,
+            'totalsForCost' => $totalsForCost,
+            'totalsForAmount' => $totalsForAmount
+        ], 200);
+    }
 }

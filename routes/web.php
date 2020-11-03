@@ -37,37 +37,30 @@ Route::group(['middleware' => ['get.menu']], function () {
 
 	Route::get('/page', function () {       return view('frontend.page'); });
     //Route::get('/backend', function () {    return view('dashboard.homepage'); });
-	Route::get('/backend', function () {		
+	Route::get('/backend', function () {
 		if(Auth::guest()) {
 			return redirect('login');
 		}
         if (Auth::User() && Auth()->user()->hasRole('admin')) {
-            $usersApprovedNum = User::where('state', 1)->count();
-            $usersWaitingApprovalNum = User::where('state', 0)->count();
-            $usersWithRoleUser = User::role('user')->count();
-            $usersWithRoleSales = User::role('sales')->count();
 
-            $data = [
-                'users' => $usersWithRoleUser,
-                'sales' => $usersWithRoleSales,
-                'totalUsersApproved' => $usersApprovedNum,
-                'usersWaitingApproval' => $usersWaitingApprovalNum
-            ];
-
-            $payments = Payment::orderBy('approved', 'asc')->paginate(10, ['*'], 'payments');
-            $paymentTotals = Payment::where('approved', 1)->count();
-            $paymentsPending = Payment::where('approved', 0)->count();
-
-            $totalAmounts = Payment::where('approved', 1)->sum('amount');
+            $paymentsCount = Payment::where('approved', 0)->count();
+            $paymentsPending = Payment::where('approved', 0)->limit(3)->orderBy('created_at', 'desc')->get();
 
             $paymentsData = [
-                'payments' => $paymentTotals,
+                'totals' => $paymentsCount,
                 'pending' => $paymentsPending,
-                'totals' => $totalAmounts
+            ];
+
+            $usersCount = User::where('state', 0)->count();
+            $usersPending = User::where('state', 0)->limit(3)->orderBy('created_at', 'desc')->get();
+
+            $usersData = [
+                'totals' => $usersCount,
+                'pending' => $usersPending
             ];
 
             $users = User::orderBy('state', 'asc')->paginate(10, ['*'], 'users');
-            return view('welcome', compact('users', 'data', 'payments', 'paymentsData'));
+            return view('welcome', compact( 'paymentsData', 'usersData'));
         } else {
             return view('welcome');
         }
@@ -320,6 +313,8 @@ Route::group(['middleware' => ['get.menu']], function () {
 
 		Route::resource('/admin/service/ding',  'DingController', [ 'names' => 'admin.ding' ]);
 
+		Route::get('/admin/internal/services/operations/totals/{type}', 'ServiceOperationController@totals'); // endpoint for initial calculations (daily)
+
 		Route::get('/admin/internal/services/operations/{type}', 'ServiceOperationController@operationStats');  // data for operations
         Route::get('/admin/internal/services/gain/{type}', 'ServiceOperationController@gainStats');  // data for gains
         Route::get('/admin/internal/services/cost/{type}', 'ServiceOperationController@costStats');  // data for cost
@@ -334,7 +329,7 @@ Route::group(['middleware' => ['get.menu']], function () {
 			Route::put('/categories/{id}/update-configuration', 'ServiceController@category_configuration_update')->name('admin.service.category.update_configuration');
 			Route::post('/categories/create', 'ServiceController@category_create')->name('admin.service.category.create');
 			Route::post('/categories/update', 'ServiceController@categories_update')->name('admin.service.category.update');
-			
+
 			Route::put('/{id}/set-master', 'ServiceController@set_master')->name('admin.service.set_master');
 			Route::put('/{id}/associate', 'ServiceController@associate')->name('admin.service.set_master');
 			Route::get('/deleted', 'ServiceController@deleted')->name('admin.service.deleted');

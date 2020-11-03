@@ -90,10 +90,16 @@ class User extends Authenticatable
 		return back()->withError('Not authorized');
 	}
 
-	public function adminAccessServices()
+	public function adminAccessServices($time)
     {
         if (auth()->user()->hasRole('admin')) {
-            return ServiceOperation::paginate(10);
+            if ($time == 'day') {
+                return ServiceOperation::orderBy('created_at', 'desc')->whereDate('created_at','2020-08-11')->limit(20)->get();
+            } elseif ($time = 'yesterday') {
+                return ServiceOperation::orderBy('created_at', 'desc')->whereDate('created_at','2020-08-10')->limit(20)->get();
+            } else {
+                return ServiceOperation::orderBy('created_at', 'desc')->whereDate('created_at','2020-08-11')->limit(20)->get();
+            }
         }
     }
 }
