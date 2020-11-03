@@ -24,10 +24,9 @@ Route::group(['middleware' => ['get.menu']], function () {
             //return view('dashboard.homepage');
 			return redirect('/backend');
 		} else {
-			return redirect('login');;
+			return redirect('login');
 		}
 	})->name('index');
-
 
 	Route::get('/users/{id}/impersonate', function($id) {
 		if (Auth::User() && Auth::user()->hasrole('admin')){
@@ -38,8 +37,11 @@ Route::group(['middleware' => ['get.menu']], function () {
 
 	Route::get('/page', function () {       return view('frontend.page'); });
     //Route::get('/backend', function () {    return view('dashboard.homepage'); });
-	Route::get('/backend', function () {
-        if (auth()->user()->hasRole('admin')) {
+	Route::get('/backend', function () {		
+		if(Auth::guest()) {
+			return redirect('login');
+		}
+        if (Auth::User() && Auth()->user()->hasRole('admin')) {
             $usersApprovedNum = User::where('state', 1)->count();
             $usersWaitingApprovalNum = User::where('state', 0)->count();
             $usersWithRoleUser = User::role('user')->count();
@@ -324,12 +326,17 @@ Route::group(['middleware' => ['get.menu']], function () {
         Route::get('/admin/internal/services/amount/{type}', 'ServiceOperationController@amountStats');  // data for amount
 
 		Route::prefix('/admin/service')->group(function () {
-			Route::get('/associations', 'ServiceController@associations')->name('admin.service.associations');
-			Route::post('admin/service/associations/setMaster', 'ServiceController@associations_set_master')->name('admin.service.associations.set_master');
+			//Route::get('/associations', 'ServiceController@associations')->name('admin.service.associations');
+			//Route::post('admin/service/associations/setMaster', 'ServiceController@associations_set_master')->name('admin.service.associations.set_master');
 
 			Route::get('/categories', 'ServiceController@categories')->name('admin.service.category.manage');
+			Route::get('/categories/{id}/data', 'ServiceController@category_data')->name('admin.service.category.data');
+			Route::put('/categories/{id}/update-configuration', 'ServiceController@category_configuration_update')->name('admin.service.category.update_configuration');
 			Route::post('/categories/create', 'ServiceController@category_create')->name('admin.service.category.create');
 			Route::post('/categories/update', 'ServiceController@categories_update')->name('admin.service.category.update');
+			
+			Route::put('/{id}/set-master', 'ServiceController@set_master')->name('admin.service.set_master');
+			Route::put('/{id}/associate', 'ServiceController@associate')->name('admin.service.set_master');
 			Route::get('/deleted', 'ServiceController@deleted')->name('admin.service.deleted');
 			Route::put('/{id}/recover', 'ServiceController@recover')->name('admin.service.recover');
 	        });

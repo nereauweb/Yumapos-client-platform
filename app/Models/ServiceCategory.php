@@ -19,6 +19,15 @@ class ServiceCategory extends Model
 	
 	protected $fillable = [
 		'name',
+		'country_list_type',
 	];
+	
+	public function countries(){
+		return $this->belongsToMany('App\Models\ServiceCountry', 'service_categories_countries', 'category_id', 'country_id');
+	}
+	
+	public function operators(){
+		return $this->belongsToMany('App\Models\ServiceOperator', 'service_categories_operators', 'category_id', 'operator_id');
+	}
 	
 }

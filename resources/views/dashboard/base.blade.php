@@ -74,9 +74,9 @@
     </script>
 	--}}
   </head>
-
-
-
+  <style>
+	@yield('style')
+  </style>
   <body class="c-app c-dark-theme">
     <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
     @include('dashboard.shared.nav-builder')

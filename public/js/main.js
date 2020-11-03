@@ -416,7 +416,7 @@ function fetchData(url, type, identifier) {
             mainChart.data = {
                     labels: customData.values,
                     datasets: [{
-                        lineTension: 0,
+                        lineTension: 0.05,
                         label: customData.label,
                         backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--info'), 10),
                         borderColor: coreui.Utils.getStyle('--info'),
@@ -446,7 +446,7 @@ const initialData = () => {
         mainChart.data = {
             labels: customData.values,
                 datasets: [{
-                lineTension: 0,
+                lineTension: 0.05,
                 label: 'Operations by hour',
                 backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--info'), 10),
                 borderColor: coreui.Utils.getStyle('--info'),
