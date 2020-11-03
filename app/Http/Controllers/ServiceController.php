@@ -119,7 +119,7 @@ class ServiceController extends Controller
 		$reloadly_operators_options = '';
 		foreach($reloadly_operators as $reloadly_operator_name => $reloadly_operatorId){
 			$service_operator = ServiceOperator::where('name',$reloadly_operator_name)->orWhere('reloadly_operatorId',$reloadly_operatorId)->first();
-			if (!$service_operator){
+			if ($service_operator){
 				if (!$service_operator->reloadly_operatorId == $reloadly_operatorId){
 					$service_operator->reloadly_operatorId = $reloadly_operatorId;
 					$service_operator->save();
