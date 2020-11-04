@@ -1,4 +1,5 @@
 <div class="row">
+    @include('livewire.loader')
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
@@ -28,17 +29,42 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-12">
                         <div class="row">
-                            <div class="col-6">
-                                <div class="c-callout c-callout-info"><small class="text-muted">New Clients</small>
-                                    <div class="text-value-lg">9,123</div>
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-header">User</div>
+                                    <div class="card-body">
+                                        <ul class="list-group">
+                                            @foreach($usersDetails as $operation)
+                                                <li class="list-group-item d-flex list-group-item-action justify-content-between align-items-center">{{ $operation->user->name }}<span class="badge badge-primary badge-pill">{{ $operation->amount }}</span></li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div class="col-6">
-                                <div class="c-callout c-callout-danger"><small class="text-muted">Recuring Clients</small>
-                                    <div class="text-value-lg">22,643</div>
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-header">Country</div>
+                                    <div class="card-body">
+                                        <ul class="list-group">
+                                            @foreach($countriesList as $country)
+                                                <li class="list-group-item d-flex list-group-item-action justify-content-between align-items-center">{{ $country->operator->country->name }}<span class="badge badge-primary badge-pill">{{ $country->amount }}</span></li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-header">Operator</div>
+                                    <div class="card-body">
+                                        <ul class="list-group">
+                                            @foreach($operationsList as $serviceOperation)
+                                                <li class="list-group-item d-flex list-group-item-action justify-content-between align-items-center">{{ $serviceOperation->operator->name }}<span class="badge badge-primary badge-pill">{{ $serviceOperation->amount }}</span></li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>

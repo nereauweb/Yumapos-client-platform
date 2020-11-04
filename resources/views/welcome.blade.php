@@ -28,9 +28,9 @@
                                                     <div>Api reloadly balance</div>
                                                 </div>
                                                 <div class="btn-group">
-                                                    <button class="btn btn-ghost-secondary" type="button" aria-haspopup="true" aria-expanded="false">
+                                                    <a href="{{ route('admin.api.reloadly.balance') }}" class="btn btn-ghost-secondary" type="button" aria-haspopup="true" aria-expanded="false">
                                                         refresh
-                                                    </button>
+                                                    </a>
                                                 </div>
                                             </div>
                                             <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
@@ -47,16 +47,15 @@
                                                         @if(Cache::has('ding_cache_balance'))
                                                             {{ Cache::get('ding_cache_balance')['balance'] }}
                                                         @else
-
                                                             /api/ding/balance not visited yet!
                                                         @endif
                                                     </div>
                                                     <div>Api Ding balance</div>
                                                 </div>
                                                 <div class="btn-group">
-                                                    <button class="btn btn-ghost-secondary" type="button" aria-haspopup="true" aria-expanded="false">
+                                                    <a href="{{ route('admin.api.ding.Balance') }}" class="btn btn-ghost-secondary" type="button" aria-haspopup="true" aria-expanded="false">
                                                         refresh
-                                                    </button>
+                                                    </a>
                                                 </div>
                                             </div>
                                             <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
@@ -143,11 +142,11 @@
                                                             <input id="option2month" value="month" name="filterSelected" type="radio" autocomplete="off"> Month
                                                         </label>
                                                     </div>
-                                                    <button class="btn btn-primary" type="button">
+                                                    <a href="{{ route('admin.report.operations') }}" class="btn btn-primary" type="button">
                                                         <svg class="c-icon">
                                                             <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-cloud-download"></use>
                                                         </svg>
-                                                    </button>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
