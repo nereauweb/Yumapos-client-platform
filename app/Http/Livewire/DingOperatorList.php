@@ -16,12 +16,17 @@ class DingOperatorList extends Component
     public $sortAsc = true;
     public $countrySelected;
 
+    public $relationshipAsc = true;
+    public $relationshipSortField;
+
     public function render()
     {
         $livewireDingOperators = ApiDingOperator::when($this->sortField, function ($query) {
             $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
         })->when($this->countrySelected, function ($query) {
             $query->where('countryIso', $this->countrySelected);
+        })->when($this->relationshipSortField, function ($query) {
+            $query->orderBy(ApiDingCountry::select('CountryName')->whereColumn('api_ding_countries.CountryIso', 'api_ding_operators.CountryIso'), $this->relationshipAsc ? 'asc' : 'desc');
         })->paginate(10);
 
         $countriesList = $countriesList = ApiDingCountry::all();
@@ -41,6 +46,17 @@ class DingOperatorList extends Component
         }
 
         $this->sortField = $field;
+    }
+
+    public function sortByRelationship($field)
+    {
+        if ($this->relationshipSortField === $field) {
+            $this->relationshipAsc = !$this->relationshipAsc;
+        } else {
+            $this->relationshipAsc = true;
+        }
+        $this->sortField = '';
+        $this->relationshipSortField = $field;
     }
 
     public function commit(){}

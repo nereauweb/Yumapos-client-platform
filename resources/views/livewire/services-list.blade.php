@@ -1,4 +1,5 @@
 <div class="container-fluid">
+    @include('livewire.loader')
     <div class="card">
         <div class="card-header">
 
@@ -16,19 +17,61 @@
                     </div>
                 </div>
             </div>
+            <div>
+                <div class="row">
+                    <div class="col-4">
+                        <select wire:model.defer="countrySelected" class="form-control">
+                            <option value="0">All countries</option>
+                            @foreach($countriesList as $country)
+                                <option value="{{ $country->id }}">{{ $country->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <button wire:click="commit" class="btn btn-success">Commit</button>
+                    </div>
+                </div>
+            </div>
         </div>
-
         <div class="card-body">
             <div id="alert_placeholder"></div>
-            <div class="table-responsive">
-                <table class="table table-striped table-sm datatable">
+            <div class="table">
+                <table class="table table-striped">
                     <thead class="thead">
                     <tr>
-                        <th>Country</th>
-                        <th>Nome</th>
+                        <th wire:click="sortByRelationship('country')">
+                            <span>Country</span>
+                            @if($relationshipAsc && $relationshipSortField == 'country')
+                                <i class="cil-arrow-bottom"></i>
+                            @else
+                                <i class="cil-arrow-top"></i>
+                            @endif
+                        </th>
+                        <th wire:click="sortBy('name')">
+                            <span>Nome</span>
+                            @if($sortAsc && $sortField == 'name')
+                                <i class="cil-arrow-bottom"></i>
+                            @else
+                                <i class="cil-arrow-top"></i>
+                            @endif
+                        </th>
                         <th>Default</th>
-                        <th>Ding</th>
-                        <th>Reloadly</th>
+                        <th wire:click="sortByRelationship('ding')">
+                            <span>Ding</span>
+                            @if($relationshipAsc && $relationshipSortField == 'ding')
+                                <i class="cil-arrow-bottom"></i>
+                            @else
+                                <i class="cil-arrow-top"></i>
+                            @endif
+                        </th>
+                        <th wire:click="sortByRelationship('reloadly')">
+                            <span>Reloadly</span>
+                            @if($relationshipAsc && $relationshipSortField == 'reloadly')
+                                <i class="cil-arrow-bottom"></i>
+                            @else
+                                <i class="cil-arrow-top"></i>
+                            @endif
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -70,4 +113,9 @@
             </div>
         </div>
     </div>
+    <style>
+        th > span {
+            cursor:pointer;
+        }
+    </style>
 </div>

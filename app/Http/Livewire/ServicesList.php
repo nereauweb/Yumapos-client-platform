@@ -14,9 +14,13 @@ class ServicesList extends Component
     use WithPagination;
 
     protected $paginationTheme = 'bootstrap';
-    private $ding_operators;
-    private $reloadly_operators;
-    private $service_operators;
+
+    public $sortAsc = true;
+    public $sortField;
+
+    public $countrySelected;
+    public $relationshipAsc = true;
+    public $relationshipSortField;
 
     public function mount()
     {
@@ -25,7 +29,7 @@ class ServicesList extends Component
 
     public function render()
     {
-        $this->ding_operators = ApiDingOperator::pluck('ProviderCode','Name');
+        $ding_operators = ApiDingOperator::pluck('ProviderCode','Name');
 //        $this->ding_operators_options = '';
 //        foreach($this->ding_operators as $ding_operator_name => $ding_ProviderCode){
 //            $service_operator = ServiceOperator::where('name',$ding_operator_name)->orWhere('ding_ProviderCode',$ding_ProviderCode)->first();
@@ -45,7 +49,7 @@ class ServicesList extends Component
 //            $this->ding_operators_options .= '<option value="'.$ding_ProviderCode.'">'.$ding_operator_name.'</option>';
 //        }
 
-        $this->reloadly_operators = ApiReloadlyOperator::pluck('operatorId','name');
+        $reloadly_operators = ApiReloadlyOperator::pluck('operatorId','name');
 //        $this->reloadly_operators_options = '';
 //        foreach($this->reloadly_operators as $reloadly_operator_name => $reloadly_operatorId){
 //            $service_operator = ServiceOperator::where('name',$reloadly_operator_name)->orWhere('reloadly_operatorId',$reloadly_operatorId)->first();
@@ -66,8 +70,43 @@ class ServicesList extends Component
 //            }
 //            $this->reloadly_operators_options .= '<option value="'.$reloadly_operatorId.'">'.$reloadly_operator_name.'</option>';
 //        }
-        $this->service_operators = ServiceOperator::orderBy('name')->paginate(10);
-
-        return view('livewire.services-list', ['ding_operators' => $this->ding_operators, 'reloadly_operators' => $this->reloadly_operators, 'service_operators' => $this->service_operators]);
+        $countriesList = ServiceCountry::orderBy('name')->select(['name', 'id'])->get();
+        $service_operators = ServiceOperator::when($this->sortField, function ($query) {
+            $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
+        })->when($this->relationshipSortField, function ($query) {
+            if ($this->relationshipSortField === 'country') {
+                $query->orderBy(ServiceCountry::select('name')->whereColumn('service_countries.id', 'service_operators.country_id'), $this->relationshipAsc ? 'asc' : 'desc');
+            } elseif ($this->relationshipSortField === 'ding') {
+                $query->orderBy(ApiDingOperator::select('Name')->whereColumn('api_ding_operators.ProviderCode', 'service_operators.ding_ProviderCode'), $this->relationshipAsc ? 'asc' : 'desc');
+            } elseif ($this->relationshipSortField === 'reloadly') {
+                $query->orderBy(ApiReloadlyOperator::select('name')->whereColumn('api_reloadly_operators.operatorId', 'service_operators.reloadly_operatorId'), $this->relationshipAsc ? 'asc' : 'desc');
+            }
+        })->when($this->countrySelected, function ($query) {
+            $query->where('country_id', $this->countrySelected);
+        })->paginate(10);
+        return view('livewire.services-list', ['ding_operators' => $ding_operators, 'reloadly_operators' => $reloadly_operators, 'service_operators' => $service_operators, 'countriesList' => $countriesList]);
     }
+
+    public function sortBy($field)
+    {
+        if ($this->sortField === $field) {
+            $this->sortAsc = !$this->sortAsc;
+        } else {
+            $this->sortAsc = true;
+        }
+        $this->sortField = $field;
+    }
+
+    public function sortByRelationship($field)
+    {
+        if ($this->relationshipSortField === $field) {
+            $this->relationshipAsc = !$this->relationshipAsc;
+        } else {
+            $this->relationshipAsc = true;
+        }
+        $this->sortField = '';
+        $this->relationshipSortField = $field;
+    }
+
+    public function commit(){}
 }

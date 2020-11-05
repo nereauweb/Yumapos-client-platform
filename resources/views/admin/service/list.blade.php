@@ -1,7 +1,7 @@
 @extends('dashboard.base')
 
 @section('css')
-    <link href="{{ asset('css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+{{--    <link href="{{ asset('css/dataTables.bootstrap4.css') }}" rel="stylesheet">--}}
 @endsection
 
 @section('content')
@@ -87,9 +87,9 @@
 @endsection
 
 @section('javascript')
-	<script src="{{ asset('js/jquery.dataTables.js') }}"></script>
-	<script src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>
-	<script src="{{ asset('js/datatables.js') }}"></script>
+{{--	<script src="{{ asset('js/jquery.dataTables.js') }}"></script>--}}
+{{--	<script src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>--}}
+{{--	<script src="{{ asset('js/datatables.js') }}"></script>--}}
 	<script>
 		$(document).ready(function(){
 

@@ -43,13 +43,13 @@
                                 <i class="cil-arrow-top"></i>
                             @endif
                         </th>
-                        <th>
-                            <span class="mr-4">Country</span>
-{{--                            @if($sortAscCustom && $customSort == 'CountryName')--}}
-{{--                                <i class="cil-arrow-bottom"></i>--}}
-{{--                            @else--}}
-{{--                                <i class="cil-arrow-top"></i>--}}
-{{--                            @endif--}}
+                        <th wire:click="sortByRelationship('countryName')">
+                            <span>Country</span>
+                            @if($relationshipAsc && $relationshipSortField == 'countryName')
+                                <i class="cil-arrow-bottom"></i>
+                            @else
+                                <i class="cil-arrow-top"></i>
+                            @endif
                         </th>
                         <th wire:click="sortBy('Name')"><span class="mr-4">Operator name</span>
                             @if($sortAsc && $sortField == 'Name')
