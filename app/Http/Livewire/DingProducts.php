@@ -46,7 +46,6 @@ class DingProducts extends Component
 //        });
 
         $countriesList = ApiDingCountry::all();
-        $typesList = ApiReloadlyOperator::select('denominationType')->distinct('denominationType')->get();
 //
 //        $livewireOperators = $livewireOperators->distinct()->paginate(10);
 
@@ -64,8 +63,7 @@ class DingProducts extends Component
 
         return view('livewire.ding-products', [
             'livewireProducts' => $this->livewireOperators,
-            'dingCountries' => $countriesList,
-            'typesList' => $typesList
+            'dingCountries' => $countriesList
         ]);
     }
 
