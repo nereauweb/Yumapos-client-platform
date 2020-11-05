@@ -20,12 +20,12 @@
                         </select>
                     </div>
                     <div>
-                        <select wire:model.defer="type" name="typesList" id="typesId" class="custom-select">
-                            <option value="0">Every type</option>
-                            @foreach ($typesList as $item)
-                                <option value="{{$item->denominationType}}">{{$item->denominationType}}</option>
-                            @endforeach
-                        </select>
+{{--                        <select wire:model.defer="type" name="typesList" id="typesId" class="custom-select">--}}
+{{--                            <option value="0">Every type</option>--}}
+{{--                            @foreach ($typesList as $item)--}}
+{{--                                <option value="{{$item->denominationType}}">{{$item->denominationType}}</option>--}}
+{{--                            @endforeach--}}
+{{--                        </select>--}}
                     </div>
                     <div class="input-group-append">
                         <button wire:click="commit" class="btn btn-success" type="button"
