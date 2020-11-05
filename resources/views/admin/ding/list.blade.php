@@ -7,12 +7,12 @@
 
 @section('content')
 	@livewireStyles()
-	@livewire('ding-products')
+	@livewire('ding-operator-list')
 	@livewireScripts()
-    	
+
 	<div id="details-modal" uk-modal></div>
 	<div id="edit-modal" uk-modal></div>
-	
+
 	<div class="modal fade modal-success modal-save" id="confirmSave" role="dialog" aria-labelledby="confirmSaveLabel" aria-hidden="true" tabindex="-1">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -62,7 +62,7 @@
 		$('#confirmSave').on('show.coreui.modal', function (e) {
 			var message = $(e.relatedTarget).attr('data-message');
 			var title = $(e.relatedTarget).attr('data-title');
-			var formData = $(e.relatedTarget).closest('form').serialize();			
+			var formData = $(e.relatedTarget).closest('form').serialize();
 			var formAction = $(e.relatedTarget).closest('form').attr('action');
 			$(this).find('.modal-body p').text(message);
 			$(this).find('.modal-title').text(title);
