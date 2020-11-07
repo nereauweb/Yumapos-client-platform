@@ -120,6 +120,14 @@
                                             </div>
                                             <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
                                                 <div class="d-flex">
+                                                    <div>
+                                                        <select id="country-selected" autocomplete="off" class="form-control">
+                                                            <option value="0">All countries</option>
+                                                            @foreach(\App\Models\ServiceCountry::all() as $country)
+                                                                <option value="{{$country->iso}}">{{ $country->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
                                                     <div class="btn-group btn-group-toggle mx-3" data-toggle="buttons">
                                                         <label class="btn btn-outline-secondary">
                                                             <input id="option1day" value="day" name="filterSelected" type="radio" autocomplete="off" checked> Day

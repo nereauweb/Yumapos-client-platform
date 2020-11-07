@@ -105,6 +105,82 @@
  */
 
 /* eslint-disable no-magic-numbers */
+
+// var mainChart = new Chart(document.getElementById('main-chart'), {
+//   type: 'line',
+//   data: {
+//     labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S'],
+//     datasets: [{
+//       label: 'My First dataset',
+//       backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--info'), 10),
+//       borderColor: coreui.Utils.getStyle('--info'),
+//       pointHoverBackgroundColor: '#fff',
+//       borderWidth: 2,
+//       data: [165, 180, 70, 69, 77, 57, 125, 165, 172, 91, 173, 138, 155, 89, 50, 161, 65, 163, 160, 103, 114, 185, 125, 196, 183, 64, 137, 95, 112, 175]
+//     }, {
+//       label: 'My Second dataset',
+//       backgroundColor: 'transparent',
+//       borderColor: coreui.Utils.getStyle('--success'),
+//       pointHoverBackgroundColor: '#fff',
+//       borderWidth: 2,
+//       data: [92, 97, 80, 100, 86, 97, 83, 98, 87, 98, 93, 83, 87, 98, 96, 84, 91, 97, 88, 86, 94, 86, 95, 91, 98, 91, 92, 80, 83, 82]
+//     }, {
+//       label: 'My Third dataset',
+//       backgroundColor: 'transparent',
+//       borderColor: coreui.Utils.getStyle('--danger'),
+//       pointHoverBackgroundColor: '#fff',
+//       borderWidth: 1,
+//       borderDash: [8, 5],
+//       data: [65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65]
+//     }]
+//   },
+//   options: {
+//     maintainAspectRatio: false,
+//     legend: {
+//       display: false
+//     },
+//     scales: {
+//       xAxes: [{
+//         gridLines: {
+//           drawOnChartArea: false
+//         }
+//       }],
+//       yAxes: [{
+//         ticks: {
+//           beginAtZero: true,
+//           maxTicksLimit: 5,
+//           stepSize: Math.ceil(250 / 5),
+//           max: 250
+//         }
+//       }]
+//     },
+//     elements: {
+//       point: {
+//         radius: 0,
+//         hitRadius: 10,
+//         hoverRadius: 4,
+//         hoverBorderWidth: 3
+//       }
+//     }
+//   }
+// });
+            const mainChart = new Chart(document.getElementById('main-chart'), {
+                type: 'line',
+                options: {
+                    maintainAspectRatio: false,
+                    legend: {
+                        display: false
+                    },
+                    elements: {
+                        point: {
+                            radius: 0,
+                            hitRadius: 10,
+                            hoverRadius: 4,
+                            hoverBorderWidth: 3
+                        }
+                    }
+                }
+            });
 // Disable the on-canvas tooltip
 Chart.defaults.global.pointHitDetectionRadius = 1;
 Chart.defaults.global.tooltips.enabled = false;
@@ -297,94 +373,14 @@ document.body.addEventListener('classtoggle', function (event) {
 //   }
 // }); // eslint-disable-next-line no-unused-vars
 
-// var mainChart = new Chart(document.getElementById('main-chart'), {
-//   type: 'line',
-//   data: {
-//     labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S'],
-//     datasets: [{
-//       label: 'My First dataset',
-//       backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--info'), 10),
-//       borderColor: coreui.Utils.getStyle('--info'),
-//       pointHoverBackgroundColor: '#fff',
-//       borderWidth: 2,
-//       data: [165, 180, 70, 69, 77, 57, 125, 165, 172, 91, 173, 138, 155, 89, 50, 161, 65, 163, 160, 103, 114, 185, 125, 196, 183, 64, 137, 95, 112, 175]
-//     }, {
-//       label: 'My Second dataset',
-//       backgroundColor: 'transparent',
-//       borderColor: coreui.Utils.getStyle('--success'),
-//       pointHoverBackgroundColor: '#fff',
-//       borderWidth: 2,
-//       data: [92, 97, 80, 100, 86, 97, 83, 98, 87, 98, 93, 83, 87, 98, 96, 84, 91, 97, 88, 86, 94, 86, 95, 91, 98, 91, 92, 80, 83, 82]
-//     }, {
-//       label: 'My Third dataset',
-//       backgroundColor: 'transparent',
-//       borderColor: coreui.Utils.getStyle('--danger'),
-//       pointHoverBackgroundColor: '#fff',
-//       borderWidth: 1,
-//       borderDash: [8, 5],
-//       data: [65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65]
-//     }]
-//   },
-//   options: {
-//     maintainAspectRatio: false,
-//     legend: {
-//       display: false
-//     },
-//     scales: {
-//       xAxes: [{
-//         gridLines: {
-//           drawOnChartArea: false
-//         }
-//       }],
-//       yAxes: [{
-//         ticks: {
-//           beginAtZero: true,
-//           maxTicksLimit: 5,
-//           stepSize: Math.ceil(250 / 5),
-//           max: 250
-//         }
-//       }]
-//     },
-//     elements: {
-//       point: {
-//         radius: 0,
-//         hitRadius: 10,
-//         hoverRadius: 4,
-//         hoverBorderWidth: 3
-//       }
-//     }
-//   }
-// });
-var mainChart = new Chart(document.getElementById('main-chart'), {
-    type: 'line',
-    options: {
-        maintainAspectRatio: false,
-        legend: {
-            display: false
-        },
-        elements: {
-            point: {
-                radius: 0,
-                hitRadius: 10,
-                hoverRadius: 4,
-                hoverBorderWidth: 3
-            }
-        }
-    }
-});
-
-let customData = {
-    'arrayLabels': [],
-    'label': '',
-    'values': []
-};
 
 const totalsOperations = document.getElementById('operationsTotals');
 const totalsGain = document.getElementById('gainTotals');
 const totalsCost = document.getElementById('costTotals');
 const totalsAmount = document.getElementById('amountTotals');
+const country_filter = document.getElementById('country-selected');
 
-function fetchData(url, type) {
+function fetchData(url, type, country) {
     let custom_data = {
         amounts: [],
         costs: [],
@@ -392,7 +388,17 @@ function fetchData(url, type) {
         gains: [],
         labels: []
     };
-    fetch(`${url}/${type}`).then(response => response.json()).then(response => {
+    fetch(`${url}/${type}`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text-plain, */*",
+            'X-CSRF-TOKEN': document.getElementsByName('csrf-token')[0].getAttribute('content')
+        },
+        body: JSON.stringify({
+            'country': country
+        })
+    }).then(response => response.json()).then(response => {
         response.map(item => {
             custom_data.operations.push(item.operations);
             custom_data.amounts.push(item.amount_data);
@@ -453,8 +459,18 @@ const initialData = () => {
 initialData();
 
 // loads the items below chart when initialized
-function loadTotals(type) {
-    fetch(`/admin/internal/services/operations/totals/${type}`).then(response => response.json()).then(response => {
+function loadTotals(type, country) {
+    fetch(`/admin/internal/services/operations/totals/${type}`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text-plain, */*",
+            'X-CSRF-TOKEN': document.getElementsByName('csrf-token')[0].getAttribute('content')
+        },
+        body: JSON.stringify({
+            'country': country
+        })
+    }).then(response => response.json()).then(response => {
         totalsOperations.innerText = `${response.totalsForOperations}`;
         totalsGain.innerText = `${response.totalsForGain.gainSumPerDay}`;
         totalsCost.innerText = `${response.totalsForCost.costSumPerDay}`;
@@ -462,7 +478,7 @@ function loadTotals(type) {
     });
 }
 
-loadTotals('day');
+loadTotals('day', 0);
 
 let checkedFilter = document.querySelector('input[name="filterSelected"]:checked');
 checkedFilter.parentElement.classList.add('active');
@@ -472,22 +488,24 @@ const filters = document.getElementsByName("filterSelected");
 filters.forEach(filter => {
     filter.onchange = (e) => {
         e.preventDefault();
+        let  countrified = country_filter.value;
         switch (filter.value) {
             case 'day':
-                fetchData('/admin/internal/services', 'day');
-                loadTotals('day');
+                fetchData('/admin/internal/services', 'day', countrified);
+                loadTotals('day', countrified);
                 break;
             case 'yesterday':
-                fetchData('/admin/internal/services', 'yesterday');
-                loadTotals('yesterday');
+                fetchData('/admin/internal/services', 'yesterday', countrified);
+
+                loadTotals('yesterday', countrified);
                 break;
             case 'week':
-                fetchData('/admin/internal/services', 'week');
-                loadTotals('week');
+                fetchData('/admin/internal/services', 'week', countrified);
+                loadTotals('week', countrified);
                 break;
             case 'month':
-                fetchData('/admin/internal/services', 'month');
-                loadTotals('month');
+                fetchData('/admin/internal/services', 'month', countrified);
+                loadTotals('month', countrified);
                 break;
             default:
                 alert('coding error!');
@@ -495,6 +513,10 @@ filters.forEach(filter => {
     }
 });
 
+country_filter.onchange = () => {
+    fetchData('/admin/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value);
+    loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value);
+}
 /***/ }),
 
 /***/ "./resources/sass/style.scss":

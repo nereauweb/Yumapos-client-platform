@@ -313,10 +313,9 @@ Route::group(['middleware' => ['get.menu']], function () {
 
 		Route::resource('/admin/service/ding',  'DingController', [ 'names' => 'admin.ding' ]);
 
-		Route::get('/admin/internal/services', 'ServiceOperationController@index')->name('service-operation.index');
-		Route::get('/admin/internal/services/operations/totals/{type}', 'ServiceOperationController@totals'); // endpoint for initial calculations (daily)
-
-		Route::get('/admin/internal/services/{type}', 'ServiceOperationController@operations');  // data for operations
+		Route::post('/admin/internal/services/operations/totals/{type}', 'ServiceOperationController@totals'); // endpoint for initial calculations (daily)
+		Route::post('/admin/internal/services/{type}', 'ServiceOperationController@operations');  // data for operations
+        Route::post('/admin/internal/services/countries/{country}', 'ServiceOperationController@countries');  // data for operations
 
 		Route::prefix('/admin/service')->group(function () {
 			//Route::get('/associations', 'ServiceController@associations')->name('admin.service.associations');
