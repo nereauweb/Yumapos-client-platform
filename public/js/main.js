@@ -384,87 +384,71 @@ const totalsGain = document.getElementById('gainTotals');
 const totalsCost = document.getElementById('costTotals');
 const totalsAmount = document.getElementById('amountTotals');
 
-function fetchData(url, type, identifier) {
+function fetchData(url, type) {
+    let custom_data = {
+        amounts: [],
+        costs: [],
+        operations: [],
+        gains: [],
+        labels: []
+    };
     fetch(`${url}/${type}`).then(response => response.json()).then(response => {
-        customData = {
-            'arrayLabels': [],
-            'label': '',
-            'values': []
-        };
-        response.map(element => {
-            switch (identifier) {
-                case 'gain':
-                    customData.arrayLabels.push(element.gain_data);
-                    customData.values.push(element.label);
-                    customData.label  = 'Gain: ';
-                    break;
-                case 'operations':
-                    customData.arrayLabels.push(element.operations);
-                    customData.values.push(element.label);
-                    customData.label  = 'Operations: ';
-                    break;
-                case 'amount':
-                    customData.arrayLabels.push(element.amount_data);
-                    customData.values.push(element.label);
-                    customData.label  = 'Amount: ';
-                    break;
-                case 'cost':
-                    customData.arrayLabels.push(element.cost);
-                    customData.values.push(element.label);
-                    customData.label  = 'Cost: ';
-                    break;
-                default:
-                    alert('this type does not exist!');
-            }
+        response.map(item => {
+            custom_data.operations.push(item.operations);
+            custom_data.amounts.push(item.amount_data);
+            custom_data.gains.push(item.gain_data);
+            custom_data.costs.push(item.cost);
+            custom_data.labels.push(item.label);
         });
     }).then(res => {
-            mainChart.data = {
-                    labels: customData.values,
-                    datasets: [{
-                        lineTension: 0.05,
-                        label: customData.label,
-                        backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--info'), 10),
-                        borderColor: coreui.Utils.getStyle('--info'),
-                        pointHoverBackgroundColor: '#fff',
-                        borderWidth: 2,
-                        data: customData.arrayLabels
-                    }]
-            }
-            mainChart.update();
+        mainChart.data = {
+            labels: custom_data.labels,
+            datasets: [{
+                lineTension: 0.05,
+                label: 'Operations by hour',
+                backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--success'), 10),
+                borderColor: coreui.Utils.getStyle('--success'),
+                pointHoverBackgroundColor: '#fff',
+                borderWidth: 2,
+                data: custom_data.operations
+            },
+                {
+                    lineTension: 0.05,
+                    label: 'Amount by hour',
+                    backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--info'), 10),
+                    borderColor: coreui.Utils.getStyle('--info'),
+                    pointHoverBackgroundColor: '#fff',
+                    borderWidth: 2,
+                    data: custom_data.amounts
+                },
+                {
+                    lineTension: 0.05,
+                    label: 'Cost by hour',
+                    backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--warning'), 10),
+                    borderColor: coreui.Utils.getStyle('--warning'),
+                    pointHoverBackgroundColor: '#fff',
+                    borderWidth: 2,
+                    data: custom_data.costs
+                },
+                {
+                    lineTension: 0.05,
+                    label: 'Gain by hour',
+                    backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--danger'), 10),
+                    borderColor: coreui.Utils.getStyle('--danger'),
+                    pointHoverBackgroundColor: '#fff',
+                    borderWidth: 2,
+                    data: custom_data.gains
+                },
+            ]
+        }
+        mainChart.update();
     }).catch(error => {
         alert(error);
     });
 }
 
 const initialData = () => {
-    customData = {
-        'arrayLabels': [],
-        'label': '',
-        'values': []
-    };
-
-    fetch('/admin/internal/services/operations/day').then(response => response.json()).then(response => {
-        response.map(element => {
-            customData.arrayLabels.push(element.operations);
-            customData.values.push(element.label);
-        });
-    }).then(res => {
-        mainChart.data = {
-            labels: customData.values,
-                datasets: [{
-                lineTension: 0.05,
-                label: 'Operations by hour',
-                backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--info'), 10),
-                borderColor: coreui.Utils.getStyle('--info'),
-                pointHoverBackgroundColor: '#fff',
-                borderWidth: 2,
-                data: customData.arrayLabels
-            }]
-        }
-        mainChart.update();
-    }).catch(error => {
-        alert(error);
-    });
+    fetchData('admin/internal/services', 'day');
 }
 initialData();
 
@@ -480,82 +464,29 @@ function loadTotals(type) {
 
 loadTotals('day');
 
-function loadGainData(url, type) {
-    fetchData(url, type, 'gain');
-}
-
-function loadCostData(url, type) {
-    fetchData(url, type, 'cost');
-}
-
-function loadAmountData(url, type) {
-    fetchData(url, type, 'amount');
-}
-
-function loadOperationsData(url, type) {
-    fetchData(url, type, 'operations');
-}
-
-
 let checkedFilter = document.querySelector('input[name="filterSelected"]:checked');
 checkedFilter.parentElement.classList.add('active');
 
-const dropdownMenu = document.getElementById('select_1');
-dropdownMenu.onchange = (element) => {
-    let checkedFilter = document.querySelector('input[name="filterSelected"]:checked');
-    let valueOfCheckedFilter = checkedFilter.value;
-    element.preventDefault();
-    const selectedItem = dropdownMenu.options[dropdownMenu.selectedIndex].value;
-    switch (selectedItem) {
-        case 'amount':
-            loadAmountData('/admin/internal/services/amount', valueOfCheckedFilter);
-            break;
-        case 'cost':
-            loadCostData('/admin/internal/services/cost', valueOfCheckedFilter);
-            break;
-        case 'gain':
-            loadGainData('/admin/internal/services/gain', valueOfCheckedFilter);
-            break;
-        case 'number_of_operations':
-            loadOperationsData('/admin/internal/services/operations', valueOfCheckedFilter);
-            break;
-        default:
-            alert(`alert select item from dropdown!`);
-    }
-};
 
 const filters = document.getElementsByName("filterSelected");
 filters.forEach(filter => {
     filter.onchange = (e) => {
         e.preventDefault();
-        switch (dropdownMenu.value) {
-            case 'number_of_operations':
-                loadOperationsData('/admin/internal/services/operations', filter.value);
-                break;
-            case 'gain':
-                loadGainData('/admin/internal/services/gain', filter.value);
-                break;
-            case 'cost':
-                loadCostData('/admin/internal/services/cost', filter.value);
-                break;
-            case 'amount':
-                loadAmountData('/admin/internal/services/amount', filter.value);
-                break;
-            default:
-                alert('error');
-        }
-
         switch (filter.value) {
             case 'day':
+                fetchData('/admin/internal/services', 'day');
                 loadTotals('day');
                 break;
             case 'yesterday':
+                fetchData('/admin/internal/services', 'yesterday');
                 loadTotals('yesterday');
                 break;
             case 'week':
+                fetchData('/admin/internal/services', 'week');
                 loadTotals('week');
                 break;
             case 'month':
+                fetchData('/admin/internal/services', 'month');
                 loadTotals('month');
                 break;
             default:

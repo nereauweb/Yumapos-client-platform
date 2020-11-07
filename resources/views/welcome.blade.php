@@ -120,14 +120,6 @@
                                             </div>
                                             <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
                                                 <div class="d-flex">
-                                                    <div>
-                                                        <select id="select_1" autocomplete="off" class="form-control">
-                                                            <option value="number_of_operations">Number of Operations</option>
-                                                            <option value="amount">Amount</option>
-                                                            <option value="cost">Cost</option>
-                                                            <option value="gain">Gain</option>
-                                                        </select>
-                                                    </div>
                                                     <div class="btn-group btn-group-toggle mx-3" data-toggle="buttons">
                                                         <label class="btn btn-outline-secondary">
                                                             <input id="option1day" value="day" name="filterSelected" type="radio" autocomplete="off" checked> Day

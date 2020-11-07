@@ -94,11 +94,11 @@ class User extends Authenticatable
     {
         if (auth()->user()->hasRole('admin')) {
             if ($time == 'day') {
-                return ServiceOperation::orderBy('created_at', 'desc')->whereDate('created_at','2020-08-11')->limit(20)->get();
+                return ServiceOperation::orderBy('created_at', 'desc')->whereDate('created_at','2020-08-11')->limit(10)->get();
             } elseif ($time = 'yesterday') {
-                return ServiceOperation::orderBy('created_at', 'desc')->whereDate('created_at','2020-08-10')->limit(20)->get();
+                return ServiceOperation::orderBy('created_at', 'desc')->whereDate('created_at','2020-08-10')->limit(10)->get();
             } else {
-                return ServiceOperation::orderBy('created_at', 'desc')->whereDate('created_at','2020-08-11')->limit(20)->get();
+                return ServiceOperation::orderBy('created_at', 'desc')->whereDate('created_at','2020-08-11')->limit(10)->get();
             }
         }
     }
