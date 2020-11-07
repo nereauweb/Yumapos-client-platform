@@ -20,6 +20,9 @@ class ServiceOperationController extends Controller
                 ->when($country || request()->country, function ($query) use ($country) {
                     $query->where('request_country_iso', '=', $country ? $country : request()->country);
                 })
+                ->when(request()->operation, function ($query) {
+                  $query->where('request_operatorId', '=', request()->operation);
+                })
 //            ->whereDate('created_at', '=', Carbon::now()->toDateString())
                 ->groupBy('label')
                 ->get();
@@ -31,6 +34,9 @@ class ServiceOperationController extends Controller
                 ->when($country || request()->country, function ($query) use ($country) {
                     $query->where('request_country_iso', '=', $country ? $country : request()->country);
                 })
+                ->when(request()->operation, function ($query) {
+                    $query->where('request_operatorId', '=', request()->operation);
+                })
 //            ->whereDate('created_at', '=', Carbon::now()->toDateString())
                 ->groupBy('label')
                 ->get();
@@ -40,6 +46,9 @@ class ServiceOperationController extends Controller
                 ->select(DB::raw('count(id) as operations, sum(platform_total_gain) - sum(user_discount) as gain_data, sum(sent_amount) - sum(platform_commission) as cost, sum(user_amount) as amount_data, DAY(created_at) as label'))
                 ->when($country || request()->country, function ($query) use ($country) {
                     $query->where('request_country_iso', '=', $country ? $country : request()->country);
+                })
+                ->when(request()->operation, function ($query) {
+                    $query->where('request_operatorId', '=', request()->operation);
                 })
                 ->whereBetween('created_at', [Carbon::createFromDate('2020', '09', '2')->startOfWeek(), Carbon::createFromDate('2020', '09', '2')->endOfWeek()])
 //            ->whereDate('created_at', '=', Carbon::now()->toDateString())
@@ -51,6 +60,9 @@ class ServiceOperationController extends Controller
                 ->select(DB::raw('count(id) as operations, sum(platform_total_gain) - sum(user_discount) as gain_data, sum(sent_amount) - sum(platform_commission) as cost, sum(user_amount) as amount_data, DAY(created_at) as day ,DATE_FORMAT(created_at, "%D") as label'))
                 ->when($country || request()->country, function ($query) use ($country) {
                     $query->where('request_country_iso', '=', $country ? $country : request()->country);
+                })
+                ->when(request()->operation, function ($query) {
+                    $query->where('request_operatorId', '=', request()->operation);
                 })
                 ->whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3))
 //            ->whereDate('created_at', '=', Carbon::now()->toDateString())

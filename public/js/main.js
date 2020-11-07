@@ -379,8 +379,9 @@ const totalsGain = document.getElementById('gainTotals');
 const totalsCost = document.getElementById('costTotals');
 const totalsAmount = document.getElementById('amountTotals');
 const country_filter = document.getElementById('country-selected');
+const operator_filter = document.getElementById('operator-selected');
 
-function fetchData(url, type, country) {
+function fetchData(url, type, country, operator) {
     let custom_data = {
         amounts: [],
         costs: [],
@@ -396,7 +397,8 @@ function fetchData(url, type, country) {
             'X-CSRF-TOKEN': document.getElementsByName('csrf-token')[0].getAttribute('content')
         },
         body: JSON.stringify({
-            'country': country
+            'country': country,
+            'operator': operator
         })
     }).then(response => response.json()).then(response => {
         response.map(item => {
@@ -454,12 +456,12 @@ function fetchData(url, type, country) {
 }
 
 const initialData = () => {
-    fetchData('admin/internal/services', 'day');
+    fetchData('admin/internal/services', 'day', 0, 0);
 }
 initialData();
 
 // loads the items below chart when initialized
-function loadTotals(type, country) {
+function loadTotals(type, country, operator) {
     fetch(`/admin/internal/services/operations/totals/${type}`, {
         method: 'POST',
         headers: {
@@ -468,7 +470,8 @@ function loadTotals(type, country) {
             'X-CSRF-TOKEN': document.getElementsByName('csrf-token')[0].getAttribute('content')
         },
         body: JSON.stringify({
-            'country': country
+            'country': country,
+            'operator': operator
         })
     }).then(response => response.json()).then(response => {
         totalsOperations.innerText = `${response.totalsForOperations}`;
@@ -489,23 +492,24 @@ filters.forEach(filter => {
     filter.onchange = (e) => {
         e.preventDefault();
         let  countrified = country_filter.value;
+        let  operatorField = operator_filter.value;
         switch (filter.value) {
             case 'day':
-                fetchData('/admin/internal/services', 'day', countrified);
-                loadTotals('day', countrified);
+                fetchData('/admin/internal/services', 'day', countrified, operatorField);
+                loadTotals('day', countrified, operatorField);
                 break;
             case 'yesterday':
-                fetchData('/admin/internal/services', 'yesterday', countrified);
+                fetchData('/admin/internal/services', 'yesterday', countrified, operatorField);
 
-                loadTotals('yesterday', countrified);
+                loadTotals('yesterday', countrified, operatorField);
                 break;
             case 'week':
-                fetchData('/admin/internal/services', 'week', countrified);
-                loadTotals('week', countrified);
+                fetchData('/admin/internal/services', 'week', countrified, operatorField);
+                loadTotals('week', countrified, operatorField);
                 break;
             case 'month':
-                fetchData('/admin/internal/services', 'month', countrified);
-                loadTotals('month', countrified);
+                fetchData('/admin/internal/services', 'month', countrified, operatorField);
+                loadTotals('month', countrified, operatorField);
                 break;
             default:
                 alert('coding error!');
@@ -515,7 +519,7 @@ filters.forEach(filter => {
 
 country_filter.onchange = () => {
     fetchData('/admin/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value);
-    loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value);
+    loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
 }
 /***/ }),
 

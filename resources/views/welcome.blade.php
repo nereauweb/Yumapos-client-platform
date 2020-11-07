@@ -123,8 +123,16 @@
                                                     <div>
                                                         <select id="country-selected" autocomplete="off" class="form-control">
                                                             <option value="0">All countries</option>
-                                                            @foreach(\App\Models\ServiceCountry::all() as $country)
+                                                            @foreach(\App\Models\ServiceCountry::orderBy('name', 'asc')->get() as $country)
                                                                 <option value="{{$country->iso}}">{{ $country->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="ml-3">
+                                                        <select id="operator-selected" autocomplete="off" class="form-control">
+                                                            <option value="0">All operators</option>
+                                                            @foreach(\App\Models\ApiReloadlyOperator::orderBy('name', 'asc')->get() as $operator)
+                                                                <option value="{{$operator->operatorId}}">{{ $operator->name }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
