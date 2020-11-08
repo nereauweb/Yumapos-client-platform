@@ -373,15 +373,38 @@ document.body.addEventListener('classtoggle', function (event) {
 //   }
 // }); // eslint-disable-next-line no-unused-vars
 
-
+// admin details
 const totalsOperations = document.getElementById('operationsTotals');
 const totalsGain = document.getElementById('gainTotals');
 const totalsCost = document.getElementById('costTotals');
 const totalsAmount = document.getElementById('amountTotals');
+
+
+// user details
+const totalsUserOperations = document.getElementById('operationsUserTotals');
+const totalsUserGain = document.getElementById('gainUserTotals');
+const totalsUserCost = document.getElementById('costUserTotals');
+const totalsUserAmount = document.getElementById('amountUserTotals');
+
+
+// shared variables
+const filters = document.getElementsByName("filterSelected");
 const country_filter = document.getElementById('country-selected');
 const operator_filter = document.getElementById('operator-selected');
 
-function fetchData(url, type, country, operator) {
+// to be taken note, not very secure way of passing the user
+const user_identifier = document.getElementById('identifier-custom');
+let user_id;
+if (user_identifier) {
+    user_id = user_identifier.value;
+}
+
+let user_object = {
+    isUser: '',
+    user_id:''
+};
+
+function fetchData(url, type, country, operator, user_object = null) {
     let custom_data = {
         amounts: [],
         costs: [],
@@ -398,7 +421,9 @@ function fetchData(url, type, country, operator) {
         },
         body: JSON.stringify({
             'country': country,
-            'operator': operator
+            'operator': operator,
+            'user_id': user_object ? user_object.user_id : null,
+            'isUser': user_object ? user_object.isUser : false
         })
     }).then(response => response.json()).then(response => {
         response.map(item => {
@@ -456,9 +481,104 @@ function fetchData(url, type, country, operator) {
 }
 
 const initialData = () => {
-    fetchData('admin/internal/services', 'day', 0, 0);
+    fetchData('admin/internal/services', 'day', 0, 0, user_object);
 }
-initialData();
+
+const initialUserData = () => {
+    fetchData('user/internal/services', 'day', 0, 0, user_object);
+}
+
+
+if (totalsOperations) {
+    user_object.isUser = false;
+    initialData();
+    loadTotals('day', 0);
+    let checkedFilter = document.querySelector('input[name="filterSelected"]:checked');
+    checkedFilter.parentElement.classList.add('active');
+
+    filters.forEach(filter => {
+        filter.onchange = (e) => {
+            e.preventDefault();
+            let  countrified = country_filter.value;
+            let  operatorField = operator_filter.value;
+            switch (filter.value) {
+                case 'day':
+                    fetchData('/admin/internal/services', 'day', countrified, operatorField);
+                    loadTotals('day', countrified, operatorField);
+                    break;
+                case 'yesterday':
+                    fetchData('/admin/internal/services', 'yesterday', countrified, operatorField);
+                    loadTotals('yesterday', countrified, operatorField);
+                    break;
+                case 'week':
+                    fetchData('/admin/internal/services', 'week', countrified, operatorField);
+                    loadTotals('week', countrified, operatorField);
+                    break;
+                case 'month':
+                    fetchData('/admin/internal/services', 'month', countrified, operatorField);
+                    loadTotals('month', countrified, operatorField);
+                    break;
+                default:
+                    alert('coding error!');
+            }
+        }
+    });
+
+    country_filter.onchange = () => {
+        fetchData('/admin/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+        loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+    }
+
+    operator_filter.onchange = () => {
+        fetchData('/admin/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+        loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+    }
+
+} else {
+    user_object.isUser = true;
+    user_object.user_id = user_id;
+    initialUserData();
+    let checkedFilter = document.querySelector('input[name="filterSelected"]:checked');
+    checkedFilter.parentElement.classList.add('active');
+
+    filters.forEach(filter => {
+        filter.onchange = (e) => {
+            e.preventDefault();
+            let countrified = country_filter.value;
+            let operatorField = operator_filter.value;
+            switch (filter.value) {
+                case 'day':
+                    fetchData('/user/internal/services', 'day', countrified, operatorField, user_object);
+                    // loadTotals('day', countrified, operatorField);
+                    break;
+                case 'yesterday':
+                    fetchData('/user/internal/services', 'yesterday', countrified, operatorField, user_object);
+                    // loadTotals('yesterday', countrified, operatorField);
+                    break;
+                case 'week':
+                    fetchData('/user/internal/services', 'week', countrified, operatorField, user_object);
+                    // loadTotals('week', countrified, operatorField);
+                    break;
+                case 'month':
+                    fetchData('/user/internal/services', 'month', countrified, operatorField, user_object);
+                    // loadTotals('month', countrified, operatorField);
+                    break;
+                default:
+                    alert('coding error!');
+            }
+        }
+
+        operator_filter.onchange = () => {
+            fetchData('/user/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+            // loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+        }
+
+        country_filter.onchange = () => {
+            fetchData('/user/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+            // loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+        }
+    });
+}
 
 // loads the items below chart when initialized
 function loadTotals(type, country, operator) {
@@ -481,46 +601,8 @@ function loadTotals(type, country, operator) {
     });
 }
 
-loadTotals('day', 0);
-
-let checkedFilter = document.querySelector('input[name="filterSelected"]:checked');
-checkedFilter.parentElement.classList.add('active');
 
 
-const filters = document.getElementsByName("filterSelected");
-filters.forEach(filter => {
-    filter.onchange = (e) => {
-        e.preventDefault();
-        let  countrified = country_filter.value;
-        let  operatorField = operator_filter.value;
-        switch (filter.value) {
-            case 'day':
-                fetchData('/admin/internal/services', 'day', countrified, operatorField);
-                loadTotals('day', countrified, operatorField);
-                break;
-            case 'yesterday':
-                fetchData('/admin/internal/services', 'yesterday', countrified, operatorField);
-
-                loadTotals('yesterday', countrified, operatorField);
-                break;
-            case 'week':
-                fetchData('/admin/internal/services', 'week', countrified, operatorField);
-                loadTotals('week', countrified, operatorField);
-                break;
-            case 'month':
-                fetchData('/admin/internal/services', 'month', countrified, operatorField);
-                loadTotals('month', countrified, operatorField);
-                break;
-            default:
-                alert('coding error!');
-        }
-    }
-});
-
-country_filter.onchange = () => {
-    fetchData('/admin/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value);
-    loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
-}
 /***/ }),
 
 /***/ "./resources/sass/style.scss":

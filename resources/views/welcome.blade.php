@@ -715,6 +715,120 @@
 {{--                                </div>--}}
                             </div>
                         </div>
+                @else
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 class="card-title mb-0">Operations Report</h4>
+                                    </div>
+                                    <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
+                                        <div class="d-flex">
+                                            <div>
+                                                <select id="country-selected" autocomplete="off" class="form-control">
+                                                    <option value="0">All countries</option>
+                                                    @foreach(\App\Models\ServiceCountry::orderBy('name', 'asc')->get() as $country)
+                                                        <option value="{{$country->iso}}">{{ $country->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="ml-3">
+                                                <select id="operator-selected" autocomplete="off" class="form-control">
+                                                    <option value="0">All operators</option>
+                                                    @foreach(auth()->user()->serviceOperations()->groupBy('request_operatorId')->get() as $operator)
+                                                        <option value="{{$operator->operator->operatorId}}">{{ $operator->operator->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <input hidden value="{{ auth()->id() }}" id="identifier-custom">
+                                            <div class="btn-group btn-group-toggle mx-3" data-toggle="buttons">
+                                                <label class="btn btn-outline-secondary">
+                                                    <input id="option1day" value="day" name="filterSelected" type="radio" autocomplete="off" checked> Day
+                                                </label>
+                                                <label class="btn btn-outline-secondary">
+                                                    <input id="option_yesterday" value="yesterday" name="filterSelected" type="radio" autocomplete="off"> Yesterday
+                                                </label>
+                                                <label class="btn btn-outline-secondary">
+                                                    <input id="option_week" value="week" name="filterSelected" type="radio" autocomplete="off"> Week
+                                                </label>
+                                                <label class="btn btn-outline-secondary">
+                                                    <input id="option2month" value="month" name="filterSelected" type="radio" autocomplete="off"> Month
+                                                </label>
+                                            </div>
+                                            <a href="{{ route('admin.report.operations') }}" class="btn btn-primary" type="button">
+                                                <svg class="c-icon">
+                                                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-cloud-download"></use>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
+                                    <div class="chartjs-size-monitor">
+                                        <div class="chartjs-size-monitor-expand">
+                                            <div class=""></div>
+                                        </div>
+                                        <div class="chartjs-size-monitor-shrink">
+                                            <div class=""></div>
+                                        </div>
+                                    </div>
+                                    <canvas class="chart chartjs-render-monitor" id="main-chart" height="300" width="1549" style="display: block;"></canvas>
+                                    <div id="main-chart-tooltip" class="c-chartjs-tooltip center" style="opacity: 0; left: 1004.14px; top: 302.554px;">
+                                        <div class="c-tooltip-header">
+                                            <div class="c-tooltip-header-item">
+                                                T
+                                            </div>
+                                        </div>
+                                        <div class="c-tooltip-body">
+                                            <div class="c-tooltip-body-item">
+                                                        <span class="c-tooltip-body-item-color" style="background-color: rgba(3, 9, 15, 0.1);">
+                                                        </span>
+                                                <span class="c-tooltip-body-item-label">My First dataset</span>
+                                                <span class="c-tooltip-body-item-value">163</span>
+                                            </div>
+                                            <div class="c-tooltip-body-item">
+                                                <span class="c-tooltip-body-item-color" style="background-color: transparent;"></span>
+                                                <span class="c-tooltip-body-item-label">My Second dataset</span>
+                                                <span class="c-tooltip-body-item-value">97</span>
+                                            </div>
+                                            <div class="c-tooltip-body-item">
+                                                <span class="c-tooltip-body-item-color" style="background-color: transparent;"></span>
+                                                <span class="c-tooltip-body-item-label">My Third dataset</span>
+                                                <span class="c-tooltip-body-item-value">65</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row text-center">
+                                    <div class="col-sm-12 col-md mb-sm-2 mb-0">
+                                        <div class="text-muted">Number of operations</div><strong id="operationsUserTotals">29.703</strong>
+                                        <div class="progress progress-xs mt-2">
+                                            <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md mb-sm-2 mb-0">
+                                        <div class="text-muted">Amount</div><strong id="amountUserTotals">24.093</strong>
+                                        <div class="progress progress-xs mt-2">
+                                            <div class="progress-bar bg-gradient-info" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md mb-sm-2 mb-0">
+                                        <div class="text-muted">Cost</div><strong id="costUserTotals">78.706</strong>
+                                        <div class="progress progress-xs mt-2">
+                                            <div class="progress-bar bg-gradient-warning" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md mb-sm-2 mb-0">
+                                        <div class="text-muted">Gain</div><strong id="gainUserTotals">22.123</strong>
+                                        <div class="progress progress-xs mt-2">
+                                            <div class="progress-bar bg-gradient-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                 @endif
 {{--                <div class="card" uk-height-viewport="offset-top: true, offset-bottom: true">--}}
 {{--                    <div class="card-body">--}}

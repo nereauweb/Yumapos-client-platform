@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\ApiReloadlyOperator;
 use App\Models\Payment;
 use App\Models\ServiceOperation;
 use Illuminate\Contracts\Auth\MustVerifyEmail;

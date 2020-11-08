@@ -11,19 +11,33 @@ use Illuminate\Support\Facades\DB;
 class ServiceOperationController extends Controller
 {
 
-    public function operations($type, $country = null) : JsonResponse
+    public function operations($type, $country = null, $operator = null, $isUser = null) : JsonResponse
     {
+        if (request()->operator && request()->operator > 0) {
+            $operator = true;
+        } else {
+            $operator = null;
+        }
+
+        if (request()->isUser == true) {
+            $isUser = true;
+        } else {
+            $isUser = null;
+        }
+
         if ($type == 'day') {
             $platformTotalOperations = DB::table('service_operations')
                 ->select(DB::raw('count(id) as operations, sum(platform_total_gain) - sum(user_discount) as gain_data, sum(sent_amount) - sum(platform_commission) as cost, sum(user_amount) as amount_data, HOUR(created_at) as label'))
-                ->whereDate('created_at', '=', '2020-09-20')
+                ->whereDate('created_at', '=', '2020-09-22')
                 ->when($country || request()->country, function ($query) use ($country) {
                     $query->where('request_country_iso', '=', $country ? $country : request()->country);
                 })
-                ->when(request()->operation, function ($query) {
-                  $query->where('request_operatorId', '=', request()->operation);
+                ->when(!is_null($isUser), function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })
-//            ->whereDate('created_at', '=', Carbon::now()->toDateString())
+                ->when(!is_null($operator), function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })
                 ->groupBy('label')
                 ->get();
             return response()->json($platformTotalOperations, 200);
@@ -34,8 +48,11 @@ class ServiceOperationController extends Controller
                 ->when($country || request()->country, function ($query) use ($country) {
                     $query->where('request_country_iso', '=', $country ? $country : request()->country);
                 })
-                ->when(request()->operation, function ($query) {
-                    $query->where('request_operatorId', '=', request()->operation);
+                ->when(!is_null($operator), function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })
+                ->when(!is_null($isUser), function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })
 //            ->whereDate('created_at', '=', Carbon::now()->toDateString())
                 ->groupBy('label')
@@ -47,8 +64,11 @@ class ServiceOperationController extends Controller
                 ->when($country || request()->country, function ($query) use ($country) {
                     $query->where('request_country_iso', '=', $country ? $country : request()->country);
                 })
-                ->when(request()->operation, function ($query) {
-                    $query->where('request_operatorId', '=', request()->operation);
+                ->when(!is_null($operator), function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })
+                ->when(!is_null($isUser), function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })
                 ->whereBetween('created_at', [Carbon::createFromDate('2020', '09', '2')->startOfWeek(), Carbon::createFromDate('2020', '09', '2')->endOfWeek()])
 //            ->whereDate('created_at', '=', Carbon::now()->toDateString())
@@ -61,8 +81,11 @@ class ServiceOperationController extends Controller
                 ->when($country || request()->country, function ($query) use ($country) {
                     $query->where('request_country_iso', '=', $country ? $country : request()->country);
                 })
-                ->when(request()->operation, function ($query) {
-                    $query->where('request_operatorId', '=', request()->operation);
+                ->when(!is_null($operator), function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })
+                ->when(!is_null($isUser), function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })
                 ->whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3))
 //            ->whereDate('created_at', '=', Carbon::now()->toDateString())
