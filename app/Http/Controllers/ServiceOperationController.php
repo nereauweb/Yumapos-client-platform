@@ -99,62 +99,136 @@ class ServiceOperationController extends Controller
 
     public function totals($type) : JsonResponse
     {
-
         switch ($type) {
             case 'day':
-                $totalsForOperations = ServiceOperation::whereDate('created_at', '=', '2020-09-20')->when(request()->country, function ($query) {
+                $totalsForOperations = ServiceOperation::whereDate('created_at', '=', '2020-09-22')
+                ->when(request()->country, function ($query) {
                     $query->where('request_country_iso', '=', request()->country);
+                })->when(request()->operator, function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })->when(request()->isUser, function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })->count();
-                $totalsForGain = ServiceOperation::whereDate('created_at', '=', '2020-09-20')->select(DB::raw('sum(platform_total_gain - user_discount) as gainSumPerDay'))->when(request()->country, function ($query) {
+                $totalsForGain = ServiceOperation::whereDate('created_at', '=', '2020-09-19')->select(DB::raw('sum(platform_total_gain - user_discount) as gainSumPerDay'))
+                ->when(request()->country, function ($query) {
                     $query->where('request_country_iso', '=', request()->country);
+                })->when(request()->operator, function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })->when(request()->isUser, function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })->first();
-                $totalsForCost = ServiceOperation::whereDate('created_at', '=', '2020-09-20')->select(DB::raw('sum(sent_amount - platform_commission) as costSumPerDay'))->when(request()->country, function ($query) {
+                $totalsForCost = ServiceOperation::whereDate('created_at', '=', '2020-09-20')->select(DB::raw('sum(sent_amount - platform_commission) as costSumPerDay'))
+                ->when(request()->country, function ($query) {
                     $query->where('request_country_iso', '=', request()->country);
+                })->when(request()->operator, function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })->when(request()->isUser, function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })->first();
                 $totalsForAmount = ServiceOperation::whereDate('created_at', '=', '2020-09-20')->when(request()->country, function ($query) {
                     $query->where('request_country_iso', '=', request()->country);
+                })->when(request()->operator, function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })->when(request()->isUser, function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })->sum('user_amount');
                 break;
             case 'yesterday':
-                $totalsForOperations = ServiceOperation::whereDate('created_at', '=', '2020-09-19')->when(request()->country, function ($query) {
+                $totalsForOperations = ServiceOperation::whereDate('created_at', '=', '2020-09-19')
+                ->when(request()->country, function ($query) {
                     $query->where('request_country_iso', '=', request()->country);
+                })->when(request()->operator, function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })->when(request()->isUser, function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })->count();
-                $totalsForGain = ServiceOperation::whereDate('created_at', '=', '2020-09-19')->when(request()->country, function ($query) {
+                $totalsForGain = ServiceOperation::whereDate('created_at', '=', '2020-09-19')
+                ->when(request()->country, function ($query) {
                     $query->where('request_country_iso', '=', request()->country);
+                })->when(request()->operator, function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })->when(request()->isUser, function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })->select(DB::raw('sum(platform_total_gain - user_discount) as gainSumPerDay'))->first();
-                $totalsForCost = ServiceOperation::whereDate('created_at', '=', '2020-09-19')->when(request()->country, function ($query) {
+                $totalsForCost = ServiceOperation::whereDate('created_at', '=', '2020-09-19')
+                ->when(request()->country, function ($query) {
                     $query->where('request_country_iso', '=', request()->country);
+                })->when(request()->operator, function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })->when(request()->isUser, function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })->select(DB::raw('sum(sent_amount - platform_commission) as costSumPerDay'))->first();
-                $totalsForAmount = ServiceOperation::whereDate('created_at', '=', '2020-09-19')->when(request()->country, function ($query) {
+                $totalsForAmount = ServiceOperation::whereDate('created_at', '=', '2020-09-19')
+                ->when(request()->country, function ($query) {
                     $query->where('request_country_iso', '=', request()->country);
+                })->when(request()->operator, function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })->when(request()->isUser, function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })->sum('user_amount');
                 break;
             case 'week':
-                $totalsForOperations = ServiceOperation::whereBetween('created_at', [Carbon::createFromDate('2020', '09', '2')->startOfWeek(), Carbon::createFromDate('2020', '09', '2')->endOfWeek()])->when(request()->country, function ($query) {
+                $totalsForOperations = ServiceOperation::whereBetween('created_at', [Carbon::createFromDate('2020', '09', '2')->startOfWeek(), Carbon::createFromDate('2020', '09', '2')->endOfWeek()])
+                ->when(request()->country, function ($query) {
                     $query->where('request_country_iso', '=', request()->country);
+                })->when(request()->operator, function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })->when(request()->isUser, function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })->count();
-                $totalsForGain = ServiceOperation::whereBetween('created_at', [Carbon::createFromDate('2020', '09', '2')->startOfWeek(), Carbon::createFromDate('2020', '09', '2')->endOfWeek()])->when(request()->country, function ($query) {
+                $totalsForGain = ServiceOperation::whereBetween('created_at', [Carbon::createFromDate('2020', '09', '2')->startOfWeek(), Carbon::createFromDate('2020', '09', '2')->endOfWeek()])
+                ->when(request()->country, function ($query) {
                     $query->where('request_country_iso', '=', request()->country);
+                })->when(request()->operator, function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })->when(request()->isUser, function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })->select(DB::raw('sum(platform_total_gain - user_discount) as gainSumPerDay'))->first();
-                $totalsForCost = ServiceOperation::whereBetween('created_at', [Carbon::createFromDate('2020', '09', '2')->startOfWeek(), Carbon::createFromDate('2020', '09', '2')->endOfWeek()])->when(request()->country, function ($query) {
+                $totalsForCost = ServiceOperation::whereBetween('created_at', [Carbon::createFromDate('2020', '09', '2')->startOfWeek(), Carbon::createFromDate('2020', '09', '2')->endOfWeek()])
+                ->when(request()->country, function ($query) {
                     $query->where('request_country_iso', '=', request()->country);
+                })->when(request()->operator, function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })->when(request()->isUser, function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })->select(DB::raw('sum(sent_amount - platform_commission) as costSumPerDay'))->first();
-                $totalsForAmount = ServiceOperation::whereBetween('created_at', [Carbon::createFromDate('2020', '09', '2')->startOfWeek(), Carbon::createFromDate('2020', '09', '2')->endOfWeek()])->when(request()->country, function ($query) {
+                $totalsForAmount = ServiceOperation::whereBetween('created_at', [Carbon::createFromDate('2020', '09', '2')->startOfWeek(), Carbon::createFromDate('2020', '09', '2')->endOfWeek()])
+                ->when(request()->country, function ($query) {
                     $query->where('request_country_iso', '=', request()->country);
+                })->when(request()->operator, function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })->when(request()->isUser, function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })->sum('user_amount');
                 break;
             case 'month':
                 $totalsForOperations = ServiceOperation::whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3))->when(request()->country, function ($query) {
                     $query->where('request_country_iso', '=', request()->country);
+                })->when(request()->operator, function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })->when(request()->isUser, function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })->count();
                 $totalsForGain = ServiceOperation::whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3))->when(request()->country, function ($query) {
                     $query->where('request_country_iso', '=', request()->country);
+                })->when(request()->operator, function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })->when(request()->isUser, function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })->select(DB::raw('sum(platform_total_gain - user_discount) as gainSumPerDay'))->first();
                 $totalsForCost = ServiceOperation::whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3))->when(request()->country, function ($query) {
                     $query->where('request_country_iso', '=', request()->country);
+                })->when(request()->operator, function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })->when(request()->isUser, function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })->select(DB::raw('sum(sent_amount - platform_commission) as costSumPerDay'))->first();
                 $totalsForAmount = ServiceOperation::whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3))->when(request()->country, function ($query) {
                     $query->where('request_country_iso', '=', request()->country);
+                })->when(request()->operator, function ($query) {
+                    $query->where('request_operatorId', request()->operator);
+                })->when(request()->isUser, function ($query) {
+                    $query->where('user_id', request()->user_id);
                 })->sum('user_amount');
                 break;
             default:

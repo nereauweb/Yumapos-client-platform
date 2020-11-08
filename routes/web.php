@@ -168,7 +168,7 @@ Route::group(['middleware' => ['get.menu']], function () {
 	Route::group(['middleware' => ['role:user|sales']], function () {
 
 //	    chart data
-        Route::post('/admin/internal/services/operations/totals/{type}', 'ServiceOperationController@totals'); // endpoint for initial calculations (daily)
+        Route::post('/user/internal/services/operations/totals/{type}', 'ServiceOperationController@totals'); // endpoint for initial calculations (daily)
         Route::post('user/internal/services/{type}', 'ServiceOperationController@operations');  // data for operations
         Route::post('/admin/internal/services/countries/{country}', 'ServiceOperationController@countries');  // data for operations
 

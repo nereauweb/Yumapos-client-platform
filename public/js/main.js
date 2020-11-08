@@ -489,10 +489,10 @@ const initialUserData = () => {
 }
 
 
-if (totalsOperations) {
+if (!user_identifier) {
     user_object.isUser = false;
     initialData();
-    loadTotals('day', 0);
+    loadTotals('admin','day', 0, 0, 0);
     let checkedFilter = document.querySelector('input[name="filterSelected"]:checked');
     checkedFilter.parentElement.classList.add('active');
 
@@ -504,19 +504,19 @@ if (totalsOperations) {
             switch (filter.value) {
                 case 'day':
                     fetchData('/admin/internal/services', 'day', countrified, operatorField);
-                    loadTotals('day', countrified, operatorField);
+                    loadTotals('admin','day', countrified, operatorField);
                     break;
                 case 'yesterday':
                     fetchData('/admin/internal/services', 'yesterday', countrified, operatorField);
-                    loadTotals('yesterday', countrified, operatorField);
+                    loadTotals('admin','yesterday', countrified, operatorField);
                     break;
                 case 'week':
                     fetchData('/admin/internal/services', 'week', countrified, operatorField);
-                    loadTotals('week', countrified, operatorField);
+                    loadTotals('admin','week', countrified, operatorField);
                     break;
                 case 'month':
                     fetchData('/admin/internal/services', 'month', countrified, operatorField);
-                    loadTotals('month', countrified, operatorField);
+                    loadTotals('admin','month', countrified, operatorField);
                     break;
                 default:
                     alert('coding error!');
@@ -526,12 +526,12 @@ if (totalsOperations) {
 
     country_filter.onchange = () => {
         fetchData('/admin/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
-        loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+        loadTotals('admin',document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
     }
 
     operator_filter.onchange = () => {
         fetchData('/admin/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
-        loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+        loadTotals('admin',document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
     }
 
 } else {
@@ -549,19 +549,19 @@ if (totalsOperations) {
             switch (filter.value) {
                 case 'day':
                     fetchData('/user/internal/services', 'day', countrified, operatorField, user_object);
-                    // loadTotals('day', countrified, operatorField);
+                    loadTotals('user','day', countrified, operatorField, user_object);
                     break;
                 case 'yesterday':
                     fetchData('/user/internal/services', 'yesterday', countrified, operatorField, user_object);
-                    // loadTotals('yesterday', countrified, operatorField);
+                    loadTotals('user','yesterday', countrified, operatorField);
                     break;
                 case 'week':
                     fetchData('/user/internal/services', 'week', countrified, operatorField, user_object);
-                    // loadTotals('week', countrified, operatorField);
+                    loadTotals('user','week', countrified, operatorField, user_object);
                     break;
                 case 'month':
                     fetchData('/user/internal/services', 'month', countrified, operatorField, user_object);
-                    // loadTotals('month', countrified, operatorField);
+                    loadTotals('user','month', countrified, operatorField, user_object);
                     break;
                 default:
                     alert('coding error!');
@@ -578,11 +578,12 @@ if (totalsOperations) {
             // loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
         }
     });
+    loadTotals('user',document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value, user_object);
 }
 
 // loads the items below chart when initialized
-function loadTotals(type, country, operator) {
-    fetch(`/admin/internal/services/operations/totals/${type}`, {
+function loadTotals(path,type, country, operator, user_object) {
+    fetch(`/${path}/internal/services/operations/totals/${type}`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
@@ -591,7 +592,9 @@ function loadTotals(type, country, operator) {
         },
         body: JSON.stringify({
             'country': country,
-            'operator': operator
+            'operator': operator,
+            'user_id': user_object ? user_object.user_id : null,
+            'isUser': user_object ? user_object.isUser : false
         })
     }).then(response => response.json()).then(response => {
         totalsOperations.innerText = `${response.totalsForOperations}`;

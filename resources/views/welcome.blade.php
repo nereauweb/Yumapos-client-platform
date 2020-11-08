@@ -803,25 +803,25 @@
                             <div class="card-footer">
                                 <div class="row text-center">
                                     <div class="col-sm-12 col-md mb-sm-2 mb-0">
-                                        <div class="text-muted">Number of operations</div><strong id="operationsUserTotals">29.703</strong>
+                                        <div class="text-muted">Number of operations</div><strong id="operationsTotals">29.703</strong>
                                         <div class="progress progress-xs mt-2">
                                             <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md mb-sm-2 mb-0">
-                                        <div class="text-muted">Amount</div><strong id="amountUserTotals">24.093</strong>
+                                        <div class="text-muted">Amount</div><strong id="amountTotals">24.093</strong>
                                         <div class="progress progress-xs mt-2">
                                             <div class="progress-bar bg-gradient-info" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md mb-sm-2 mb-0">
-                                        <div class="text-muted">Cost</div><strong id="costUserTotals">78.706</strong>
+                                        <div class="text-muted">Cost</div><strong id="costTotals">78.706</strong>
                                         <div class="progress progress-xs mt-2">
                                             <div class="progress-bar bg-gradient-warning" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md mb-sm-2 mb-0">
-                                        <div class="text-muted">Gain</div><strong id="gainUserTotals">22.123</strong>
+                                        <div class="text-muted">Gain</div><strong id="gainTotals">22.123</strong>
                                         <div class="progress progress-xs mt-2">
                                             <div class="progress-bar bg-gradient-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
