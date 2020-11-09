@@ -11,6 +11,7 @@ use App\Models\MenuLangList;
 use App\Models\RoleHierarchy;
 use App;
 use Spatie\Permission\Models\Role;
+use App\Models\ServiceCategory;
 
 class GetMenu
 {
@@ -26,6 +27,7 @@ class GetMenu
         if (session()->has('locale')) {
             App::setLocale(session()->get('locale'));
         }
+		$extra = '';
         if (Auth::check()){
             $role = 'guest';
             //$role =  Auth::user()->menuroles;
@@ -50,12 +52,26 @@ class GetMenu
         }else{
             $role = 'guest';
         }
+		if ($role == 'user' ){
+			$extra = '<li class="c-sidebar-nav-title">                         
+				Servizi
+			</li>';
+			$categories = ServiceCategory::all();
+			foreach ($categories as $category){
+				$extra .= '<li class="c-sidebar-nav-item">
+							<a class="c-sidebar-nav-link c-active" href="/users/services/category/'.$category->id.'">				 
+							'.$category->name.'
+							</a>
+						</li>';
+			}
+		}
         $menus = new GetSidebarMenu();
         $menulists = Menulist::all();
         $result = array();
         foreach($menulists as $menulist){
             $result[ $menulist->name ] = $menus->get( $role, App::getLocale(), $menulist->id );
         }
+        view()->share('appMenuExtra', $extra );
         view()->share('appMenus', $result );
         view()->share('locales', MenuLangList::all() );
         view()->share('appLocale', App::getLocale() );

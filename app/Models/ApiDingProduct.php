@@ -36,6 +36,9 @@ class ApiDingProduct extends Model
 		'description_localization_key',
 		'description_language_code',
 		];
+		
+	public $type = '';
+	public $fx_rate = 0;
 
 	public function setting_definitions(){ return $this->hasMany('App\Models\ApiDingProductSettingDefinition','product_id'); }
 	public function maximum(){ return $this->hasOne('App\Models\ApiDingProductMaximum','product_id'); }
@@ -44,12 +47,7 @@ class ApiDingProduct extends Model
 	public function payment_types(){ return $this->hasMany('App\Models\ApiDingProductPaymentType','product_id'); }
 	public function operator(){ return $this->hasOne('App\Models\ApiDingOperator','ProviderCode','ProviderCode'); }
 	
-	public function type(){
-		if ($this->minimum->SendValue==$this->maximum->SendValue){
-			return 'FIXED';
-		}
-		return 'RANGE';
-	}
+	
 	
 	public function configurations(){ 
 		return $this->hasMany('App\Models\ApiDingProductConfiguration','product_id','id'); 
@@ -64,9 +62,22 @@ class ApiDingProduct extends Model
 		return $configuration && $configuration->fx_delta_percent != 0 ? $this->fx->rate - $this->fx->rate * $configuration->fx_delta_percent / 100 : $this->fx->rate;
 	}
 	
+	public function type(){
+		if ($this->type==''){
+			if ($this->minimum&&$this->maximum){
+				$this->type = $this->minimum->SendValue==$this->maximum->SendValue ? 'FIXED' : 'RANGE';
+			}
+		}
+		return $this->type;
+	}
 	
 	public function fx_rate(){
-		return $this->minimum->ReceiveValue / $this->minimum->SendValue;
+		if ($this->fx_rate==0){
+			if ($this->minimum&&$this->maximum){
+				$this->fx_rate = round( $this->minimum->ReceiveValue / $this->minimum->SendValue , 3 );
+			}
+		}
+		return $this->fx_rate;
 	}
 	
 }

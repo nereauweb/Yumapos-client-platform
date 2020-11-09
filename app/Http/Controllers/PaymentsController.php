@@ -26,10 +26,6 @@ class PaymentsController extends Controller
 
 	public function export(Request $request)
     {
-//        dd($request->all());
-//		$payments = Payment::select("payments.id","payments.date","payments.user_id","users.name","payments.amount","payments.details","payments.created_at","payments.updated_at")
-//			->join('users', 'users.id', '=', 'payments.user_id')
-//			->get();
         $date_begin = ($request->from && !is_null($request->from)) ? $request->from . ' 00:00:00' : date("Y") . '-01-01 00:00:00';
         $date_end = ($request->to && !is_null($request->to)) ? $request->to . ' 23:59:59' : date("Y") . '-12-31 23:59:59';
         $payments = Payment::leftJoin('users as u', 'u.id', '=', 'payments.user_id')->where('payments.date', '>=', $date_begin)->where('payments.date', '<=', $date_end)
@@ -99,7 +95,7 @@ class PaymentsController extends Controller
 
     }
 
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         $payment = Payment::findOrFail($id);
         return view('admin.payments.edit', compact('payment'));

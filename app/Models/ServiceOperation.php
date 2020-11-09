@@ -18,6 +18,7 @@ class ServiceOperation extends Model
     protected $table = 'service_operations';
 	
 	protected $fillable = [
+		'provider',
 		'user_id',
 		'api_reloadly_calls_id',
 		'api_reloadly_operations_id',
@@ -51,7 +52,13 @@ class ServiceOperation extends Model
 	}
 	
 	public function operator(){ 
-		return $this->hasOne('App\Models\ApiReloadlyOperator','operatorId','request_operatorId'); 
+		if ($this->provider == 'reloadly'){
+			return $this->hasOne('App\Models\ApiReloadlyOperator','operatorId','request_operatorId'); 
+		}
+		if ($this->provider == 'ding'){
+			return $this->hasOne('App\Models\ApiDingOperator','ProviderCode','request_ProviderCode'); 
+		}
+		return false;
 	}
 	
 	public function user(){ 

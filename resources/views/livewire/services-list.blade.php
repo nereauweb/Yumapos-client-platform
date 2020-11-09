@@ -89,20 +89,20 @@
                                 @if($service_operator->ding)
                                     {{ $service_operator->ding->Name ? $service_operator->ding->Name : 'undefined ('.$service_operator->ding_ProviderCode.')' }}
                                 @else
-{{--                                    <select class="form-control form-control-sm ding-select" data-id="{{ $service_operator->id }}">--}}
-{{--                                        <option value=""></option>--}}
-{{--                                        {!! $ding_operators_options !!}--}}
-{{--                                    </select>--}}
+                                   <select class="form-control form-control-sm ding-select" data-id="{{ $service_operator->id }}">
+                                       <option value=""></option>
+                                        {!! $ding_operators_options !!}
+                                   </select>
                                 @endif
                             </td>
                             <td>
                                 @if($service_operator->reloadly)
                                     {{ $service_operator->reloadly->name ? $service_operator->reloadly->name : 'undefined ('.$service_operator->reloadly_operatorId.')' }}
                                 @else
-{{--                                    <select class="form-control form-control-sm reloadly-select" data-id="{{ $service_operator->id }}">--}}
-{{--                                        <option value=""></option>--}}
-{{--                                        {!! $reloadly_operators_options !!}--}}
-{{--                                    </select>--}}
+									<select class="form-control form-control-sm reloadly-select" data-id="{{ $service_operator->id }}">
+										<option value=""></option>
+										{!! $reloadly_operators_options !!}
+									</select>
                                 @endif
                             </td>
                         </tr>

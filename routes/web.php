@@ -11,8 +11,7 @@
 |
 */
 
-use App\Models\Payment;
-use App\User;
+
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Contracts\Role;
@@ -36,36 +35,8 @@ Route::group(['middleware' => ['get.menu']], function () {
 	})->name('admin.users.impersonate');
 
 	Route::get('/page', function () {       return view('frontend.page'); });
-    //Route::get('/backend', function () {    return view('dashboard.homepage'); });
-	Route::get('/backend', function () {
-		if(Auth::guest()) {
-			return redirect('login');
-		}
-        if (Auth::User() && Auth()->user()->hasRole('admin')) {
-
-            $paymentsCount = Payment::where('approved', 0)->count();
-            $paymentsPending = Payment::where('approved', 0)->limit(3)->orderBy('created_at', 'desc')->get();
-
-            $paymentsData = [
-                'totals' => $paymentsCount,
-                'pending' => $paymentsPending,
-            ];
-
-            $usersCount = User::where('state', 0)->count();
-            $usersPending = User::where('state', 0)->limit(3)->orderBy('created_at', 'desc')->get();
-
-            $usersData = [
-                'totals' => $usersCount,
-                'pending' => $usersPending
-            ];
-
-            $users = User::orderBy('state', 'asc')->paginate(10, ['*'], 'users');
-            return view('welcome', compact( 'paymentsData', 'usersData'));
-        } else {
-            return view('welcome');
-        }
-
-    });
+    
+	Route::get('/backend', 'HomeController@index')->name('home');
 
 	/*
     Route::group(['middleware' => ['role:user']], function () {
@@ -175,8 +146,10 @@ Route::group(['middleware' => ['get.menu']], function () {
 		Route::get('/users/info', function () { return view('users.info'); });
 
 		Route::prefix('/users/services')->group(function () {
+			Route::get('/category/{id}', 'PointServiceController@category')->name('users.services.category');
 			Route::get('/input', 'PointServiceController@input')->name('users.services.input');
-			Route::post('/preview', 'ApiReloadlyController@user_input_phone_number')->name('users.services.preview');
+			//Route::post('/preview', 'ApiReloadlyController@user_input_phone_number')->name('users.services.preview');
+			Route::post('/preview', 'PointServiceController@preview')->name('users.services.preview');
 			Route::get('/preview/operator/{id}', 'ApiReloadlyController@user_operator_selected')->name('users.services.preview.operator');
 			Route::post('/transaction', 'ApiReloadlyController@user_recharge_request')->name('users.services.transaction');
 			Route::get('/transaction/result', 'ApiReloadlyController@user_recharge')->name('users.services.transaction.result');
@@ -264,7 +237,9 @@ Route::group(['middleware' => ['get.menu']], function () {
         Route::post('/admin/user/approve/{user}', 'UsersController@approve')->name('admin.user.approve');
         Route::get('/admin/users/export', 'UsersController@export')->name('admin.user.export');
 
+        Route::resource('/admin/payments/',  'PaymentsController', [ 'names' => 'admin.payments' ]);
 		Route::prefix('/admin/payments')->group(function () {
+            Route::get('/{id}/edit', 'PaymentsController@edit')->name('admin.payments.edit');
             Route::get('/export', 'PaymentsController@export')->name('admin.payments.export');
             Route::put('payments/cancel/{payment}', 'PaymentsController@cancel')->name('admin.payments.cancel');
             Route::put('/approve/{ids}', 'PaymentsController@updatePaymentStatus')->name('admin.payments.updatePaymentStatus');
@@ -274,12 +249,12 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::get('/pay-provider', 'PaymentsController@payProvider')->name('admin.payProvider');
             Route::post('/pay-provider', 'PaymentsController@payProviderStore')->name('admin.payProviderStore');
             Route::post('/pay-user', 'PaymentsController@payUserStore')->name('admin.payments.payUserStore');
-            Route::resource('/',  'PaymentsController', [ 'names' => 'admin.payments' ]);
         });
 
 		Route::prefix('/admin/api/reloadly')->group(function () {
 			Route::get('/', 'ApiReloadlyController@index')->name('admin.api.reloadly.index');
             Route::get('/balance', 'ApiReloadlyController@balance')->name('admin.api.reloadly.balance');
+            Route::get('/cached_balance', 'ApiReloadlyController@get_cache_balance')->name('admin.api.reloadly.cached_balance');
             Route::get('/discounts', 'ApiReloadlyController@discounts')->name('admin.api.reloadly.discounts');
             Route::post('/fx_rates', 'ApiReloadlyController@fx_rates')->name('admin.api.reloadly.fx_rates');
             Route::get('/countries', 'ApiReloadlyController@countries')->name('admin.api.reloadly.countries');
@@ -306,6 +281,7 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::get('/Products/save', 'ApiDingController@Products_save')->name('admin.api.ding.Products.save');
             Route::get('/ProductDescriptions', 'ApiDingController@ProductDescriptions')->name('admin.api.ding.ProductDescriptions');
             Route::get('/Balance', 'ApiDingController@Balance')->name('admin.api.ding.Balance');
+            Route::get('/cached_balance', 'ApiDingController@get_cache_balance')->name('admin.api.ding.cached_balance');
             Route::get('/Promotions', 'ApiDingController@Promotions')->name('admin.api.ding.Promotions');
             Route::get('/PromotionDescriptions', 'ApiDingController@PromotionDescriptions')->name('admin.api.ding.PromotionDescriptions');
             Route::post('/AccountLookup', 'ApiDingController@AccountLookup')->name('admin.api.ding.account_lookup');

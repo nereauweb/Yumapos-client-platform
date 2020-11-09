@@ -20,4 +20,8 @@ class ServiceCountry extends Model
 		'name',
 	];
 	
+	public function operators(){ 
+		return $this->hasMany('App\Models\ServiceOperator','country_id','id'); 
+	}
+	
 }

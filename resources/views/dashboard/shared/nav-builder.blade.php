@@ -57,6 +57,9 @@ if(!function_exists('renderDropdown')){
                         {{ $menuel['name'] }}
                     </li>
                 @endif
+				@if (isset($menuel['href'])&&$menuel['href']=='/backend')
+					{!! $appMenuExtra !!}
+				@endif
             @endforeach
         @endif
         </ul>

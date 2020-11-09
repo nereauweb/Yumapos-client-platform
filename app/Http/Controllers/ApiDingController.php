@@ -403,14 +403,33 @@ class ApiDingController extends Controller
 		$request_description = 'Balance';
 		try{
 			$result = $this->ding->getBalance();
-            if (Cache::has('ding_cache_balance')) {
-                Cache::forget('ding_cache_balance');
-            }
-            Cache::forever('ding_cache_balance', $result); // to store current value of the api ding balance, currently you have to visit the balance route to go through the request and only after that we get to see the re
+			if (isset($result['balance'])){
+				if (Cache::has('ding_cache_balance_'.date('w'))) {
+					Cache::forget('ding_cache_balance_'.date('w'));
+				}
+				Cache::forever('ding_cache_balance_'.date('w'), $result['balance']); 
+			}
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
 		return view('admin/api/ding/test', compact('request_description','result'));
+	}
+	
+	public function get_cache_balance(){
+		try{
+			$result = $this->ding->getBalance();
+			if (isset($result['balance'])){
+				if (Cache::has('ding_cache_balance_'.date('w'))) {
+					Cache::forget('ding_cache_balance_'.date('w'));
+				}
+				Cache::forever('ding_cache_balance_'.date('w'), $result['balance']); 
+				return $result['balance'];
+			}
+			return 'error';
+		} catch (Exception $ex){
+			$result = $ex->getMessage();
+			return 'error';
+		}
 	}
 
 	public function Promotions(Request $request)

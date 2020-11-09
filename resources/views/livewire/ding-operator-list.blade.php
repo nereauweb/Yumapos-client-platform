@@ -19,14 +19,6 @@
                             @endforeach
                         </select>
                     </div>
-                    <div>
-                        {{--                        <select wire:model.defer="type" name="typesList" id="typesId" class="custom-select">--}}
-                        {{--                            <option value="0">Every type</option>--}}
-                        {{--                            @foreach ($typesList as $item)--}}
-                        {{--                                <option value="{{$item->denominationType}}">{{$item->denominationType}}</option>--}}
-                        {{--                            @endforeach--}}
-                        {{--                        </select>--}}
-                    </div>
                     <div class="input-group-append">
                         <button wire:click="commit" class="btn btn-success" type="button"
                                 id="commitBtn">Commit</button>
@@ -78,7 +70,7 @@
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <div class="uk-width-small">
                                             <a class="btn btn-success details dropdown-item" href="#"
-                                               data-product-id="{{ $dingOperator->id }}">
+                                               data-operator-id="{{ $dingOperator->id }}">
                                                 <svg class="c-icon">
                                                     <use
                                                         xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-magnifying-glass">
@@ -86,7 +78,7 @@
                                                 </svg>
                                                 <span>Details</span>
                                             </a>
-                                            <a class="btn btn-info edit dropdown-item" href="#" data-product-id="{{ $dingOperator->id }}">
+                                            <a class="btn btn-info edit dropdown-item" href="#" data-operator-id="{{ $dingOperator->id }}">
                                                 <svg class="c-icon">
                                                     <use
                                                         xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-description">
@@ -100,7 +92,7 @@
                             </td>
                             <td>{{ $dingOperator->country->CountryName }}</td>
                             <td>{{ $dingOperator->Name }}</td>
-                            <td></td>
+                            <td>{{ $dingOperator->products()->first() ? $dingOperator->products()->first()->type() : '' }}</td>
                         </tr>
                     @endforeach
                     </tbody>

@@ -37,8 +37,8 @@ class DingController extends Controller
      */
     public function show($id)
 	{
-		$product = ApiDingProduct::find($id);
-		return view('admin/ding/details', compact('product') );
+		$operator = ApiDingOperator::find($id);
+		return view('admin/ding/details', compact('operator') );
     }
 
     /**
@@ -48,9 +48,9 @@ class DingController extends Controller
      */
     public function edit($id)
     {
-		$product = ApiDingProduct::find($id);
+		$operator = ApiDingOperator::find($id);
 		$groups = UsersGroup::where('type',1)->get();
-		return view('admin/ding/edit', compact('product','groups','id') );
+		return view('admin/ding/edit', compact('operator','groups','id') );
     }
 
     /**

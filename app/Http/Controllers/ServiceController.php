@@ -95,6 +95,7 @@ class ServiceController extends Controller
 	
 	public function index()
     {
+		/*
 		$ding_operators = ApiDingOperator::pluck('ProviderCode','Name');
 		$ding_operators_options = '';
 		foreach($ding_operators as $ding_operator_name => $ding_ProviderCode){
@@ -137,7 +138,8 @@ class ServiceController extends Controller
 			$reloadly_operators_options .= '<option value="'.$reloadly_operatorId.'">'.$reloadly_operator_name.'</option>';
 		}
 		$service_operators = ServiceOperator::limit(100)->orderBy('name')->get();
-        return view('admin/service/list', compact('service_operators','ding_operators','ding_operators_options','reloadly_operators','reloadly_operators_options'));
+		*/
+        return view('admin/service/list');
     }
 	
 	public function deleted()
@@ -271,9 +273,26 @@ class ServiceController extends Controller
 	public function associate(Request $request, $id){
 		$service_operator = ServiceOperator::find($id);
 		if (!$service_operator){
-			return 'Service operator ID '.$request->input('operator').' not found';
+			return 'Target service operator ID '.$request->input('operator').' not found';
 		}
-		return 'Under development';
+		if ($request->input('provider')=='ding'){
+			$old_service_operator = ServiceOperator::where('ding_ProviderCode',$request->input('identifier'))->first();
+		}
+		if ($request->input('provider')=='reloadly'){
+			$old_service_operator = ServiceOperator::where('reloadly_operatorId',$request->input('identifier'))->first();		
+		}
+		if (!isset($old_service_operator)||!$old_service_operator){
+			return 'Source service operator '.$request->input('provider').' '.$request->input('identifier').' not found';
+		}
+		if ($request->input('provider')=='ding'){
+			$service_operator->ding_ProviderCode = $request->input('identifier');
+		}
+		if ($request->input('provider')=='reloadly'){
+			$service_operator->reloadly_operatorId = $request->input('identifier');			
+		}
+		$service_operator->save();
+		$old_service_operator->delete();
+		return 'OK';
 	}
 	
 }

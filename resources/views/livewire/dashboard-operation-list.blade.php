@@ -3,10 +3,10 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        Traffic &amp; Sales
-                    </div>
+                <div class="d-flex justify-content-between">										
+					<div>
+						<h4 class="card-title mb-0 mt-1">Traffic &amp; Sales</h4>
+					</div>
                     <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
                         <div class="d-flex">
                             <div class="btn-group btn-group-toggle mx-3" data-toggle="buttons">
@@ -23,6 +23,9 @@
                                     <input wire:model="filterSelected" value="month" name="filterSelectedOperation" type="radio" autocomplete="off"> Month
                                 </label>
                             </div>
+							<a href="{{ route('admin.report.operations') }}" class="btn btn-primary" type="button">
+								<i class="cil-library"></i> 
+							</a>
                         </div>
                     </div>
                 </div>

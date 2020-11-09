@@ -30,8 +30,8 @@ class ServicesList extends Component
     public function render()
     {
         $ding_operators = ApiDingOperator::pluck('ProviderCode','Name');
-//        $this->ding_operators_options = '';
-//        foreach($this->ding_operators as $ding_operator_name => $ding_ProviderCode){
+        $ding_operators_options = '';
+        foreach($ding_operators as $ding_operator_name => $ding_ProviderCode){
 //            $service_operator = ServiceOperator::where('name',$ding_operator_name)->orWhere('ding_ProviderCode',$ding_ProviderCode)->first();
 //            if ($service_operator){
 //                $service_operator->ding_providerCode = $ding_ProviderCode;
@@ -46,12 +46,12 @@ class ServicesList extends Component
 //                    'ding_ProviderCode' => $ding_ProviderCode,
 //                ]);
 //            }
-//            $this->ding_operators_options .= '<option value="'.$ding_ProviderCode.'">'.$ding_operator_name.'</option>';
-//        }
+            $ding_operators_options .= '<option value="'.$ding_ProviderCode.'">'.$ding_operator_name.'</option>';
+        }
 
         $reloadly_operators = ApiReloadlyOperator::pluck('operatorId','name');
-//        $this->reloadly_operators_options = '';
-//        foreach($this->reloadly_operators as $reloadly_operator_name => $reloadly_operatorId){
+        $reloadly_operators_options = '';
+        foreach($reloadly_operators as $reloadly_operator_name => $reloadly_operatorId){
 //            $service_operator = ServiceOperator::where('name',$reloadly_operator_name)->orWhere('reloadly_operatorId',$reloadly_operatorId)->first();
 //            if ($service_operator){
 //                if (!$service_operator->reloadly_operatorId == $reloadly_operatorId){
@@ -68,8 +68,8 @@ class ServicesList extends Component
 //                    'reloadly_operatorId' => $reloadly_operatorId,
 //                ]);
 //            }
-//            $this->reloadly_operators_options .= '<option value="'.$reloadly_operatorId.'">'.$reloadly_operator_name.'</option>';
-//        }
+            $reloadly_operators_options .= '<option value="'.$reloadly_operatorId.'">'.$reloadly_operator_name.'</option>';
+        }
         $countriesList = ServiceCountry::orderBy('name')->select(['name', 'id'])->get();
         $service_operators = ServiceOperator::when($this->sortField, function ($query) {
             $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
@@ -84,7 +84,7 @@ class ServicesList extends Component
         })->when($this->countrySelected, function ($query) {
             $query->where('country_id', $this->countrySelected);
         })->paginate(10);
-        return view('livewire.services-list', ['ding_operators' => $ding_operators, 'reloadly_operators' => $reloadly_operators, 'service_operators' => $service_operators, 'countriesList' => $countriesList]);
+        return view('livewire.services-list', compact('ding_operators', 'reloadly_operators', 'service_operators', 'countriesList', 'ding_operators_options', 'reloadly_operators_options'));
     }
 
     public function sortBy($field)

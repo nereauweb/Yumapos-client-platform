@@ -185,6 +185,10 @@ class AccountLookup implements ModelInterface, ArrayAccess
         $this->container['provider_code'] = isset($data['provider_code']) ? $data['provider_code'] : null;
         $this->container['region_code'] = isset($data['region_code']) ? $data['region_code'] : null;
     }
+	
+	public function getData(){
+		return $this->container;
+	}
 
     /**
      * Show all the invalid properties with reasons.

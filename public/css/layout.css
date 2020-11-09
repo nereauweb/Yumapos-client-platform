@@ -87,3 +87,12 @@ html:not([dir="rtl"]) .custom-select-sm {
 	text-transform: uppercase;
 	transition: 0.3s;
 }
+.card-body {
+	padding: 1rem;
+}
+.c-dark-theme .card-title, .c-dark-theme .card-header h3,  .c-dark-theme h2, .c-dark-theme h3, .c-dark-theme h4 {
+	color: #f9f9f9;
+}
+.c-dark-theme .uk-form-label {
+	color: #e1e1e1;
+}

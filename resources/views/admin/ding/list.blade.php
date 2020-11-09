@@ -90,14 +90,14 @@
 		$(document).ready(function(){
 			$('#admin-table').on('click','.details',function(e){
 				e.preventDefault();
-				productID = $(this).data('product-id');
-				$('#details-modal').load('/admin/service/ding/'+productID+' #content');
+				operatorID = $(this).data('operator-id');
+				$('#details-modal').load('/admin/service/ding/'+operatorID+' #content');
 				UIkit.modal('#details-modal').show();
 			});
 			$('#admin-table').on('click','.edit',function(e){
 				e.preventDefault();
-				productID = $(this).data('product-id');
-				$('#edit-modal').load('/admin/service/ding/'+productID+'/edit #content');
+				operatorID = $(this).data('operator-id');
+				$('#edit-modal').load('/admin/service/ding/'+operatorID+'/edit #content');
 				UIkit.modal('#edit-modal').show();
 			});
 		});

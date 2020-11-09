@@ -16,3 +16,4 @@ composer.phar
 /.idea
 # release
 /coreui-pro-laravel-admin-template*.zip
+/resources/certs

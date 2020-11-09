@@ -109,12 +109,6 @@ class ApiReloadlyController extends Controller
 		curl_close($ch);
 		$this->call_id = $this->log_call('get',$full_path,'',$response);
         $data = json_decode($response, true);
-		if (isset($data['balance'])) {
-            if (Cache::has('reloadly_cache_balance')) {
-                Cache::forget('reloadly_cache_balance');
-            }
-            Cache::forever('reloadly_cache_balance', $data); // to store current value of the api reloadly balance, currently you have to visit the balance route to go through the request and only after that we get to see the result in dashboard
-        }
 		if ($return_data) { return $data; }
 		return view('admin/api/reloadly/dump', ['log' => $this->log, 'data' => $data] );
 	}
@@ -176,8 +170,32 @@ class ApiReloadlyController extends Controller
 
     public function balance(Request $request)
     {
-		return $this->get_call('/accounts/balance');
+		$call = $this->get_call('/accounts/balance');
+		if (isset($call['data']['balance'])){
+			if (Cache::has('reloadly_cache_balance_'.date('w'))) {
+				Cache::forget('reloadly_cache_balance_'.date('w'));
+			}
+			Cache::forever('reloadly_cache_balance_'.date('w'), $call['data']['balance']); 
+		}
+		return $call;
     }
+	
+	public function get_cache_balance(){
+		try{
+			$call = $this->get_call('/accounts/balance');
+			if (isset($call['data']['balance'])){
+				if (Cache::has('reloadly_cache_balance_'.date('w'))) {
+					Cache::forget('reloadly_cache_balance_'.date('w'));
+				}
+				Cache::forever('reloadly_cache_balance_'.date('w'), $call['data']['balance']); 
+				return $call['data']['balance'];
+			}
+			return 'error';
+		} catch (Exception $ex){
+			$call = $ex->getMessage();
+			return 'error';
+		}
+	}
 
     public function discounts(Request $request)
     {
