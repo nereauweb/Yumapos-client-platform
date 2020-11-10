@@ -18,9 +18,6 @@ class ReloadlyOperators extends Component
     public $sortField;
     public $customSort = null;
     public $sortAscCustom = true;
-    public $start;
-    public $end;
-    public $type;
     public $sortAsc = true;
 
     public $countryId;
@@ -34,23 +31,16 @@ class ReloadlyOperators extends Component
             $query->where('country.name', $this->countryName);
         })->when($this->sortField, function ($query) {
             $query->orderBy('api_reloadly_operators.'.$this->sortField, $this->sortAsc ? 'asc' : 'desc');
-        })->when(($this->start && $this->end), function ($query) {
-            $query->where('api_reloadly_operators.created_at','>=', \Carbon\Carbon::parse($this->start))->where('api_reloadly_operators.created_at','<=', \Carbon\Carbon::parse($this->end));
         })->when($this->customSort, function ($query) {
             $query->orderBy($this->customSort, $this->sortAscCustom ? 'asc' : 'desc');
-        })->when($this->type, function ($query) {
-            $query->where('api_reloadly_operators.denominationType', $this->type);
         });
 
-        $countriesList = DB::table('api_reloadly_operators_countries')->select(DB::raw('count(*) as countries_count, name'))->groupBy('name')->get();
-        $typesList = ApiReloadlyOperator::select('denominationType')->distinct('denominationType')->get();
-
+        $countriesList = DB::table('api_reloadly_operators_countries')->select(DB::raw('count(*) as countries_count, name'))->orderBy('name', 'asc')->groupBy('name')->get();
         $livewireOperators = $livewireOperators->distinct()->paginate(10);
 
         return view('livewire.reloadly-operators', [
             'livewireOperators' => $livewireOperators,
             'countriesList' => $countriesList,
-            'typesList' => $typesList
         ]);
     }
 

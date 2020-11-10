@@ -3,7 +3,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <div class="d-flex justify-content-between">										
+                <div class="d-flex justify-content-between">
 					<div>
 						<h4 class="card-title mb-0 mt-1">Traffic &amp; Sales</h4>
 					</div>
@@ -24,7 +24,7 @@
                                 </label>
                             </div>
 							<a href="{{ route('admin.report.operations') }}" class="btn btn-primary" type="button">
-								<i class="cil-library"></i> 
+								<i class="cil-library"></i>
 							</a>
                         </div>
                     </div>
@@ -121,7 +121,7 @@
                                 {{ $service->operator->name }}
                             </td>
                             <td>
-                                // todo show provider
+                                {{ $service->provider }}
                             </td>
                         </tr>
                     @endforeach

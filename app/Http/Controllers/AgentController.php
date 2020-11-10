@@ -22,27 +22,9 @@ class AgentController extends Controller
                 'first_name'             => 'required',
                 'last_name'              => 'required',
                 'email'                  => 'required|email|max:255|unique:users',
-                // 'company_email'          => 'required|email|max:255|unique:users_company_data',
-                'plafond'                => 'required',
-                'debt_limit'             => 'required',
                 'company_name'           => 'required',
-                'legal_seat_address'     => 'required',
-                'legal_seat_zip'         => 'required',
-                'legal_seat_city'        => 'required',
-                'legal_seat_region'      => 'required',
-                'operative_seat_address' => 'required',
-                'operative_seat_zip'     => 'required',
-                'operative_seat_city'    => 'required',
-                'operative_seat_region'  => 'required',
                 'vat'                    => 'required',
-                'tax_unique_code'        => 'required',
-                'vat_percent'            => 'required',
-                'witholding_tax_percent' => 'required',
-                'pec'                    => 'required',
-                'phone'                  => 'required',
                 'mobile'                 => 'required',
-                'company_mobile'         => 'required',
-                'shop_sign'              => 'required',         
             ],
             [
                 'name.required'       => trans('auth.userNameRequired'),
@@ -51,7 +33,7 @@ class AgentController extends Controller
         ]);
 
         $identifier = strtolower(Str::random(2));
-        
+
         try {
             $user = User::create([
                 'email'            => $request->email,
@@ -93,7 +75,7 @@ class AgentController extends Controller
                 'referent_mobile'       => $request->company_mobile,
 				'shop_sign'				=> $request->shop_sign,
             ]);
-            
+
             return redirect('/backend')->with(['status' => 'success', 'message' => 'user created successfully, waiting for admin approval..']);
 
         } catch (\Throwable $th) {

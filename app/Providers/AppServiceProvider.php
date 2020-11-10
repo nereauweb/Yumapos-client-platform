@@ -44,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
 
         view()->composer(['livewire.*'], function($view) {
             //do something awesome here as well
-            $countries = ApiReloadlyOperatorCountry::select('name', 'isoName')->groupBy('name', 'isoName')->get();
+            $countries = ApiReloadlyOperatorCountry::select('name', 'isoName')->orderBy('name')->groupBy('name', 'isoName')->get();
             $operators = ApiReloadlyOperator::all();
             $view->with(['countries' => $countries, 'operators' => $operators]);
         });

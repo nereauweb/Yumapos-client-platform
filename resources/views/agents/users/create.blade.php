@@ -80,52 +80,8 @@
                                     @endif
                                 </div>
 							</div>
-							<button @click="toggleInputs" type="button" class="btn btn-link">Dati aziendali</button>
-							<div v-if="isShown" class="my-4" id="hidden-inputs">
-								<div class="form-group has-feedback row {{ $errors->has('plafond') ? ' has-error ' : '' }}">
-									<label for="plafond"
-										class="col-md-3 control-label">Plafond</label>
-									<div class="col-md-9">
-										<div class="input-group">
-											<input class="form-control" type="number" min="0" name="plafond" id="plafond"
-												placeholder="Plafond"
-												value="{{ old('plafond') }}">
-											<div class="input-group-append">
-												<label for="plafond" class="input-group-text">
-													<i class="fa fa-fw"
-														aria-hidden="true"></i>
-												</label>
-											</div>
-										</div>
-										@if ($errors->has('plafond'))
-											<span class="help-block">
-												<strong>{{ $errors->first('plafond') }}</strong>
-											</span>
-										@endif
-									</div>
-								</div>
-								<div class="form-group has-feedback row {{ $errors->has('debt_limit') ? ' has-error ' : '' }}">
-									<label for="debt_limit"
-										class="col-md-3 control-label">Plafond limit</label>
-									<div class="col-md-9">
-										<div class="input-group">
-											<input class="form-control" type="number" min="0" name="debt_limit" id="debt_limit"
-												placeholder="Plafond limit"
-												value="{{ old('debt_limit') }}">
-											<div class="input-group-append">
-												<label for="debt_limit" class="input-group-text">
-													<i class="fa fa-fw {{ trans('forms.create_user_icon_lastname') }}"
-														aria-hidden="true"></i>
-												</label>
-											</div>
-										</div>
-										@if ($errors->has('debt_limit'))
-											<span class="help-block">
-												<strong>{{ $errors->first('debt_limit') }}</strong>
-											</span>
-										@endif
-									</div>
-								</div>
+							<div class="btn btn-link">Dati aziendali</div>
+							<div class="my-4" id="hidden-inputs">
 								<div class="form-group has-feedback row {{ $errors->has('company_name') ? ' has-error ' : '' }}">
 									<label for="company_name"
 										class="col-md-3 control-label">Ragione sociale</label>
@@ -558,42 +514,4 @@
 @endsection
 
 @section('javascript')
-	<script>
-		new Vue({
-			el: '#vueel',
-			data() {
-				return {
-					isShown: false,
-					valuesToBeCopied: {
-						legal_seat_region: '',
-						legal_seat_address: '',
-						legal_seat_city: '',
-						legal_seat_zip: '',
-					},
-					valuesToPassCopy: {
-						operative_seat_address: '',
-						operative_seat_region: '',
-						operative_seat_city: '',
-						operative_seat_zip: '',
-					}
-				}
-			},
-			methods: {
-				toggleInputs() {
-					this.isShown = !this.isShown;
-				},
-				copyValues() {
-					this.valuesToPassCopy.operative_seat_address = this.valuesToBeCopied.legal_seat_address;
-					this.valuesToPassCopy.operative_seat_city = this.valuesToBeCopied.legal_seat_city;
-					this.valuesToPassCopy.operative_seat_region = this.valuesToBeCopied.legal_seat_region;
-					this.valuesToPassCopy.operative_seat_zip = this.valuesToBeCopied.legal_seat_zip;
-				}
-			},
-			created() {
-				if ($('#hidden-inputs .has-error').length > 0) {
-					this.isShown = !this.isShown;
-				}
-			}
-		});
-	</script>
 @endsection

@@ -16,10 +16,16 @@
                 <div class="card">
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h3>Your account</h3>
+                            <h3>{{ ucfirst(auth()->user()->name).' '.auth()->user()->company_data->referent_surname }}</h3>
                         </div>
                     </div>
                     <div class="card-body">
+                        @if(auth()->user()->company_data->company_name !== '' && !is_null(auth()->user()->company_data->company_name))
+                            Company name: {{ auth()->user()->company_data->company_name }}
+                        @endif
+                        @if(auth()->user()->company_data->shop_sign !== '' && !is_null(auth()->user()->company_data->shop_sign))
+                            Shop sign: {{ auth()->user()->company_data->shop_sign }}
+                        @endif
                         ID: {{ Auth::user()->id }}<br>
                         Balance: {{ round(Auth::user()->plafond, 2) }} € <br>
                         Profile:
@@ -61,7 +67,7 @@
                         <div class="card-body">
                             @if (!empty(auth()->user()->referenced))
                                 <div style="overflow:auto;">
-                                    <table class="table table-striped table-bordered col-filtered-datatable"
+                                    <table class="table table-striped table-bordered"
                                         id="admin-table">
                                         <thead>
                                             <tr>

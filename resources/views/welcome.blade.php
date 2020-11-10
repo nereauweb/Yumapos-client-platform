@@ -29,7 +29,7 @@
                                                 </div>
                                                 <div class="btn-group">
                                                     <a href="#" class="btn btn-pill btn-success" type="button" aria-haspopup="true" aria-expanded="false" id="reload-reloadly-balance">
-                                                         <i class="cil-sync"></i> 
+                                                         <i class="cil-sync"></i>
                                                     </a>
                                                 </div>
                                             </div>
@@ -73,7 +73,7 @@
                                                 </div>
                                                 <div class="btn-group">
                                                     <a class="btn btn-pill btn-primary" type="button" aria-haspopup="true" aria-expanded="false" href="{{ route('admin.payments.index') }}">
-                                                         <i class="cil-library"></i> 
+                                                         <i class="cil-library"></i>
                                                     </a>
                                                 </div>
                                             </div>
@@ -104,8 +104,8 @@
 																	@endif
 																</div>
 															</div>
-															{{ $pendingPayment->user->name }} 	
-															<strong>{{ $pendingPayment->amount }} €</strong> 															
+															{{ $pendingPayment->user->name }}
+															<strong>{{ $pendingPayment->amount }} €</strong>
 														</li>
                                                     @endforeach
                                                 </ul>
@@ -122,7 +122,7 @@
                                                 </div>
                                                 <div class="btn-group">
                                                     <a class="btn btn-pill btn-primary" type="button" aria-haspopup="true" aria-expanded="false" href="{{ route('users.index') }}">
-                                                         <i class="cil-library"></i> 
+                                                         <i class="cil-library"></i>
                                                     </a>
                                                 </div>
                                             </div>
@@ -157,7 +157,7 @@
                                                     <div class="ml-3">
                                                         <select id="operator-selected" autocomplete="off" class="form-control">
                                                             <option value="0">All operators</option>
-                                                            @foreach(\App\Models\ApiReloadlyOperator::orderBy('name', 'asc')->get() as $operator)
+                                                            @foreach(\App\Models\ApiReloadlyOperator::orderBy('name', 'asc')->distinct()->get() as $operator)
                                                                 <option value="{{$operator->operatorId}}">{{ $operator->name }}</option>
                                                             @endforeach
                                                         </select>
@@ -177,7 +177,7 @@
                                                         </label>
                                                     </div>
                                                     <a href="{{ route('admin.report.operations') }}" class="btn btn-primary" type="button">
-                                                        <i class="cil-library"></i> 
+                                                        <i class="cil-library"></i>
                                                     </a>
                                                 </div>
                                             </div>

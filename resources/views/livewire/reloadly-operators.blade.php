@@ -11,34 +11,11 @@
             </div>
             <div class="card-body">
                 <div class="uk-grid-small my-4 d-flex align-items-end" uk-grid>
-                    <div class="uk-width-expand">
-                        <fieldset>
-                            <label>Date range</label>
-                            <div class="input-group">
-                                <span class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="cil-calendar"></i>
-                                    </span>
-                                </span>
-                                <input class="form-control" id="daterange" type="text">
-                                <input type="hidden" id="date_begin">
-                                <input type="hidden" id="date_end">
-                            </div>
-                        </fieldset>
-                    </div>
                     <div>
                         <select wire:model.defer="countryName" name="countryName" id="countryId" class="custom-select">
                             <option value="0">All countries</option>
                             @foreach ($countries as $item)
                                 <option value="{{$item->name}}">{{$item->name}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
-                        <select wire:model.defer="type" name="typesList" id="typesId" class="custom-select">
-                            <option value="-">Every typye</option>
-                            @foreach ($typesList as $item)
-                                <option value="{{$item->denominationType}}">{{$item->denominationType}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -167,9 +144,3 @@
         </div>
     </div>
 </div>
-<script>
-    $('#commitBtn').on('click', function(e) {
-        @this.set('start', $("#date_begin").val());
-        @this.set('end', $("#date_end").val());
-    });
-</script>

@@ -195,7 +195,7 @@
 				--}}
             @hasanyrole('sales|user')
             <li class="c-header-nav-item px-3">
-                Balance {{ Auth::user()->plafond + Auth::user()->payments->where('approved', '=', 1)->where('type', '=', 2)->sum('amount') }} €
+                Balance {{ Auth::user()->plafond }} €
             </li>
             <li class="c-header-nav-item-px-3">
                 <a href="{{ route('users.payments.create') }}" class="btn btn-success">Payment</a>
