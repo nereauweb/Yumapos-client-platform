@@ -10,13 +10,24 @@ use Illuminate\Support\Facades\DB;
 
 class ServiceOperationController extends Controller
 {
+    protected $month;
+    protected $week;
+    protected $day;
+    protected $yesterday;
 
+    public function __construct()
+    {
+        $this->month = Carbon::now()->month;
+        $this->week = [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()];
+        $this->day = Carbon::today();
+        $this->yesterday = Carbon::yesterday();
+    }
     public function operations($type, $country = null, $operator = null, $isUser = null) : JsonResponse
     {
         if ($type == 'day') {
             $platformTotalOperations = DB::table('service_operations')
                 ->select(DB::raw('count(id) as operations, sum(platform_total_gain) - sum(user_discount) as gain_data, sum(sent_amount) - sum(platform_commission) as cost, sum(user_amount) as amount_data, HOUR(created_at) as label'))
-                ->whereDate('created_at', '=', '2020-09-22')
+                ->whereDate('created_at', '=', $this->day)
                 ->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })
@@ -26,7 +37,7 @@ class ServiceOperationController extends Controller
         } elseif ($type == 'yesterday') {
             $platformTotalOperations = DB::table('service_operations')
                 ->select(DB::raw('count(id) as operations, sum(platform_total_gain) - sum(user_discount) as gain_data, sum(sent_amount) - sum(platform_commission) as cost, sum(user_amount) as amount_data, HOUR(created_at) as label'))
-                ->whereDate('created_at', '=', '2020-09-19')
+                ->whereDate('created_at', '=', $this->yesterday)
                 ->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })
@@ -40,7 +51,7 @@ class ServiceOperationController extends Controller
                 ->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })
-                ->whereBetween('created_at', [Carbon::createFromDate('2020', '09', '2')->startOfWeek(), Carbon::createFromDate('2020', '09', '2')->endOfWeek()])
+                ->whereBetween('created_at', $this->week)
 //            ->whereDate('created_at', '=', Carbon::now()->toDateString())
                 ->groupBy('label')
                 ->get();
@@ -51,7 +62,7 @@ class ServiceOperationController extends Controller
                 ->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })
-                ->whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3))
+                ->whereMonth('created_at', '=', $this->month)
 //            ->whereDate('created_at', '=', Carbon::now()->toDateString())
                 ->groupBy(['label', 'day'])
                 ->get();
@@ -65,69 +76,71 @@ class ServiceOperationController extends Controller
     {
         switch ($type) {
             case 'day':
-                $totalsForOperations = ServiceOperation::whereDate('created_at', '=', '2020-09-22')
+                $totalsForOperations = ServiceOperation::whereDate('created_at', '=', $this->day)
                 ->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })->count();
-                $totalsForGain = ServiceOperation::whereDate('created_at', '=', '2020-09-19')->select(DB::raw('sum(platform_total_gain - user_discount) as gainSumPerDay'))
+                $totalsForGain = ServiceOperation::whereDate('created_at', '=', $this->day)->select(DB::raw('sum(platform_total_gain - user_discount) as gainSumPerDay'))
                 ->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })->first();
-                $totalsForCost = ServiceOperation::whereDate('created_at', '=', '2020-09-20')->select(DB::raw('sum(sent_amount - platform_commission) as costSumPerDay'))
+                $totalsForCost = ServiceOperation::whereDate('created_at', '=', $this->day)->select(DB::raw('sum(sent_amount - platform_commission) as costSumPerDay'))
                 ->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })->first();
-                $totalsForAmount = ServiceOperation::whereDate('created_at', '=', '2020-09-20')->when(request()->all(), function ($query) {
+                $totalsForAmount = ServiceOperation::whereDate('created_at', '=', $this->day)->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })->sum('user_amount');
                 break;
             case 'yesterday':
-                $totalsForOperations = ServiceOperation::whereDate('created_at', '=', '2020-09-19')
+                $totalsForOperations = ServiceOperation::whereDate('created_at', '=', $this->yesterday)
                 ->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })->count();
-                $totalsForGain = ServiceOperation::whereDate('created_at', '=', '2020-09-19')
+                $totalsForGain = ServiceOperation::whereDate('created_at', '=', $this->yesterday)
                 ->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })->select(DB::raw('sum(platform_total_gain - user_discount) as gainSumPerDay'))->first();
-                $totalsForCost = ServiceOperation::whereDate('created_at', '=', '2020-09-19')
+                $totalsForCost = ServiceOperation::whereDate('created_at', '=', $this->yesterday)
                 ->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })->select(DB::raw('sum(sent_amount - platform_commission) as costSumPerDay'))->first();
-                $totalsForAmount = ServiceOperation::whereDate('created_at', '=', '2020-09-19')
+                $totalsForAmount = ServiceOperation::whereDate('created_at', '=', $this->yesterday)
                 ->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })->sum('user_amount');
                 break;
             case 'week':
-                $totalsForOperations = ServiceOperation::whereBetween('created_at', [Carbon::createFromDate('2020', '09', '2')->startOfWeek(), Carbon::createFromDate('2020', '09', '2')->endOfWeek()])
+                $totalsForOperations = ServiceOperation::whereBetween('created_at', $this->week)
                 ->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })->count();
-                $totalsForGain = ServiceOperation::whereBetween('created_at', [Carbon::createFromDate('2020', '09', '2')->startOfWeek(), Carbon::createFromDate('2020', '09', '2')->endOfWeek()])
+                $totalsForGain = ServiceOperation::whereBetween('created_at', $this->week)
                 ->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })->select(DB::raw('sum(platform_total_gain - user_discount) as gainSumPerDay'))->first();
-                $totalsForCost = ServiceOperation::whereBetween('created_at', [Carbon::createFromDate('2020', '09', '2')->startOfWeek(), Carbon::createFromDate('2020', '09', '2')->endOfWeek()])
+                $totalsForCost = ServiceOperation::whereBetween('created_at', $this->week)
                 ->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })->select(DB::raw('sum(sent_amount - platform_commission) as costSumPerDay'))->first();
-                $totalsForAmount = ServiceOperation::whereBetween('created_at', [Carbon::createFromDate('2020', '09', '2')->startOfWeek(), Carbon::createFromDate('2020', '09', '2')->endOfWeek()])
+                $totalsForAmount = ServiceOperation::whereBetween('created_at', $this->week)
                 ->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })->sum('user_amount');
                 break;
             case 'month':
-                $totalsForOperations = ServiceOperation::whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3))->when(request()->all(), function ($query) {
+                $totalsForOperations = ServiceOperation::whereMonth('created_at', '=', $this->month)
+                ->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })->count();
-                $totalsForGain = ServiceOperation::whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3))->when(request()->all(), function ($query) {
+                $totalsForGain = ServiceOperation::whereMonth('created_at', '=', $this->month)
+                ->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })->select(DB::raw('sum(platform_total_gain - user_discount) as gainSumPerDay'))->first();
-                $totalsForCost = ServiceOperation::whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3))->when(request()->all(), function ($query) {
+                $totalsForCost = ServiceOperation::whereMonth('created_at', '=', $this->month)->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })->select(DB::raw('sum(sent_amount - platform_commission) as costSumPerDay'))->first();
-                $totalsForAmount = ServiceOperation::whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3))->when(request()->all(), function ($query) {
+                $totalsForAmount = ServiceOperation::whereMonth('created_at', '=', $this->month)->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })->sum('user_amount');
                 break;

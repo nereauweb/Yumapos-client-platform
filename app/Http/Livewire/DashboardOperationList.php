@@ -31,19 +31,24 @@ class DashboardOperationList extends Component
 
     public function filter($query)
     {
+        $month = Carbon::now()->month;
+        $week = [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()];
+        $day = Carbon::today();
+        $yesterday = Carbon::yesterday();
+
         $q = '';
         switch ($this->filterSelected) {
             case 'day':
-                $q = $query->whereDate('created_at', '=', '2020-09-20');
+                $q = $query->whereDate('created_at', '=', $day);
                 break;
             case 'yesterday':
-                $q = $query->whereDate('created_at', '=', '2020-09-19');
+                $q = $query->whereDate('created_at', '=', $yesterday);
                 break;
             case 'week':
-                $q = $query->whereBetween('created_at', [Carbon::createFromDate('2020', '09', '6')->startOfWeek(), Carbon::createFromDate('2020', '09', '6')->endOfWeek()]);
+                $q = $query->whereBetween('created_at', $week);
                 break;
             case 'month':
-                $q = $query->whereMonth('created_at', '=', Carbon::now()->startOfMonth()->subMonth(3));
+                $q = $query->whereMonth('created_at', '=', $month);
                 break;
             default:
                 break;

@@ -78,7 +78,7 @@
                                 <option value="0" selected>All users</option>
                                 @foreach ($users as $user)
                                     @if (!is_null($user) && $user->hasRole(['user', 'sales']))
-                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                        <option value="{{ $user->id }}">{{ $user->email }}</option>
                                     @endif
                                 @endforeach
                             </select>

@@ -5,6 +5,7 @@ namespace App;
 use App\Models\ApiReloadlyOperator;
 use App\Models\Payment;
 use App\Models\ServiceOperation;
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -94,12 +95,19 @@ class User extends Authenticatable
 	public function adminAccessServices($time)
     {
         if (auth()->user()->hasRole('admin')) {
+            $month = Carbon::now()->month;
+            $week = [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()];
+            $day = Carbon::today();
+            $yesterday = Carbon::yesterday();
+
             if ($time == 'day') {
-                return ServiceOperation::orderBy('created_at', 'desc')->whereDate('created_at','2020-08-11')->limit(10)->get();
-            } elseif ($time = 'yesterday') {
-                return ServiceOperation::orderBy('created_at', 'desc')->whereDate('created_at','2020-08-10')->limit(10)->get();
+                return ServiceOperation::orderBy('created_at', 'desc')->whereDate('created_at', $day)->limit(10)->get();
+            } elseif ($time == 'yesterday') {
+                return ServiceOperation::orderBy('created_at', 'desc')->whereDate('created_at', $yesterday)->limit(10)->get();
+            } else if ($time == 'week') {
+                return ServiceOperation::orderBy('created_at', 'desc')->whereBetween('created_at', $week)->limit(10)->get();
             } else {
-                return ServiceOperation::orderBy('created_at', 'desc')->whereDate('created_at','2020-08-11')->limit(10)->get();
+                return ServiceOperation::orderBy('created_at', 'desc')->whereMonth('created_at', $month)->limit(10)->get();
             }
         }
     }

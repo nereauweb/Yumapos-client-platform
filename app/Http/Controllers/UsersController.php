@@ -91,7 +91,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'name'       => 'required|min:1|max:256',
             'email'      => 'required|email|max:256'
         ]);
@@ -112,62 +112,40 @@ class UsersController extends Controller
 
         $user->save();
 
+		$data = [
+            'company_name'			=> $request->input('company_name'),
+            'legal_seat_address'	=> $request->input('legal_seat_address'),
+            'legal_seat_zip'		=> $request->input('legal_seat_zip'),
+            'legal_seat_city'		=> $request->input('legal_seat_city'),
+            'legal_seat_region'		=> $request->input('legal_seat_region'),
+            'legal_seat_country'	=> $request->input('legal_seat_country') ? $request->input('legal_seat_country') : NULL,
+            'operative_seat_address'=> $request->input('operative_seat_address'),
+            'operative_seat_zip'	=> $request->input('operative_seat_zip'),
+            'operative_seat_city'	=> $request->input('operative_seat_city'),
+            'operative_seat_region'	=> $request->input('operative_seat_region'),
+            'operative_seat_country'=> $request->input('operative_seat_country') ? $request->input('operative_seat_country') : NULL,
+            'vat'					=> $request->input('vat'),
+            'tax_unique_code'		=> $request->input('tax_unique_code'),
+            'vat_percent'			=> $request->input('vat_percent'),
+            'witholding_tax_percent'=> $request->input('witholding_tax_percent'),
+            'pec'					=> $request->input('pec'),
+            'email'					=> $request->input('company_email'),
+            'phone'					=> $request->input('phone'),
+            'mobile'				=> $request->input('company_mobile'),
+            'referent_name'			=> $request->input('referent_name'),
+            'referent_surname'		=> $request->input('referent_surname'),
+            'referent_mobile'		=> $request->input('referent_mobile'),
+            'shop_sign'				=> $request->input('shop_sign'),
+        ];
+
 		if ($user->company_data) {
-			$user->company_data->update([
-				'company_name'			=> $request->input('company_name'),
-				'legal_seat_address'	=> $request->input('legal_seat_address'),
-				'legal_seat_zip'		=> $request->input('legal_seat_zip'),
-				'legal_seat_city'		=> $request->input('legal_seat_city'),
-				'legal_seat_region'		=> $request->input('legal_seat_region'),
-				'legal_seat_country'	=> $request->input('legal_seat_country') ? $request->input('legal_seat_country') : NULL,
-				'operative_seat_address'=> $request->input('operative_seat_address'),
-				'operative_seat_zip'	=> $request->input('operative_seat_zip'),
-				'operative_seat_city'	=> $request->input('operative_seat_city'),
-				'operative_seat_region'	=> $request->input('operative_seat_region'),
-				'operative_seat_country'=> $request->input('operative_seat_country') ? $request->input('operative_seat_country') : NULL,
-				'vat'					=> $request->input('vat'),
-				'tax_unique_code'		=> $request->input('tax_unique_code'),
-				'vat_percent'			=> $request->input('vat_percent'),
-				'witholding_tax_percent'=> $request->input('witholding_tax_percent'),
-				'pec'					=> $request->input('pec'),
-				'email'					=> $request->input('company_email'),
-				'phone'					=> $request->input('phone'),
-				'mobile'				=> $request->input('company_mobile'),
-				'referent_name'			=> $request->input('referent_name'),
-				'referent_surname'		=> $request->input('referent_surname'),
-				'referent_mobile'		=> $request->input('referent_mobile'),
-				'shop_sign'				=> $request->input('shop_sign'),
-			]);
+			$user->company_data->update($data);
 		} else {
-			UserCompanyData::create([
-				'user_id'				=> $user->id,
-				'company_name'			=> $request->input('company_name'),
-				'legal_seat_address'	=> $request->input('legal_seat_address'),
-				'legal_seat_zip'		=> $request->input('legal_seat_zip'),
-				'legal_seat_city'		=> $request->input('legal_seat_city'),
-				'legal_seat_region'		=> $request->input('legal_seat_region'),
-				'legal_seat_country'	=> $request->input('legal_seat_country') ? $request->input('legal_seat_country') : NULL,
-				'operative_seat_address'=> $request->input('operative_seat_address'),
-				'operative_seat_zip'	=> $request->input('operative_seat_zip'),
-				'operative_seat_city'	=> $request->input('operative_seat_city'),
-				'operative_seat_region'	=> $request->input('operative_seat_region'),
-				'operative_seat_country'=> $request->input('operative_seat_country') ? $request->input('operative_seat_country') : NULL,
-				'vat'					=> $request->input('vat'),
-				'tax_unique_code'		=> $request->input('tax_unique_code'),
-				'vat_percent'			=> $request->input('vat_percent'),
-				'witholding_tax_percent'=> $request->input('witholding_tax_percent'),
-				'pec'					=> $request->input('pec'),
-				'email'					=> $request->input('company_email'),
-				'phone'					=> $request->input('phone'),
-				'mobile'				=> $request->input('company_mobile'),
-				'referent_name'			=> $request->input('referent_name'),
-				'referent_surname'		=> $request->input('referent_surname'),
-				'referent_mobile'		=> $request->input('referent_mobile'),
-				'shop_sign'				=> $request->input('shop_sign'),
-			]);
+		    $data['user_id'] = $user->id;
+			UserCompanyData::create($data);
 		}
 
-        $request->session()->flash('message', 'Successfully updated user');
+//        $request->session()->flash('message', 'Successfully updated user');
 		return redirect('users')->with(['status' => 'success', 'message' => 'Successfully updated user']);
     }
 

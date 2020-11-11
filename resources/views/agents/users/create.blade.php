@@ -109,7 +109,7 @@
 										class="col-md-3 control-label">Sede legale - indirizzo</label>
 									<div class="col-md-9">
 										<div class="input-group">
-											<input v-model="valuesToBeCopied.legal_seat_address" class="form-control" type="text" name="legal_seat_address" id="legal_seat_address"
+											<input class="form-control" type="text" name="legal_seat_address" id="legal_seat_address"
 												placeholder="Sede legale - indirizzo"
 												value="{{ old('legal_seat_address') }}">
 											<div class="input-group-append">
@@ -131,7 +131,7 @@
 										class="col-md-3 control-label">Sede legale - CAP</label>
 									<div class="col-md-9">
 										<div class="input-group">
-											<input v-model="valuesToBeCopied.legal_seat_zip" class="form-control" type="text" name="legal_seat_zip" id="legal_seat_zip"
+											<input class="form-control" type="text" name="legal_seat_zip" id="legal_seat_zip"
 												placeholder="Sede legale - CAP"
 												value="{{ old('legal_seat_zip') }}">
 											<div class="input-group-append">
@@ -153,7 +153,7 @@
 										class="col-md-3 control-label">Sede legale - Città</label>
 									<div class="col-md-9">
 										<div class="input-group">
-											<input v-model="valuesToBeCopied.legal_seat_city" class="form-control" type="text" name="legal_seat_city" id="legal_seat_city"
+											<input class="form-control" type="text" name="legal_seat_city" id="legal_seat_city"
 												placeholder="Sede legale - Città"
 												value="{{ old('legal_seat_city') }}">
 											<div class="input-group-append">
@@ -176,7 +176,7 @@
 										class="col-md-3 control-label">Sede legale - Regione</label>
 									<div class="col-md-9">
 										<div class="input-group">
-											<select class="form-control" name="legal_seat_region" id="legal_seat_region" v-model="valuesToBeCopied.legal_seat_region">
+											<select class="form-control" name="legal_seat_region" id="legal_seat_region">
 												@foreach ($regions as $region)
 													<option value="{{$region}}">{{$region}}</option>
 												@endforeach
@@ -190,14 +190,14 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<button class="btn btn-success" @click.prevent="copyValues">Copia dati sede legale in sede operativa</button>
+									<button class="btn btn-success" type="button" id="copyValues">Copia dati sede legale in sede operativa</button>
 								</div>
 								<div class="form-group has-feedback row {{ $errors->has('operative_seat_address') ? ' has-error ' : '' }}">
 									<label for="operative_seat_address"
 										class="col-md-3 control-label">Sede operativa - indirizzo</label>
 									<div class="col-md-9">
 										<div class="input-group">
-											<input v-model="valuesToPassCopy.operative_seat_address" class="form-control" type="text" name="operative_seat_address" id="operative_seat_address"
+											<input class="form-control" type="text" name="operative_seat_address" id="operative_seat_address"
 												placeholder="Sede operativa - indirizzo"
 												value="{{ old('operative_seat_address') }}">
 											<div class="input-group-append">
@@ -219,7 +219,7 @@
 										class="col-md-3 control-label">Sede operativa - CAP</label>
 									<div class="col-md-9">
 										<div class="input-group">
-											<input v-model="valuesToPassCopy.operative_seat_zip" class="form-control" type="text" name="operative_seat_zip" id="operative_seat_zip"
+											<input class="form-control" type="text" name="operative_seat_zip" id="operative_seat_zip"
 												placeholder="Sede operativa - CAP"
 												value="{{ old('operative_seat_zip') }}">
 											<div class="input-group-append">
@@ -241,7 +241,7 @@
 										class="col-md-3 control-label">Sede operativa - Città</label>
 									<div class="col-md-9">
 										<div class="input-group">
-											<input v-model="valuesToPassCopy.operative_seat_city" class="form-control" type="text" name="operative_seat_city" id="operative_seat_city"
+											<input class="form-control" type="text" name="operative_seat_city" id="operative_seat_city"
 												placeholder="Sede operativa - Città"
 												value="{{ old('operative_seat_city') }}">
 											<div class="input-group-append">
@@ -263,7 +263,7 @@
 										class="col-md-3 control-label">Sede operativa - Regione</label>
 									<div class="col-md-9">
 										<div class="input-group">
-											<select class="form-control" name="operative_seat_region" id="operative_seat_region" v-model="valuesToPassCopy.operative_seat_region">
+											<select class="form-control" name="operative_seat_region" id="operative_seat_region">
 												@foreach ($regions as $region)
 													<option value="{{$region}}">{{$region}}</option>
 												@endforeach
@@ -514,4 +514,37 @@
 @endsection
 
 @section('javascript')
+    <script>
+        const copyBtn = document.querySelector('#copyValues');
+        // return data with the values to be copied from
+        const legal_seat_address = document.querySelector("input[name='legal_seat_address']");
+        const legal_seat_zip = document.querySelector("input[name='legal_seat_zip']");
+        const legal_seat_city = document.querySelector("input[name='legal_seat_city']");
+        const legal_seat_region = document.querySelector("select[name='legal_seat_region']");
+
+        // return data with the values to be pass coiped values to
+        const operative_seat_address = document.querySelector("input[name='operative_seat_address']");
+        const operative_seat_zip = document.querySelector("input[name='operative_seat_zip']");
+        const operative_seat_city = document.querySelector("input[name='operative_seat_city']");
+        const operative_seat_region = document.querySelector("select[name='operative_seat_region']");
+
+        console.log(legal_seat_address);
+
+        function copy() {
+            operative_seat_address.value = legal_seat_address !== null ? legal_seat_address.value : '';
+            operative_seat_zip.value = legal_seat_zip !== null ? legal_seat_zip.value : '';
+            operative_seat_city.value = legal_seat_city !== null ? legal_seat_city.value : '';
+            operative_seat_region.value = legal_seat_region !== null ? legal_seat_region.options[legal_seat_region.selectedIndex].value : '';
+            operative_seat_country.value = legal_seat_country !== null ? legal_seat_country.value : '';
+        }
+
+        window.onload = () => {
+            if (copyBtn) {
+                copyBtn.onclick = (e) => {
+                    e.preventDefault();
+                    copy();
+                }
+            }
+        }
+    </script>
 @endsection

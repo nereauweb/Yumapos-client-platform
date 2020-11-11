@@ -35,7 +35,7 @@ Route::group(['middleware' => ['get.menu']], function () {
 	})->name('admin.users.impersonate');
 
 	Route::get('/page', function () {       return view('frontend.page'); });
-    
+
 	Route::get('/backend', 'HomeController@index')->name('home');
 
 	/*
@@ -184,6 +184,8 @@ Route::group(['middleware' => ['get.menu']], function () {
 	});
 
     Route::group(['middleware' => ['role:admin']], function () {
+
+        Route::post('admin/agent/user/approve', 'AgentController@approve');
 
         Route::get('/reloadly_balance', 'ApiReloadlyController@getBalance');
 

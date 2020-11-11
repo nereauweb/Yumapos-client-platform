@@ -322,7 +322,6 @@ class PaymentsController extends Controller
     private function storePayment(array $data, bool $boolean)
     {
         $validator = $this->validateData($data);
-
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
@@ -373,7 +372,7 @@ class PaymentsController extends Controller
         return Validator::make($data,
             [
                 'date'		=> 'required',
-                'amount'	=> 'required',
+                'amount'	=> 'required|gt:0',
                 'user_id'	=> 'required',
                 'document'  => 'mimes:jpg,doc,docx,png,pdf'
             ],

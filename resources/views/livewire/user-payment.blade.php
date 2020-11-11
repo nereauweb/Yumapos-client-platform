@@ -102,7 +102,15 @@
                                     </td>
                                     <td>{{ $payment->amount }}</td>
                                     <td>{{ $payment->details }}</td>
-                                    <td>{!! $payment->approved == 1 ? '<i class="cil-check-alt"></i>':'<i class="cil-x"></i>' !!}</td>
+                                    <td>
+                                        @if($payment->approved == 1)
+                                            <i class="cil-check-alt"></i>
+                                        @elseif($payment->approved == 0)
+                                            <i class="cil-clock"></i>
+                                        @elseif($payment->approved == -1)
+                                            <i class="cil-x"></i>
+                                        @endif
+                                    </td>
                                     <td>{{ $payment->type == 1 ? 'You to platform' : 'Platform to you' }}</td>
                                 </tr>
                             @endforeach

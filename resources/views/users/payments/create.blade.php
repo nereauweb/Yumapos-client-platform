@@ -11,21 +11,21 @@
 						<a href="{{ url('/users/payments/') }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="{{ trans('usersmanagement.tooltips.back-users') }}">
 							<i class="fa fa-fw fa-reply-all" aria-hidden="true"></i>
 							Return to payments list
-						</a> 
+						</a>
 					</div>
 				</div>
 			</div>
-	
+
 			<div class="card-body">
 				{!! Form::open(array('route' => 'users.payments.store', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation', 'enctype' => 'multipart/form-data')) !!}
-	
+
 					{!! csrf_field() !!}
-					
+
 					<div class="form-group has-feedback row {{ $errors->has('date') ? ' has-error ' : '' }}">
 						{!! Form::label('date', 'Date', array('class' => 'col-md-3 control-label')); !!}
 						<div class="col-md-9">
 							<div class="input-group">
-								{!! Form::text('date', NULL, array('id' => 'date', 'class' => 'form-control', 'placeholder' => 'Date','required' => 'required')) !!}
+								{!! Form::text('date', date('d m Y'), array('id' => 'date', 'class' => 'form-control', 'placeholder' => 'Date','required' => 'required')) !!}
 							</div>
 							@if ($errors->has('date'))
 								<span class="help-block">
@@ -34,7 +34,7 @@
 							@endif
 						</div>
 					</div>
-					
+
 					<div class="form-group has-feedback row {{ $errors->has('amount') ? ' has-error ' : '' }}">
 						{!! Form::label('amount', 'Amount (€)', array('class' => 'col-md-3 control-label')); !!}
 						<div class="col-md-9">
@@ -53,7 +53,7 @@
 							@endif
 						</div>
 					</div>
-					
+
 					<div class="form-group has-feedback row {{ $errors->has('details') ? ' has-error ' : '' }}">
 						{!! Form::label('details', 'Details', array('class' => 'col-md-3 control-label')); !!}
 						<div class="col-md-9">
@@ -67,7 +67,7 @@
 							@endif
 						</div>
 					</div>
-					
+
 					<div class="form-group has-feedback row {{ $errors->has('file') ? ' has-error ' : '' }}">
 						<div class="col-md-3 control-label">
 							File upload
@@ -86,13 +86,13 @@
 							@endif
 						</div>
 					</div>
-					
+
 					{!! Form::button('Save payment', array('class' => 'btn btn-success margin-bottom-1 mb-1 float-right','type' => 'submit' )) !!}
 				{!! Form::close() !!}
 			</div>
-	
+
 		</div>
-	
+
 	</div>
 @endsection
 

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ConfirmationMail;
 use App\User;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -43,8 +45,8 @@ class AgentController extends Controller
                 'password'         => bcrypt(Str::random()),
                 'remember_token'   => Str::random(64),
                 'state'            => 0,
-                'plafond'          => $request->plafond,
-                'debt_limit'       => $request->debt_limit
+                'plafond'          => 0,
+                'debt_limit'       => 0
             ]);
 
             $user->assignRole('user');
@@ -81,5 +83,32 @@ class AgentController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
+
+    public function approve()
+    {
+        $user = User::findOrFail(request()->user_id);
+        request()->validate([
+            'parent_percent' => 'required',
+            'debt_limit' => 'required',
+            'group_id' => 'required',
+            'plafond' => 'required|gt:0'
+        ]);
+        try {
+            $notHashedPassword = Str::random(10);
+            $user->update([
+                'state' => 1,
+                'group_id' => request()->group_id,
+                'plafond' => request()->plafond,
+                'debt_limit' => request()->debt_limit,
+                'parent_percent' => request()->parent_percent,
+                'password' => bcrypt($notHashedPassword),
+            ]);
+            Mail::to($user->email)->send(new ConfirmationMail($user, $notHashedPassword));
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+
     }
 }

@@ -13,9 +13,9 @@
                 @if (auth()->user()->hasRole('admin'))
                         <div>
                             <div class="fade-in">
-                                <div class="row">
-                                    <div class="col-sm-6 col-lg-3">
-                                        <div class="card text-white bg-gradient-primary">
+                                <div class="row" style="height: 200px">
+                                    <div class="col-sm-6 col-lg-3" style="height: 100%">
+                                        <div class="card text-white bg-gradient-primary" style="height: 90%">
                                             <div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
                                                 <div>
                                                     <div class="text-value-lg">
@@ -39,8 +39,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6 col-lg-3">
-                                        <div class="card text-white bg-gradient-info">
+                                    <div class="col-sm-6 col-lg-3" style="height: 100%">
+                                        <div class="card text-white bg-gradient-info" style="height: 90%">
                                             <div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
                                                 <div>
                                                     <div class="text-value-lg">
@@ -64,8 +64,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6 col-lg-3">
-                                        <div class="card text-white bg-gradient-warning">
+                                    <div class="col-sm-6 col-lg-3" style="height: 100%">
+                                        <div class="card text-white bg-gradient-warning" style="height: 90%">
                                             <div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
                                                 <div>
                                                     <div class="text-value-lg">{{ $paymentsData['totals'] }}</div>
@@ -113,8 +113,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6 col-lg-3">
-                                        <div class="card text-white bg-gradient-danger">
+                                    <div class="col-sm-6 col-lg-3" style="height: 100%">
+                                        <div class="card text-white bg-gradient-danger" style="height: 90%">
                                             <div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
                                                 <div>
                                                     <div class="text-value-lg">{{ $usersData['totals'] }}</div>
@@ -127,11 +127,32 @@
                                                 </div>
                                             </div>
                                             <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                                                @foreach($usersData['pending'] as $usersPending)
-                                                    <ul>
-                                                        <li style="list-style-type: none;">payment by: {{ $usersPending->name }}</li>
-                                                    </ul>
-                                                @endforeach
+                                                <ul class="uk-list m-0 p-1">
+                                                    @foreach($usersData['pending'] as $usersPending)
+                                                        <li class="m-0">
+                                                            <span>
+                                                                @if (!$usersPending->trashed())
+                                                                    <div class="btn-group btn-group-xs">
+                                                                        <button type="button" class="btn btn-table-action dropdown-toggle" data-toggle="dropdown">
+                                                                        {{ $usersPending->id }}
+                                                                        <i class="fa fa-ellipsis-v fa-fw" aria-hidden="true"></i>
+                                                                        <span class="sr-only">
+                                                                            Actions
+                                                                        </span>
+                                                                        </button>
+                                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                                            @if (!$usersPending->state)
+                                                                                <button class="dropdown-item btn-success" data-toggle="modal" data-target="#modalApprove" data-id="{{ $usersPending->id }}">Approve</button>
+                                                                                <button class="dropdown-item btn-danger" data-toggle="modal" data-target="#modalDelete" data-id="{{ $usersPending->id }}">{{ __('coreuiforms.delete') }}</button>
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
+                                                            </span>
+                                                            <span>{{ $usersPending->name }}</span>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
@@ -371,7 +392,25 @@
             </div>
         </div>
     </div>
-
+    <div class="modal fade" id="modalApprove" tabindex="-1" role="dialog" aria-labelledby="modalApproveLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalApproveLabel">Approve user</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveUserModalBtn">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('javascript')
@@ -392,5 +431,26 @@
 				}
 			});
 		});
+
+		$('#saveUserModalBtn').click((e) => {
+		    e.preventDefault();
+		    fetch('/admin/agent/user/approve', {
+		        method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json, text-plain, */*",
+                    'X-CSRF-TOKEN': document.getElementsByName('csrf-token')[0].getAttribute('content')
+                },
+                body: JSON.stringify({
+                    parent_percent: '',
+                    debt_limit:'',
+                    group_id: '',
+                    plafond: ''
+                })
+            }).then(response => response.json()).then(res => () => {
+                console.log(res);
+            }).catch();
+        })
+
 	</script>
 @endsection
