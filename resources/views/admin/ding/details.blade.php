@@ -10,7 +10,7 @@
             <div class="col-lg-12">
 				<div class="uk-modal-dialog uk-modal-body" id="content">
 					<button class="uk-modal-close-default" type="button" uk-close></button>
-					<h2>{{ $operator->Name }} | Details</h2>
+					<h2 class="uk-text-secondary">{{ $operator->Name }} | Details</h2>
 					<dl class="row light">
 					
 						<dt class="col-sm-5">Code</dt>

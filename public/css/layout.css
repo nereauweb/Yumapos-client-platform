@@ -96,3 +96,7 @@ html:not([dir="rtl"]) .custom-select-sm {
 .c-dark-theme .uk-form-label {
 	color: #e1e1e1;
 }
+.c-dark-theme option {
+	background: #5b5b5b;
+	color: white;
+}

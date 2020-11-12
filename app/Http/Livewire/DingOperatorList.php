@@ -21,7 +21,7 @@ class DingOperatorList extends Component
 
     public function render()
     {
-        $livewireDingOperators = ApiDingOperator::when($this->sortField, function ($query) {
+        $livewireDingOperators = ApiDingOperator::select('api_ding_operators.*')->when($this->sortField, function ($query) {
             $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
         })->when($this->countrySelected, function ($query) {
             $query->where('countryIso', $this->countrySelected);
@@ -29,7 +29,7 @@ class DingOperatorList extends Component
             $query->orderBy(ApiDingCountry::select('CountryName')->whereColumn('api_ding_countries.CountryIso', 'api_ding_operators.CountryIso'), $this->relationshipAsc ? 'asc' : 'desc');
         })->paginate(10);
 
-        $countriesList = $countriesList = ApiDingCountry::all();
+        $countriesList = $countriesList = ApiDingCountry::orderBy('CountryName')->get();
 
         return view('livewire.ding-operator-list', [
             'livewireDingOperators' => $livewireDingOperators,

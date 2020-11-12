@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ApiDingOperator;
+use App\Models\ApiDingOperatorConfiguration;
+use App\Models\ApiDingOperatorConfigurationAmount;
 use App\Models\ApiDingProduct;
 use App\Models\UsersGroup;
 
@@ -64,11 +66,11 @@ class DingController extends Controller
     {
 		$operator = ApiDingOperator::find($id);
 		$groups = $request->input('group');
-		if($operator->denominationType=="RANGE"){
+		if($operator->products_type()=="RANGE"){
 			foreach($groups as $group_id => $group_data) {
 				ApiDingOperatorConfiguration::updateOrCreate(
 					[ 
-						'operator_id' => $operator->operatorId,
+						'operator_ProviderCode' => $operator->ProviderCode,
 						'group_id' => $group_id,
 					],
 					[
@@ -79,11 +81,11 @@ class DingController extends Controller
 				);
 			}
 		}
-		if($operator->denominationType=="FIXED"){
+		if($operator->products_type()=="FIXED"){
 			foreach($groups as $group_id => $group_data) {				
 				$configuration = ApiDingOperatorConfiguration::updateOrCreate(
 					[ 
-						'operator_id' => $operator->operatorId,
+						'operator_ProviderCode' => $operator->ProviderCode,
 						'group_id' => $group_id,
 					],
 					[

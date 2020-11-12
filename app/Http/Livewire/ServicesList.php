@@ -32,42 +32,42 @@ class ServicesList extends Component
         $ding_operators = ApiDingOperator::pluck('ProviderCode','Name');
         $ding_operators_options = '';
         foreach($ding_operators as $ding_operator_name => $ding_ProviderCode){
-//            $service_operator = ServiceOperator::where('name',$ding_operator_name)->orWhere('ding_ProviderCode',$ding_ProviderCode)->first();
-//            if ($service_operator){
-//                $service_operator->ding_providerCode = $ding_ProviderCode;
-//                $service_operator->save();
-//            } else {
-//                $country = ApiDingOperator::where('ProviderCode',$ding_ProviderCode)->first()->country;
-//                $service_country = ServiceCountry::updateOrCreate(['iso'=>$country->CountryIso],['name'=>$country->CountryName]);
-//                ServiceOperator::create([
-//                    'name' => $ding_operator_name,
-//                    'country_id' => $service_country->id,
-//                    'master' => 'ding',
-//                    'ding_ProviderCode' => $ding_ProviderCode,
-//                ]);
-//            }
+            $service_operator = ServiceOperator::where('name',$ding_operator_name)->orWhere('ding_ProviderCode',$ding_ProviderCode)->first();
+            if ($service_operator){
+                $service_operator->ding_providerCode = $ding_ProviderCode;
+                $service_operator->save();
+            } else {
+                $country = ApiDingOperator::where('ProviderCode',$ding_ProviderCode)->first()->country;
+                $service_country = ServiceCountry::updateOrCreate(['iso'=>$country->CountryIso],['name'=>$country->CountryName]);
+                ServiceOperator::create([
+                    'name' => $ding_operator_name,
+                    'country_id' => $service_country->id,
+                    'master' => 'ding',
+                    'ding_ProviderCode' => $ding_ProviderCode,
+                ]);
+            }
             $ding_operators_options .= '<option value="'.$ding_ProviderCode.'">'.$ding_operator_name.'</option>';
         }
 
         $reloadly_operators = ApiReloadlyOperator::pluck('operatorId','name');
         $reloadly_operators_options = '';
         foreach($reloadly_operators as $reloadly_operator_name => $reloadly_operatorId){
-//            $service_operator = ServiceOperator::where('name',$reloadly_operator_name)->orWhere('reloadly_operatorId',$reloadly_operatorId)->first();
-//            if ($service_operator){
-//                if (!$service_operator->reloadly_operatorId == $reloadly_operatorId){
-//                    $service_operator->reloadly_operatorId = $reloadly_operatorId;
-//                    $service_operator->save();
-//                }
-//            } else {
-//                $country = ApiReloadlyOperator::where('operatorId',$reloadly_operatorId)->first()->country;
-//                $service_country = ServiceCountry::updateOrCreate(['iso'=>$country->isoName],['name'=>$country->name]);
-//                ServiceOperator::create([
-//                    'name' => $reloadly_operator_name,
-//                    'country_id' => $service_country->id,
-//                    'master' => 'reloadly',
-//                    'reloadly_operatorId' => $reloadly_operatorId,
-//                ]);
-//            }
+            $service_operator = ServiceOperator::where('name',$reloadly_operator_name)->orWhere('reloadly_operatorId',$reloadly_operatorId)->first();
+            if ($service_operator){
+                if (!$service_operator->reloadly_operatorId == $reloadly_operatorId){
+                    $service_operator->reloadly_operatorId = $reloadly_operatorId;
+                    $service_operator->save();
+                }
+            } else {
+                $country = ApiReloadlyOperator::where('operatorId',$reloadly_operatorId)->first()->country;
+                $service_country = ServiceCountry::updateOrCreate(['iso'=>$country->isoName],['name'=>$country->name]);
+                ServiceOperator::create([
+                    'name' => $reloadly_operator_name,
+                    'country_id' => $service_country->id,
+                    'master' => 'reloadly',
+                    'reloadly_operatorId' => $reloadly_operatorId,
+                ]);
+            }
             $reloadly_operators_options .= '<option value="'.$reloadly_operatorId.'">'.$reloadly_operator_name.'</option>';
         }
         $countriesList = ServiceCountry::orderBy('name')->select(['name', 'id'])->get();

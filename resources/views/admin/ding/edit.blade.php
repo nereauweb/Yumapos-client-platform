@@ -10,14 +10,10 @@
             <div class="col-lg-12">
 				<div class="uk-modal-dialog uk-modal-body" id="content">
 					<button class="uk-modal-close-default" type="button" uk-close></button>
-					<h2>{{ $operator->Name }} | Configuration</h2>					
+					<h2 class="uk-text-secondary">{{ $operator->Name }} | Configuration</h2>					
 					<div class="uk-margin-small-top" id="modal-submit-response"></div>
 					
 					@if($operator->products)
-						
-						@php 
-							$type = $operator->products()->first() ? $operator->products()->first()->type() : '';
-						@endphp
 						
 						{!! Form::open(array('route' => ['admin.ding.update', $operator->id], 'method' => 'PUT', 'role' => 'form', 'class' => 'needs-validation')) !!}
 
@@ -27,7 +23,7 @@
 						
 						@foreach ($operator->products as $product)
 						
-							@if($type=="RANGE")
+							@if($product->type()=="RANGE")
 									<table class="table light">
 										<thead>
 											<tr>
@@ -40,7 +36,7 @@
 										<tbody>
 										@foreach($groups as $group)
 											@php
-												$configuration = $product->configurations->where('group_id', $group->id)->first();
+												$configuration = $operator->configurations->where('group_id', $group->id)->first();
 											@endphp
 											<tr>
 												<td>
@@ -63,14 +59,14 @@
 										@endforeach
 										</tbody>
 									</table>
-							@elseif($type=="FIXED")				
+							@elseif($product->type()=="FIXED")				
 									<table class="table light">
 										<thead>
 											<tr>
 												<th>Enabled</th>
 												@foreach($groups as $group)
 													@php
-														$configuration = $product->configurations->where('group_id', $group->id)->first();	
+														$configuration = $operator->configurations->where('group_id', $group->id)->first();	
 													@endphp
 													<th>
 														{{ $group->name }}<br>
@@ -87,7 +83,7 @@
 												<td><strong>{{round($product->minimum->SendValue,3)}}&nbsp;€</strong><br><small>{{round($product->minimum->SendValue * $product->fx_rate(),3)}}&nbsp;{{$product->destinationCurrencySymbol}}</td>
 												@foreach($groups as $group)									
 													@php
-														$configuration = $product->configurations->where('group_id', $group->id)->first();	
+														$configuration = $operator->configurations->where('group_id', $group->id)->first();	
 														if ($configuration) {
 															$amount_configuration = $configuration->amounts->where('original_amount',$product->minimum->SendValue)->first();
 														}
@@ -113,7 +109,7 @@
 						
 						@endforeach
 								</div>
-						@if($type=="FIXED")
+						@if($operator->products_type()=="FIXED")
 								<div class="uk-width-1-1 uk-flex uk-flex-center uk-margin-top">
 									<div>
 										<a class="uk-button" id="all-visible">All visibile</a>
@@ -121,7 +117,7 @@
 									</div>
 								</div>
 						@endif
-						@if($type=="RANGE"||$type=="FIXED")
+						@if($operator->products_type()=="RANGE"||$operator->products_type()=="FIXED")
 							{!! Form::button(trans('forms.save-changes'), array('class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => trans('modals.edit_user__modal_text_confirm_title'), 'data-message' => trans('modals.edit_user__modal_text_confirm_message'))) !!}	
 						@endif
 						{!! Form::close() !!}

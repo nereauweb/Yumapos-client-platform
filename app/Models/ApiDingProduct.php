@@ -49,18 +49,7 @@ class ApiDingProduct extends Model
 	
 	
 	
-	public function configurations(){ 
-		return $this->hasMany('App\Models\ApiDingProductConfiguration','product_id','id'); 
-	}
 	
-	public function configuration($group_id){
-		return $this->configurations->where('group_id', $group_id)->first();
-	}
-	
-	public function config_rate($group_id){
-		$configuration = $this->configurations->where('group_id', $group_id)->first();
-		return $configuration && $configuration->fx_delta_percent != 0 ? $this->fx->rate - $this->fx->rate * $configuration->fx_delta_percent / 100 : $this->fx->rate;
-	}
 	
 	public function type(){
 		if ($this->type==''){

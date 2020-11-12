@@ -27,6 +27,8 @@ class ApiDingOperator extends Model
 		'CustomerCareNumber',
 		'LogoUrl',
 		];
+		
+	public $products_type = '';
 
 	public function region_codes(){ return $this->hasMany('App\Models\ApiDingOperatorRegionCode','ProviderCode','ProviderCode'); }
 
@@ -44,11 +46,33 @@ class ApiDingOperator extends Model
 	public function payment_types(){ return $this->hasMany('App\Models\ApiDingOperatorPaymentType','ProviderCode'); }
 
 
-	public function products(){ return $this->hasMany('App\Models\ApiDingProduct','ProviderCode'); }
+	public function products(){ return $this->hasMany('App\Models\ApiDingProduct','ProviderCode','ProviderCode'); }
 
 	public function country()
     {
         return $this->hasOne(ApiDingCountry::class, 'CountryIso', 'CountryIso');
     }
+	
+	public function products_type(){
+		
+		if ($this->products_type==''){
+			$this->products_type = $this->products()->first() ? $this->products()->first()->type() : 'Undefined';
+		}
+		return $this->products_type;
+		
+	}
+	
+	public function configurations(){ 
+		return $this->hasMany('App\Models\ApiDingOperatorConfiguration','operator_ProviderCode','ProviderCode'); 
+	}
+	
+	public function configuration($group_id){
+		return $this->configurations->where('group_id', $group_id)->first();
+	}
+	
+	public function config_rate($group_id){
+		$configuration = $this->configurations->where('group_id', $group_id)->first();
+		return $configuration && $configuration->fx_delta_percent != 0 ? $this->fx->rate - $this->fx->rate * $configuration->fx_delta_percent / 100 : $this->fx->rate;
+	}
 
 }
