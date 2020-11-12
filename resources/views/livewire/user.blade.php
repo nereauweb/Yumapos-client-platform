@@ -2,19 +2,6 @@
     @include('livewire.loader')
     @include('livewire.user.approve')
     @include('livewire.user.destroy')
-    @if (session()->has('success'))
-    <div class="alert alert-success" role="alert">
-        {{ session()->get('success') }}
-    </div>
-    @elseif(session()->has('warning'))
-    <div class="alert alert-warning" role="alert">
-        {{ session()->get('warning') }}
-    </div>
-    @elseif(session()->has('error'))
-    <div class="alert alert-danger" role="alert">
-        {{ session()->get('error') }}
-    </div>
-    @endif
     <div class="uk-padding-small">
         <dl class="row">
             <div class="col-6 row justify-content-between">

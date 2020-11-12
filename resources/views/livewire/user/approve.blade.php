@@ -31,7 +31,7 @@
                             <label for="group" class="col-md-3 control-label">Ruolo utente</label>
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    <select wire:model.defer="groupId" class="form-control" id="group" name="groupId">
+                                    <select wire:model.defer="group_id" class="form-control" id="group" name="group_id">
                                         <option value="" selected>Choose a group</option>
                                         @foreach ($groups as $group)
                                             <option value="{{ $group->id }}">{{ $group->name }}</option>
@@ -45,6 +45,38 @@
                                 </div>
                                 <div class="text-sm text-danger italic block">
                                     @error('group') {{$message}} @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group has-feedback row ">
+                            <label for="group" class="col-md-3 control-label">Plafond</label>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <input wire:model.defer="plafond" class="form-control" id="plafond" name="plafond" />
+                                    <div class="input-group-append">
+                                        <label class="input-group-text" for="group">
+                                            <i class="fa fa-fw fa-shield" aria-hidden="true"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="text-sm text-danger italic block">
+                                    @error('plafond') {{$message}} @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group has-feedback row ">
+                            <label for="debt_limit" class="col-md-3 control-label">Plafond limit</label>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <input wire:model.defer="debt_limit" class="form-control" id="debt_limit" name="debt_limit" />
+                                    <div class="input-group-append">
+                                        <label class="input-group-text" for="group">
+                                            <i class="fa fa-fw fa-shield" aria-hidden="true"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="text-sm text-danger italic block">
+                                    @error('debt_limit') {{$message}} @enderror
                                 </div>
                             </div>
                         </div>

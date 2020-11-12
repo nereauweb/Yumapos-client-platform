@@ -109,6 +109,5 @@ class AgentController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
-
     }
 }

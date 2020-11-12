@@ -72,12 +72,14 @@ class PaymentsController extends Controller
             ]);
 
             $file = $request->file('document');
-            $filename = 'payment-'.$payment->user->name.'-' . time() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('payments', $filename);
-            $payment->documents()->create([
-                'label' => $payment->user->name.'-document-'.time(),
-                'filename' => $path
-            ]);
+            if ($file) {
+                $filename = 'payment-'.$payment->user->name.'-' . time() . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('payments', $filename);
+                $payment->documents()->create([
+                    'label' => $payment->user->name.'-document-'.time(),
+                    'filename' => $path
+                ]);
+            }
 
             $payment->user()->update([
                 'plafond' => $payment->user->plafond + $request->input('amount')
@@ -258,12 +260,22 @@ class PaymentsController extends Controller
         $payment = Payment::findOrFail($payment);
         $amountToBeRemoved = $payment->amount;
         try {
-            if ($payment->update_balance == 0) {
+            if ($payment->update_balance == 0 && $payment->update_credit == 0) {
                 $payment->update([
                     'approved' => '-1'
                 ]);
                 $updatedRelation = $payment->type == 3 ? 'Provider' : 'User';
                 return back()->with(['status' => 'success', 'message' => 'payment canceled successfully,'.$updatedRelation.' balance remains the same!']);
+            } else if($payment->update_credit == 1) {
+                DB::beginTransaction();
+                $payment->update([
+                    'approved' => '-1'
+                ]);
+                $payment->user()->update([
+                    'credit' => (float)$payment->user->credit + (float)$amountToBeRemoved
+                ]);
+                DB::commit();
+                return back()->with(['status' => 'success', 'message' => 'credit canceled successfully, agent credit restored']);
             } else {
                 try {
                     DB::beginTransaction();
@@ -288,12 +300,20 @@ class PaymentsController extends Controller
     public function recover($payment)
     {
         $payment = Payment::findOrFail($payment);
-        if ($payment->update_balance === 0) {
+        if ($payment->update_balance === 0 && $payment->update_credit == 0) {
             $payment->update([
                 'approved' => 1
             ]);
             $updatedRelation = $payment->type == 3 ? 'Provider' : 'User';
             return back()->with(['status' => 'success', 'message' => 'payment recovered, '.$updatedRelation.' balance remains the same!']);
+        } else if ($payment->update_credit == 1) {
+            $payment->update([
+                'approved' => 1,
+            ]);
+            $payment->user()->update([
+               'credit' => (float)$payment->user->credit - (float)$payment->amount
+            ]);
+            return back()->with(['status' => 'success', 'message' => 'agent credit recovered']);
         } else if ($payment->update_balance === 1) {
             try {
                 DB::beginTransaction();
@@ -365,6 +385,53 @@ class PaymentsController extends Controller
             } catch (\Exception $e) {
                 DB::rollBack();
             }
+        }
+    }
+
+    public function reduceCreditView()
+    {
+        $users = User::role('sales')->pluck('name','id');
+        return view('admin.payments.reduce-credit', compact('users'));
+    }
+
+    public function reduceCredit(Request $request)
+    {
+        $request->validate([
+            'date' => 'required',
+            'amount' => 'required',
+            'user_id' => 'required',
+            'document'  => 'mimes:jpg,doc,docx,png,pdf'
+        ]);
+
+        $date = \DateTime::createFromFormat("d/m/Y", $request->date);
+        if (!$date) {
+            return back()->withErrors(['date' => 'date is required'])->withInput();
+        }
+        try {
+            DB::beginTransaction();
+            $user = User::findOrFail($request->user_id);
+            $user->update(['credit' => (float)$user->credit - (float)$request->amount]);
+            $payment = $user->payments()->create([
+                'update_credit' => 1,
+                'update_amount' => 0,
+                'approved' => 1,
+                'type' => 4,
+                'amount' => $request->amount,
+                'document' => $request->document,
+            ]);
+            if ($request->hasFile('document')) {
+                $filename = 'admin-reduced-credit-' . time() . '.' . $request->document->getClientOriginalExtension();
+                $path = $request->document->storeAs('credits', $filename);
+                $payment->documents()->create([
+                    'label' => $payment->provider->company_data.'-credit-document',
+                    'filename' => $path
+                ]);
+            }
+            DB::commit();
+            return redirect()->route('admin.payments.index')->with(['status' => 'success', 'message' => 'Successfully reduced credit from agent!']);
+        } catch (\Error $error) {
+            DB::rollBack();
+            dd($error);
         }
     }
 

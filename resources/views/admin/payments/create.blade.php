@@ -23,7 +23,7 @@
 						{!! Form::label('date', 'Date', array('class' => 'col-md-3 control-label')); !!}
 						<div class="col-md-9">
 							<div class="input-group">
-								{!! Form::text('date', NULL, array('id' => 'date', 'class' => 'form-control', 'placeholder' => 'Date','required' => 'required')) !!}
+								{!! Form::text('date', date('d m Y'), array('id' => 'date', 'class' => 'form-control', 'placeholder' => 'Date','required' => 'required')) !!}
 							</div>
 							@if ($errors->has('date'))
 								<span class="help-block">

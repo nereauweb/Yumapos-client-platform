@@ -18,8 +18,10 @@ class User extends Component
 
     protected $paginationTheme = 'bootstrap';
 
+    public $debt_limit;
+    public $plafond;
     public $parent_percent;
-    public $groupId;
+    public $group_id;
     public $user_id;
 
     public $sortField;
@@ -114,7 +116,9 @@ class User extends Component
         if ($user) {
             $this->validate([
                 'parent_percent' => 'required',
-                'groupId' => 'required'
+                'group_id' => 'required',
+                'plafond' => 'required',
+                'debt_limit' => 'required'
             ]);
 
             try {
@@ -122,8 +126,10 @@ class User extends Component
 
                 $user->update([
                     'state' => 1,
-                    'group_id' => $this->groupId,
+                    'group_id' => $this->group_id,
                     'parent_percent' => $this->parent_percent,
+                    'plafond' =>$this->plafond,
+                    'debt_limit' => $this->debt_limit,
                     'password' => bcrypt($notHashedPassword),
                 ]);
 

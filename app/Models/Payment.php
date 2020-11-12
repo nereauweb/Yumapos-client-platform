@@ -27,7 +27,8 @@ class Payment extends Model
 		'details',
 		'approved',
 		'type',
-        'update_balance'
+        'update_balance',
+        'update_credit'
 		];
 
 	public function user() {

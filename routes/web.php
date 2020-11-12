@@ -251,6 +251,8 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::get('/pay-provider', 'PaymentsController@payProvider')->name('admin.payProvider');
             Route::post('/pay-provider', 'PaymentsController@payProviderStore')->name('admin.payProviderStore');
             Route::post('/pay-user', 'PaymentsController@payUserStore')->name('admin.payments.payUserStore');
+            Route::get('/reduce-credit', 'PaymentsController@reduceCreditView')->name('admin.payments.reduce-credit-view');
+            Route::post('/reduce-credit', 'PaymentsController@reduceCredit')->name('admin.payments.reduce-credit');
         });
 
 		Route::prefix('/admin/api/reloadly')->group(function () {
