@@ -5,11 +5,6 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                @if (session()->has('status'))
-                    <div class="alert @if(session()->get('status') == 'success') alert-success @else alert-danger @endif" role="alert">
-                        {{ session()->get('message') }}
-                    </div>
-                @endif
                 @if (auth()->user()->hasRole('admin'))
                         <div>
                             <div class="fade-in">
@@ -367,6 +362,9 @@
                                 </div>
                             </div>
                         </div>
+                        @livewireStyles()
+                        @livewire('dashboard-operation-list', ['isUser' => true])
+                        @livewireScripts()
                 @endif
             </div>
         </div>

@@ -14,18 +14,33 @@ class DashboardOperationList extends Component
     public $countriesList;
     public $operationsList;
 
+    public $isUser;
+
     public function render()
     {
-        $this->usersDetails = ServiceOperation::select(DB::raw('sum(user_amount) amount, service_operations.*'))->when($this->filterSelected, function ($query) {
-            $this->filter($query);
-        })->orderBy('amount', 'desc')->groupBy('user_id')->take(5)->get();
-        $this->countriesList = ServiceOperation::select(DB::raw('sum(user_amount) amount, service_operations.*'))->when($this->filterSelected, function ($query) {
-            $this->filter($query);
-        })->orderBy('amount', 'desc')->groupBy('request_country_iso')->take(5)->get();
-        $this->operationsList = ServiceOperation::select(DB::raw('sum(user_amount) amount, service_operations.*'))->when($this->filterSelected, function ($query) {
-            $this->filter($query);
-        })->orderBy('amount', 'desc')->groupBy('request_operatorId')->take(5)->get();
-        $services = auth()->user()->adminAccessServices($this->filterSelected);
+        if ($this->isUser) {
+            $this->usersDetails = ServiceOperation::where('user_id', auth()->id())->select(DB::raw('sum(user_amount) amount, service_operations.*'))->when($this->filterSelected, function ($query) {
+                $this->filter($query);
+            })->orderBy('amount', 'desc')->groupBy('user_id')->take(5)->get();
+            $this->countriesList = ServiceOperation::where('user_id', auth()->id())->select(DB::raw('sum(user_amount) amount, service_operations.*'))->when($this->filterSelected, function ($query) {
+                $this->filter($query);
+            })->orderBy('amount', 'desc')->groupBy('request_country_iso')->take(5)->get();
+            $this->operationsList = ServiceOperation::where('user_id', auth()->id())->select(DB::raw('sum(user_amount) amount, service_operations.*'))->when($this->filterSelected, function ($query) {
+                $this->filter($query);
+            })->orderBy('amount', 'desc')->groupBy('request_operatorId')->take(5)->get();
+            $services = auth()->user()->accessServices($this->filterSelected);
+        } else {
+            $this->usersDetails = ServiceOperation::select(DB::raw('sum(user_amount) amount, service_operations.*'))->when($this->filterSelected, function ($query) {
+                $this->filter($query);
+            })->orderBy('amount', 'desc')->groupBy('user_id')->take(5)->get();
+            $this->countriesList = ServiceOperation::select(DB::raw('sum(user_amount) amount, service_operations.*'))->when($this->filterSelected, function ($query) {
+                $this->filter($query);
+            })->orderBy('amount', 'desc')->groupBy('request_country_iso')->take(5)->get();
+            $this->operationsList = ServiceOperation::select(DB::raw('sum(user_amount) amount, service_operations.*'))->when($this->filterSelected, function ($query) {
+                $this->filter($query);
+            })->orderBy('amount', 'desc')->groupBy('request_operatorId')->take(5)->get();
+            $services = auth()->user()->adminAccessServices($this->filterSelected);
+        }
         return view('livewire.dashboard-operation-list', compact('services'));
     }
 

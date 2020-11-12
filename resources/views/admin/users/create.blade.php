@@ -125,57 +125,9 @@
                                 </div>
                             </div>
 
-                            <div class="form-group has-feedback row {{ $errors->has('role') ? ' has-error ' : '' }}">
-                                {!! Form::label('role', trans('forms.create_user_label_role'), array('class' => 'col-md-3 control-label')); !!}
-                                <div class="col-md-9">
-                                    <div class="input-group">
-                                        <select class="custom-select form-control" name="role" id="role" required>
-                                            <option value="">{{ trans('forms.create_user_ph_role') }}</option>
-                                            @if ($roles)
-                                                @foreach($roles as $role)
-                                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <div class="input-group-append">
-                                            <label class="input-group-text" for="role">
-                                                <i class="{{ trans('forms.create_user_icon_role') }}" aria-hidden="true"></i>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    @if ($errors->has('role'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('role') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="form-group has-feedback row {{ $errors->has('group') ? ' has-error ' : '' }}">
-                                {!! Form::label('group', trans('forms.create_user_label_role'), array('class' => 'col-md-3 control-label')); !!}
-                                <div class="col-md-9">
-                                    <div class="input-group">
-                                        <select class="custom-select form-control" name="group" id="group">
-                                            <option value="0">{{ trans('forms.create_user_ph_role') }}</option>
-                                            @if ($roles)
-                                                @foreach($groups as $group)
-                                                    <option value="{{ $group->id }}">{{ $group->name }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <div class="input-group-append">
-                                            <label class="input-group-text" for="group">
-                                                <i class="{{ trans('forms.create_user_icon_role') }}" aria-hidden="true"></i>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    @if ($errors->has('role'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('role') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
+                            @livewireStyles()
+                            @livewire('group-component', ['roles' => $roles])
+                            @livewireScripts()
 
                             <div class="form-group has-feedback row {{ $errors->has('password') ? ' has-error ' : '' }}">
                                 {!! Form::label('password', trans('forms.create_user_label_password'), array('class' => 'col-md-3 control-label')); !!}

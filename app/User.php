@@ -111,4 +111,22 @@ class User extends Authenticatable
             }
         }
     }
+
+    public function accessServices($time)
+    {
+        $month = Carbon::now()->month;
+        $week = [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()];
+        $day = Carbon::today();
+        $yesterday = Carbon::yesterday();
+
+        if ($time == 'day') {
+            return ServiceOperation::where('user_id', auth()->id())->orderBy('created_at', 'desc')->whereDate('created_at', $day)->limit(10)->get();
+        } elseif ($time == 'yesterday') {
+            return ServiceOperation::where('user_id', auth()->id())->orderBy('created_at', 'desc')->whereDate('created_at', $yesterday)->limit(10)->get();
+        } else if ($time == 'week') {
+            return ServiceOperation::where('user_id', auth()->id())->orderBy('created_at', 'desc')->whereBetween('created_at', $week)->limit(10)->get();
+        } else {
+            return ServiceOperation::where('user_id', auth()->id())->orderBy('created_at', 'desc')->whereMonth('created_at', $month)->limit(10)->get();
+        }
+    }
 }
