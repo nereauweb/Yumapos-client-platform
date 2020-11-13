@@ -32,7 +32,7 @@
 								<div class="uk-width-1-3@s">
 									<ul class="uk-tab-left" uk-tab="connect: #form-boxes;">
 										<li class="uk-active"><a href="#">Utente</a></li>
-										@if ($user->hasRole('user'))
+										@if ($user->hasRole('user')||$user->hasRole('sales'))
 										<li><a href="#">Dati aziendali</a></li>
 										@endif
 									</ul>
@@ -247,7 +247,7 @@
 											</div>
 										</li>
 										
-										@if ($user->hasRole('user'))
+										@if ($user->hasRole('user')||$user->hasRole('sales'))
 										<li>
 											<div class="form-group has-feedback row {{ $errors->has('company_name') ? ' has-error ' : '' }}">
 												{!! Form::label('company_name', 'Ragione sociale', array('class' => 'col-md-3 control-label')); !!}

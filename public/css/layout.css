@@ -7,14 +7,14 @@
 .uk-modal {
 	z-index: 1040;
 }
-.form-control-dark {
+.c-dark-theme .form-control-dark {
     background: #595959 !important;
     color: white;
 }
-.iti__country-list {
+.c-dark-theme .iti__country-list {
     background: black;
 }
-.iti__country-list > li:hover {
+.c-dark-theme .iti__country-list > li:hover {
     background: #606060;
 }
 .c-dark-theme .c-sidebar .c-sidebar-nav-title {

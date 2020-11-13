@@ -52,7 +52,7 @@ class GetMenu
         }else{
             $role = 'guest';
         }
-		if ($role == 'user' ){
+		if ($role == 'user' || $role == 'sales'){
 			$extra = '<li class="c-sidebar-nav-title">                         
 				Servizi
 			</li>';

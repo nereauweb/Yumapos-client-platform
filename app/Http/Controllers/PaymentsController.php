@@ -200,7 +200,7 @@ class PaymentsController extends Controller
 
     public function payUser()
     {
-        $users = User::where('id', '!=', auth()->id())->pluck('name','id');
+        $users = User::where('id', '!=', auth()->id())->orderBy('name')->pluck('name','id');
         return view('admin/payments/pay-user', compact('users'));
     }
 
