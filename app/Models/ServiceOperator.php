@@ -24,7 +24,7 @@ class ServiceOperator extends Model
 	];
 	
 	public function main(){
-		if ($this->main=="reloadly"){
+		if ($this->master=="reloadly"){
 			return $this->reloadly();
 		}
 		return $this->ding();
@@ -38,6 +38,13 @@ class ServiceOperator extends Model
 	
 	public function country(){ 
 		return $this->hasOne('App\Models\ServiceCountry','id','country_id'); 
+	}
+	
+	public function type(){
+		if ($this->master=="reloadly"){
+			return $this->reloadly->denominationType;
+		}
+		return $this->ding->products_type();
 	}
 	
 }

@@ -20,6 +20,7 @@ class ServiceCategory extends Model
 	protected $fillable = [
 		'name',
 		'country_list_type',
+		'operator_list_type'
 	];
 	
 	public function countries(){

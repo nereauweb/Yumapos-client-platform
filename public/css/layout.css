@@ -14,6 +14,9 @@
 .iti__country-list {
     background: black;
 }
+.iti__country-list > li:hover {
+    background: #606060;
+}
 .c-dark-theme .c-sidebar .c-sidebar-nav-title {
     color: rgba(255, 255, 255, 0.9) !important;
 }

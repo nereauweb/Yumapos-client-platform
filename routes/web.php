@@ -150,9 +150,12 @@ Route::group(['middleware' => ['get.menu']], function () {
 			Route::get('/input', 'PointServiceController@input')->name('users.services.input');
 			//Route::post('/preview', 'ApiReloadlyController@user_input_phone_number')->name('users.services.preview');
 			Route::post('/preview', 'PointServiceController@preview')->name('users.services.preview');
+			Route::put('/preview/category/{id}', 'PointServiceController@preview_category')->name('users.services.preview.category');
 			Route::get('/preview/operator/{id}', 'ApiReloadlyController@user_operator_selected')->name('users.services.preview.operator');
-			Route::post('/transaction', 'ApiReloadlyController@user_recharge_request')->name('users.services.transaction');
-			Route::get('/transaction/result', 'ApiReloadlyController@user_recharge')->name('users.services.transaction.result');
+			Route::post('/transaction', 'PointServiceController@user_recharge_request')->name('users.services.transaction');
+			//Route::post('/reloadly/transaction', 'ApiReloadlyController@user_recharge_request')->name('users.services.reloadly.transaction');
+			Route::get('/ding/transaction/result', 'ApiDingController@user_recharge')->name('users.services.ding.transaction.result');
+			Route::get('/reloadly/transaction/result', 'ApiReloadlyController@user_recharge')->name('users.services.reloadly.transaction.result');
 			Route::get('/print/{id}', 'PointServiceController@print')->name('users.services.print');
 			Route::get('/print/{id}/small', 'PointServiceController@print_small')->name('users.services.print.small');
         });

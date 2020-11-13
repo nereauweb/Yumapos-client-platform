@@ -33,4 +33,12 @@ class ApiDingOperatorConfiguration extends Model
 		return $this->amounts->where('original_amount', $original_amount)->first();
 	}
 	
+	public function local_amounts(){ 
+		return $this->hasMany('App\Models\ApiDingOperatorConfigurationLocalAmount','parent_id'); 
+	}
+	
+	public function local_amount($original_amount){
+		return $this->local_amounts->where('original_amount', $original_amount)->first();
+	}
+	
 }

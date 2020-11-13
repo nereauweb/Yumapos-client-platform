@@ -17,7 +17,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-						{!! Form::open(array('route' => 'users.services.preview', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation')) !!}
+						{!! Form::open(array('route' => ['users.services.preview.category',$category->id], 'method' => 'PUT', 'role' => 'form', 'class' => 'needs-validation')) !!}
 
 							{!! csrf_field() !!}
 									<div class="">
@@ -48,6 +48,7 @@
 
 <script src="/intltelinput/js/intlTelInput.min.js"></script>
 <script>
+$(document).ready(function(){
 	var input = document.querySelector("#phone");
 	var iti = window.intlTelInput(input, {
 		customContainer: "uk-width-1-1",
@@ -106,6 +107,8 @@
 			return $1.toUpperCase();
 		});
 	}
+	$(".iti__selected-flag > .iti__flag").click();
+});
 </script>
 
 @endsection

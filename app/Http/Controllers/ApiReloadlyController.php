@@ -265,7 +265,8 @@ class ApiReloadlyController extends Controller
 		$operator = isset($data['operatorId']) ? $this->save_operator_data($data,0,true) : false;
 		return view('users/service/preview', ['log' => $this->log, 'data' => $data, 'operator' => $operator, 'phone_number' => $full_number] );
     }
-
+	
+	/*
 	public function user_recharge_request(Request $request){
 		$request_data = [
 			'request_local' 					=> $request->input('local') ? $request->input('local') : 0,
@@ -278,8 +279,11 @@ class ApiReloadlyController extends Controller
 			'final_expected_destination_amount' => $request->input('final_amount_destination'),
 		];
 		$request->session()->flash('request_data', $request_data);
-		return redirect()->route('users.services.transaction.result');
+		return redirect()->route('users.services.reloadly.transaction.result');
 	}
+	*/
+
+	// two distinct functions passing data through session to avoid multiple submits...
 
 	public function user_recharge(Request $request)
     {
@@ -335,6 +339,7 @@ class ApiReloadlyController extends Controller
 		$user_total_gain = $user_discount + $user_gain;
 
 		$response = [
+			'provider' => 'reloadly',
 			'user_id' => Auth::user()->id,
 			'request_operatorId' => $request_operator_id,
 			'request_amount' => $request_amount,

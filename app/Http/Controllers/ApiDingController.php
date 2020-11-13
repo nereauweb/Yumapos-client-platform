@@ -32,8 +32,8 @@ use Illuminate\Support\Facades\Validator;
 
 class ApiDingController extends Controller
 {
-
 	private $token = '';
+	private $test = true;
 
 	public $log = '';
 	public $call_id = 0;
@@ -463,6 +463,219 @@ class ApiDingController extends Controller
 			$result = $ex->getMessage();
 		}
 		return view('admin/api/ding/test', compact('request_description','result'));
+	}
+	
+	public function SendTransfer(Request $request)
+	{
+		$data = $request->input('data');
+		$request_description = 'Send Transfer';
+		try{
+			$result = $this->ding->SendTransfer([
+				'SkuCode' => $data['sku_code'],
+				'SendValue' => $data['sku_code'],
+				'SendCurrencyIso' => $data['send_currency_iso'],
+				'AccountNumber' => $data['account_number'],
+				'DistributorRef' => $data['distributor_ref'],
+				'Settings' => [
+					'Name' => $data['name'],
+					'Value' => $data['value'],
+				],
+				'ValidateOnly' => $this->test ? 'true' : 'false',
+				'BillRef' => $data['bill_ref'],
+			]);
+		} catch (Exception $ex){
+			$result = $ex->getMessage();
+		}
+		return view('admin/api/ding/test', compact('request_description','result'));
+	}
+	
+	public function user_recharge(Request $request)
+	{
+		$request_data = $request->session()->get('request_data');
+
+		if (empty($request_data)) { return redirect()->route('users.reports.operations'); }
+
+		$request_product_sku 				= $request_data['request_product_sku'];
+		$request_local 						= $request_data['request_local'];
+		$request_send_currency_iso			= isset($request_data['request_local']) ? $request_data['request_local'] : 'EUR';
+		$request_operator_ProviderCode 		= $request_data['request_operator_ProviderCode'];
+		$request_amount 					= $request_data['request_amount'];
+		$request_country_iso 				= $request_data['request_country_iso'];
+		$request_recipient_phone 			= $request_data['request_recipient_phone'];
+		$user_gain 							= $request_data['user_gain'];
+		$final_amount 						= $request_data['final_amount'];
+		$final_expected_destination_amount 	= $request_data['final_expected_destination_amount'];
+
+		$operator = ApiDingOperator::where('ProviderCode',$request_operator_ProviderCode)->first();
+		//$original_expected_destination_amount = $request_amount * $operator->fx->rate;
+
+		$configuration = $operator->configuration(Auth::user()->group_id);
+
+		$user_amount = $final_amount - $user_gain;
+
+		if ($operator->products_type=="FIXED"){
+			if($request_local==1){
+				$sent_amount = $user_amount; // temporary, to be overwritten before saving
+				if ($configuration) {
+					$config_amount = $configuration->local_amount($request_amount);
+					$user_discount = $config_amount && $config_amount->discount > 0 ? round(($config_amount->discount/100)*$config_amount->final_amount,2) : 0;
+					$platform_gain = 0;
+				} else {
+					$user_discount = 0;
+					$platform_gain = 0;
+				}
+			} else {
+				$sent_amount = $request_amount;
+				if ($configuration) {
+					$config_amount = $configuration->amount($request_amount);
+					$user_discount = $config_amount && $config_amount->discount > 0 ? round(($config_amount->discount/100)*$request_amount,2) : 0;
+					$platform_gain = $config_amount && $config_amount->final_amount > 0 ? $config_amount->final_amount - $config_amount->original_amount : 0;
+				} else {
+					$user_discount = 0;
+					$platform_gain = 0;
+				}
+			}
+		}
+		if ($operator->products_type=="RANGE"){
+			$user_discount = $configuration ? round(($configuration->discount_percent/100) * $request_amount,3) : 0;
+			$sent_amount = round($final_expected_destination_amount / $operator->fx->rate,3);
+			$platform_gain = $request_amount - $sent_amount;
+		}
+
+		$user_total_gain = $user_discount + $user_gain;
+
+		$response = [
+			'provider' => 'reloadly',
+			'user_id' => Auth::user()->id,
+			'request_product_sku' => $request_product_sku,
+			'request_ProviderCode' => $request_operator_ProviderCode,
+			'request_amount' => $request_amount,
+			'request_local' => $request_local,
+			'request_country_iso' => $request_country_iso,
+			'request_recipient_phone' => $request_recipient_phone,
+			//'original_expected_destination_amount' => $original_expected_destination_amount,
+			'final_expected_destination_amount' => $final_expected_destination_amount,
+			'user_discount' => $user_discount,
+			'user_amount' => $user_amount,
+			'sent_amount' => $sent_amount,
+			'platform_gain' => $platform_gain,
+			'user_gain' => $user_gain,
+			'final_amount' => $final_amount,
+			'user_total_gain' => $user_total_gain,
+		];
+
+		if(Auth::user()->plafond - $user_amount < Auth::user()->debt_limit){
+			$response['result'] = -1;
+			$response['message'] = 'Insufficient balance, please add credit to your balance to finalize operation or contact administration.';
+			return view('users/service/result', ['response' => $response]);
+		}
+
+		try{
+			$data = $this->ding->SendTransfer([
+				'SkuCode' => $request_product_sku,
+				'SendValue' => $request_amount,
+				'SendCurrencyIso' => $request_send_currency_iso,
+				'AccountNumber' => $request_recipient_phone,
+				'DistributorRef' => Auth::user()->id .'.'. time(),
+				/*
+				'Settings' => [
+					'Name' => $data['name'],
+					'Value' => $data['value'],
+				],
+				*/
+				'ValidateOnly' => $this->test ? 'true' : 'false',
+				'BillRef' => Auth::user()->id .'.'. time(),
+			]);
+		} catch (Exception $ex){
+			$result = $ex->getMessage();
+		}
+
+		/*
+		
+		if($request_local==1){
+			$data = $this->post_call('/topups', [
+				'operatorId' => $request_operator_id,
+				'amount' => $request_amount,
+				'useLocalAmount' => 'true',
+				'recipientPhone' => "{
+					\"countryCode\": \"".$request_country_iso."\",
+					\"number\": \"".$request_recipient_phone."\"
+				  }"
+			], true);
+		} else {
+			$data = $this->post_call('/topups', [
+				'operatorId' => $request_operator_id,
+				'amount' => $sent_amount,
+				'recipientPhone' => "{
+					\"countryCode\": \"".$request_country_iso."\",
+					\"number\": \"".$request_recipient_phone."\"
+				  }"
+			], true);
+		}
+		$response['api_reloadly_calls_id'] = $this->call_id;
+		
+		*/
+		
+		
+		
+		if ($result->getResultCode()==1){
+			$data = $result->getTransferRecord();
+		} else {
+			return view('users/service/result', ['log' => $this->log, 'data' => $data, 'response' => $response, 'operator' => $operator] );
+		}
+		
+		$dingOperation = ApiDingOperation::create([
+			'TransferRef' 				=> $data['TransferId']['TransferRef'],
+			'DistributorRef' 			=> $data['TransferId']['DistributorRef'],
+			'SkuCode' 					=> $data['SkuCode'],
+			'CustomerFee' 				=> $data['Price']['CustomerFee'],
+			'DistributorFee' 			=> $data['Price']['DistributorFee'],
+			'ReceiveValue' 				=> $data['Price']['ReceiveValue'],
+			'ReceiveCurrencyIso' 		=> $data['Price']['ReceiveCurrencyIso'],
+			'ReceiveValueExcludingTax' 	=> $data['Price']['ReceiveValueExcludingTax'],
+			'TaxRate' 					=> $data['Price']['TaxRate'],
+			'TaxName' 					=> $data['Price']['TaxName'],
+			'TaxCalculation' 			=> $data['Price']['TaxCalculation'],
+			'SendValue' 				=> $data['Price']['SendValue'],
+			'SendCurrencyIso' 			=> $data['Price']['SendCurrencyIso'],
+			'CommissionApplied' 		=> $data['CommissionApplied'],
+			'StartedUtc' 				=> $data['StartedUtc'],
+			'CompletedUtc' 				=> $data['CompletedUtc'],
+			'ProcessingState' 			=> $data['ProcessingState'],
+			'ReceiptText' 				=> $data['ReceiptText'],
+			'ReceiptParams' 			=> $data['ReceiptParams'],
+			'AccountNumber' 			=> $data['AccountNumber'],
+		]);
+		$response['api_ding_operation_id'] = $dingOperation->id;
+		$response['ding_TransferRef'] = $dingOperation->TransferRef;
+
+		$response['platform_commission'] = $dingOperation->CommissionApplied;
+		if($request_local==1){
+			$response['sent_amount'] = $dingOperation->SendValue;
+			$response['platform_gain'] = $user_amount - $response['sent_amount'];
+		}
+		$response['platform_total_gain'] = $response['platform_gain'] + $response['platform_commission'];
+
+		$user = Auth::user();
+		$response['user_old_plafond'] = $user->plafond;
+		$user_cost = $user_amount - $user_discount;
+		$user->plafond = Auth::user()->plafond - $user_cost;
+		$user->save();
+		$response['user_new_plafond'] = $user->plafond;
+		$response['result'] = 1;
+		$operation = ServiceOperation::create($response);
+		$response['operation_id'] = $operation->id;
+		if ($user->parent_id && $user->parent_id != 0){
+			AgentOperation::create([
+				'user_id'				=> $user->parent_id,
+				'service_operation_id'	=> $operation->id,
+				'original_amount'		=> $user_cost,
+				'applied percentage'	=> $user->parent_percent,
+				'commission'			=> round(($user_cost * ( $user->parent_percent / 100 )),2),
+			]);
+		}
+			
+		return view('users/service/result', ['log' => $this->log, 'data' => $data, 'response' => $response, 'operator' => $operator] );
 	}
 
 }
