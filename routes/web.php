@@ -132,11 +132,9 @@ Route::group(['middleware' => ['get.menu']], function () {
         'destroy'   => 'resource.destroy'
     ]);
 
-    Route::group(['middleware' => ['role:user']], function () {
-        Route::put('/user/update-password', 'ApprovedUserController@updatePassword')->name('user.updatePassword');
-    });
-
 	Route::group(['middleware' => ['role:user|sales']], function () {
+		
+        Route::put('/user/update-password', 'ApprovedUserController@updatePassword')->name('user.updatePassword');
 
 //	    chart data
         Route::post('/user/internal/services/operations/totals/{type}', 'ServiceOperationController@totals'); // endpoint for initial calculations (daily)
