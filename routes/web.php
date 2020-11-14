@@ -133,7 +133,7 @@ Route::group(['middleware' => ['get.menu']], function () {
     ]);
 
 	Route::group(['middleware' => ['role:user|sales']], function () {
-		
+
         Route::put('/user/update-password', 'ApprovedUserController@updatePassword')->name('user.updatePassword');
 
 //	    chart data
@@ -244,7 +244,7 @@ Route::group(['middleware' => ['get.menu']], function () {
 		Route::prefix('/admin/payments')->group(function () {
             Route::get('/{id}/edit', 'PaymentsController@edit')->name('admin.payments.edit');
             Route::get('/export', 'PaymentsController@export')->name('admin.payments.export');
-            Route::put('payments/cancel/{payment}', 'PaymentsController@cancel')->name('admin.payments.cancel');
+            Route::put('/cancel/{payment}', 'PaymentsController@cancel')->name('admin.payments.cancel');
             Route::put('/approve/{ids}', 'PaymentsController@updatePaymentStatus')->name('admin.payments.updatePaymentStatus');
             Route::put('/recover/{payment}', 'PaymentsController@recover')->name('admin.payments.recover');
             Route::get('/trashed-payments', 'PaymentsController@trashed')->name('admin.trashedPayments');

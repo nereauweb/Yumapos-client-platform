@@ -1,14 +1,11 @@
-@extends('dashboard.base')
-
-@section('content')
-
+<div>
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    Pay provider
+                    Pay user
                     <div class="pull-right">
-                        <a href="{{ url('/admin/payments/') }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="{{ trans('providersmanagement.tooltips.back-providers') }}">
+                        <a href="{{ url('/admin/payments/') }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="{{ trans('usersmanagement.tooltips.back-users') }}">
                             <i class="fa fa-fw fa-reply-all" aria-hidden="true"></i>
                             Return to payments list
                         </a>
@@ -17,13 +14,13 @@
             </div>
 
             <div class="card-body">
-                {!! Form::open(array('route' => 'admin.payProviderStore', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation', 'enctype' => 'multipart/form-data')) !!}
+                {!! Form::open(array('route' => 'admin.payments.payUserStore', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation', 'enctype' => 'multipart/form-data')) !!}
                 {!! csrf_field() !!}
                 <div class="form-group has-feedback row {{ $errors->has('date') ? ' has-error ' : '' }}">
                     {!! Form::label('date', 'Date', array('class' => 'col-md-3 control-label')); !!}
                     <div class="col-md-9">
                         <div class="input-group">
-                            {!! Form::text('date', date('d m Y'), array('id' => 'date', 'class' => 'form-control', 'placeholder' => 'Date','required' => 'required')) !!}
+                            {!! Form::text('date', date('d m Y'), array('id' => 'date', 'class' => 'form-control','required' => 'required')) !!}
                         </div>
                         @if ($errors->has('date'))
                             <span class="help-block">
@@ -33,19 +30,19 @@
                     </div>
                 </div>
 
-                <div class="form-group has-feedback row {{ $errors->has('provider_id') ? ' has-error ' : '' }}">
-                    {!! Form::label('provider_id', 'Provider', array('class' => 'col-md-3 control-label','required' => 'required')); !!}
+                <div class="form-group has-feedback row {{ $errors->has('user_id') ? ' has-error ' : '' }}">
+                    {!! Form::label('user_id', 'User', array('class' => 'col-md-3 control-label','required' => 'required')); !!}
                     <div class="col-md-9">
                         <div class="input-group">
-                            <select name="provider_id" id="provider_id" class="form-control">
-                                @foreach($providers as $provider)
-                                    <option value="{{ $provider->id }}">{{ $provider->company_name }}</option>
+                            <select id="user_id" name="user_id" wire:model="userSelected" class="custom-select">
+                                @foreach($users as $user)
+                                    <option value="{{ $user->id }}">{{ $user->name }} {{ $user->hasRole('sales') ? '|role| [Agent]' : '' }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        @if ($errors->has('provider_id'))
+                        @if ($errors->has('user_id'))
                             <span class="help-block">
-									<strong>{{ $errors->first('provider_id') }}</strong>
+									<strong>{{ $errors->first('user_id') }}</strong>
 								</span>
                         @endif
                     </div>
@@ -74,7 +71,7 @@
                     {!! Form::label('details', 'Details', array('class' => 'col-md-3 control-label')); !!}
                     <div class="col-md-9">
                         <div class="input-group">
-                            <textarea name="details" id="details" rows="5" class="form-control"></textarea>
+                            {!! Form::text('details', NULL, array('id' => 'details', 'class' => 'form-control', 'placeholder' => 'Add payment details')) !!}
                         </div>
                         @if ($errors->has('details'))
                             <span class="help-block">
@@ -103,22 +100,24 @@
                     </div>
                 </div>
 
-                <input type="hidden" name="type" value="3">
-                <input type="hidden" name="update_balance" value="0">
-                <input type="hidden" name="approved" value="1">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="customCheck1" name="updateUserBalance">
+                    <label class="custom-control-label" for="customCheck1">add the payment amount to the user's balance</label>
+                </div>
 
-                {!! Form::button('Pay provider', array('class' => 'btn btn-success margin-bottom-1 mb-1 float-right','type' => 'submit' )) !!}
+                @if($isAgent)
+                    <div class="custom-control custom-checkbox mt-4">
+                        <input type="checkbox" class="custom-control-input" id="customCheck2" name="updateAgentCredit">
+                        <label class="custom-control-label" for="customCheck2">add the amount to the agent's credit</label>
+                    </div>
+                @endif
+
+                <input type="hidden" name="type" value="2">
+
+                {!! Form::button('Save payment', array('class' => 'btn btn-success margin-bottom-1 mb-1 float-right','type' => 'submit' )) !!}
                 {!! Form::close() !!}
             </div>
 
         </div>
     </div>
-
-@endsection
-
-@section('javascript')
-    <script src="/js/jquery.maskedinput.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        $("#date").mask("99/99/9999");
-    </script>
-@endsection
+</div>

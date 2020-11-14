@@ -23,10 +23,6 @@
                         <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
                         Add payment
                     </a>
-                    <a class="btn btn-warning" href="{{ route('admin.payments.reduce-credit-view') }}">
-                        <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
-                        Reduce credit
-                    </a>
                 </div>
             </div>
         </div>
@@ -57,7 +53,6 @@
                                 <option value="1">User to platform</option>
                                 <option value="2">Platform to user</option>
                                 <option value="3">Platform to provider</option>
-                                <option value="4">Agent Credit</option>
                             </select>
                         </div>
                     </div>
