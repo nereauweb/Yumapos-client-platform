@@ -22,7 +22,9 @@
                     <td>{{ $trash->amount }}</td>
                     <td>{{ $trash->user->name }}</td>
                     <td>
-                        <form action="#">
+                        <form action="{{ route('admin.payments.recover-from-trash', $trash->id) }}" method="POST">
+                            @method('PUT')
+                            @csrf
                             <button class="btn btn-success">Recover</button>
                         </form>
                     </td>

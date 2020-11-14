@@ -1,7 +1,7 @@
 <div>
     @include('livewire.user.approve')
     @include('livewire.user.destroy')
-    <div class="btn-group btn-group-xs">
+    <div class="btn-group btn-group-xs mb-1">
         @if (!$user->trashed())
             <button type="button" class="btn btn-table-action dropdown-toggle" data-toggle="dropdown">
                 {{ $user->id }}

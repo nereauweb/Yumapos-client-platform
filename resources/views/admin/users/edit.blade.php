@@ -27,7 +27,7 @@
                         {!! Form::open(array('route' => ['users.update', $user->id], 'method' => 'PUT', 'role' => 'form', 'class' => 'needs-validation')) !!}
 
                             {!! csrf_field() !!}
-							
+
 							<div uk-grid>
 								<div class="uk-width-1-3@s">
 									<ul class="uk-tab-left" uk-tab="connect: #form-boxes;">
@@ -86,7 +86,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('parent_percent') ? ' has-error ' : '' }}">
 												{!! Form::label('parent_percent', 'Percentuale referente', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -105,7 +105,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('plafond') ? ' has-error ' : '' }}">
 												{!! Form::label('plafond', 'Plafond', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -124,7 +124,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('debt_limit') ? ' has-error ' : '' }}">
 												{!! Form::label('debt_limit', 'Plafond limit', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -143,7 +143,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											@endif
 <?php /*
 											<div class="form-group has-feedback row {{ $errors->has('first_name') ? ' has-error ' : '' }}">
@@ -202,7 +202,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="pw-change-container">
 												<div class="form-group has-feedback row {{ $errors->has('password') ? ' has-error ' : '' }}">
 
@@ -246,7 +246,7 @@
 												</div>
 											</div>
 										</li>
-										
+
 										@if ($user->hasRole('user')||$user->hasRole('sales'))
 										<li>
 											<div class="form-group has-feedback row {{ $errors->has('company_name') ? ' has-error ' : '' }}">
@@ -262,7 +262,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('legal_seat_address') ? ' has-error ' : '' }}">
 												{!! Form::label('legal_seat_address', 'Sede legale - indirizzo', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -276,7 +276,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('legal_seat_zip') ? ' has-error ' : '' }}">
 												{!! Form::label('legal_seat_zip', 'Sede legale - CAP', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -290,7 +290,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('legal_seat_city') ? ' has-error ' : '' }}">
 												{!! Form::label('legal_seat_city', 'Sede legale - Città', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -304,7 +304,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('legal_seat_region') ? ' has-error ' : '' }}">
 												{!! Form::label('legal_seat_region', 'Sede legale - Regione', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -323,11 +323,11 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group">
 												<button class="btn btn-success" onClick="javascript:copy_values(event);">Copia dati sede legale in sede operativa</button>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('operative_seat_address') ? ' has-error ' : '' }}">
 												{!! Form::label('operative_seat_address', 'Sede operativa - indirizzo', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -341,7 +341,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('operative_seat_zip') ? ' has-error ' : '' }}">
 												{!! Form::label('operative_seat_zip', 'Sede operativa - CAP', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -355,7 +355,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('operative_seat_city') ? ' has-error ' : '' }}">
 												{!! Form::label('operative_seat_city', 'Sede operativa - Città', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -369,7 +369,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('operative_seat_region') ? ' has-error ' : '' }}">
 												{!! Form::label('operative_seat_region', 'Sede operativa - Regione', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -388,7 +388,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('vat') ? ' has-error ' : '' }}">
 												{!! Form::label('vat', 'Partita IVA', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -402,7 +402,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('tax_unique_code') ? ' has-error ' : '' }}">
 												{!! Form::label('tax_unique_code', 'Codice unico destinatario', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -416,7 +416,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('vat_percent') ? ' has-error ' : '' }}">
 												{!! Form::label('vat_percent', 'Percentuale IVA', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -430,7 +430,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('witholding_tax_percent') ? ' has-error ' : '' }}">
 												{!! Form::label('witholding_tax_percent', "Percentuale ritenuta d'acconto", array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -444,7 +444,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('pec') ? ' has-error ' : '' }}">
 												{!! Form::label('pec', 'PEC', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -458,7 +458,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('email') ? ' has-error ' : '' }}">
 												{!! Form::label('email', 'Email', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -472,7 +472,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('phone') ? ' has-error ' : '' }}">
 												{!! Form::label('phone', 'Telefono fisso', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -486,7 +486,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('mobile') ? ' has-error ' : '' }}">
 												{!! Form::label('mobile', 'Cellulare', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -500,7 +500,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('referent_name') ? ' has-error ' : '' }}">
 												{!! Form::label('referent_name', 'Nome referente', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -514,7 +514,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('referent_surname') ? ' has-error ' : '' }}">
 												{!! Form::label('referent_surname', 'Cognome referente', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -528,7 +528,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('referent_mobile') ? ' has-error ' : '' }}">
 												{!! Form::label('referent_mobile', 'Cellulare referente', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -542,7 +542,7 @@
 													@endif
 												</div>
 											</div>
-											
+
 											<div class="form-group has-feedback row {{ $errors->has('shop_sign') ? ' has-error ' : '' }}">
 												{!! Form::label('shop_sign', 'Insegna negozio', array('class' => 'col-md-3 control-label')); !!}
 												<div class="col-md-9">
@@ -557,7 +557,7 @@
 												</div>
 											</div>
 										</li>
-										@endif	
+										@endif
 									</ul>
 								</div>
 							</div>

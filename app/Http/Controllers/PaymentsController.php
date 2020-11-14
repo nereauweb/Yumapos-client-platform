@@ -624,6 +624,49 @@ class PaymentsController extends Controller
             return back()->with(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
+
+    public function reject(Payment $payment)
+    {
+        try {
+            DB::beginTransaction();
+            if (count($payment->documents) > 0) {
+                foreach ($payment->documents as $doc) {
+                    $doc->delete();
+                }
+            }
+            $payment->delete();
+            DB::commit();
+            return back()->with(['status' => 'success', 'message' => 'Payment successfully moved to trash!']);
+        } catch (\ErrorException $e) {
+            DB::rollBack();
+            return back()->with(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function recoverFromTrash($paymentId)
+    {
+        try {
+            DB::beginTransaction();
+                $payment = Payment::withTrashed()->find($paymentId);
+                $payment->restore();
+                $payment->update(['approved' => 1]);
+                $payment->user->update([
+                   'plafond' => (float)$payment->user->plafond + (float)$payment->amount
+                ]);
+                $trashedDocuments = $payment->documents()->withTrashed()->get();
+                if (count($trashedDocuments) >= 0) {
+                    foreach ($trashedDocuments as $trashedDocument) {
+                        $trashedDocument->restore();
+                    }
+                }
+            DB::commit();
+            return back()->with(['status' => 'success', 'message' => 'success, payment moved to approved list!']);
+        } catch (\ErrorException $e) {
+            DB::rollBack();
+            return back()->with(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
     //  ###OLD CODE####
 //    public function recover($payment)
 //    {

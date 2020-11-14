@@ -186,7 +186,7 @@ Route::group(['middleware' => ['get.menu']], function () {
 
     Route::group(['middleware' => ['role:admin']], function () {
 
-        Route::post('admin/agent/user/approve', 'AgentController@approve');
+        Route::put('admin/agent/user/approve', 'AgentController@approve')->name('admin.agent.user.approve');
 
         Route::get('/reloadly_balance', 'ApiReloadlyController@getBalance');
 
@@ -252,8 +252,8 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::get('/pay-provider', 'PaymentsController@payProvider')->name('admin.payProvider');
             Route::post('/pay-provider', 'PaymentsController@payProviderStore')->name('admin.payProviderStore');
             Route::post('/pay-user', 'PaymentsController@payUserStore')->name('admin.payments.payUserStore');
-            Route::get('/reduce-credit', 'PaymentsController@reduceCreditView')->name('admin.payments.reduce-credit-view');
-            Route::post('/reduce-credit', 'PaymentsController@reduceCredit')->name('admin.payments.reduce-credit');
+            Route::delete('/delete/{payment}', 'PaymentsController@reject')->name('admin.payments.reject');
+            Route::put('/recover-from-trash/{payment}', 'PaymentsController@recoverFromTrash')->name('admin.payments.recover-from-trash');
         });
 
 		Route::prefix('/admin/api/reloadly')->group(function () {

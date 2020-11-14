@@ -61,72 +61,77 @@
 
                                     <div class="col-sm-6 col-lg-3" style="height: 100%">
                                         <div class="card text-white bg-gradient-warning" style="height: 90%">
-                                            <div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
-                                                <div>
-                                                    <div class="text-value-lg">{{ $paymentsData['totals'] }}</div>
-                                                    <div class="uk-text-uppercase">Pending payments</div>
+                                            <div class="card-body card-body pb-0">
+                                                <div class="d-flex justify-content-between align-items-start">
+                                                    <div>
+                                                        <div class="text-value-lg">{{ $paymentsData['totals'] }}</div>
+                                                        <div class="uk-text-uppercase">Pending payments</div>
+                                                    </div>
+                                                    <div class="btn-group">
+                                                        <a class="btn btn-pill btn-primary" type="button" aria-haspopup="true" aria-expanded="false" href="{{ route('admin.payments.index') }}">
+                                                             <i class="cil-library"></i>
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                                <div class="btn-group">
-                                                    <a class="btn btn-pill btn-primary" type="button" aria-haspopup="true" aria-expanded="false" href="{{ route('admin.payments.index') }}">
-                                                         <i class="cil-library"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="c-chart-wrapper mt-0" style="height:70px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                                                <ul class="uk-list m-0 p-1">
-                                                    @foreach($paymentsData['pending'] as $pendingPayment)
-														<li class="m-0">
-															<div class="btn-group btn-group-xs">
-																<button type="button" class="btn btn-table-action dropdown-toggle" data-toggle="dropdown">
-																	<i class="fa fa-ellipsis-v fa-fw" aria-hidden="true"></i>
-																	<span class="sr-only">
+
+                                            <div class="c-chart-wrapper mt-0" style="height:70px;">
+                                                <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand">
+                                                    <div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                                                    <ul class="uk-list m-0 p-1">
+                                                        @foreach($paymentsData['pending'] as $pendingPayment)
+                                                            <li class="m-0">
+                                                                <div class="btn-group btn-group-xs my-1">
+                                                                    <button type="button" class="btn btn-table-action dropdown-toggle" data-toggle="dropdown">
+                                                                        <i class="fa fa-ellipsis-v fa-fw" aria-hidden="true"></i>
+                                                                        <span class="sr-only">
 																		Actions
 																	</span>
-																</button>
-																<div class="dropdown-menu dropdown-menu-right">
-																	@if ($pendingPayment->approved == 0)
-																		{!! Form::open(['route' => ['admin.payments.updatePaymentStatus', $pendingPayment->id],
-																		'method' => 'PUT', 'role' => 'form']) !!}
-																		{!! csrf_field() !!}
-																		<button class="dropdown-item" type="submit">Approve</button>
-																		{!! Form::close() !!}
-																		{!! Form::open(['route' => ['admin.payments.destroy', $pendingPayment->id],
-																		'method' => 'DELETE', 'role' => 'form']) !!}
-																		{!! csrf_field() !!}
-																		<button class="dropdown-item" type="submit">Reject</button>
-																		{!! Form::close() !!}
-																		<a href="{{ route('admin.payments.edit', $pendingPayment) }}" class="dropdown-item">Edit payment</a>
-																	@endif
-																</div>
-															</div>
-															{{ $pendingPayment->user->name }}
-															<strong>{{ $pendingPayment->amount }} €</strong>
-														</li>
-                                                    @endforeach
-                                                </ul>
+                                                                    </button>
+                                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                                        @if ($pendingPayment->approved == 0)
+                                                                            {!! Form::open(['route' => ['admin.payments.updatePaymentStatus', $pendingPayment->id],
+                                                                            'method' => 'PUT', 'role' => 'form']) !!}
+                                                                            {!! csrf_field() !!}
+                                                                            <button class="dropdown-item" type="submit">Approve</button>
+                                                                            {!! Form::close() !!}
+                                                                            {!! Form::open(['route' => ['admin.payments.reject', $pendingPayment],
+                                                                            'method' => 'DELETE', 'role' => 'form']) !!}
+                                                                            {!! csrf_field() !!}
+                                                                            <button class="dropdown-item" type="submit">Reject</button>
+                                                                            {!! Form::close() !!}
+                                                                            <a href="{{ route('admin.payments.edit', $pendingPayment) }}" class="dropdown-item">Edit payment</a>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                                {{ $pendingPayment->user->name }}
+                                                                <strong>{{ $pendingPayment->amount }} €</strong>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
 
                                     <div class="col-sm-6 col-lg-3" style="height: 100%">
                                         <div class="card text-white bg-gradient-danger" style="height: 90%">
-                                            <div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
-                                                <div>
-                                                    <div class="text-value-lg">{{ $usersData['totals'] }}</div>
-                                                    <div class="uk-text-uppercase">Pending users</div>
+                                            <div class="card-body card-body pb-0">
+                                                <div class="d-flex justify-content-between align-items-start">
+                                                    <div>
+                                                        <div class="text-value-lg">{{ $usersData['totals'] }}</div>
+                                                        <div class="uk-text-uppercase">Pending users</div>
+                                                    </div>
+                                                    <div class="btn-group">
+                                                        <a class="btn btn-pill btn-primary" type="button" aria-haspopup="true" aria-expanded="false" href="{{ route('users.index') }}">
+                                                            <i class="cil-library"></i>
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                                <div class="btn-group">
-                                                    <a class="btn btn-pill btn-primary" type="button" aria-haspopup="true" aria-expanded="false" href="{{ route('users.index') }}">
-                                                         <i class="cil-library"></i>
-                                                    </a>
+                                                <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                                                        @foreach($usersData['pending'] as $user)
+                                                            @livewire('dashboard-user-managment', ['user' => $user])
+                                                        @endforeach
                                                 </div>
-                                            </div>
-                                            <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                                                <ul class="uk-list m-0 p-1">
-                                                    @foreach($usersData['pending'] as $user)
-                                                        @livewire('dashboard-user-managment', ['user' => $user])
-                                                    @endforeach
-                                                </ul>
                                             </div>
                                         </div>
                                     </div>
