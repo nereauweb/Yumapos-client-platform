@@ -54,7 +54,7 @@ class PointPaymentsController extends Controller
             [
                 'date'		=> 'required',
                 'amount'	=> 'required',
-                'document'  => 'mimes:jpg,doc,docx,png,pdf'
+                'document'  => 'mimes:jpg,jpeg,doc,docx,png,pdf'
             ],
             [
                 'date.required'		=> 'Date required',

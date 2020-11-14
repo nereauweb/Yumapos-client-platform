@@ -53,7 +53,7 @@ class PaymentsController extends Controller
             'user_id' => 'required',
             'amount' => 'required|gt:0',
             'details' => '',
-            'document' => 'mimes:jpg,doc,docx,png,pdf',
+            'document' => 'mimes:jpg,jpeg,jpeg,doc,docx,png,pdf',
         ]);
 
         $date = \DateTime::createFromFormat('d/m/Y', $request->date);
@@ -160,7 +160,7 @@ class PaymentsController extends Controller
         [
             'date'		=> 'required',
             'amount'	=> 'required',
-            'document'  => 'mimes:jpg,doc,docx,png,pdf'
+            'document'  => 'mimes:jpg,jpeg,doc,docx,png,pdf'
         ],
         [
             'date.required'		=> 'Date required',
@@ -298,7 +298,7 @@ class PaymentsController extends Controller
            'date' => 'required',
             'user_id' => 'required',
             'amount' => 'required|gt:0',
-            'document' => 'mimes:jpg,doc,docx,png,pdf',
+            'document' => 'mimes:jpg,jpeg,doc,docx,png,pdf',
         ]);
 
         $date = \DateTime::createFromFormat('d/m/Y', $request->date);
@@ -728,7 +728,7 @@ class PaymentsController extends Controller
             'date' => 'required',
             'amount' => 'required|gt:0',
             'user_id' => 'required',
-            'document'  => 'mimes:jpg,doc,docx,png,pdf'
+            'document'  => 'mimes:jpg,jpeg,doc,docx,png,pdf'
         ]);
 
         $date = \DateTime::createFromFormat("d/m/Y", $request->date);
@@ -769,7 +769,7 @@ class PaymentsController extends Controller
                 'date'		=> 'required',
                 'amount'	=> 'required|gt:0',
                 'user_id'	=> 'required',
-                'document'  => 'mimes:jpg,doc,docx,png,pdf'
+                'document'  => 'mimes:jpg,jpeg,doc,docx,png,pdf'
             ],
             [
                 'date.required'		=> 'Date required',
