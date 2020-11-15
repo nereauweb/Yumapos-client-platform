@@ -175,11 +175,11 @@ class ApiReloadlyController extends Controller
 			if (Cache::has('reloadly_cache_balance_'.date('w'))) {
 				Cache::forget('reloadly_cache_balance_'.date('w'));
 			}
-			Cache::forever('reloadly_cache_balance_'.date('w'), $call['data']['balance']); 
+			Cache::forever('reloadly_cache_balance_'.date('w'), $call['data']['balance']);
 		}
 		return $call;
     }
-	
+
 	public function get_cache_balance(){
 		try{
 			$call = $this->get_call('/accounts/balance');
@@ -187,8 +187,8 @@ class ApiReloadlyController extends Controller
 				if (Cache::has('reloadly_cache_balance_'.date('w'))) {
 					Cache::forget('reloadly_cache_balance_'.date('w'));
 				}
-				Cache::forever('reloadly_cache_balance_'.date('w'), $call['data']['balance']); 
-				return $call['data']['balance'];
+				Cache::forever('reloadly_cache_balance_'.date('w'), $call['data']['balance']);
+				return response()->json($call['data']['balance'], 200);
 			}
 			return 'error';
 		} catch (Exception $ex){
@@ -265,7 +265,7 @@ class ApiReloadlyController extends Controller
 		$operator = isset($data['operatorId']) ? $this->save_operator_data($data,0,true) : false;
 		return view('users/service/preview', ['log' => $this->log, 'data' => $data, 'operator' => $operator, 'phone_number' => $full_number] );
     }
-	
+
 	/*
 	public function user_recharge_request(Request $request){
 		$request_data = [

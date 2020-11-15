@@ -256,9 +256,19 @@
                 @else
                         <div class="card">
                             <div class="card-body">
-                                <div class="d-flex justify-content-between">
+                                <div class="d-flex justify-content-between align-center">
                                     <div>
-                                        <h4 class="card-title mb-0">Operations Report</h4>
+                                        <div class="d-flex align-items-center">
+                                            <h4 class="card-title mb-0">Operations Report</h4>
+                                            @role('sales')
+                                            <div class="ml-3">
+                                                <select id="graph-selected" autocomplete="off" class="form-control">
+                                                    <option value="1">Agent Chart</option>
+                                                    <option value="2">User Chart</option>
+                                                </select>
+                                            </div>
+                                            @endrole
+                                        </div>
                                     </div>
                                     <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
                                         <div class="d-flex">
@@ -408,6 +418,7 @@
 		$("#reload-ding-balance").click(function(e){
 			e.preventDefault();
 			$.get( "{{ route('admin.api.ding.cached_balance') }}", function( data ) {
+                console.log(data);
 				if(data!='error'){
 					$( "#ding-balance" ).html( data );
 				}

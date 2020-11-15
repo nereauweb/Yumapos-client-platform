@@ -407,23 +407,23 @@ class ApiDingController extends Controller
 				if (Cache::has('ding_cache_balance_'.date('w'))) {
 					Cache::forget('ding_cache_balance_'.date('w'));
 				}
-				Cache::forever('ding_cache_balance_'.date('w'), $result['balance']); 
+				Cache::forever('ding_cache_balance_'.date('w'), $result['balance']);
 			}
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
 		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-	
+
 	public function get_cache_balance(){
-		try{
+        try{
 			$result = $this->ding->getBalance();
 			if (isset($result['balance'])){
 				if (Cache::has('ding_cache_balance_'.date('w'))) {
 					Cache::forget('ding_cache_balance_'.date('w'));
 				}
-				Cache::forever('ding_cache_balance_'.date('w'), $result['balance']); 
-				return $result['balance'];
+				Cache::forever('ding_cache_balance_'.date('w'), $result['balance']);
+				return response()->json($result['balance'], 200);
 			}
 			return 'error';
 		} catch (Exception $ex){
@@ -464,7 +464,7 @@ class ApiDingController extends Controller
 		}
 		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-	
+
 	public function SendTransfer(Request $request)
 	{
 		$data = $request->input('data');
@@ -488,7 +488,7 @@ class ApiDingController extends Controller
 		}
 		return view('admin/api/ding/test', compact('request_description','result'));
 	}
-	
+
 	public function user_recharge(Request $request)
 	{
 		$request_data = $request->session()->get('request_data');
@@ -591,7 +591,7 @@ class ApiDingController extends Controller
 		}
 
 		/*
-		
+
 		if($request_local==1){
 			$data = $this->post_call('/topups', [
 				'operatorId' => $request_operator_id,
@@ -613,17 +613,17 @@ class ApiDingController extends Controller
 			], true);
 		}
 		$response['api_reloadly_calls_id'] = $this->call_id;
-		
+
 		*/
-		
-		
-		
+
+
+
 		if ($result->getResultCode()==1){
 			$data = $result->getTransferRecord();
 		} else {
 			return view('users/service/result', ['log' => $this->log, 'data' => $data, 'response' => $response, 'operator' => $operator] );
 		}
-		
+
 		$dingOperation = ApiDingOperation::create([
 			'TransferRef' 				=> $data['TransferId']['TransferRef'],
 			'DistributorRef' 			=> $data['TransferId']['DistributorRef'],
@@ -674,7 +674,7 @@ class ApiDingController extends Controller
 				'commission'			=> round(($user_cost * ( $user->parent_percent / 100 )),2),
 			]);
 		}
-			
+
 		return view('users/service/result', ['log' => $this->log, 'data' => $data, 'response' => $response, 'operator' => $operator] );
 	}
 
