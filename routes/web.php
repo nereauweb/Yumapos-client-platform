@@ -181,6 +181,8 @@ Route::group(['middleware' => ['get.menu']], function () {
         Route::post('/sales/user', 'AgentController@userStore')->name('agent.user.store');
 		Route::prefix('/sales/reports')->group(function () {
 			Route::get('/operations', 'AgentReportController@operations')->name('agents.reports.operations');
+			Route::post('/internal/{type}', 'ServiceOperationController@agentOperations');
+			Route::post('/internal/agent-totals/{type}', 'ServiceOperationController@agentTotals');
         });
 	});
 

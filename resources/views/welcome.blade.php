@@ -263,8 +263,8 @@
                                             @role('sales')
                                             <div class="ml-3">
                                                 <select id="graph-selected" autocomplete="off" class="form-control">
-                                                    <option value="1">Agent Chart</option>
-                                                    <option value="2">User Chart</option>
+                                                    <option value="1">User Chart</option>
+                                                    <option value="2">Agent Chart</option>
                                                 </select>
                                             </div>
                                             @endrole

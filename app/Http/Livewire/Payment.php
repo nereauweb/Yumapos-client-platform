@@ -57,7 +57,7 @@ class Payment extends Component
         $this->positiveBalance -= ModelsPayment::where('type',3)->where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end)->where('approved', 1)->sum('amount');
         $this->negativeBalance = ModelsPayment::where('type', 2)->orWhere('type', 3)->where('approved', 1)->where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end)->sum('amount');
         $this->diffBalance = $this->positiveBalance - $this->negativeBalance;
-        $payments = $payments->paginate(10);
+        $payments = $payments->orderBy('created_at', 'desc')->paginate(10);
         $users = \App\User::orderBy('email', 'asc')->get();
         return view('livewire.payment', compact('payments', 'users'));
     }

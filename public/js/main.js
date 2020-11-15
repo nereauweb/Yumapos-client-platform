@@ -106,81 +106,23 @@
 
 /* eslint-disable no-magic-numbers */
 
-// var mainChart = new Chart(document.getElementById('main-chart'), {
-//   type: 'line',
-//   data: {
-//     labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S'],
-//     datasets: [{
-//       label: 'My First dataset',
-//       backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--info'), 10),
-//       borderColor: coreui.Utils.getStyle('--info'),
-//       pointHoverBackgroundColor: '#fff',
-//       borderWidth: 2,
-//       data: [165, 180, 70, 69, 77, 57, 125, 165, 172, 91, 173, 138, 155, 89, 50, 161, 65, 163, 160, 103, 114, 185, 125, 196, 183, 64, 137, 95, 112, 175]
-//     }, {
-//       label: 'My Second dataset',
-//       backgroundColor: 'transparent',
-//       borderColor: coreui.Utils.getStyle('--success'),
-//       pointHoverBackgroundColor: '#fff',
-//       borderWidth: 2,
-//       data: [92, 97, 80, 100, 86, 97, 83, 98, 87, 98, 93, 83, 87, 98, 96, 84, 91, 97, 88, 86, 94, 86, 95, 91, 98, 91, 92, 80, 83, 82]
-//     }, {
-//       label: 'My Third dataset',
-//       backgroundColor: 'transparent',
-//       borderColor: coreui.Utils.getStyle('--danger'),
-//       pointHoverBackgroundColor: '#fff',
-//       borderWidth: 1,
-//       borderDash: [8, 5],
-//       data: [65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65]
-//     }]
-//   },
-//   options: {
-//     maintainAspectRatio: false,
-//     legend: {
-//       display: false
-//     },
-//     scales: {
-//       xAxes: [{
-//         gridLines: {
-//           drawOnChartArea: false
-//         }
-//       }],
-//       yAxes: [{
-//         ticks: {
-//           beginAtZero: true,
-//           maxTicksLimit: 5,
-//           stepSize: Math.ceil(250 / 5),
-//           max: 250
-//         }
-//       }]
-//     },
-//     elements: {
-//       point: {
-//         radius: 0,
-//         hitRadius: 10,
-//         hoverRadius: 4,
-//         hoverBorderWidth: 3
-//       }
-//     }
-//   }
-// });
-            const mainChart = new Chart(document.getElementById('main-chart'), {
-                type: 'line',
-                options: {
-                    maintainAspectRatio: false,
-                    legend: {
-                        display: false
-                    },
-                    elements: {
-                        point: {
-                            radius: 0,
-                            hitRadius: 10,
-                            hoverRadius: 4,
-                            hoverBorderWidth: 3
-                        }
-                    }
-                }
-            });
+const mainChart = new Chart(document.getElementById('main-chart'), {
+    type: 'line',
+    options: {
+        maintainAspectRatio: false,
+        legend: {
+            display: false
+        },
+        elements: {
+            point: {
+                radius: 0,
+                hitRadius: 10,
+                hoverRadius: 4,
+                hoverBorderWidth: 3
+            }
+        }
+    }
+});
 // Disable the on-canvas tooltip
 Chart.defaults.global.pointHitDetectionRadius = 1;
 Chart.defaults.global.tooltips.enabled = false;
@@ -205,174 +147,7 @@ document.body.addEventListener('classtoggle', function (event) {
     cardChart2.update();
     mainChart.update();
   }
-}); // eslint-disable-next-line no-unused-vars
-
-// var cardChart1 = new Chart(document.getElementById('card-chart1'), {
-//   type: 'line',
-//   data: {
-//     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-//     datasets: [{
-//       label: 'My First dataset',
-//       backgroundColor: 'transparent',
-//       borderColor: 'rgba(255,255,255,.55)',
-//       pointBackgroundColor: coreui.Utils.getStyle('--primary'),
-//       data: [65, 59, 84, 84, 51, 55, 40]
-//     }]
-//   },
-//   options: {
-//     maintainAspectRatio: false,
-//     legend: {
-//       display: false
-//     },
-//     scales: {
-//       xAxes: [{
-//         gridLines: {
-//           color: 'transparent',
-//           zeroLineColor: 'transparent'
-//         },
-//         ticks: {
-//           fontSize: 2,
-//           fontColor: 'transparent'
-//         }
-//       }],
-//       yAxes: [{
-//         display: false,
-//         ticks: {
-//           display: false,
-//           min: 35,
-//           max: 89
-//         }
-//       }]
-//     },
-//     elements: {
-//       line: {
-//         borderWidth: 1
-//       },
-//       point: {
-//         radius: 4,
-//         hitRadius: 10,
-//         hoverRadius: 4
-//       }
-//     }
-//   }
-// }); // eslint-disable-next-line no-unused-vars
-
-// var cardChart2 = new Chart(document.getElementById('card-chart2'), {
-//   type: 'line',
-//   data: {
-//     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-//     datasets: [{
-//       label: 'My First dataset',
-//       backgroundColor: 'transparent',
-//       borderColor: 'rgba(255,255,255,.55)',
-//       pointBackgroundColor: coreui.Utils.getStyle('--info'),
-//       data: [1, 18, 9, 17, 34, 22, 11]
-//     }]
-//   },
-//   options: {
-//     maintainAspectRatio: false,
-//     legend: {
-//       display: false
-//     },
-//     scales: {
-//       xAxes: [{
-//         gridLines: {
-//           color: 'transparent',
-//           zeroLineColor: 'transparent'
-//         },
-//         ticks: {
-//           fontSize: 2,
-//           fontColor: 'transparent'
-//         }
-//       }],
-//       yAxes: [{
-//         display: false,
-//         ticks: {
-//           display: false,
-//           min: -4,
-//           max: 39
-//         }
-//       }]
-//     },
-//     elements: {
-//       line: {
-//         tension: 0.00001,
-//         borderWidth: 1
-//       },
-//       point: {
-//         radius: 4,
-//         hitRadius: 10,
-//         hoverRadius: 4
-//       }
-//     }
-//   }
-// }); // eslint-disable-next-line no-unused-vars
-
-// var cardChart3 = new Chart(document.getElementById('card-chart3'), {
-//   type: 'line',
-//   data: {
-//     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-//     datasets: [{
-//       label: 'My First dataset',
-//       backgroundColor: 'rgba(255,255,255,.2)',
-//       borderColor: 'rgba(255,255,255,.55)',
-//       data: [78, 81, 80, 45, 34, 12, 40]
-//     }]
-//   },
-//   options: {
-//     maintainAspectRatio: false,
-//     legend: {
-//       display: false
-//     },
-//     scales: {
-//       xAxes: [{
-//         display: false
-//       }],
-//       yAxes: [{
-//         display: false
-//       }]
-//     },
-//     elements: {
-//       line: {
-//         borderWidth: 2
-//       },
-//       point: {
-//         radius: 0,
-//         hitRadius: 10,
-//         hoverRadius: 4
-//       }
-//     }
-//   }
-// }); // eslint-disable-next-line no-unused-vars
-
-// var cardChart4 = new Chart(document.getElementById('card-chart4'), {
-//   type: 'bar',
-//   data: {
-//     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April'],
-//     datasets: [{
-//       label: 'My First dataset',
-//       backgroundColor: 'rgba(255,255,255,.2)',
-//       borderColor: 'rgba(255,255,255,.55)',
-//       data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82],
-//       barPercentage: 0.6
-//     }]
-//   },
-//   options: {
-//     maintainAspectRatio: false,
-//     legend: {
-//       display: false
-//     },
-//     scales: {
-//       xAxes: [{
-//         display: false
-//       }],
-//       yAxes: [{
-//         display: false
-//       }]
-//     }
-//   }
-// }); // eslint-disable-next-line no-unused-vars
-
+});
 // admin details
 const totalsOperations = document.getElementById('operationsTotals');
 const totalsGain = document.getElementById('gainTotals');
@@ -394,6 +169,8 @@ const operator_filter = document.getElementById('operator-selected');
 
 // to be taken note, not very secure way of passing the user
 const user_identifier = document.getElementById('identifier-custom');
+const agent_identifier = document.querySelector('#graph-selected');
+
 let user_id;
 if (user_identifier) {
     user_id = user_identifier.value;
@@ -488,6 +265,9 @@ const initialUserData = () => {
     fetchData('user/internal/services', 'day', 0, 0, user_object);
 }
 
+const initialAgentData = () => {
+    fetchData('sales/reports/internal', 'day', 0, 0, user_object);
+}
 
 if (!user_identifier) {
     user_object.isUser = false;
@@ -534,10 +314,11 @@ if (!user_identifier) {
         loadTotals('admin',document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
     }
 
-} else {
+} else if (user_identifier && !agent_identifier) {
     user_object.isUser = true;
     user_object.user_id = user_id;
     initialUserData();
+    loadTotals('user','day', 0, 0, 0);
     let checkedFilter = document.querySelector('input[name="filterSelected"]:checked');
     checkedFilter.parentElement.classList.add('active');
 
@@ -570,16 +351,121 @@ if (!user_identifier) {
 
         operator_filter.onchange = () => {
             fetchData('/user/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
-            // loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+            loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
         }
 
         country_filter.onchange = () => {
             fetchData('/user/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
-            // loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+            loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
         }
     });
-    loadTotals('user',document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value, user_object);
+
+} else if (user_identifier && agent_identifier) {
+    user_object.isUser = true;
+    user_object.user_id = user_id;
+    initialUserData();
+    loadTotals('user','day', 0, 0, 0);
+    let checkedFilter = document.querySelector('input[name="filterSelected"]:checked');
+    checkedFilter.parentElement.classList.add('active');
+    agent_identifier.onchange = () => {
+        switch (agent_identifier.value) {
+            case '1':
+                user_object.isUser = true;
+                user_object.user_id = user_id;
+                initialUserData();
+                loadTotals('user','day', 0, 0, 0);
+                checkedFilter.parentElement.classList.add('active');
+
+                filters.forEach(filter => {
+                    filter.onchange = (e) => {
+                        e.preventDefault();
+                        let countrified = country_filter.value;
+                        let operatorField = operator_filter.value;
+                        switch (filter.value) {
+                            case 'day':
+                                fetchData('/user/internal/services', 'day', countrified, operatorField, user_object);
+                                loadTotals('user','day', countrified, operatorField, user_object);
+                                break;
+                            case 'yesterday':
+                                fetchData('/user/internal/services', 'yesterday', countrified, operatorField, user_object);
+                                loadTotals('user','yesterday', countrified, operatorField);
+                                break;
+                            case 'week':
+                                fetchData('/user/internal/services', 'week', countrified, operatorField, user_object);
+                                loadTotals('user','week', countrified, operatorField, user_object);
+                                break;
+                            case 'month':
+                                fetchData('/user/internal/services', 'month', countrified, operatorField, user_object);
+                                loadTotals('user','month', countrified, operatorField, user_object);
+                                break;
+                            default:
+                                alert('coding error!');
+                        }
+                    }
+
+                    operator_filter.onchange = () => {
+                        fetchData('/user/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+                        loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+                    }
+
+                    country_filter.onchange = () => {
+                        fetchData('/user/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+                        loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+                    }
+                });
+                break;
+            case '2':
+                user_object.isUser = false;
+                user_object.user_id = null;
+                initialAgentData();
+                loadAgentTotals('day', 0, 0);
+                checkedFilter.parentElement.classList.add('active');
+
+                filters.forEach(filter => {
+                    filter.onchange = (e) => {
+                        e.preventDefault();
+                        let countrified = country_filter.value;
+                        let operatorField = operator_filter.value;
+                        switch (filter.value) {
+                            case 'day':
+                                fetchData('/sales/reports/internal', 'day', countrified, operatorField, user_object);
+                                loadAgentTotals('day', countrified, operatorField, user_object);
+                                break;
+                            case 'yesterday':
+                                fetchData('/sales/reports/internal', 'yesterday', countrified, operatorField, user_object);
+                                loadAgentTotals('yesterday', countrified, operatorField, user_object);
+                                break;
+                            case 'week':
+                                fetchData('/sales/reports/internal', 'week', countrified, operatorField, user_object);
+                                loadAgentTotals('week', countrified, operatorField, user_object);
+                                break;
+                            case 'month':
+                                fetchData('/sales/reports/internal', 'month', countrified, operatorField, user_object);
+                                loadAgentTotals('month', countrified, operatorField, user_object);
+                                break;
+                            default:
+                                alert('coding error!');
+                        }
+                    }
+
+                    operator_filter.onchange = () => {
+                        fetchData('/sales/reports/internal', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+                        loadAgentTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+                    }
+
+                    country_filter.onchange = () => {
+                        fetchData('/sales/reports/internal', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+                        loadAgentTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+                    }
+                });
+                break;
+            default:
+                console.log('error');
+        }
+    }
 }
+
+// agent services graph
 
 // loads the items below chart when initialized
 function loadTotals(path,type, country, operator, user_object) {
@@ -595,6 +481,28 @@ function loadTotals(path,type, country, operator, user_object) {
             'operator': operator,
             'user_id': user_object ? user_object.user_id : null,
             'isUser': user_object ? user_object.isUser : false
+        })
+    }).then(response => response.json()).then(response => {
+        totalsOperations.innerText = `${response.totalsForOperations}`;
+        totalsGain.innerText = `${response.totalsForGain.gainSumPerDay}`;
+        totalsCost.innerText = `${response.totalsForCost.costSumPerDay}`;
+        totalsAmount.innerText = `${response.totalsForAmount}`;
+    });
+}
+
+function loadAgentTotals(type, country, operator) {
+    fetch(`/sales/reports/internal/agent-totals/${type}`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text-plain, */*",
+            'X-CSRF-TOKEN': document.getElementsByName('csrf-token')[0].getAttribute('content')
+        },
+        body: JSON.stringify({
+            'isUser': false,
+            'user_id': null,
+            'country': country,
+            'operator': operator,
         })
     }).then(response => response.json()).then(response => {
         totalsOperations.innerText = `${response.totalsForOperations}`;
