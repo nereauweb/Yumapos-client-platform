@@ -17,7 +17,7 @@
                                                         @if(Cache::has('reloadly_cache_balance_'.date('w')))
                                                             <span id="reloadly-balance">{{ Cache::get('reloadly_cache_balance_'.date('w')) }}</span> €
                                                         @else
-                                                            Out of sync
+                                                           <span id="reloadly-balance">Out of sync</span>
                                                         @endif
                                                     </div>
                                                     <div class="uk-text-uppercase">Reloadly balance</div>
@@ -42,7 +42,7 @@
                                                         @if(Cache::has('ding_cache_balance_'.date('w')))
                                                             <span id="ding-balance">{{ Cache::get('ding_cache_balance_'.date('w')) }}</span> €
                                                         @else
-                                                            Out of sync
+                                                           <span id="ding-balance">Out of sync</span>
                                                         @endif
                                                     </div>
                                                     <div class="uk-text-uppercase">Api Ding balance</div>
@@ -418,7 +418,6 @@
 		$("#reload-ding-balance").click(function(e){
 			e.preventDefault();
 			$.get( "{{ route('admin.api.ding.cached_balance') }}", function( data ) {
-                console.log(data);
 				if(data!='error'){
 					$( "#ding-balance" ).html( data );
 				}
