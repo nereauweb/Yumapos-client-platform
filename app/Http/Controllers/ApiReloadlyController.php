@@ -171,22 +171,28 @@ class ApiReloadlyController extends Controller
     public function balance(Request $request)
     {
 		$call = $this->get_call('/accounts/balance');
-		if (isset($call['data']['balance'])){
-			if (Cache::has('reloadly_cache_balance_'.date('w'))) {
-				Cache::forget('reloadly_cache_balance_'.date('w'));
-			}
-			Cache::forever('reloadly_cache_balance_'.date('w'), $call['data']['balance']);
-		}
+	//	if (isset($call['data']['balance'])){
+	//		if (Cache::has('reloadly_cache_balance_'.date('w'))) {
+	//			Cache::forget('reloadly_cache_balance_'.date('w'));
+	//		}
+	//		Cache::forever('reloadly_cache_balance_'.date('w'), $call['data']['balance']);
+	//	}
 		return $call;
     }
 
 	public function get_cache_balance(){
 		try{
+		//Cache::forget('reloadly_cache_balance_'.date('w'));
             $call = $this->get_call('/accounts/balance');
             if (isset($call['data']['balance'])){
                 if (Cache::has('reloadly_cache_balance_'.date('w'))) {
                     $toPushVal = $call['data']['balance'];
-                    Cache::forever('reloadly_cache_balance_'.date('w'), [$toPushVal]);
+                    $key = Cache::get('reloadly_cache_balance_'.date('w'));
+			$key[] = $toPushVal;
+			Cache::forever('reloadly_cache_balance_'.date('w'), $key);
+			if (count(Cache::get('reloadly_cache_balance_'.date('w'))) >= 7) {
+				Cache::forget(Cache::get('reloadly_cache_balance_'.date('w'))[0]);
+			}	
                 } else {
                     Cache::forever('reloadly_cache_balance_'.date('w'), [$call['data']['balance']]);
                 }
