@@ -14,10 +14,16 @@
                                             <div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
                                                 <div>
                                                     <div class="text-value-lg">
+                                                        @php
+                                                        var_dump()
+                                                        @endphp
                                                         @if(Cache::has('reloadly_cache_balance_'.date('w')))
-                                                            <span id="reloadly-balance">{{ Cache::get('reloadly_cache_balance_'.date('w')) }}</span> €
+                                                            @php
+                                                             var_dump(Cache::get('reloadly_cache_balance_'.date('w')))
+                                                            @endphp
+{{--                                                           <span id="reloadly-balance">{{ Cache::get('reloadly_cache_balance_'.date('w')) }}</span> €--}}
                                                         @else
-                                                           <span id="reloadly-balance">Out of sync</span>
+{{--                                                           <span id="reloadly-balance">Out of sync</span>--}}
                                                         @endif
                                                     </div>
                                                     <div class="uk-text-uppercase">Reloadly balance</div>

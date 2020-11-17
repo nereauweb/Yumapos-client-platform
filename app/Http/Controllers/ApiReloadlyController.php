@@ -182,15 +182,19 @@ class ApiReloadlyController extends Controller
 
 	public function get_cache_balance(){
 		try{
-			$call = $this->get_call('/accounts/balance');
-			if (isset($call['data']['balance'])){
-				if (Cache::has('reloadly_cache_balance_'.date('w'))) {
-					Cache::forget('reloadly_cache_balance_'.date('w'));
-				}
-				Cache::forever('reloadly_cache_balance_'.date('w'), $call['data']['balance']);
-				return response()->json($call['data']['balance'], 200);
-			}
-			return 'error';
+            $call = $this->get_call('/accounts/balance');
+            if (isset($call['data']['balance'])){
+                if (Cache::has('reloadly_cache_balance_'.date('w'))) {
+                    $toPushVal = $call['data']['balance'];
+                    Cache::forever('reloadly_cache_balance_'.date('w'), [$toPushVal]);
+                } else {
+                    Cache::forever('reloadly_cache_balance_'.date('w'), [$call['data']['balance']]);
+                }
+
+                return response()->json($call['data']['balance'], 200);
+            }
+
+            return 'error';
 		} catch (Exception $ex){
 			$call = $ex->getMessage();
 			return 'error';
@@ -517,7 +521,7 @@ class ApiReloadlyController extends Controller
 				]);
 				$operator->save();
 			} else {
-				$operator = ApiReloadlyOperator::create([ 
+				$operator = ApiReloadlyOperator::create([
 					'operatorId' => $operator_data['operatorId'],
 					'name' => $operator_data['name'],
 					'bundle' => $operator_data['bundle'],
