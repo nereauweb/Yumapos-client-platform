@@ -485,9 +485,17 @@ class ApiReloadlyController extends Controller
 	private function save_operator_data($operator_data,$count = 0, $return_operator = false){
 		if (!isset($operator_data['operatorId'])){ return $return_operator ? false : $count; }
 		try {
-			$operator = ApiReloadlyOperator::updateOrCreate(
-					[ 'operatorId' => $operator_data['operatorId'] ],
-					[
+			$operator = ApiReloadlyOperator::where('operatorId',$operator_data['operatorId'])->first();
+			if ($operator){
+				if ($operator->denominationType!=$operator_data['denominationType']){
+					foreach ($operator->configurations as $configuration) {
+						$configuration->update([
+							'fx_delta_percent' => 0,
+							'discount_percent' => 0,
+							]);
+					}
+				}
+				$operator->update([
 					'name' => $operator_data['name'],
 					'bundle' => $operator_data['bundle'],
 					'data' => $operator_data['data'],
@@ -506,8 +514,31 @@ class ApiReloadlyController extends Controller
 					'maxAmount' => $operator_data['maxAmount'],
 					'localMinAmount' => $operator_data['localMinAmount'],
 					'localMaxAmount' => $operator_data['localMaxAmount'],
-					]
-				);
+				]);
+				$operator->save();
+			} else {
+				$operator = ApiReloadlyOperator::create([ 
+					'operatorId' => $operator_data['operatorId'],
+					'name' => $operator_data['name'],
+					'bundle' => $operator_data['bundle'],
+					'data' => $operator_data['data'],
+					'pin' => $operator_data['pin'],
+					'supportsLocalAmounts' => $operator_data['supportsLocalAmounts'],
+					'denominationType' => $operator_data['denominationType'],
+					'senderCurrencyCode' => $operator_data['senderCurrencyCode'],
+					'senderCurrencySymbol' => $operator_data['senderCurrencySymbol'],
+					'destinationCurrencyCode' => $operator_data['destinationCurrencyCode'],
+					'destinationCurrencySymbol' => $operator_data['destinationCurrencySymbol'],
+					'commission' => $operator_data['commission'],
+					'internationalDiscount' => $operator_data['internationalDiscount'],
+					'localDiscount' => $operator_data['localDiscount'],
+					'mostPopularAmount' => $operator_data['mostPopularAmount'],
+					'minAmount' => $operator_data['minAmount'],
+					'maxAmount' => $operator_data['maxAmount'],
+					'localMinAmount' => $operator_data['localMinAmount'],
+					'localMaxAmount' => $operator_data['localMaxAmount'],
+				]);
+			}
 			$count++;
 			if (isset($operator_data['country'])&&!empty($operator_data['country'])){
 				$operator->country()->updateOrCreate(

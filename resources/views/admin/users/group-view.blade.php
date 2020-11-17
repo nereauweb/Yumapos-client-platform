@@ -27,15 +27,6 @@
                 </div>
 
                 <div class="form-group row">
-                    <label for="name" class="col-md-3 control-label">Slug</label>
-                    <div class="col-md-9">
-                        <div class="uk-text-bold">
-                            {{ $group->slug }}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group row">
                     <label for="name" class="col-md-3 control-label">Sconto</label>
                     <div class="col-md-9">
                         <div class="uk-text-bold">

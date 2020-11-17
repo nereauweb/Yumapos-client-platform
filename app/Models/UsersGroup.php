@@ -20,13 +20,25 @@ class UsersGroup extends Model
 	protected $fillable = [
 		'type',
 		'name',
-		'slug',
 		'description',
 		'discount',
 		];
+		
+	private $configurations = [];
 	
 	public function members() {
 		return $this->hasMany('App\User','group_id','id');
+    }
+	
+	public function configurations() {
+		return $this->hasMany('App\Models\UsersGroupConfiguration','group_id','id');
+    }
+	
+	public function configuration($category_id) {
+		if (!isset($configurations[$category_id])){
+			$configurations[$category_id] = $this->configurations()->where('category_id',$category_id)->first();
+		}
+		return $configurations[$category_id];
     }
 	
 }

@@ -50,7 +50,6 @@
                         <tr>
                             <th>Id</th>
                             <th>Nome</th>
-                            <th>Slug</th>
                             <th>Descrizione</th>
                         </tr>
                         </thead>
@@ -84,7 +83,6 @@
                                     </div>
                                 </td>
                                 <td scope="row">{{$group->name}}</td>
-                                <td scope="row">{{$group->slug}}</td>
                                 <td scope="row">{{$group->description}}</td>
                             </tr>
 							@endif
@@ -126,7 +124,6 @@
                         <tr>
                             <th>Id</th>
                             <th>Nome</th>
-                            <th>Slug</th>
                             <th>Descrizione</th>
                         </tr>
                         </thead>
@@ -160,7 +157,6 @@
                                     </div>
                                 </td>
                                 <td scope="row">{{$group->name}}</td>
-                                <td scope="row">{{$group->slug}}</td>
                                 <td scope="row">{{$group->description}}</td>
                             </tr>
 							@endif

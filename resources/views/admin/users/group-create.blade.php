@@ -7,7 +7,7 @@
 			<div style="display: flex; justify-content: space-between; align-items: center;">
 				Crea nuovo gruppo utenti
 				<div class="pull-right">
-					<a href="{{ url('/admin/groups/') }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="{{ trans('usersmanagement.tooltips.back-users') }}">
+					<a href="{{ url('/admin/users/groups/') }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="{{ trans('usersmanagement.tooltips.back-users') }}">
 						<i class="fa fa-fw fa-reply-all" aria-hidden="true"></i>
 						Torna alla lista gruppi utenti
 					</a>
@@ -29,20 +29,6 @@
 						@if ($errors->has('name'))
 							<span class="help-block">
 								<strong>{{ $errors->first('name') }}</strong>
-							</span>
-						@endif
-					</div>
-				</div>
-											
-				<div class="form-group has-feedback row {{ $errors->has('slug') ? ' has-error ' : '' }}">
-					{!! Form::label('slug', 'Slug', array('class' => 'col-md-3 control-label')); !!}
-					<div class="col-md-9">
-						<div class="input-group">
-							{!! Form::text('slug', NULL, array('id' => 'slug', 'class' => 'form-control', 'placeholder' => 'Slug','required' => 'required')) !!}
-						</div>
-						@if ($errors->has('slug'))
-							<span class="help-block">
-								<strong>{{ $errors->first('slug') }}</strong>
 							</span>
 						@endif
 					</div>

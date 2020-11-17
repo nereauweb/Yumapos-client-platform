@@ -7,7 +7,7 @@
 			<div style="display: flex; justify-content: space-between; align-items: center;">
 				Crea nuovo gruppo agenti
 				<div class="pull-right">
-					<a href="{{ url('/admin/groups/') }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="{{ trans('usersmanagement.tooltips.back-users') }}">
+					<a href="{{ url('/admin/users/groups/') }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="{{ trans('usersmanagement.tooltips.back-users') }}">
 						<i class="fa fa-fw fa-reply-all" aria-hidden="true"></i>
 						Torna alla lista gruppi
 					</a>
@@ -33,39 +33,6 @@
 						@endif
 					</div>
 				</div>
-											
-				<div class="form-group has-feedback row {{ $errors->has('slug') ? ' has-error ' : '' }}">
-					{!! Form::label('slug', 'Slug', array('class' => 'col-md-3 control-label')); !!}
-					<div class="col-md-9">
-						<div class="input-group">
-							{!! Form::text('slug', NULL, array('id' => 'slug', 'class' => 'form-control', 'placeholder' => 'Slug','required' => 'required')) !!}
-						</div>
-						@if ($errors->has('slug'))
-							<span class="help-block">
-								<strong>{{ $errors->first('slug') }}</strong>
-							</span>
-						@endif
-					</div>
-				</div>
-				
-				<div class="form-group has-feedback row {{ $errors->has('discount') ? ' has-error ' : '' }}">
-					{!! Form::label('discount', 'Discount %', array('class' => 'col-md-3 control-label')); !!}
-					<div class="col-md-9">
-						<div class="input-group">
-							{!! Form::number('discount', 0, array('id' => 'discount', 'class' => 'form-control', 'placeholder' => 'Discount', 'min' => '0', 'step' => '0.001')) !!}
-							<div class="input-group-append">
-								<label for="discount" class="input-group-text">
-									€
-								</label>
-							</div>
-						</div>
-						@if ($errors->has('discount'))
-							<span class="help-block">
-								<strong>{{ $errors->first('discount') }}</strong>
-							</span>
-						@endif
-					</div>
-				</div>
 				
 				<div class="form-group has-feedback row {{ $errors->has('description') ? ' has-error ' : '' }}">
 					{!! Form::label('description', 'Descrizione', array('class' => 'col-md-3 control-label')); !!}
@@ -80,6 +47,27 @@
 						@endif
 					</div>
 				</div>	
+				
+				@foreach($categories as $category)
+					<div class="form-group has-feedback row {{ $errors->has('categories') ? ' has-error ' : '' }}">
+						{!! Form::label('cat'.$category->id, $category->name, array('class' => 'col-md-3 control-label uk-text-bold')); !!}
+						<div class="col-md-9">
+							<div class="input-group row no-gutters">
+								<div class="col-md-6">
+									{!! Form::select('configurations['.$category->id.'][type]', [ 'percent' => 'Percentuale', 'value' => 'Valore'], NULL, array('id' => 'cat'.$category->id, 'class' => 'form-control', 'placeholder' => 'Seleziona tipo','required' => 'required')) !!}
+								</div>
+								<div class="col-md-6">
+									{!! Form::number('configurations['.$category->id.'][amount]', NULL, array('id' => 'cat'.$category->id, 'class' => 'form-control', 'placeholder' => 'Valore','required' => 'required','step' => '0.01')) !!}
+								</div>
+							</div>
+							@if ($errors->has('categories'))
+								<span class="help-block">
+									<strong>{{ $errors->first('categories') }}</strong>
+								</span>
+							@endif
+						</div>
+					</div>	
+				@endforeach
 				
 				<input type="hidden" name="type" value="2">
 				

@@ -41,6 +41,8 @@ class ServiceOperation extends Model
 		'user_new_plafond',
 		'user_total_gain',
 		'platform_total_gain',
+		'report_status',
+		'report_notes',
 		];
 		
 	public function reloadly_call(){ 

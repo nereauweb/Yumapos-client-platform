@@ -29,7 +29,7 @@ class ServicesList extends Component
 
     public function render()
     {
-        $ding_operators = ApiDingOperator::pluck('ProviderCode','Name');
+        $ding_operators = ApiDingOperator::orderBy('Name')->pluck('ProviderCode','Name');
         $ding_operators_options = '';
         foreach($ding_operators as $ding_operator_name => $ding_ProviderCode){
             $service_operator = ServiceOperator::where('name',$ding_operator_name)->orWhere('ding_ProviderCode',$ding_ProviderCode)->first();
@@ -49,7 +49,7 @@ class ServicesList extends Component
             $ding_operators_options .= '<option value="'.$ding_ProviderCode.'">'.$ding_operator_name.'</option>';
         }
 
-        $reloadly_operators = ApiReloadlyOperator::pluck('operatorId','name');
+        $reloadly_operators = ApiReloadlyOperator::orderBy('name')->pluck('operatorId','name');
         $reloadly_operators_options = '';
         foreach($reloadly_operators as $reloadly_operator_name => $reloadly_operatorId){
             $service_operator = ServiceOperator::where('name',$reloadly_operator_name)->orWhere('reloadly_operatorId',$reloadly_operatorId)->first();

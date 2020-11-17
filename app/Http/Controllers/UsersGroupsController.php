@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\UsersGroup;
+use App\Models\UsersGroupConfiguration;
+use App\Models\ServiceCategory;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -43,32 +45,41 @@ class UsersGroupsController extends Controller
             [
                 'type'                  => 'required',
                 'name'                  => 'required|max:127|unique:users_groups',
-                'slug'                  => 'required|max:63|unique:users_groups',
             ],
             [
                 'type.required'       	=> 'tipo richiesto',
                 'name.unique'         	=> 'nome già in uso',
                 'name.required'       	=> 'nome richiesto',
                 'name.max'       		=> 'nome troppo lungo',
-                'slug.unique'         	=> 'slug già in uso',
-                'slug.required'       	=> 'slug richiesto',
-                'slug.max'       		=> 'slug troppo lungo',
             ]
         );
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-
-        $group = UsersGroup::create([
-            'type'             	=> $request->input('type'),
-            'name'             	=> $request->input('name'),
-            'slug' 				=> $request->input('slug'),
-            'discount' 				=> $request->input('discount'),
-            'description'		=> $request->input('description') ? $request->input('description') : "",
-        ]);
-
-        $group->save();
+		
+		if ($request->type == 1) {
+			$group = UsersGroup::create([
+				'type'             	=> $request->type,
+				'name'             	=> $request->name,
+				'discount' 			=> $request->discount,
+				'description'		=> $request->description ? $request->description : "",
+			]);
+		} else {
+			$group = UsersGroup::create([
+				'type'             	=> $request->type,
+				'name'             	=> $request->name,
+				'description'		=> $request->description ? $request->description : "",
+			]);
+			foreach ($request->configurations as $category_id => $configuration){
+				UsersGroupConfiguration::create([
+					'group_id'      => $group->id,
+					'category_id'   => $category_id,
+					'type'			=> $configuration['type'],
+					'amount'      	=> $configuration['amount'],
+				]);
+			}
+		}
 
         return redirect()->route('admin.groups.list')->with(['status' => 'success', 'message' => 'Gruppo creato correttamente!']);
     }
@@ -88,27 +99,38 @@ class UsersGroupsController extends Controller
 		$validator = Validator::make($request->all(),
             [
                 'name'                  => 'required|max:127',
-                'slug'                  => 'required|max:63',
             ],
             [
                 'name.unique'         	=> 'nome già in uso',
                 'name.required'       	=> 'nome richiesto',
                 'name.max'       		=> 'nome troppo lungo',
-                'slug.unique'         	=> 'slug già in uso',
-                'slug.required'       	=> 'slug richiesto',
-                'slug.max'       		=> 'slug troppo lungo',
             ]
         );
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-
+		
         $group->name 		= $request->input('name');
-        $group->slug 		= $request->input('slug');
-        $group->discount	= $request->input('discount');
         $group->description = $request->input('description') ? $request->input('description') : "";
-
+		
+		if ($group->type==1){			
+			$group->discount	= $request->input('discount');
+		} else {
+			foreach ($request->configurations as $category_id => $configuration){
+				if (isset($configuration['type'])&&$configuration['amount']){
+					UsersGroupConfiguration::updateOrCreate([
+						'group_id'      => $group->id,
+						'category_id'   => $category_id,
+					], [
+						'type'			=> $configuration['type'],
+						'amount'      	=> $configuration['amount'],
+					]);
+				}
+			}
+		}
+		
+		
 		$group->save();
 
 		if($request->input('users')){
@@ -171,7 +193,8 @@ class UsersGroupsController extends Controller
 	
 	public function create_agent()
     {
-		return view('admin/users/group-create-agent');
+		$categories = ServiceCategory::all();		
+		return view('admin/users/group-create-agent',compact('categories'));
 	}
 
 
@@ -186,12 +209,14 @@ class UsersGroupsController extends Controller
     {
         $group = UsersGroup::findOrFail($id);
 		if ($group->type == 1) {
-			$users = User::whereHas("roles", function($q){ $q->where("name", "user"); })->get();
+			$users = User::whereHas("roles", function($q){ $q->where("name", "user"); })->get();			
+			return view('admin/users/group-edit',compact('group','users'));
 		}
 		if ($group->type == 2) {
-			$users = User::whereHas("roles", function($q){ $q->where("name", "sales"); })->get();
+			$users = User::whereHas("roles", function($q){ $q->where("name", "sales"); })->get();	
+			$categories = ServiceCategory::all();		
+			return view('admin/users/group-edit-agent',compact('group','users','categories'));
 		}
-        return view('admin/users/group-edit',compact('group','users'));
     }
 
 	/**

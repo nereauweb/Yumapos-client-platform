@@ -25,51 +25,53 @@
                 {!! csrf_field() !!}
 
                 <div class="form-group has-feedback row {{ $errors->has('name') ? ' has-error ' : '' }}">
-                    {!! Form::label('name', 'Nome del gruppo utenti', array('class' => 'col-md-3 control-label')); !!}
-                    <div class="col-md-9">
-                        <div class="input-group">
-                            {!! Form::text('name', $group->name, array('id' => 'name', 'class' => 'form-control', 'placeholder' => 'Nome del gruppo utenti')) !!}
-                        </div>
-                        @if($errors->has('name'))
-                            <span class="help-block">
+					{!! Form::label('name', 'Nome', array('class' => 'col-md-3 control-label')); !!}
+					<div class="col-md-9">
+						<div class="input-group">
+							{!! Form::text('name', $group->name, array('id' => 'name', 'class' => 'form-control', 'placeholder' => 'Nome','required' => 'required')) !!}
+						</div>
+						@if ($errors->has('name'))
+							<span class="help-block">
 								<strong>{{ $errors->first('name') }}</strong>
 							</span>
-                        @endif
-                    </div>
-                </div>
-
-                <div class="form-group has-feedback row {{ $errors->has('discount') ? ' has-error ' : '' }}">
-                    {!! Form::label('discount', 'Discount %', array('class' => 'col-md-3 control-label')); !!}
-                    <div class="col-md-9">
-                        <div class="input-group">
-                            {!! Form::number('discount', $group->discount, array('id' => 'discount', 'class' => 'form-control', 'placeholder' => 'Discount', 'min' => '0', 'step' => '0.001')) !!}
-                            <div class="input-group-append">
-                                <label for="discount" class="input-group-text">
-                                    €
-                                </label>
-                            </div>
-                        </div>
-                        @if ($errors->has('discount'))
-                            <span class="help-block">
-								<strong>{{ $errors->first('discount') }}</strong>
-							</span>
-                        @endif
-                    </div>
-                </div>
-
-                <div class="form-group has-feedback row {{ $errors->has('description') ? ' has-error ' : '' }}">
-                    {!! Form::label('description', 'Descrizione', array('class' => 'col-md-3 control-label')); !!}
-                    <div class="col-md-9">
-                        <div class="input-group">
-                            {!! Form::text('description', $group->description, array('id' => 'description', 'class' => 'form-control', 'placeholder' => 'Cellulare referente','required' => 'required')) !!}
-                        </div>
-                        @if ($errors->has('description'))
-                            <span class="help-block">
+						@endif
+					</div>
+				</div>
+				
+				<div class="form-group has-feedback row {{ $errors->has('description') ? ' has-error ' : '' }}">
+					{!! Form::label('description', 'Descrizione', array('class' => 'col-md-3 control-label')); !!}
+					<div class="col-md-9">
+						<div class="input-group">
+							{!! Form::text('description', $group->description, array('id' => 'description', 'class' => 'form-control', 'placeholder' => 'Descrizione','required' => 'required')) !!}
+						</div>
+						@if ($errors->has('description'))
+							<span class="help-block">
 								<strong>{{ $errors->first('description') }}</strong>
 							</span>
-                        @endif
-                    </div>
-                </div>
+						@endif
+					</div>
+				</div>	
+				
+				@foreach($categories as $category)
+					<div class="form-group has-feedback row {{ $errors->has('categories') ? ' has-error ' : '' }}">
+						{!! Form::label('cat'.$category->id, $category->name, array('class' => 'col-md-3 control-label uk-text-bold')); !!}
+						<div class="col-md-9">
+							<div class="input-group row no-gutters">
+								<div class="col-md-6">
+									{!! Form::select('configurations['.$category->id.'][type]', [ 'percent' => 'Percentuale', 'value' => 'Valore'], $group->configuration($category->id) ? $group->configuration($category->id)->type : NULL, array('id' => 'cat'.$category->id, 'class' => 'form-control', 'placeholder' => 'Seleziona tipo','required' => 'required')) !!}
+								</div>
+								<div class="col-md-6">
+									{!! Form::number('configurations['.$category->id.'][amount]', $group->configuration($category->id) ? $group->configuration($category->id)->amount : NULL, array('id' => 'cat'.$category->id, 'class' => 'form-control', 'placeholder' => 'Valore','required' => 'required','step' => '0.01')) !!}
+								</div>
+							</div>
+							@if ($errors->has('categories'))
+								<span class="help-block">
+									<strong>{{ $errors->first('categories') }}</strong>
+								</span>
+							@endif
+						</div>
+					</div>	
+				@endforeach
 
                 <div class="form-group has-feedback row {{ $errors->has('users') ? ' has-error ' : '' }}">
                     <label for="users" class="col-md-3 control-label">
