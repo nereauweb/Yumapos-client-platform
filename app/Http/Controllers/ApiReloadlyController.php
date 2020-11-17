@@ -171,36 +171,26 @@ class ApiReloadlyController extends Controller
     public function balance(Request $request)
     {
 		$call = $this->get_call('/accounts/balance');
-	//	if (isset($call['data']['balance'])){
-	//		if (Cache::has('reloadly_cache_balance_'.date('w'))) {
-	//			Cache::forget('reloadly_cache_balance_'.date('w'));
-	//		}
-	//		Cache::forever('reloadly_cache_balance_'.date('w'), $call['data']['balance']);
-	//	}
+		if (isset($call['data']['balance'])){
+			if (Cache::has('reloadly_cache_balance_'.date('w'))) {
+				Cache::forget('reloadly_cache_balance_'.date('w'));
+			}
+			Cache::forever('reloadly_cache_balance_'.date('w'), $call['data']['balance']);
+		}
 		return $call;
     }
 
 	public function get_cache_balance(){
 		try{
-		//Cache::forget('reloadly_cache_balance_'.date('w'));
-            $call = $this->get_call('/accounts/balance');
-            if (isset($call['data']['balance'])){
-                if (Cache::has('reloadly_cache_balance_'.date('w'))) {
-                    $toPushVal = $call['data']['balance'];
-                    $key = Cache::get('reloadly_cache_balance_'.date('w'));
-			$key[] = $toPushVal;
-			Cache::forever('reloadly_cache_balance_'.date('w'), $key);
-			if (count(Cache::get('reloadly_cache_balance_'.date('w'))) >= 7) {
-				Cache::forget(Cache::get('reloadly_cache_balance_'.date('w'))[0]);
-			}	
-                } else {
-                    Cache::forever('reloadly_cache_balance_'.date('w'), [$call['data']['balance']]);
-                }
-
-                return response()->json($call['data']['balance'], 200);
-            }
-
-            return 'error';
+			$call = $this->get_call('/accounts/balance');
+			if (isset($call['data']['balance'])){
+				if (Cache::has('reloadly_cache_balance_'.date('w'))) {
+					Cache::forget('reloadly_cache_balance_'.date('w'));
+				}
+				Cache::forever('reloadly_cache_balance_'.date('w'), $call['data']['balance']);
+				return response()->json($call['data']['balance'], 200);
+			}
+			return 'error';
 		} catch (Exception $ex){
 			$call = $ex->getMessage();
 			return 'error';
@@ -495,17 +485,9 @@ class ApiReloadlyController extends Controller
 	private function save_operator_data($operator_data,$count = 0, $return_operator = false){
 		if (!isset($operator_data['operatorId'])){ return $return_operator ? false : $count; }
 		try {
-			$operator = ApiReloadlyOperator::where('operatorId',$operator_data['operatorId'])->first();
-			if ($operator){
-				if ($operator->denominationType!=$operator_data['denominationType']){
-					foreach ($operator->configurations as $configuration) {
-						$configuration->update([
-							'fx_delta_percent' => 0,
-							'discount_percent' => 0,
-							]);
-					}
-				}
-				$operator->update([
+			$operator = ApiReloadlyOperator::updateOrCreate(
+					[ 'operatorId' => $operator_data['operatorId'] ],
+					[
 					'name' => $operator_data['name'],
 					'bundle' => $operator_data['bundle'],
 					'data' => $operator_data['data'],
@@ -524,31 +506,8 @@ class ApiReloadlyController extends Controller
 					'maxAmount' => $operator_data['maxAmount'],
 					'localMinAmount' => $operator_data['localMinAmount'],
 					'localMaxAmount' => $operator_data['localMaxAmount'],
-				]);
-				$operator->save();
-			} else {
-				$operator = ApiReloadlyOperator::create([
-					'operatorId' => $operator_data['operatorId'],
-					'name' => $operator_data['name'],
-					'bundle' => $operator_data['bundle'],
-					'data' => $operator_data['data'],
-					'pin' => $operator_data['pin'],
-					'supportsLocalAmounts' => $operator_data['supportsLocalAmounts'],
-					'denominationType' => $operator_data['denominationType'],
-					'senderCurrencyCode' => $operator_data['senderCurrencyCode'],
-					'senderCurrencySymbol' => $operator_data['senderCurrencySymbol'],
-					'destinationCurrencyCode' => $operator_data['destinationCurrencyCode'],
-					'destinationCurrencySymbol' => $operator_data['destinationCurrencySymbol'],
-					'commission' => $operator_data['commission'],
-					'internationalDiscount' => $operator_data['internationalDiscount'],
-					'localDiscount' => $operator_data['localDiscount'],
-					'mostPopularAmount' => $operator_data['mostPopularAmount'],
-					'minAmount' => $operator_data['minAmount'],
-					'maxAmount' => $operator_data['maxAmount'],
-					'localMinAmount' => $operator_data['localMinAmount'],
-					'localMaxAmount' => $operator_data['localMaxAmount'],
-				]);
-			}
+					]
+				);
 			$count++;
 			if (isset($operator_data['country'])&&!empty($operator_data['country'])){
 				$operator->country()->updateOrCreate(
