@@ -27,8 +27,7 @@ class DingController extends Controller
      */
     public function index()
     {
-		$products = ApiDingProduct::all();
-        return view('admin/ding/list', compact('products') );
+        return view('admin/ding/list');
     }
 
     

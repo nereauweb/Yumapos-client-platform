@@ -1,87 +1,14 @@
 @extends('dashboard.base')
 
 @section('css')
-    <link href="{{ asset('css/dataTables.bootstrap4.css') }}" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 @endsection
 
 @section('content')
+
 	@livewireStyles()
 	@livewire('reloadly-operators')
 	@livewireScripts()
-    {{-- <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h3>Operatori</h3>
-                        </div>
-                    </div>
-                    <div class="card-body">
-						<table class="table table-striped table-bordered col-filtered-datatable" id="admin-table">
-							<thead>
-								<tr>
-									<th>Country</th>
-									<th>ID</th>
-									<th>Name</th>
-									<th>Type</th>
-									<th>FX currency</th>
-									<th>FX rate</th>
-									<th>Commission&nbsp;(€)</th>
-									<th class="no-search">Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								@foreach($operators as $operator)
-									<tr>
-										<td>{{ $operator->country->name }} ({{ $operator->country->isoName }})</td>
-										<td>{{ $operator->operatorId }}</td>
-										<td>{{ $operator->name }}</td>
-										<td>{{ $operator->denominationType }}</td>
-										<td>{{ $operator->fx->currencyCode }}</td>
-										<td>{{ $operator->fx->rate }}</td>
-										<td>{{ $operator->commission }}</td>
-										<td>
-											<div class="uk-width-small">
-												<a class="btn btn-success details" href="#" data-operator-id="{{ $operator->id }}">
-													<svg class="c-icon">
-													  <use xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-magnifying-glass"></use>
-													</svg>
-												</a>
-												<a class="btn btn-info edit" href="#" data-operator-id="{{ $operator->id }}">
-													<svg class="c-icon">
-													  <use xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-description">
-													  </use>
-													</svg>
-												</a>
-												@if($operator->denominationType=="FIXED"&&$operator->localFixedAmounts->count()>0)
-													<a class="btn btn-info edit-local" href="#" data-operator-id="{{ $operator->id }}">
-														<svg class="c-icon">
-														  <use xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-description">
-														  </use>
-														</svg>
-													</a>
-												@endif
-												
-												<a class="btn btn-danger" href="#">
-													<svg class="c-icon">
-													  <use xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-trash"></use>
-													</svg>
-												</a>
-												
-											</div>
-										</td>
-									</tr>
-								@endforeach
-							</tbody>
-						</table>						
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-	
+    	
 	<div id="details-modal" uk-modal></div>
 	<div id="edit-modal" uk-modal></div>
 	<div id="edit-local-modal" uk-modal></div>
@@ -114,24 +41,6 @@
 @endsection
 
 @section('javascript')
-{{-- <script src="{{ asset('js/jquery.dataTables.js') }}"></script>
-<script src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('js/datatables.js') }}"></script> --}}
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<script type="text/javascript">
-    $(function() {
-      $('#daterange').daterangepicker({
-        opens: 'left',
-        locale: {
-          format: 'DD/MM/YYYY'
-        }
-      }, function(start, end, label) {
-        $("#date_begin").val(start.format('YYYY-MM-DD'));
-        $("#date_end").val(end.format('YYYY-MM-DD'));
-      });
-    });
-</script>
 	<script type="text/javascript">
 		// CONFIRMATION SAVE MODEL
 		$('#confirmSave').on('show.coreui.modal', function (e) {
@@ -161,30 +70,22 @@
 		});
 
 	</script>
-    {{-- <script src="{{ asset('js/jquery.dataTables.js') }}"></script>
-    <script src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('js/datatables.js') }}"></script> --}}
-	<script>
-		$(document).ready(function(){
-			$('#admin-table').on('click','.details',function(e){
-				e.preventDefault();
-				operatorID = $(this).data('operator-id');
-				$('#details-modal').load('/admin/service/reloadly/'+operatorID+' #content');
-				UIkit.modal('#details-modal').show();
-			});
-			$('#admin-table').on('click','.edit',function(e){
-				e.preventDefault();
-				operatorID = $(this).data('operator-id');
-				$('#edit-modal').load('/admin/service/reloadly/'+operatorID+'/edit #content');
-				UIkit.modal('#edit-modal').show();
-			});
-			$('#admin-table').on('click','.edit-local',function(e){
-				e.preventDefault();
-				operatorID = $(this).data('operator-id');
-				$('#edit-local-modal').load('/admin/service/reloadly/'+operatorID+'/edit/local #content');
-				UIkit.modal('#edit-local-modal').show();
-			});
-		});
+	<script>		
+		function details(operatorID) {
+			event.preventDefault();
+			$('#details-modal').load('/admin/service/reloadly/'+operatorID+' #content');
+			UIkit.modal('#details-modal').show();
+		}
+		function edit(operatorID) {
+			event.preventDefault();
+			$('#edit-modal').load('/admin/service/reloadly/'+operatorID+'/edit #content');
+			UIkit.modal('#edit-modal').show();
+		}
+		function editLocal(operatorID) {
+			event.preventDefault();
+			$('#edit-modal').load('/admin/service/reloadly/'+operatorID+'/edit/local #content');
+			UIkit.modal('#edit-local-modal').show();
+		}		
 	</script>
 	<script>
 		$(document).ready(function(){

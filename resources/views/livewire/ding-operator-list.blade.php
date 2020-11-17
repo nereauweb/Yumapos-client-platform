@@ -5,7 +5,7 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-8">
-                        <h3>Operations</h3>
+                        <h3>Ding providers</h3>
                     </div>
                 </div>
             </div>
@@ -69,16 +69,15 @@
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <div class="uk-width-small">
-                                            <a class="btn btn-success details dropdown-item" href="#"
-                                               data-operator-id="{{ $dingOperator->id }}">
+                                            <a class="btn btn-success details dropdown-item" href="#" onclick="details({{ $dingOperator->id }})">
                                                 <svg class="c-icon">
                                                     <use
-                                                        xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-magnifying-glass">
+														xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-magnifying-glass">
                                                     </use>
                                                 </svg>
                                                 <span>Details</span>
                                             </a>
-                                            <a class="btn btn-info edit dropdown-item" href="#" data-operator-id="{{ $dingOperator->id }}">
+                                            <a class="btn btn-info edit dropdown-item" href="#" onclick="edit({{ $dingOperator->id }})">
                                                 <svg class="c-icon">
                                                     <use
                                                         xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-description">

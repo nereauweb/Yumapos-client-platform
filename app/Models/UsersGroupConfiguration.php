@@ -18,12 +18,17 @@ class UsersGroupConfiguration extends Model
 	protected $fillable = [
 		'group_id',
 		'category_id',
+		'target_group_id',
 		'type',
 		'amount',
 		];
 	
 	public function group() {
 		return $this->hasOne('App\UsersGroup','id','group_id');
+    }
+	
+	public function target() {
+		return $this->hasOne('App\UsersGroup','id','target_group_id');
     }
 	
 }

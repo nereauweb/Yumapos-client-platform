@@ -34,11 +34,14 @@ class UsersGroup extends Model
 		return $this->hasMany('App\Models\UsersGroupConfiguration','group_id','id');
     }
 	
-	public function configuration($category_id) {
-		if (!isset($configurations[$category_id])){
-			$configurations[$category_id] = $this->configurations()->where('category_id',$category_id)->first();
+	public function configuration($target_group_id,$category_id) {
+		if (!isset($configurations[$target_group_id][$category_id])){
+			$configurations[$target_group_id][$category_id] = $this->configurations()
+																->where('category_id',$category_id)
+																->where('target_group_id',$target_group_id)
+																->first();
 		}
-		return $configurations[$category_id];
+		return $configurations[$target_group_id][$category_id];
     }
 	
 }

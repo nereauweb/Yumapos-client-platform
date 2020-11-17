@@ -1,8 +1,6 @@
 @extends('dashboard.base')
 
 @section('css')
-    <link href="{{ asset('css/dataTables.bootstrap4.css') }}" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 @endsection
 
 @section('content')
@@ -42,21 +40,6 @@
 
 @section('javascript')
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<script type="text/javascript">
-    $(function() {
-      $('#daterange').daterangepicker({
-        opens: 'left',
-        locale: {
-          format: 'DD/MM/YYYY'
-        }
-      }, function(start, end, label) {
-        $("#date_begin").val(start.format('YYYY-MM-DD'));
-        $("#date_end").val(end.format('YYYY-MM-DD'));
-      });
-    });
-</script>
 	<script type="text/javascript">
 		// CONFIRMATION SAVE MODEL
 		$('#confirmSave').on('show.coreui.modal', function (e) {
@@ -87,20 +70,16 @@
 
 	</script>
 	<script>
-		$(document).ready(function(){
-			$('#admin-table').on('click','.details',function(e){
-				e.preventDefault();
-				operatorID = $(this).data('operator-id');
-				$('#details-modal').load('/admin/service/ding/'+operatorID+' #content');
-				UIkit.modal('#details-modal').show();
-			});
-			$('#admin-table').on('click','.edit',function(e){
-				e.preventDefault();
-				operatorID = $(this).data('operator-id');
-				$('#edit-modal').load('/admin/service/ding/'+operatorID+'/edit #content');
-				UIkit.modal('#edit-modal').show();
-			});
-		});
+		function details(operatorID) {
+			event.preventDefault();
+			$('#details-modal').load('/admin/service/ding/'+operatorID+' #content');
+			UIkit.modal('#details-modal').show();
+		}
+		function edit(operatorID) {
+			event.preventDefault();
+			$('#edit-modal').load('/admin/service/ding/'+operatorID+'/edit #content');
+			UIkit.modal('#edit-modal').show();
+		}
 	</script>
 	<script>
 		$(document).ready(function(){

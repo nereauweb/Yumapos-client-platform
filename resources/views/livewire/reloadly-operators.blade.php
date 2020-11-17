@@ -97,8 +97,7 @@
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right">
                                             <div class="uk-width-small">
-                                                <a class="btn btn-success details dropdown-item" href="#"
-                                                   data-operator-id="{{ $operator->id }}">
+                                                <a class="btn btn-success details dropdown-item" onclick="details({{ $operator->id }})">
                                                     <svg class="c-icon">
                                                         <use
                                                             xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-magnifying-glass">
@@ -106,7 +105,7 @@
                                                     </svg>
 													<span>Details</span>
                                                 </a>
-                                                <a class="btn btn-info edit dropdown-item" href="#" data-operator-id="{{ $operator->id }}">
+                                                <a class="btn btn-info edit dropdown-item" href="#" onclick="edit({{ $operator->id }})">
                                                     <svg class="c-icon">
                                                         <use
                                                             xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-description">
@@ -115,8 +114,7 @@
 													<span>Edit<span>
                                                 </a>
                                                 @if ($operator->denominationType == 'FIXED' && $operator->localFixedAmounts->count() > 0)
-                                                    <a class="btn btn-info edit-local dropdown-item" href="#"
-                                                       data-operator-id="{{ $operator->id }}">
+                                                    <a class="btn btn-info edit-local dropdown-item" onclick="editLocal({{ $operator->id }})">
                                                         <svg class="c-icon">
                                                             <use
                                                                 xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-description">

@@ -11,114 +11,99 @@
 
 @section('javascript')
 	<script>
-		$(document).ready(function(){
-
-			$(document).on('change','.master-select',function(){
-				thisSelect = $(this);
-				operatorId = thisSelect.data('id');
-				master = thisSelect.val();
-				$.ajaxSetup({
-				   headers: {
-					 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				   }
+		function changeMaster(thisSelect,operatorId,master){
+			$.ajaxSetup({
+			   headers: {
+				 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			   }
+			});
+			$.ajax({
+				type: 'PUT',
+				url: '/admin/service/'+operatorId+'/set-master',
+				data: {
+					master: master
+				}
+			}).done(function (response) {
+				UIkit.notification({
+					message: response == 'OK' ? 'Done.' : 'Update FAILED <br><small>' + response +'</small>',
+					status: response == 'OK' ? 'success' : 'warning',
+					pos: 'top-center',
+					timeout: 15000
 				});
-				$.ajax({
-					type: 'PUT',
-					url: '/admin/service/'+operatorId+'/set-master',
-					data: {
-						master: master
-					}
-				}).done(function (response) {
-					UIkit.notification({
-						message: response == 'OK' ? 'Done.' : 'Update FAILED <br><small>' + response +'</small>',
-						status: response == 'OK' ? 'success' : 'warning',
-						pos: 'top-center',
-						timeout: 15000
-					});
-					if (response!='OK'){
-						thisSelect.val(master=='ding'?'reloadly':'ding');
-					}
-				}).fail(function (msg) {
+				if (response!='OK'){
 					thisSelect.val(master=='ding'?'reloadly':'ding');
-					UIkit.notification({
-						message: 'Update FAILED <br><small>' + msg.responseText.slice(0, 500) +'</small>',
-						status: 'danger',
-						pos: 'top-center',
-						timeout: 15000
-					});
+				}
+			}).fail(function (msg) {
+				thisSelect.val(master=='ding'?'reloadly':'ding');
+				UIkit.notification({
+					message: 'Update FAILED <br><small>' + msg.responseText.slice(0, 500) +'</small>',
+					status: 'danger',
+					pos: 'top-center',
+					timeout: 15000
 				});
 			});
-
-			$(document).on('change','.ding-select',function(){
-				thisSelect = $(this);
-				operatorId = $(this).data('id');
-				identifier = $(this).val();
-				$.ajaxSetup({
-				   headers: {
-					 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				   }
+		};
+		function changeDing(thisSelect,operatorId,identifier){
+			$.ajaxSetup({
+			   headers: {
+				 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			   }
+			});
+			$.ajax({
+				type: 'PUT',
+				url: '/admin/service/'+operatorId+'/associate',
+				data: {
+					provider: 'ding',
+					identifier: identifier
+				}
+			}).done(function (response) {
+				if (response!='OK'){ thisSelect.val(""); }
+				UIkit.notification({
+					message: response == 'OK' ? 'Done.' : 'Update FAILED <br><small>' + response +'</small>',
+					status: response == 'OK' ? 'success' : 'warning',
+					pos: 'top-center',
+					timeout: 15000
 				});
-				$.ajax({
-					type: 'PUT',
-					url: '/admin/service/'+operatorId+'/associate',
-					data: {
-						provider: 'ding',
-						identifier: identifier
-					}
-				}).done(function (response) {
-					if (response!='OK'){ thisSelect.val(""); }
-					UIkit.notification({
-						message: response == 'OK' ? 'Done.' : 'Update FAILED <br><small>' + response +'</small>',
-						status: response == 'OK' ? 'success' : 'warning',
-						pos: 'top-center',
-						timeout: 15000
-					});
-				}).fail(function (msg) {
-					thisSelect.val("");
-					UIkit.notification({
-						message: 'Update FAILED <br><small>' + msg.responseText.slice(0, 500) +'</small>',
-						status: 'danger',
-						pos: 'top-center',
-						timeout: 15000
-					});
+			}).fail(function (msg) {
+				thisSelect.val("");
+				UIkit.notification({
+					message: 'Update FAILED <br><small>' + msg.responseText.slice(0, 500) +'</small>',
+					status: 'danger',
+					pos: 'top-center',
+					timeout: 15000
 				});
 			});
-
-			$(document).on('change','.reloadly-select',function(){
-				thisSelect = $(this);
-				operatorId = $(this).data('id');
-				identifier = $(this).val();
-				$.ajaxSetup({
-				   headers: {
-					 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				   }
+		};
+		function changeReloadly(thisSelect,operatorId,identifier){
+			$.ajaxSetup({
+			   headers: {
+				 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			   }
+			});
+			$.ajax({
+				type: 'PUT',
+				url: '/admin/service/'+operatorId+'/associate',
+				data: {
+					provider: 'reloadly',
+					identifier: identifier
+				}
+			}).done(function (response) {
+				if (response!='OK'){ thisSelect.val(""); }
+				UIkit.notification({
+					message: response == 'OK' ? 'Done.' : 'Update FAILED <br><small>' + response +'</small>',
+					status: response == 'OK' ? 'success' : 'warning',
+					pos: 'top-center',
+					timeout: 15000
 				});
-				$.ajax({
-					type: 'PUT',
-					url: '/admin/service/'+operatorId+'/associate',
-					data: {
-						provider: 'reloadly',
-						identifier: identifier
-					}
-				}).done(function (response) {
-					if (response!='OK'){ thisSelect.val(""); }
-					UIkit.notification({
-						message: response == 'OK' ? 'Done.' : 'Update FAILED <br><small>' + response +'</small>',
-						status: response == 'OK' ? 'success' : 'warning',
-						pos: 'top-center',
-						timeout: 15000
-					});
-				}).fail(function (msg) {
-					thisSelect.val("");
-					UIkit.notification({
-						message: 'Update FAILED <br><small>' + msg.responseText +'</small>',
-						status: 'danger',
-						pos: 'top-center',
-						timeout: 15000
-					});
+			}).fail(function (msg) {
+				thisSelect.val("");
+				UIkit.notification({
+					message: 'Update FAILED <br><small>' + msg.responseText +'</small>',
+					status: 'danger',
+					pos: 'top-center',
+					timeout: 15000
 				});
 			});
-
-		});
+		};
 	</script>
 @endsection

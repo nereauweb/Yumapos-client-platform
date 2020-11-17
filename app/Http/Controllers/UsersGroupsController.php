@@ -71,13 +71,18 @@ class UsersGroupsController extends Controller
 				'name'             	=> $request->name,
 				'description'		=> $request->description ? $request->description : "",
 			]);
-			foreach ($request->configurations as $category_id => $configuration){
-				UsersGroupConfiguration::create([
-					'group_id'      => $group->id,
-					'category_id'   => $category_id,
-					'type'			=> $configuration['type'],
-					'amount'      	=> $configuration['amount'],
-				]);
+			foreach ($request->configurations as $target_group_id => $cat_configuration){
+				foreach ($cat_configuration as $category_id => $configuration){
+					if (isset($configuration['type'])&&$configuration['amount']){
+						UsersGroupConfiguration::create([
+							'group_id'      	=> $group->id,
+							'category_id'   	=> $category_id,
+							'target_group_id'   => $target_group_id,
+							'type'			=> $configuration['type'],
+							'amount'      	=> $configuration['amount'],
+						]);
+					}
+				}
 			}
 		}
 
@@ -117,15 +122,18 @@ class UsersGroupsController extends Controller
 		if ($group->type==1){			
 			$group->discount	= $request->input('discount');
 		} else {
-			foreach ($request->configurations as $category_id => $configuration){
-				if (isset($configuration['type'])&&$configuration['amount']){
-					UsersGroupConfiguration::updateOrCreate([
-						'group_id'      => $group->id,
-						'category_id'   => $category_id,
-					], [
-						'type'			=> $configuration['type'],
-						'amount'      	=> $configuration['amount'],
-					]);
+			foreach ($request->configurations as $target_group_id => $cat_configuration){
+				foreach ($cat_configuration as $category_id => $configuration){
+					if (isset($configuration['type'])&&$configuration['amount']){
+						UsersGroupConfiguration::updateOrCreate([
+							'group_id'      	=> $group->id,
+							'category_id'   	=> $category_id,
+							'target_group_id'   => $target_group_id,
+						], [
+							'type'			=> $configuration['type'],
+							'amount'      	=> $configuration['amount'],
+						]);
+					}
 				}
 			}
 		}
@@ -193,8 +201,9 @@ class UsersGroupsController extends Controller
 	
 	public function create_agent()
     {
+		$target_groups = UsersGroup::where('type',1)->get();
 		$categories = ServiceCategory::all();		
-		return view('admin/users/group-create-agent',compact('categories'));
+		return view('admin/users/group-create-agent',compact('target_groups','categories'));
 	}
 
 
@@ -214,8 +223,9 @@ class UsersGroupsController extends Controller
 		}
 		if ($group->type == 2) {
 			$users = User::whereHas("roles", function($q){ $q->where("name", "sales"); })->get();	
+		$target_groups = UsersGroup::where('type',1)->get();
 			$categories = ServiceCategory::all();		
-			return view('admin/users/group-edit-agent',compact('group','users','categories'));
+			return view('admin/users/group-edit-agent',compact('group','users','target_groups','categories'));
 		}
     }
 

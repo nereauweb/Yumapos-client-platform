@@ -49,24 +49,26 @@
 				</div>	
 				
 				@foreach($categories as $category)
-					<div class="form-group has-feedback row {{ $errors->has('categories') ? ' has-error ' : '' }}">
-						{!! Form::label('cat'.$category->id, $category->name, array('class' => 'col-md-3 control-label uk-text-bold')); !!}
-						<div class="col-md-9">
-							<div class="input-group row no-gutters">
-								<div class="col-md-6">
-									{!! Form::select('configurations['.$category->id.'][type]', [ 'percent' => 'Percentuale', 'value' => 'Valore'], NULL, array('id' => 'cat'.$category->id, 'class' => 'form-control', 'placeholder' => 'Seleziona tipo','required' => 'required')) !!}
+					@foreach($target_groups as $target_group)
+						<div class="form-group has-feedback row {{ $errors->has('categories') ? ' has-error ' : '' }}">
+							{!! Form::label('cat'.$target_group->id.'-'.$category->id, $category->name . ' ' . $target_group->name, array('class' => 'col-md-3 control-label uk-text-bold')); !!}
+							<div class="col-md-9">
+								<div class="input-group row no-gutters">
+									<div class="col-md-6">
+										{!! Form::select('configurations['.$target_group->id.']['.$category->id.'][type]', [ 'percent' => 'Percentuale', 'value' => 'Valore'], NULL, array('id' => 'cat'.$target_group->id.'-'.$category->id, 'class' => 'form-control', 'placeholder' => 'Seleziona tipo','required' => 'required')) !!}
+									</div>
+									<div class="col-md-6">
+										{!! Form::number('configurations['.$target_group->id.']['.$category->id.'][amount]', NULL, array('id' => 'cat'.$target_group->id.'-'.$category->id, 'class' => 'form-control', 'placeholder' => 'Valore','required' => 'required','step' => '0.01')) !!}
+									</div>
 								</div>
-								<div class="col-md-6">
-									{!! Form::number('configurations['.$category->id.'][amount]', NULL, array('id' => 'cat'.$category->id, 'class' => 'form-control', 'placeholder' => 'Valore','required' => 'required','step' => '0.01')) !!}
-								</div>
+								@if ($errors->has('categories'))
+									<span class="help-block">
+										<strong>{{ $errors->first('categories') }}</strong>
+									</span>
+								@endif
 							</div>
-							@if ($errors->has('categories'))
-								<span class="help-block">
-									<strong>{{ $errors->first('categories') }}</strong>
-								</span>
-							@endif
-						</div>
-					</div>	
+						</div>	
+					@endforeach
 				@endforeach
 				
 				<input type="hidden" name="type" value="2">
