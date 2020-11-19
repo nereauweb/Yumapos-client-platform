@@ -41,37 +41,37 @@ class ApiReloadlyController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
-        $this->middleware('role:admin|user|sales');
-
-        $ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, "https://auth.reloadly.com/oauth/token");
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		curl_setopt($ch, CURLOPT_HEADER, FALSE);
-		curl_setopt($ch, CURLOPT_POST, TRUE);
-		$requestBody = json_encode([
-		  "client_id" => $this->environment_credentials("client_id"),
-		  "client_secret" => $this->environment_credentials("client_secret"),
-		  "grant_type" => "client_credentials",
-		  "audience" => $this->environment()
-		]);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $requestBody);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, [
-		  "Content-Type: application/json",
-		  "Accept: application/json"
-		]);
-		$response = curl_exec($ch);
-		if (curl_errno($ch)) {	$this->log .= 'Init error 1: ' . curl_error($ch); return false; }
-		if (curl_getinfo($ch, CURLINFO_HTTP_CODE)!=200){ $this->log = 'Init error, response code: ' . curl_getinfo($ch, CURLINFO_HTTP_CODE); return false; }
-		curl_close($ch);
-		$response = json_decode($response, true);
-		if(isset($response['access_token'])){
-			$this->token = $response['access_token'];
-			$this->log .= 'Init OK';
-			return true;
-		}
-		$this->log .= 'Init error 3';
-		return false;
+//        $this->middleware('auth');
+//        $this->middleware('role:admin|user|sales');
+//
+//        $ch = curl_init();
+//		curl_setopt($ch, CURLOPT_URL, "https://auth.reloadly.com/oauth/token");
+//		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+//		curl_setopt($ch, CURLOPT_HEADER, FALSE);
+//		curl_setopt($ch, CURLOPT_POST, TRUE);
+//		$requestBody = json_encode([
+//		  "client_id" => $this->environment_credentials("client_id"),
+//		  "client_secret" => $this->environment_credentials("client_secret"),
+//		  "grant_type" => "client_credentials",
+//		  "audience" => $this->environment()
+//		]);
+//		curl_setopt($ch, CURLOPT_POSTFIELDS, $requestBody);
+//		curl_setopt($ch, CURLOPT_HTTPHEADER, [
+//		  "Content-Type: application/json",
+//		  "Accept: application/json"
+//		]);
+//		$response = curl_exec($ch);
+//		if (curl_errno($ch)) {	$this->log .= 'Init error 1: ' . curl_error($ch); return false; }
+//		if (curl_getinfo($ch, CURLINFO_HTTP_CODE)!=200){ $this->log = 'Init error, response code: ' . curl_getinfo($ch, CURLINFO_HTTP_CODE); return false; }
+//		curl_close($ch);
+//		$response = json_decode($response, true);
+//		if(isset($response['access_token'])){
+//			$this->token = $response['access_token'];
+//			$this->log .= 'Init OK';
+//			return true;
+//		}
+//		$this->log .= 'Init error 3';
+//		return false;
     }
 
 	private function environment(){
@@ -181,20 +181,20 @@ class ApiReloadlyController extends Controller
     }
 
 	public function get_cache_balance(){
-		try{
-			$call = $this->get_call('/accounts/balance');
-			if (isset($call['data']['balance'])){
-				if (Cache::has('reloadly_cache_balance_'.date('w'))) {
-					Cache::forget('reloadly_cache_balance_'.date('w'));
-				}
-				Cache::forever('reloadly_cache_balance_'.date('w'), $call['data']['balance']);
-				return response()->json($call['data']['balance'], 200);
-			}
-			return 'error';
-		} catch (Exception $ex){
-			$call = $ex->getMessage();
-			return 'error';
-		}
+//		try{
+//			$call = $this->get_call('/accounts/balance');
+//			if (isset($call['data']['balance'])){
+//				if (Cache::has('reloadly_cache_balance_'.date('w'))) {
+//					Cache::forget('reloadly_cache_balance_'.date('w'));
+//				}
+//				Cache::forever('reloadly_cache_balance_'.date('w'), $call['data']['balance']);
+//				return response()->json($call['data']['balance'], 200);
+//			}
+//			return 'error';
+//		} catch (Exception $ex){
+//			$call = $ex->getMessage();
+//			return 'error';
+//		}
 	}
 
     public function discounts(Request $request)
@@ -597,6 +597,25 @@ class ApiReloadlyController extends Controller
 		}
 		return $return_operator ? ( isset($operator) ? $operator : false ) : $count;
 	}
+
+	public function graph_data()
+    {
+        if (Cache::has('reloadly_cache_balance_graph_'.date('w'))) {
+            $key = Cache::get('reloadly_cache_balance_graph_'.date('w'));
+            $key[date('w')] = "1540";;
+            $key[date('w',strtotime("-1 day"))] = "1551";
+            $key[date('w',strtotime("-2 days"))] = "1300";
+            $key[date('w',strtotime("-3 days"))] = "1450";
+            $key[date('w',strtotime("-4 days"))] = "1420";
+            $key[date('w',strtotime("-5 days"))] = "1200";
+            $key[date('w',strtotime("-6 days"))] = "1100";
+            Cache::forever('reloadly_cache_balance_graph_'.date('w'), $key);
+        } else {
+            Cache::forever('reloadly_cache_balance_graph_'.date('w'), [date('w') => '1540']);
+        }
+
+        return response()->json(['graph_data' => Cache::get('reloadly_cache_balance_graph_'.date('w'))], 200);
+    }
 
 
 }

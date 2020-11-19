@@ -270,6 +270,8 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::get('/transactions', 'ApiReloadlyController@transactions')->name('admin.api.reloadly.transactions');
             Route::post('/recharge', 'ApiReloadlyController@recharge')->name('admin.api.reloadly.recharge');
             Route::get('/operators/save', 'ApiReloadlyController@save_operators')->name('admin.api.reloadly.operators.save');
+
+            Route::get('/graph','ApiReloadlyController@graph_data')->name('graph_data');
         });
 
 		Route::prefix('/admin/api/ding')->group(function () {
