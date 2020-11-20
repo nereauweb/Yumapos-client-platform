@@ -83,7 +83,7 @@
 		}
 		function editLocal(operatorID) {
 			event.preventDefault();
-			$('#edit-modal').load('/admin/service/reloadly/'+operatorID+'/edit/local #content');
+			$('#edit-local-modal').load('/admin/service/reloadly/'+operatorID+'/edit/local #content');
 			UIkit.modal('#edit-local-modal').show();
 		}		
 	</script>

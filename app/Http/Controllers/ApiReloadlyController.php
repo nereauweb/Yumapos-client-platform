@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ApiReloadlyController extends Controller
 {
-	private $environment = 'testing';
+	private $environment = 'live';
 
 	private $balanceString;
 
