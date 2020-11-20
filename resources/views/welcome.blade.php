@@ -414,17 +414,6 @@
 					$( "#reloadly-balance" ).html( data );
 				}
 			});
-            let reloadlyValues = [];
-            fetch('/admin/api/reloadly/graph').then(data => data.json()).then(data => {
-                for (const [key, value] of Object.entries(data['graph_data'])) {
-                    reloadlyValues.push(parseInt(value));
-                }
-            }).then(item => {
-            //    todo: apply graph
-		    }).catch(e => {
-		        console.log(e);
-            });
-
         });
 		$("#reload-ding-balance").click(function(e){
 			e.preventDefault();

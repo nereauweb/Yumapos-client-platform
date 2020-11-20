@@ -294,6 +294,8 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::get('/Promotions', 'ApiDingController@Promotions')->name('admin.api.ding.Promotions');
             Route::get('/PromotionDescriptions', 'ApiDingController@PromotionDescriptions')->name('admin.api.ding.PromotionDescriptions');
             Route::post('/AccountLookup', 'ApiDingController@AccountLookup')->name('admin.api.ding.account_lookup');
+
+            Route::get('/graph', 'ApiDingController@graph_data')->name('admin.ding.graph_data');
 		});
 
 		Route::prefix('/admin/service/reloadly')->group(function () {
