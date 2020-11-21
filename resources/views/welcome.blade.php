@@ -15,7 +15,7 @@
                                                 <div>
                                                     <div class="text-value-lg">
                                                         @if(Cache::has('reloadly_cache_balance_'.date('w')))
-                                                            <span id="reloadly-balance">{{ Cache::get('reloadly_cache_balance_'.date('w')) }}</span> €
+                                                            <span id="reloadly-balance">{{ Cache::get('reloadly_cache_balance_'.date('w'))[date('w')] }}</span> €
                                                         @else
                                                            <span id="reloadly-balance">Out of sync</span>
                                                         @endif

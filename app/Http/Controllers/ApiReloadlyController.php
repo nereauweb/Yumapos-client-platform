@@ -184,10 +184,11 @@ class ApiReloadlyController extends Controller
 		try{
 			$call = $this->get_call('/accounts/balance');
 			if (isset($call['data']['balance'])){
-				if (Cache::has('reloadly_cache_balance_'.date('w'))) {
-					Cache::forget('reloadly_cache_balance_'.date('w'));
+				if (Cache::has('reloadly_cache_balance_'.date('w'))[date('w')]) {
+					Cache::forget('reloadly_cache_balance_'.date('w')[date('w')]);
 				}
-				Cache::forever('reloadly_cache_balance_'.date('w'), $call['data']['balance']);
+                Cache::forever('reloadly_cache_balance_'.date('w'), [date('w') => $call['data']['balance']]);
+//				Cache::forever('reloadly_cache_balance_'.date('w'), $call['data']['balance']);
 				return response()->json($call['data']['balance'], 200);
 			}
 			return 'error';
@@ -600,8 +601,8 @@ class ApiReloadlyController extends Controller
 
 	public function graph_data()
     {
-        if (Cache::has('reloadly_cache_balance_graph_'.date('w'))) {
-            $key = Cache::get('reloadly_cache_balance_graph_'.date('w'));
+        if (Cache::has('reloadly_cache_balance_'.date('w'))) {
+            $key = Cache::get('reloadly_cache_balance_'.date('w'));
             $key[date('w')] = "1540";;
             $key[date('w',strtotime("-1 day"))] = "1551";
             $key[date('w',strtotime("-2 days"))] = "1300";
@@ -609,12 +610,12 @@ class ApiReloadlyController extends Controller
             $key[date('w',strtotime("-4 days"))] = "1420";
             $key[date('w',strtotime("-5 days"))] = "1200";
             $key[date('w',strtotime("-6 days"))] = "1100";
-            Cache::forever('reloadly_cache_balance_graph_'.date('w'), $key);
+            Cache::forever('reloadly_cache_balance_'.date('w'), $key);
         } else {
-            Cache::forever('reloadly_cache_balance_graph_'.date('w'), [date('w') => '1540']);
+            Cache::forever('reloadly_cache_balance_'.date('w'), [date('w') => '1540']);
         }
 
-        return response()->json(['graph_data' => Cache::get('reloadly_cache_balance_graph_'.date('w'))], 200);
+        return response()->json(['graph_data' => Cache::get('reloadly_cache_balance_'.date('w'))], 200);
     }
 
 
