@@ -695,16 +695,19 @@ class ApiDingController extends Controller
         }
 
         $key = Cache::get('ding_cache_balance_'.date('w'));
-
-        $return = [
-            'Six days ago' => $key[date('w',strtotime("-6 days"))],
-            'Five days ago' => $key[date('w',strtotime("-5 days"))],
-            'Four days ago' => $key[date('w',strtotime("-4 days"))],
-            'Three days ago' => $key[date('w',strtotime("-3 days"))],
-            'Two days ago' => $key[date('w',strtotime("-2 days"))],
-            'Yesterday' => $key[date('w',strtotime("-1 day"))],
-            'Today' => $key[date('w')],
-        ];
+        if ($key) {
+            $return = [
+                'Six days ago' => $key[date('w',strtotime("-6 days"))],
+                'Five days ago' => $key[date('w',strtotime("-5 days"))],
+                'Four days ago' => $key[date('w',strtotime("-4 days"))],
+                'Three days ago' => $key[date('w',strtotime("-3 days"))],
+                'Two days ago' => $key[date('w',strtotime("-2 days"))],
+                'Yesterday' => $key[date('w',strtotime("-1 day"))],
+                'Today' => $key[date('w')],
+            ];
+        } else {
+            $return = ['no data'];
+        }
 
         return response()->json(['graph_data' => $return], 200);
     }
