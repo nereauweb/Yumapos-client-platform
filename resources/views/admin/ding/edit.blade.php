@@ -80,7 +80,7 @@
 										</thead>
 										<tbody>
 											<tr>
-												<td><strong>{{round($product->minimum->SendValue,3)}}&nbsp;€</strong><br><small>{{round($product->minimum->SendValue * $product->fx_rate(),3)}}&nbsp;{{$product->destinationCurrencySymbol}}</td>
+												<td><strong>{{round($product->minimum->SendValue,3)}}&nbsp;€</strong><br><small>{{round($product->minimum->ReceiveValue,3)}} {{ $product->minimum->ReceiveCurrencyIso }}&nbsp;{{$product->destinationCurrencySymbol}}</td>
 												@foreach($groups as $group)									
 													@php
 														$configuration = $operator->configurations->where('group_id', $group->id)->first();	

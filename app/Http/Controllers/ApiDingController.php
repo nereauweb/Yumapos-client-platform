@@ -278,7 +278,7 @@ class ApiDingController extends Controller
 	{
 		$request_description = 'Products';
 		try{
-			$result = $this->ding->GetProducts();
+			$result = $this->ding->GetProducts(null,'ORSN');
 		} catch (Exception $ex){
 			$result = $ex->getMessage();
 		}
