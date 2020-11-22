@@ -601,6 +601,7 @@ class ApiReloadlyController extends Controller
 
 	public function graph_data()
     {
+        Cache::forget('reloadly_cache_balance_'.date('w'));
         if (Cache::has('reloadly_cache_balance_'.date('w'))) {
             $key = Cache::get('reloadly_cache_balance_'.date('w'));
             $key[date('w')] = "1540";;
@@ -615,7 +616,19 @@ class ApiReloadlyController extends Controller
             Cache::forever('reloadly_cache_balance_'.date('w'), [date('w') => '1540']);
         }
 
-        return response()->json(['graph_data' => Cache::get('reloadly_cache_balance_'.date('w'))], 200);
+        $key = Cache::get('reloadly_cache_balance_'.date('w'));
+
+        $return = [
+            'Today' => $key[date('w')],
+            'Yesterday' => $key[date('w',strtotime("-1 day"))],
+            'Two days ago' => $key[date('w',strtotime("-2 days"))],
+            'Three days ago' => $key[date('w',strtotime("-3 days"))],
+            'Four days ago' => $key[date('w',strtotime("-4 days"))],
+            'Five days ago' => $key[date('w',strtotime("-5 days"))],
+            'Six days ago' => $key[date('w',strtotime("-6 days"))]
+        ];
+
+        return response()->json(['graph_data' => $return], 200);
     }
 
 
