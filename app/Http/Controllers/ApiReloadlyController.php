@@ -615,19 +615,7 @@ class ApiReloadlyController extends Controller
             Cache::forever('reloadly_cache_balance_'.date('w'), [date('w') => '1540']);
         }
 
-        $key = Cache::get('reloadly_cache_balance_'.date('w'));
-
-        $return = [
-            'Six days ago' => $key[date('w',strtotime("-6 days"))],
-            'Five days ago' => $key[date('w',strtotime("-5 days"))],
-            'Four days ago' => $key[date('w',strtotime("-4 days"))],
-            'Three days ago' => $key[date('w',strtotime("-3 days"))],
-            'Two days ago' => $key[date('w',strtotime("-2 days"))],
-            'Yesterday' => $key[date('w',strtotime("-1 day"))],
-            'Today' => $key[date('w')],
-        ];
-
-        return response()->json(['graph_data' => $return], 200);
+        return response()->json(['graph_data' => Cache::get('reloadly_cache_balance_'.date('w'))], 200);
     }
 
 
