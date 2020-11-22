@@ -601,7 +601,6 @@ class ApiReloadlyController extends Controller
 
 	public function graph_data()
     {
-        Cache::forget('reloadly_cache_balance_'.date('w'));
         if (Cache::has('reloadly_cache_balance_'.date('w'))) {
             $key = Cache::get('reloadly_cache_balance_'.date('w'));
             $key[date('w')] = "1540";;
