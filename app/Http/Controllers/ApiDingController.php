@@ -680,21 +680,33 @@ class ApiDingController extends Controller
 
     public function graph_data()
     {
-        if (Cache::has('ding_cache_balance_graph_'.date('w'))) {
-            $key = Cache::get('ding_cache_balance_graph_'.date('w'));
+        if (Cache::has('ding_cache_balance_'.date('w'))) {
+            $key = Cache::get('ding_cache_balance_'.date('w'));
             $key[date('w')] = "1200";;
             $key[date('w',strtotime("-1 day"))] = "1300";
-            $key[date('w',strtotime("-2 days"))] = "1400";
+            $key[date('w',strtotime("-2 days"))] = "1200";
             $key[date('w',strtotime("-3 days"))] = "1300";
             $key[date('w',strtotime("-4 days"))] = "1100";
             $key[date('w',strtotime("-5 days"))] = "1200";
             $key[date('w',strtotime("-6 days"))] = "1100";
-            Cache::forever('ding_cache_balance_graph_'.date('w'), $key);
+            Cache::forever('ding_cache_balance_'.date('w'), $key);
         } else {
-            Cache::forever('ding_cache_balance_graph_'.date('w'), [date('w') => '1300']);
+            Cache::forever('ding_cache_balance_'.date('w'), [date('w') => '1300']);
         }
 
-        return response()->json(['graph_data' => Cache::get('ding_cache_balance_graph_'.date('w'))], 200);
+        $key = Cache::get('ding_cache_balance_'.date('w'));
+
+        $return = [
+            'Six days ago' => $key[date('w',strtotime("-6 days"))],
+            'Five days ago' => $key[date('w',strtotime("-5 days"))],
+            'Four days ago' => $key[date('w',strtotime("-4 days"))],
+            'Three days ago' => $key[date('w',strtotime("-3 days"))],
+            'Two days ago' => $key[date('w',strtotime("-2 days"))],
+            'Yesterday' => $key[date('w',strtotime("-1 day"))],
+            'Today' => $key[date('w')],
+        ];
+
+        return response()->json(['graph_data' => $return], 200);
     }
 
 }

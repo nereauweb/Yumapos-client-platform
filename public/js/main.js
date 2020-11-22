@@ -525,9 +525,9 @@ fetch('/admin/api/reloadly/graph').then(data => data.json()).then(data => {
     var cardChart1 = new Chart(document.getElementById('card-chart1'), {
         type: 'line',
         data: {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            labels: labelsForReloadly,
             datasets: [{
-                label: 'My First dataset',
+                label: 'Balance',
                 backgroundColor: 'transparent',
                 borderColor: 'rgba(255,255,255,.55)',
                 pointBackgroundColor: coreui.Utils.getStyle('--primary'),
@@ -589,9 +589,9 @@ fetch('/admin/api/reloadly/graph').then(data => data.json()).then(data => {
                 var cardChart2 = new Chart(document.getElementById('card-chart2'), {
                     type: 'line',
                     data: {
-                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                        labels: labelsForDing,
                         datasets: [{
-                            label: 'My First dataset',
+                            label: 'Balance',
                             backgroundColor: 'transparent',
                             borderColor: 'rgba(255,255,255,.55)',
                             pointBackgroundColor: coreui.Utils.getStyle('--info'),

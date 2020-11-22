@@ -29,7 +29,7 @@
                                                 </div>
                                             </div>
                                             <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                                                <canvas id="card-chart1" height="70" style="display: block; width: 343px; height: 70px;" width="343"></canvas>
+                                                <canvas id="card-chart1" height="80" style="display: block; width: 343px; height: 70px;" width="343"></canvas>
                                                 <div id="card-chart1-tooltip" class="c-chartjs-tooltip top" style="opacity: 0; left: 243.667px; top: 127.858px;"><div class="c-tooltip-header"><div class="c-tooltip-header-item">May</div></div><div class="c-tooltip-body"><div class="c-tooltip-body-item"><span class="c-tooltip-body-item-color" style="background-color: rgb(50, 31, 219);"></span><span class="c-tooltip-body-item-label">My First dataset</span><span class="c-tooltip-body-item-value">51</span></div></div></div></div>
                                         </div>
                                     </div>
@@ -40,7 +40,7 @@
                                                 <div>
                                                     <div class="text-value-lg">
                                                         @if(Cache::has('ding_cache_balance_'.date('w')))
-                                                            <span id="ding-balance">{{ Cache::get('ding_cache_balance_'.date('w')) }}</span> €
+                                                            <span id="ding-balance">{{ Cache::get('ding_cache_balance_'.date('w'))[date('w')] }}</span> €
                                                         @else
                                                            <span id="ding-balance">Out of sync</span>
                                                         @endif
@@ -54,7 +54,7 @@
                                                 </div>
                                             </div>
                                             <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                                                <canvas id="card-chart2" height="70" width="343" style="display: block; width: 343px; height: 70px;"></canvas>
+                                                <canvas id="card-chart2" height="80" width="343" style="display: block; width: 343px; height: 70px;"></canvas>
                                                 <div id="card-chart2-tooltip" class="c-chartjs-tooltip top" style="opacity: 0; left: 188.39px; top: 116.979px;"><div class="c-tooltip-header"><div class="c-tooltip-header-item">April</div></div><div class="c-tooltip-body"><div class="c-tooltip-body-item"><span class="c-tooltip-body-item-color" style="background-color: rgb(51, 153, 255);"></span><span class="c-tooltip-body-item-label">My First dataset</span><span class="c-tooltip-body-item-value">17</span></div></div></div></div>
                                         </div>
                                     </div>
@@ -74,7 +74,7 @@
                                                     </div>
                                                 </div>
 
-                                            <div class="c-chart-wrapper mt-0" style="height:70px;">
+                                            <div class="c-chart-wrapper" style="height:70px;">
                                                 <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand">
                                                     <div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
                                                     <ul class="uk-list m-0 p-1">
@@ -127,7 +127,7 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                                                <div class="c-chart-wrapper mt-2" style="height:70px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
                                                         @foreach($usersData['pending'] as $user)
                                                             @livewire('dashboard-user-managment', ['user' => $user])
                                                         @endforeach
