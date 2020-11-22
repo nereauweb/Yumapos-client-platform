@@ -680,7 +680,6 @@ class ApiDingController extends Controller
 
     public function graph_data()
     {
-        Cache::forget('ding_cache_balance_'.date('w'));
         if (Cache::has('ding_cache_balance_'.date('w'))) {
             $key = Cache::get('ding_cache_balance_'.date('w'));
             $key[date('w')] = "1200";;
