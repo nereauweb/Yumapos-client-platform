@@ -11,14 +11,14 @@ use Illuminate\Support\Facades\DB;
 class ServiceOperation extends Model
 {
     use SoftDeletes;
-	
+
 	/**
      * The database table used by the model.
      *
      * @var string
      */
     protected $table = 'service_operations';
-	
+
 	protected $fillable = [
 		'provider',
 		'user_id',
@@ -49,37 +49,38 @@ class ServiceOperation extends Model
 		'report_status',
 		'report_notes',
 		];
-		
-	public function reloadly_call(){ 
-		return $this->hasOne('App\Models\ApiReloadlyCall','id','api_reloadly_calls_id'); 
+
+	public function reloadly_call(){
+		return $this->hasOne('App\Models\ApiReloadlyCall','id','api_reloadly_calls_id');
 	}
-	
-	public function reloadly_operation(){ 
-		return $this->hasOne('App\Models\ApiReloadlyOperation','id','api_reloadly_operations_id'); 
+
+	public function reloadly_operation(){
+		return $this->hasOne('App\Models\ApiReloadlyOperation','id','api_reloadly_operations_id');
 	}
-	
-	public function reloadly_operator(){ 
-		return $this->hasOne('App\Models\ApiReloadlyOperator','id','request_operatorId'); 
+
+	public function reloadly_operator(){
+//		return $this->hasOne('App\Models\ApiReloadlyOperator','id','request_operatorId');
+        return $this->hasOne('App\Models\ApiReloadlyOperator','operatorId','request_operatorId');
+    }
+
+	public function ding_operation(){
+		return $this->hasOne('App\Models\ApiDingOperation','id','api_ding_operation_id');
 	}
-	
-	public function ding_operation(){ 
-		return $this->hasOne('App\Models\ApiDingOperation','id','api_ding_operation_id'); 
-	}
-	
-	public function ding_operator(){ 
+
+	public function ding_operator(){
 		return $this->hasOne('App\Models\ApiDingOperator','ProviderCode','request_ProviderCode');
 	}
-	
-	public function operator(){ 
+
+	public function operator(){
 		if ($this->provider == 'reloadly'){
 			return $this->reloadly_operator;
 		}
 		if ($this->provider == 'ding'){
-			return $this->ding_operator; 
+			return $this->ding_operator;
 		}
 		return false;
 	}
-	
+
 	public function operator_name(){
 		try
 		{
@@ -87,17 +88,17 @@ class ServiceOperation extends Model
 				return $this->reloadly_operator->name;
 			}
 			if ($this->provider == 'ding'){
-				return $this->ding_operator->Name; 
+				return $this->ding_operator->Name;
 			}
 		}
 		catch(\ErrorException $ex)
 		{
 			return '';
 		}
-		
+
 		return '';
 	}
-	
+
 	public function country_name(){
 		try
 		{
@@ -108,19 +109,19 @@ class ServiceOperation extends Model
 			return '';
 		}
 	}
-	
+
 	public function destination_currency_symbol(){
 		if ($this->provider == 'reloadly'){
 			return $this->reloadly_operator->destinationCurrencySymbol;
 		}
 		if ($this->provider == 'ding'){
-			return $this->ding_operation->ReceiveCurrencyIso; 
+			return $this->ding_operation->ReceiveCurrencyIso;
 		}
-		return '';		
+		return '';
 	}
-	
-	public function user(){ 
-		return $this->hasOne('App\User','id','user_id'); 
+
+	public function user(){
+		return $this->hasOne('App\User','id','user_id');
 	}
-	
+
 }
