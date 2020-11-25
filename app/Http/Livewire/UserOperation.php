@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\ApiReloadlyOperator;
 use App\Models\ApiReloadlyOperatorCountry;
+use App\Models\ServiceCountry;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -50,6 +51,7 @@ class UserOperation extends Component
     {
 //        $this->countries = ApiReloadlyOperatorCountry::select('name', 'isoName')->groupBy('name', 'isoName')->get();
 //        $this->operators = ApiReloadlyOperator::all();
+        $this->countries = ServiceCountry::all();
         $this->operations = auth()->user()->serviceOperations()->when(($this->from !== null && !empty($this->from)), function ($query) {
             $query->where('created_at', '>=', $this->from);
         })->when(($this->to !== null && !empty($this->to)), function ($query) {

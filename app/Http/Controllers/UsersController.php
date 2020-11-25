@@ -269,7 +269,7 @@ class UsersController extends Controller
     //    export function
     public function export(Request $request)
     {
-        $collection = User::join('users_company_data as ucd', 'ucd.user_id', 'users.id')->when($request->stateUserSelected, function ($query) use ($request) {
+        $collection = User::role('user')->join('users_company_data as ucd', 'ucd.user_id', 'users.id')->when($request->stateUserSelected, function ($query) use ($request) {
             if ($request->stateUserSelected == 1) {
                 $query->where('users.state', '=', 1);
             } else if ($request->stateUserSelected  == 2) {
@@ -289,8 +289,19 @@ class UsersController extends Controller
             $query->role($request->roleUserSelected);
         })->when($request->cityUserSelected !== 'null' && $request->cityUserSelected, function ($query) use ($request) {
             $query->where('ucd.legal_seat_city', '=', $request->cityUserSelected);
-        })->select('ucd.shop_sign', 'ucd.company_name', 'ucd.vat', 'ucd.operative_seat_address', 'ucd.operative_seat_zip', 'ucd.operative_seat_city', 'ucd.email', 'ucd.phone')->get();
+        })->select('ucd.email', 'ucd.shop_sign', 'ucd.company_name', 'ucd.vat', 'ucd.operative_seat_address', 'ucd.operative_seat_zip', 'ucd.operative_seat_city', 'ucd.phone', 'users.plafond')->get();
 
         return Excel::download(new UsersExport($collection), 'users.xlsx');
+    }
+
+    public function changeRole(User $user)
+    {
+        if (request()->has('sales-to-user')) {
+            $user->removeRole('sales');
+        } else if (request()->has('user-to-sales')) {
+            $user->assignRole('sales');
+        }
+
+        return back()->with(['status' => 'success', 'message'=> 'user role got changed successfully']);
     }
 }

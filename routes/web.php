@@ -188,6 +188,8 @@ Route::group(['middleware' => ['get.menu']], function () {
 
     Route::group(['middleware' => ['role:admin']], function () {
 
+        Route::post('/admin/users/change-role/{user}', 'UsersController@changeRole')->name('admin.user.change-role');
+
         Route::put('admin/agent/user/approve', 'AgentController@approve')->name('admin.agent.user.approve');
 
         Route::get('/reloadly_balance', 'ApiReloadlyController@getBalance');

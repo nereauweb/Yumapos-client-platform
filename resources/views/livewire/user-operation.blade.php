@@ -39,6 +39,7 @@
                                     <label for="js-select-countries">Choose operator</label>
                                     <select wire:model.defer="selectedOperator" class="form-control">
                                         <option value="0" selected>All</option>
+
                                     </select>
                                 </div>
                             </div>
