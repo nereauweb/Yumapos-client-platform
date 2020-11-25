@@ -233,6 +233,10 @@ class Price implements ModelInterface, ArrayAccess
         $this->container['send_value'] = isset($data['send_value']) ? $data['send_value'] : null;
         $this->container['send_currency_iso'] = isset($data['send_currency_iso']) ? $data['send_currency_iso'] : null;
     }
+	
+	public function getData(){
+		return $this->container;
+	}
 
     /**
      * Show all the invalid properties with reasons.

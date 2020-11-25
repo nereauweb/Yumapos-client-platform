@@ -22,6 +22,8 @@ use App\Models\ApiDingPaymentType;
 use App\Models\ApiDingSettingDefinition;
 use App\Models\ApiDingRegion;
 
+use App\Models\ApiDingOperation;
+
 use Auth;
 
 use Illuminate\Http\Request;
@@ -289,6 +291,7 @@ class ApiDingController extends Controller
 	{
 		$request_description = 'Providers save';
 		$result = "Products saved:<br><ol>";
+		ApiDingProduct::truncate();
 		try{
 			$data = $this->ding->GetProducts();
 			$index = 0;
@@ -497,7 +500,7 @@ class ApiDingController extends Controller
 
 		$request_product_sku 				= $request_data['request_product_sku'];
 		$request_local 						= $request_data['request_local'];
-		$request_send_currency_iso			= isset($request_data['request_local']) ? $request_data['request_local'] : 'EUR';
+		$request_send_currency_iso			= 'EUR';
 		$request_operator_ProviderCode 		= $request_data['request_operator_ProviderCode'];
 		$request_amount 					= $request_data['request_amount'];
 		$request_country_iso 				= $request_data['request_country_iso'];
@@ -505,6 +508,7 @@ class ApiDingController extends Controller
 		$user_gain 							= $request_data['user_gain'];
 		$final_amount 						= $request_data['final_amount'];
 		$final_expected_destination_amount 	= $request_data['final_expected_destination_amount'];
+		$internalRef						= Auth::user()->id .'.'. time();
 
 		$operator = ApiDingOperator::where('ProviderCode',$request_operator_ProviderCode)->first();
 		//$original_expected_destination_amount = $request_amount * $operator->fx->rate;
@@ -513,7 +517,7 @@ class ApiDingController extends Controller
 
 		$user_amount = $final_amount - $user_gain;
 
-		if ($operator->products_type=="FIXED"){
+		if ($operator->products_type()=="FIXED"){
 			if($request_local==1){
 				$sent_amount = $user_amount; // temporary, to be overwritten before saving
 				if ($configuration) {
@@ -536,7 +540,7 @@ class ApiDingController extends Controller
 				}
 			}
 		}
-		if ($operator->products_type=="RANGE"){
+		if ($operator->products_type()=="RANGE"){
 			$user_discount = $configuration ? round(($configuration->discount_percent/100) * $request_amount,3) : 0;
 			$sent_amount = round($final_expected_destination_amount / $operator->fx->rate,3);
 			$platform_gain = $request_amount - $sent_amount;
@@ -545,7 +549,7 @@ class ApiDingController extends Controller
 		$user_total_gain = $user_discount + $user_gain;
 
 		$response = [
-			'provider' => 'reloadly',
+			'provider' => 'ding',
 			'user_id' => Auth::user()->id,
 			'request_product_sku' => $request_product_sku,
 			'request_ProviderCode' => $request_operator_ProviderCode,
@@ -575,21 +579,39 @@ class ApiDingController extends Controller
 				'SkuCode' => $request_product_sku,
 				'SendValue' => $request_amount,
 				'SendCurrencyIso' => $request_send_currency_iso,
-				'AccountNumber' => $request_recipient_phone,
-				'DistributorRef' => Auth::user()->id .'.'. time(),
+				'AccountNumber' => str_replace('+','',$request_recipient_phone),
+				'DistributorRef' => $internalRef,
+				'ValidateOnly' => $this->test ? 'true' : 'false',
 				/*
 				'Settings' => [
 					'Name' => $data['name'],
 					'Value' => $data['value'],
 				],
 				*/
-				'ValidateOnly' => $this->test ? 'true' : 'false',
-				'BillRef' => Auth::user()->id .'.'. time(),
 			]);
+		} catch (\App\Http\Ding\ApiException $ex){
+			$data['request'] = [
+				'SkuCode' => $request_product_sku,
+				'SendValue' => $request_amount,
+				'SendCurrencyIso' => $request_send_currency_iso,
+				'AccountNumber' => $request_recipient_phone,
+				'DistributorRef' => Auth::user()->id .'.'. time(),
+				'ValidateOnly' => $this->test ? 'true' : 'false',
+				];
+			$data['response'] = $ex->getResponseBody();
+			return view('users/service/result', ['log' => $this->log, 'data' => $data, 'response' => -1, 'operator' => $operator] );
 		} catch (Exception $ex){
-			$result = $ex->getMessage();
+			$data['request'] = [
+				'SkuCode' => $request_product_sku,
+				'SendValue' => $request_amount,
+				'SendCurrencyIso' => $request_send_currency_iso,
+				'AccountNumber' => $request_recipient_phone,
+				'DistributorRef' => Auth::user()->id .'.'. time(),
+				'ValidateOnly' => $this->test ? 'true' : 'false',
+				];
+			$data['response'] = $ex->getMessage();
+			return view('users/service/result', ['log' => $this->log, 'data' => $data, 'response' => -1, 'operator' => $operator] );
 		}
-
 		/*
 
 		if($request_local==1){
@@ -616,35 +638,37 @@ class ApiDingController extends Controller
 
 		*/
 
-
-
-		if ($result->getResultCode()==1){
-			$data = $result->getTransferRecord();
+		if ($data->getResultCode()==1){
+			$record = $data->getTransferRecord()->getData();
+			$data_builder['transfer_record'] = $record;
+			$data_builder['price'] = $record['price']->getData();
+			$data_builder['transfer_id'] = $record['transfer_id']->getData();
+			$data = $data_builder;
 		} else {
-			return view('users/service/result', ['log' => $this->log, 'data' => $data, 'response' => $response, 'operator' => $operator] );
+			return view('users/service/result', ['log' => $this->log, 'data' => $data, 'response' => -1, 'operator' => $operator] );
 		}
-
-		$dingOperation = ApiDingOperation::create([
-			'TransferRef' 				=> $data['TransferId']['TransferRef'],
-			'DistributorRef' 			=> $data['TransferId']['DistributorRef'],
-			'SkuCode' 					=> $data['SkuCode'],
-			'CustomerFee' 				=> $data['Price']['CustomerFee'],
-			'DistributorFee' 			=> $data['Price']['DistributorFee'],
-			'ReceiveValue' 				=> $data['Price']['ReceiveValue'],
-			'ReceiveCurrencyIso' 		=> $data['Price']['ReceiveCurrencyIso'],
-			'ReceiveValueExcludingTax' 	=> $data['Price']['ReceiveValueExcludingTax'],
-			'TaxRate' 					=> $data['Price']['TaxRate'],
-			'TaxName' 					=> $data['Price']['TaxName'],
-			'TaxCalculation' 			=> $data['Price']['TaxCalculation'],
-			'SendValue' 				=> $data['Price']['SendValue'],
-			'SendCurrencyIso' 			=> $data['Price']['SendCurrencyIso'],
-			'CommissionApplied' 		=> $data['CommissionApplied'],
-			'StartedUtc' 				=> $data['StartedUtc'],
-			'CompletedUtc' 				=> $data['CompletedUtc'],
-			'ProcessingState' 			=> $data['ProcessingState'],
-			'ReceiptText' 				=> $data['ReceiptText'],
-			'ReceiptParams' 			=> $data['ReceiptParams'],
-			'AccountNumber' 			=> $data['AccountNumber'],
+		
+		$dingOperation = ApiDingOperation::create([		
+			'SkuCode' 					=> $data['transfer_record']['sku_code'],
+			'CommissionApplied' 		=> $data['transfer_record']['commission_applied'],
+			'StartedUtc' 				=> $data['transfer_record']['started_utc'],
+			'CompletedUtc' 				=> $data['transfer_record']['completed_utc'],
+			'ProcessingState' 			=> $data['transfer_record']['processing_state'],
+			'ReceiptText' 				=> $data['transfer_record']['receipt_text'],
+			'ReceiptParams' 			=> implode(',',$data['transfer_record']['receipt_params']),
+			'AccountNumber' 			=> $data['transfer_record']['account_number'],			
+			'DistributorRef' 			=> $data['transfer_id']['distributor_ref'],
+			'TransferRef' 				=> $data['transfer_id']['transfer_ref'],		
+			'SendCurrencyIso' 			=> $data['price']['send_currency_iso'],
+			'CustomerFee' 				=> $data['price']['customer_fee'],
+			'DistributorFee' 			=> $data['price']['distributor_fee'],
+			'ReceiveValue' 				=> $data['price']['receive_value'],
+			'ReceiveCurrencyIso' 		=> $data['price']['receive_currency_iso'],
+			'ReceiveValueExcludingTax' 	=> $data['price']['receive_value_excluding_tax'],
+			'TaxRate' 					=> $data['price']['tax_rate'],
+			'TaxName' 					=> $data['price']['tax_name'],
+			'TaxCalculation' 			=> $data['price']['tax_calculation'],
+			'SendValue' 				=> $data['price']['send_value'],
 		]);
 		$response['api_ding_operation_id'] = $dingOperation->id;
 		$response['ding_TransferRef'] = $dingOperation->TransferRef;

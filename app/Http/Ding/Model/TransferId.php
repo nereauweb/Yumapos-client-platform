@@ -185,6 +185,10 @@ class TransferId implements ModelInterface, ArrayAccess
         $this->container['transfer_ref'] = isset($data['transfer_ref']) ? $data['transfer_ref'] : null;
         $this->container['distributor_ref'] = isset($data['distributor_ref']) ? $data['distributor_ref'] : null;
     }
+	
+	public function getData(){
+		return $this->container;
+	}
 
     /**
      * Show all the invalid properties with reasons.

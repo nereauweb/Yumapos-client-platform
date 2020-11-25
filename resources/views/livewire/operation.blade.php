@@ -158,7 +158,7 @@
                                         <td>{{ $operation->reloadly_transactionId }}</td>
                                         <td>{{ $operation->api_reloadly_calls_id }}</td>
                                         <td>{{ $operation->request_country_iso }}</td>
-                                        <td>{{ $operation->operator->name ?? '' }}</td>
+                                        <td>{{ $operation->operator_name() }}</td>
                                         <td>{{ $operation->request_recipient_phone }}</td>
                                         <td>{{ round($operation->final_expected_destination_amount, 2) ?? '' }}&nbsp;{{ $operation->reloadly_operation->deliveredAmountCurrencyCode ?? '' }}
                                         </td>

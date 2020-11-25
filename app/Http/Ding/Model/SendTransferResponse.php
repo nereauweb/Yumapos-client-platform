@@ -188,6 +188,8 @@ class SendTransferResponse implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         $this->container['transfer_record'] = isset($data['transfer_record']) ? $data['transfer_record'] : null;
+        $this->container['price'] = isset($data['price']) ? $data['price'] : null;
+        $this->container['transfer_id'] = isset($data['transfer_id']) ? $data['transfer_id'] : null;
         $this->container['result_code'] = isset($data['result_code']) ? $data['result_code'] : null;
         $this->container['error_codes'] = isset($data['error_codes']) ? $data['error_codes'] : null;
     }
@@ -220,7 +222,16 @@ class SendTransferResponse implements ModelInterface, ArrayAccess
     {
         return count($this->listInvalidProperties()) === 0;
     }
-
+	
+	public function getPrice()
+    {
+        return $this->container['price'];
+    }
+	
+	public function getTransferId()
+    {
+        return $this->container['transfer_id'];
+    }	
 
     /**
      * Gets transfer_record

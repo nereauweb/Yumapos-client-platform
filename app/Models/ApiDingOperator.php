@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\ApiDingProduct;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -45,8 +47,15 @@ class ApiDingOperator extends Model
 
 	public function payment_types(){ return $this->hasMany('App\Models\ApiDingOperatorPaymentType','ProviderCode'); }
 
-
 	public function products(){ return $this->hasMany('App\Models\ApiDingProduct','ProviderCode','ProviderCode'); }
+	
+	public function ordered_products(){
+		return ApiDingProduct::select('api_ding_products.*')
+			->join('api_ding_products_minimums','api_ding_products.id','=','api_ding_products_minimums.product_id')
+			->where('api_ding_products.ProviderCode',$this->ProviderCode)
+			->orderBy('api_ding_products_minimums.SendValue')
+			->get();
+	}
 
 	public function country()
     {

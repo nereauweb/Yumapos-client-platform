@@ -85,7 +85,7 @@ a.operator-choice * {
 								<div class="form-group row">
 									<label class="col-md-3 col-form-label" for="text-input">Change operator</label>
 									<div class="col-md-9">
-										<div class="uk-child-width-auto uk-grid-collapse uk-flex" uk-grid>
+										<div class="uk-child-width-auto uk-grid-collapse uk-flex uk-flex-wrap" uk-grid>
 										@foreach($operators as $availableOperator)
 										<a href="#" class="operator-choice">
 											<div class="form-check">
@@ -110,7 +110,7 @@ a.operator-choice * {
 											<div class="col-md-3 col-form-label">
 												Choose amount
 											</div>
-											<div class="col-md-9 col-form-label uk-flex">
+											<div class="col-md-9 col-form-label uk-flex uk-flex-wrap">
 											@foreach($operator->reloadly->fixedAmounts as $index => $element)
 												@php
 													$user_amount = round($element->amount,2);												
@@ -251,8 +251,8 @@ a.operator-choice * {
 											<div class="col-md-3 col-form-label">
 												Choose amount
 											</div>
-											<div class="col-md-9 col-form-label uk-flex">
-											@foreach($operator->ding->products as $index => $element)
+											<div class="col-md-9 col-form-label uk-flex uk-flex-wrap">
+											@foreach($operator->ding->ordered_products() as $index => $element)
 												@php
 													$user_amount = round($element->minimum->SendValue,2);												
 													if ($configuration&&$configuration->amounts){
@@ -266,23 +266,31 @@ a.operator-choice * {
 													}
 													$fxrate = $element->config_rate(Auth::user()->group_id);
 												@endphp
-												<a href="#" class="amount-choice">
-													<div class="form-check">
-														<input 
-															class="form-check-input amounts" 
-															id="radio{{$index}}" 
-															type="radio" 
-															value="{{$element->minimum->SendValue}}" 
-															name="amount" 
-															data-amount="{{ $user_amount }}"
-															data-local="0"
-															data-local-amount="{{ $element->minimum->SendValue * $fxrate}}"
-															data-fxrate="{{ $fxrate }}"
-															data-sku-code="{{ $element->SkuCode }}"
-															required >
-														<label class="form-check-label" for="radio{{$index}}">{{ $user_amount }} €</label>
-													</div>			
-												</a>
+												<div>
+													<a href="#" class="amount-choice">
+														<div class="form-check">
+															<input 
+																class="form-check-input amounts" 
+																id="radio{{$index}}" 
+																type="radio" 
+																value="{{$element->minimum->SendValue}}" 
+																name="amount" 
+																data-amount="{{ $user_amount }}"
+																data-local="0"
+																data-local-amount="{{ $element->minimum->ReceiveValue}}"
+																data-fxrate="{{ $fxrate }}"
+																data-sku-code="{{ $element->SkuCode }}"
+																required >
+															<label class="form-check-label uk-text-center" for="radio{{$index}}">
+																<strong>
+																{{ round($user_amount,2) }} {{ $element->minimum->SendCurrencyIso }}
+																</strong>
+																<hr class="uk-margin-remove">
+																{{ round($element->minimum->ReceiveValue,2) }} {{ $element->minimum->ReceiveCurrencyIso }}																
+															</label>
+														</div>			
+													</a>
+												</div>
 											@endforeach
 											@if($configuration&&$operator->ding->products->count()>0&&$configuration->local_amounts)
 												@foreach($operator->ding->products as $index => $element)
@@ -300,7 +308,7 @@ a.operator-choice * {
 																class="form-check-input amounts" 
 																id="radio{{$index}}" 
 																type="radio" 
-																value="{{$element->minimum->ReceiveValue}}" 
+																value="{{$element->minimum->SendValue}}" 
 																name="amount" 
 																data-local="1"
 																data-amount="{{ $user_amount }}"
@@ -308,7 +316,13 @@ a.operator-choice * {
 																data-local-amount="{{ $element->minimum->ReceiveValue }}"
 																data-sku-code="{{ $element->SkuCode }}"
 																required >
-															<label class="form-check-label" for="radio{{$index}}">{{ round($element->minimum->ReceiveValue,2) }} {{ $element->minimum->SendCurrencyIso }}</label>
+															<label class="form-check-label uk-text-center" for="radio{{$index}}">
+																<strong>
+																{{ round($user_amount,2) }} {{ $element->minimum->SendCurrencyIso }}
+																</strong>
+																<hr class="uk-margin-remove">
+																{{ round($element->minimum->ReceiveValue,2) }} {{ $element->minimum->ReceiveCurrencyIso }}																
+															</label>
 														</div>			
 													</a>
 												@endforeach
@@ -328,7 +342,7 @@ a.operator-choice * {
 											</div>
 										</div>
 										<div class="form-group row">
-											<label class="col-md-3 col-form-label" for="text-input">Expected charge {{ $operator->ding->products()->first()->minimum->SendCurrencyIso }}</label>
+											<label class="col-md-3 col-form-label" for="text-input">Expected charge {{ $operator->ding->products()->first()->minimum->ReceiveCurrencyIso }}</label>
 											<div class="col-md-9">
 												<input class="form-control" id="final_amount_destination" type="text" name="final_amount_destination" value="" step="0.01" readonly>
 											</div>

@@ -233,6 +233,10 @@ class TransferRecord implements ModelInterface, ArrayAccess
         $this->container['receipt_params'] = isset($data['receipt_params']) ? $data['receipt_params'] : null;
         $this->container['account_number'] = isset($data['account_number']) ? $data['account_number'] : null;
     }
+	
+	public function getData(){
+		return $this->container;
+	}
 
     /**
      * Show all the invalid properties with reasons.

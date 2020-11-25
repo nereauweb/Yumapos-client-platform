@@ -61,11 +61,11 @@
 			</tr>
 			<tr>
 				<th>Operatore</th>
-				<td>{{ $operation->operator->name }}</td>
+				<td>{{ $operation->operator_name() }}</td>
 			</tr>
 			<tr>
 				<th>Paese</th>
-				<td>{{ $operation->operator->country->name }}</td>
+				<td>{{ $operation->country_name() }}</td>
 			</tr>
 			<tr>
 				<th>Numero telefonico</th>
@@ -77,7 +77,7 @@
 			</tr>
 			<tr>
 				<th>Ricarica stimata</th>
-				<td>{{ round($operation->final_expected_destination_amount,2) }} {{ $operation->operator->	destinationCurrencySymbol }}</td>
+				<td>{{ round($operation->final_expected_destination_amount,2) }} {{ $operation->destination_currency_symbol() }}</td>
 			</tr>
 			<tr>
 				<th>Stato</th>

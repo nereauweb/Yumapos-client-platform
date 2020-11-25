@@ -23,42 +23,42 @@
                 <h1>Payments</h1>
                 <div class="calculations my-4">
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-4">
                             <span class="font-weight-bold">
                                 Platform to you:
                             </span>
                         </div>
-                        <div class="col-2">
+                        <div class="col-4">
                             <span class="font-weight-bold">
                                 {{ $totalBalance }}&euro;
                             </span>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-4">
                             <span class="font-weight-bold">
                                 Your approved balance to platform:
                             </span>
                         </div>
-                        <div class="col-2">
+                        <div class="col-4">
                             <span class="font-weight-bold">
                                 {{ $negativeBalance }} &euro;
                             </span>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-4">
                             <span class="font-weight-bold">Difference between balances:</span>
                         </div>
-                        <div class="col-2">
+                        <div class="col-4">
                             <span class="font-weight-bold">{{ $totalBalance - $negativeBalance }} &euro;</span>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-4">
                             <span class="font-weight-bold">Your plafond amount:</span>
                         </div>
-                        <div class="col-2">
+                        <div class="col-4">
                             <span class="font-weight-bold">{{ auth()->user()->plafond }} &euro;</span>
                         </div>
                     </div>

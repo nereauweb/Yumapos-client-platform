@@ -21,7 +21,7 @@
 						
 						<div uk-overflow-auto>
 						
-						@foreach ($operator->products as $product)
+						@foreach ($operator->ordered_products() as $product)
 						
 							@if($product->type()=="RANGE")
 									<table class="table light">

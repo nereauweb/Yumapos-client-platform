@@ -283,8 +283,8 @@
                                             <div class="ml-3">
                                                 <select id="operator-selected" autocomplete="off" class="form-control">
                                                     <option value="0">All operators</option>
-                                                    @foreach(auth()->user()->serviceOperations()->groupBy('request_operatorId')->get() as $operator)
-                                                        <option value="{{$operator->operator->operatorId}}">{{ $operator->operator->name }}</option>
+                                                    @foreach(\App\Models\ServiceOperator::all() as $operator)
+                                                        <option value="{{$operator->id}}">{{ $operator->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>

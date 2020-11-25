@@ -84,7 +84,7 @@ class PointServiceController extends Controller
 		
 		$service_operator = ServiceOperator::findOrFail($request->input('operator_id'));
 		
-		if($service_operator->main == 'reloadly'){				
+		if($service_operator->master == 'reloadly'){				
 			$request_data = [
 				'request_local' 					=> $request->input('local') ? $request->input('local') : 0,
 				'request_operator_id' 				=> $service_operator->reloadly->operatorId,
@@ -99,7 +99,7 @@ class PointServiceController extends Controller
 			return redirect()->route('users.services.reloadly.transaction.result');		
 		}
 		
-		if($service_operator->main == 'ding'){				
+		if($service_operator->master == 'ding'){				
 			$request_data = [
 				'request_local' 					=> $request->input('local') ? $request->input('local') : 0,
 				'request_operator_ProviderCode' 	=> $service_operator->ding->ProviderCode,
@@ -115,7 +115,7 @@ class PointServiceController extends Controller
 			return redirect()->route('users.services.ding.transaction.result');		
 		}
 		
-		return back()->with('error','We are sorry, a problem occurred in selecting operator provider. Request aborted.');
+		return redirect('/backend')->with('error','We are sorry, a problem occurred in selecting operator provider ID '.$request->input('operator_id').'. Request aborted.');
 	}
 	
 	public function print($id)

@@ -52,7 +52,7 @@
                                     <div class="card-body">
                                         <ul class="list-group">
                                             @foreach($countriesList as $country)
-                                                <li class="list-group-item d-flex list-group-item-action justify-content-between align-items-center">{{ $country->operator->country->name }}<span class="badge badge-primary badge-pill">{{ $country->amount }}</span></li>
+                                                <li class="list-group-item d-flex list-group-item-action justify-content-between align-items-center">{{ $country->country_name() }}<span class="badge badge-primary badge-pill">{{ $country->amount }}</span></li>
                                             @endforeach
                                         </ul>
                                     </div>
@@ -64,7 +64,7 @@
                                     <div class="card-body">
                                         <ul class="list-group">
                                             @foreach($operationsList as $serviceOperation)
-                                                <li class="list-group-item d-flex list-group-item-action justify-content-between align-items-center">{{ $serviceOperation->operator->name }}<span class="badge badge-primary badge-pill">{{ $serviceOperation->amount }}</span></li>
+                                                <li class="list-group-item d-flex list-group-item-action justify-content-between align-items-center">{{ $serviceOperation->operator_name() }}<span class="badge badge-primary badge-pill">{{ $serviceOperation->amount }}</span></li>
                                             @endforeach
                                         </ul>
                                     </div>
@@ -115,10 +115,10 @@
                                 {{ $service->platform_total_gain - $service->user_discount }}
                             </td>
                             <td>
-                                {{ $service->operator->country->name }}
+                                {{ $service->country_name() }}
                             </td>
                             <td>
-                                {{ $service->operator->name }}
+                                {{ $service->operator_name() }}
                             </td>
                             <td>
                                 {{ $service->provider }}

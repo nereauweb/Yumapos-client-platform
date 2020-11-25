@@ -39,9 +39,6 @@
                                     <label for="js-select-countries">Choose operator</label>
                                     <select wire:model.defer="selectedOperator" class="form-control">
                                         <option value="0" selected>All</option>
-                                        @foreach($operators as $operator)
-                                            <option value="{{ $operator->operatorId }}">{{ $operator->name }}</option>
-                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -71,8 +68,8 @@
                                             <tr>
                                                 <td>{{ date('d/m/Y', strtotime($operation->created_at)) }}</td>
                                                 <td>{{ $operation->id }}</td>
-                                                <td>{{ $operation->request_country_iso }}</td>
-                                                <td>{{ $operation->reloadly_operation->operatorName ?? 'return null'  }}</td>
+                                                <td>{{ $operation->country_name() }}</td>
+                                                <td>{{ $operation->operator_name()  }}</td>
                                                 <td>{{ $operation->request_recipient_phone }}</td>
                                                 <td>{{ round($operation->final_amount,2) }}&nbsp;&euro;</td>
                                                 <td>{{ round($operation->user_gain,2) }}&nbsp;&euro;</td>
