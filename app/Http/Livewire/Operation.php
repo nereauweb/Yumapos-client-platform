@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\ApiReloadlyOperatorCountry;
 use App\Models\ServiceOperation;
 use App\User;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -38,8 +39,8 @@ class Operation extends Component
             $user_id = $user->id;
         }
 
-        $date_begin = ($this->from && !is_null($this->from)) ? $this->from . ' 00:00:00' : date("Y") . '-01-01 00:00:00';
-        $date_end = ($this->to && !is_null($this->to)) ? $this->to . ' 23:59:59' : date("Y") . '-12-31 23:59:59';
+        $date_begin = ($this->from && !is_null($this->from)) ? $this->from . ' 00:00:00' : Carbon::yesterday();
+        $date_end = ($this->to && !is_null($this->to)) ? $this->to . ' 23:59:59' : Carbon::yesterday();
         $operations = ServiceOperation::where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end)->when($this->sortField, function ($query) {
             $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
         })->when($this->selectedCountry, function ($query) {
