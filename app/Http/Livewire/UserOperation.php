@@ -55,7 +55,7 @@ class UserOperation extends Component
         })->when($this->selectedOperator, function ($query) {
 //            implement logic to fetch data related to selected query
             $query->where('request_operatorId', $this->selectedOperator);
-        })->paginate(10);
+        });
 
         $this->totalOperations = $this->operations->count();
         $this->finalAmount = $this->operations->sum('final_amount');
@@ -63,5 +63,6 @@ class UserOperation extends Component
         $this->userGain = $this->operations->sum('user_gain');
         $this->userTotalGain = $this->operations->sum('user_total_gain');
 
+        $this->operations = $this->operations->paginate(10);
     }
 }
