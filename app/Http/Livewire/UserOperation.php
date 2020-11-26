@@ -46,7 +46,6 @@ class UserOperation extends Component
     public function render()
     {
         $this->load();
-        $this->mount();
         $operators = ServiceOperator::orderBy('name', 'asc')->get();
         return view('livewire.user-operation', ['operations' => $this->operations, 'operatorsData' => $operators]);
     }
@@ -64,6 +63,14 @@ class UserOperation extends Component
         })->when($this->selectedOperator, function ($query) {
 //            implement logic to fetch data related to selected query
             $query->where('request_operatorId', $this->selectedOperator);
-        })->paginate(10);
+        });
+
+        $this->totalOperations = $this->operations->count();
+        $this->finalAmount = $this->operations->sum('final_amount');
+        $this->userDiscount = $this->operations->sum('user_discount');
+        $this->userGain = $this->operations->sum('user_gain');
+        $this->userTotalGain = $this->operations->sum('user_total_gain');
+
+        $this->operations->paginate(10);
     }
 }
