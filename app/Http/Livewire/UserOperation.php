@@ -52,9 +52,15 @@ class UserOperation extends Component
 
     public function load()
     {
-        $date_begin = ($this->from && !is_null($this->from)) ? $this->from . ' 00:00:00' : date("Y-m-d");
-        $date_end = ($this->to && !is_null($this->to)) ? $this->to . ' 23:59:59' : date("Y-m-d");
-        $this->operations = auth()->user()->serviceOperations()->where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end)
+        $date_begin = ($this->from && !is_null($this->from)) ? $this->from . ' 00:00:00' : null;
+        $date_end = ($this->to && !is_null($this->to)) ? $this->to . ' 23:59:59' : null;
+        $this->operations = auth()->user()->serviceOperations()->when((!is_null($date_begin) && !is_null($date_end)), function ($query) use ($date_begin, $date_end) {
+            if (date('d-m-Y', strtotime($date_begin)) == date('d-m-Y', strtotime($date_end))) {
+                $query->where('created_at', '=', $date_begin);
+            } else {
+                $query->where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end);
+            }
+        })
         ->when(($this->to !== null && !empty($this->to)), function ($query) {
             $query->where('created_at', '<=', $this->to);
         })->when($this->to == null && $this->from == null && $this->selectedCountry == null, function ($query) {
