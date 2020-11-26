@@ -1,6 +1,5 @@
-<div>
+
     @include('livewire.loader')
-    <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -9,76 +8,78 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="uk-padding-small">
-                    <dl class="row">
-                        <dt class="col-sm-5">Operations</dt>
-                        <dd class="col-sm-7">{{ $totalOperationsCount }}</dd>
-                        <dt class="col-sm-5">Total User discounts</dt>
-                        <dd class="col-sm-7">{{ $operations->sum('user_discount') }} €</dd>
-                        <dt class="col-sm-5">Total Commissions</dt>
-                        <dd class="col-sm-7">{{ $operations->sum('platform_commission') }} €</dd>
-                        <dt class="col-sm-5">Total gross Plaform gains</dt>
-                        <dd class="col-sm-7">{{ $operations->sum('platform_total_gain') }} €</dd>
-                        <dt class="col-sm-5">Total net Platform gains</dt>
-                        <dd class="col-sm-7">{{ $operations->sum('platform_total_gain') - $operations->sum('user_discount') }} €</dd>
-                        <dt class="col-sm-5">Volume (user amount) {{ $selectedCountry ? 'Country ISO '.$selectedCountry : 'country' }}</dt>
-{{--                        at final amount should be used: user_amount --}}
-                        <dd class="col-sm-7">{{ $operations->sum('sent_amount') }} €</dd>
-                        <dt class="col-sm-5">Platform total gain {{ $selectedOperator ? 'Operator id '.$selectedOperator : 'operator' }}</dt>
-                        <dd class="col-sm-7">{{ $operations->sum('platform_total_gain') - $operations->sum('user_discount') }} €</dd>
-                </div>
-                <div class="row align-items-center">
-                    <div class="col-sm">
-                        @include('livewire.partials.daterange')
-                    </div>
-                    <div class="col-sm">
-                        <fieldset class="form-group">
-                            <label>User</label>
-                            <div class="input-group">
-                                <span class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="cil-user"></i>
-                                    </span>
-                                </span>
-                                <select wire:model.defer="userSelected" class="form-control custom-select" name="user">
-                                    <option value="0" @if ($user_id == 0) selected
-                                        @endif>All users</option>
-                                    @foreach ($users as $list_user_id => $list_user_name)
-                                        <option value="{{ $list_user_id }}" @if ($user_id == $list_user_id) selected
-                                    @endif>{{ $list_user_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </fieldset>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                            <label for="js-select-countries">Choose country</label>
-                            <select wire:model.defer="selectedCountry" class="form-control">
-                                <option value="0" selected>All</option>
-                                @foreach($countries as $country)
-                                    <option value="{{ $country->isoName }}">{{ $country->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-{{--                    <div class="col">--}}
-{{--                        <div class="form-group">--}}
-{{--                            <label for="js-select-countries">Choose operator</label>--}}
-{{--                            <select wire:model.defer="selectedOperator" class="form-control">--}}
-{{--                                <option value="0" selected>All</option>--}}
-{{--                                @foreach($operators as $operator)--}}
-{{--                                    <option value="{{ $operator->operatorId }}">{{ $operator->name }}</option>--}}
-{{--                                @endforeach--}}
-{{--                            </select>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-                    <div class="col-sm mt-2">
-                        <button class="btn btn-success" id="commitData" wire:click="commit">Commit</button>
-                    </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered col-filtered-datatable" id="admin-table" style="overflow-x: auto;">
+				<div class="uk-width-1-1 uk-child-width-1-2" uk-grid>
+					<div class="">
+						<dl class="row uk-padding-small">
+							<dt class="col-sm-5">Operations</dt>
+							<dd class="col-sm-7">{{ $totalOperationsCount }}</dd>
+							<dt class="col-sm-5">Total User discounts</dt>
+							<dd class="col-sm-7">{{ $operations->sum('user_discount') }} €</dd>
+							<dt class="col-sm-5">Total Commissions</dt>
+							<dd class="col-sm-7">{{ $operations->sum('platform_commission') }} €</dd>
+							<dt class="col-sm-5">Total gross Plaform gains</dt>
+							<dd class="col-sm-7">{{ $operations->sum('platform_total_gain') }} €</dd>
+							<dt class="col-sm-5">Total net Platform gains</dt>
+							<dd class="col-sm-7">{{ $operations->sum('platform_total_gain') - $operations->sum('user_discount') }} €</dd>
+							<dt class="col-sm-5">Volume (user amount) {{ $selectedCountry ? 'Country ISO '.$selectedCountry : 'country' }}</dt>
+	{{--                        at final amount should be used: user_amount --}}
+							<dd class="col-sm-7">{{ $operations->sum('sent_amount') }} €</dd>
+							<dt class="col-sm-5">Platform total gain {{ $selectedOperator ? 'Operator id '.$selectedOperator : 'operator' }}</dt>
+							<dd class="col-sm-7">{{ $operations->sum('platform_total_gain') - $operations->sum('user_discount') }} €</dd>
+					</div>
+					<div class="">
+						<div class="col-sm">
+							@include('livewire.partials.daterange')
+						</div>
+						<div class="col-sm">
+							<fieldset class="form-group">
+								<label>User</label>
+								<div class="input-group">
+									<span class="input-group-prepend">
+										<span class="input-group-text">
+											<i class="cil-user"></i>
+										</span>
+									</span>
+									<select wire:model.defer="userSelected" class="form-control custom-select" name="user">
+										<option value="0" @if ($user_id == 0) selected
+											@endif>All users</option>
+										@foreach ($users as $list_user_id => $list_user_name)
+											<option value="{{ $list_user_id }}" @if ($user_id == $list_user_id) selected
+										@endif>{{ $list_user_name }}</option>
+										@endforeach
+									</select>
+								</div>
+							</fieldset>
+						</div>
+						<div class="col">
+							<div class="form-group">
+								<label for="js-select-countries">Choose country</label>
+								<select wire:model.defer="selectedCountry" class="form-control">
+									<option value="0" selected>All</option>
+									@foreach($countries as $country)
+										<option value="{{ $country->isoName }}">{{ $country->name }}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+	{{--                    <div class="col">--}}
+	{{--                        <div class="form-group">--}}
+	{{--                            <label for="js-select-countries">Choose operator</label>--}}
+	{{--                            <select wire:model.defer="selectedOperator" class="form-control">--}}
+	{{--                                <option value="0" selected>All</option>--}}
+	{{--                                @foreach($operators as $operator)--}}
+	{{--                                    <option value="{{ $operator->operatorId }}">{{ $operator->name }}</option>--}}
+	{{--                                @endforeach--}}
+	{{--                            </select>--}}
+	{{--                        </div>--}}
+	{{--                    </div>--}}
+						<div class="col-sm mt-2">
+							<button class="btn btn-success" id="commitData" wire:click="commit">Commit</button>
+						</div>
+					</div>
+				</div>
+                <div class="uk-width-1-1 table-responsive uk-margin-top">
+                    <table class="table table-striped table-bordered col-filtered-datatable" id="admin-table">
                         <thead>
                             <tr class="cursorPointer">
                                 <th wire:click="sortBy('created_at')">
@@ -174,8 +175,9 @@
                             @endif
                         </tbody>
                     </table>
+					{{ $operations->links() }}
                 </div>
-                <div class="uk-margin-top">
+                <div class="uk-width-1-1 uk-margin-top">
                     {!! Form::open(['route' => 'admin.report.operations.export', 'method' => 'GET', 'role' => 'form',
                     'class' => 'needs-validation uk-margin-bottom']) !!}
                     {!! csrf_field() !!}
@@ -195,6 +197,3 @@
                 </div>
             </div>
         </div>
-        {{ $operations->links() }}
-    </div>
-</div>

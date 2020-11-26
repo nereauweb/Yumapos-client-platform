@@ -46,7 +46,7 @@
 
 @section('javascript')
 
-<script src="/intltelinput/js/intlTelInput.min.js"></script>
+<script src="/intltelinput/js/intlTelInput.js"></script>
 <script>
 $(document).ready(function(){
 	var input = document.querySelector("#phone");
@@ -67,6 +67,8 @@ $(document).ready(function(){
 			],
 		@endif
 	});
+	iti._bindDropdownListeners = function() {};
+	iti._showDropdown();
 	input.addEventListener("countrychange", function() {
 		var country = iti.getSelectedCountryData();
 		$("#country").val(country['iso2']);
@@ -107,7 +109,7 @@ $(document).ready(function(){
 			return $1.toUpperCase();
 		});
 	}
-	$(".iti__selected-flag > .iti__flag").click();
+	//$(".iti__selected-flag > .iti__flag").click();
 });
 </script>
 

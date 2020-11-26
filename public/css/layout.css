@@ -57,8 +57,9 @@ html:not([dir="rtl"]) .custom-select-sm {
 .uk-description-list > dt {
     color: #888;
 }
-.dropdown-menu {
-	z-index: 1200;
+.dropdown-menu.show {
+	z-index: 3333;
+	padding: 10px;
 }
 .dropdown-menu.dropdown-menu-right {
 	transform: translate(8px, 32px) !important;
@@ -75,9 +76,11 @@ html:not([dir="rtl"]) .custom-select-sm {
 	margin-left: 10px;
 }
 .btn.btn-table-action.dropdown-toggle {
-	color: white;
 	font-size: 15px;
 	padding-top: 0;
+}
+.c-dark-theme .btn.btn-table-action.dropdown-toggle{
+	color: white;	
 }
 .c-sidebar .c-sidebar-nav-title {
 	color: rgba(255, 255, 255, 0.8);

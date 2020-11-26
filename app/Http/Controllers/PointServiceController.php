@@ -24,6 +24,25 @@ class PointServiceController extends Controller
         return view('users/service/category', compact('category'));
     }
 	
+	public function user_operator_selected(Request $request, $category_id, $operator_id, $phone_number){
+		$data = [];
+		try
+		{
+			$category = ServiceCategory::findOrFail($category_id);			
+			$operator = ServiceOperator::findOrFail($operator_id);	
+			if ($category->operator_list_type == 'include'){
+				$operators = $category->operators()->where('country_id',$operator->country->id)->get();			
+			} else {
+				$operators = $category->operators()->where('country_id','!=',$operator->country->id)->get();					
+			}
+		} 
+		catch (Exception $ex)
+		{
+			$data['message'] = $ex;	
+		}	
+		return view('users/service/preview', compact('data', 'category', 'operator', 'phone_number', 'operators'));
+	}
+	
     public function preview(Request $request)
     {
 		$dingService = new \App\Http\Ding\Api\V1Api();
@@ -77,14 +96,14 @@ class PointServiceController extends Controller
 		} else {
 			$operators = $category->operators()->where('country_id','!=',$operator->country->id)->get();					
 		}
-		return view('users/service/preview', compact('data', 'operator', 'phone_number', 'operators'));
+		return view('users/service/preview', compact('data', 'category', 'operator', 'phone_number', 'operators'));
     }
 	
 	public function user_recharge_request(Request $request){
 		
 		$service_operator = ServiceOperator::findOrFail($request->input('operator_id'));
 		
-		if($service_operator->master == 'reloadly'){				
+		if($service_operator->master == 'reloadly'|| ($service_operator->reloadly && Auth::user()->id != 15)){				
 			$request_data = [
 				'request_local' 					=> $request->input('local') ? $request->input('local') : 0,
 				'request_operator_id' 				=> $service_operator->reloadly->operatorId,
@@ -99,7 +118,7 @@ class PointServiceController extends Controller
 			return redirect()->route('users.services.reloadly.transaction.result');		
 		}
 		
-		if($service_operator->master == 'ding'){				
+		if($service_operator->master == 'ding' && Auth::user()->id == 15){				
 			$request_data = [
 				'request_local' 					=> $request->input('local') ? $request->input('local') : 0,
 				'request_operator_ProviderCode' 	=> $service_operator->ding->ProviderCode,
@@ -115,7 +134,7 @@ class PointServiceController extends Controller
 			return redirect()->route('users.services.ding.transaction.result');		
 		}
 		
-		return redirect('/backend')->with('error','We are sorry, a problem occurred in selecting operator provider ID '.$request->input('operator_id').'. Request aborted.');
+		return redirect('/backend')->with('error','We are sorry, a problem occurred in selecting operator provider. Request aborted.');
 	}
 	
 	public function print($id)

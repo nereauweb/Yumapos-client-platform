@@ -81,19 +81,24 @@ a.operator-choice * {
 											<input type="hidden" name="recipient_phone" id="recipient_phone" value="">
 										</div>
 									</div>
-								@endif								
+								@endif						
+								
 								<div class="form-group row">
 									<label class="col-md-3 col-form-label" for="text-input">Change operator</label>
 									<div class="col-md-9">
 										<div class="uk-child-width-auto uk-grid-collapse uk-flex uk-flex-wrap" uk-grid>
 										@foreach($operators as $availableOperator)
-										<a href="#" class="operator-choice">
+										<a href="#" class="operator-choice"
+												data-operator-id="{{ $availableOperator->id }}"
+												data-category-id="{{ $category->id }}"
+												data-phone-number="{{ $phone_number }}"
+										>
 											<div class="form-check">
 												<input 
 													class="form-check-input operators" 
-													id="operator{{$availableOperator->id}}" 
+													id="operator-{{$availableOperator->id}}" 
 													type="radio" 
-													value="" >
+													value="{{$availableOperator->id}}" >
 												<label class="form-check-label" operator="radio{{$availableOperator->id}}">{{ $availableOperator->name }}</label>
 											</div>		
 										</a>
@@ -101,6 +106,7 @@ a.operator-choice * {
 										</div>
 									</div>
 								</div>
+								
 								@if($operator->master == 'reloadly')
 									@if($operator->reloadly->denominationType=="FIXED")
 										@php
@@ -190,7 +196,7 @@ a.operator-choice * {
 											</div>
 										</div>
 						
-										{!! Form::button('Finalize', array('class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => 'Confirm submit', 'data-message' => 'Please confirm operation to continue')) !!}
+										{!! Form::button('Finalize', array('id' => 'finalizer', 'class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => 'Confirm submit', 'data-message' => 'Please confirm operation to continue')) !!}
 													
 									@elseif($operator->reloadly->denominationType=="RANGE")
 									
@@ -204,8 +210,14 @@ a.operator-choice * {
 													name="amount"
 													value="" 
 													step="0.01"
-													{{ $operator->reloadly->minAmount ? 'min="'.$operator->reloadly->minAmount.'"' : '' }}
-													{{ $operator->reloadly->maxAmount ? 'max="'.$operator->reloadly->maxAmount.'"' : '' }}
+													@if ($operator->reloadly->minAmount)
+														{!! 'min="'.number_format($operator->reloadly->minAmount,0).'"' !!}
+														{!! 'data-min="'.number_format($operator->reloadly->minAmount,0).'"' !!}
+													@endif
+													@if ($operator->reloadly->maxAmount)
+														{!! 'max="'.number_format($operator->reloadly->maxAmount,0).'"' !!}
+														{!! 'data-max="'.number_format($operator->reloadly->maxAmount,0).'"' !!}
+													@endif
 													data-fxrate="{{ round($operator->reloadly->config_rate(Auth::user()->group_id),3) }}"
 													data-local="0" 
 													required >
@@ -230,7 +242,7 @@ a.operator-choice * {
 											</div>
 										</div>
 						
-										{!! Form::button('Finalize', array('class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => 'Confirm submit', 'data-message' => 'Please confirm operation to continue')) !!}
+										{!! Form::button('Finalize', array('id' => 'finalizer', 'class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => 'Confirm submit', 'data-message' => 'Please confirm operation to continue')) !!}
 								
 									@else
 										
@@ -348,7 +360,7 @@ a.operator-choice * {
 											</div>
 										</div>
 						
-										{!! Form::button('Finalize', array('class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => 'Confirm submit', 'data-message' => 'Please confirm operation to continue')) !!}
+										{!! Form::button('Finalize', array('id' => 'finalizer', 'class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => 'Confirm submit', 'data-message' => 'Please confirm operation to continue')) !!}
 													
 									@elseif($operator->ding->product_type()=="RANGE")
 										
@@ -362,9 +374,13 @@ a.operator-choice * {
 													type="number" 
 													name="amount"
 													value="" 
-													step="0.01"
-													{{ $operator->ding->products()->first() ? 'min="'.$operator->ding->products()->first()->minimum->SendValue.'"' : '' }}
-													{{ $operator->ding->products()->first() ? 'max="'.$operator->ding->products()->first()->maximum->SendValue.'"' : '' }}
+													step="0.01"													
+													@if ( $operator->ding->products()->first() )
+														{!! 'min="'.$operator->ding->products()->first()->minimum->SendValue.'"' !!}
+														{!! 'data-min="'.$operator->ding->products()->first()->minimum->SendValue.'"' !!}
+														{!! 'max="'.$operator->ding->products()->first()->maximum->SendValue.'"' !!}
+														{!! 'data-max="'.$operator->ding->products()->first()->maximum->SendValue.'"' !!}
+													@endif													
 													data-fxrate="{{ round($operator->ding->products()->first()->config_rate(Auth::user()->group_id),3) }}"
 													data-local="0" 
 													required >
@@ -389,7 +405,7 @@ a.operator-choice * {
 											</div>
 										</div>
 						
-										{!! Form::button('Finalize', array('class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => 'Confirm submit', 'data-message' => 'Please confirm operation to continue')) !!}
+										{!! Form::button('Finalize', array('id' => 'finalizer', 'class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => 'Confirm submit', 'data-message' => 'Please confirm operation to continue')) !!}
 								
 									@else
 										
@@ -477,6 +493,13 @@ a.operator-choice * {
 				
 				$("#amount").change(function(){
 					amount = parseFloat($(this).val());
+					min = parseFloat($(this).data('min')) ?? 0;
+					max = parseFloat($(this).data('max')) ?? 10000000;
+					if (min <= amount && max >= amount){
+						$("#finalizer").prop('disabled',false);
+					} else {
+						$("#finalizer").prop('disabled',true);
+					}
 					gain = (gain_percent/100) * amount;
 					$("#gain").val(gain.toFixed(2));
 					fxRate = parseFloat($(this).data("fxrate"));
@@ -550,10 +573,17 @@ a.operator-choice * {
 			});
 			$(".operator-choice").click(function(e){
 				e.preventDefault();
+				/*
 				$(".operator-choice").removeClass('selected');
 				$(this).addClass('selected');
 				input = $(this).find("input").first();
-				input.prop('checked',true);				
+				input.prop('checked',true);
+				*/				
+				$(this).addClass('selected');
+				var operatorId = $(this).data('operator-id');
+				var categoryId = $(this).data('category-id');
+				var phoneNumber = $(this).data('phone-number');
+				window.location.href = "/users/services/preview/operator/"+categoryId+"/"+operatorId+"/"+phoneNumber+"";
 			});
 		</script>
 	@endif

@@ -35,7 +35,7 @@ use Illuminate\Support\Facades\Validator;
 class ApiDingController extends Controller
 {
 	private $token = '';
-	private $test = true;
+	private $test = false;
 
 	public $log = '';
 	public $call_id = 0;

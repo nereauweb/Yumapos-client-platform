@@ -81,7 +81,7 @@
                                                         @foreach($paymentsData['pending'] as $pendingPayment)
                                                             <li class="m-0">
                                                                 <div class="btn-group btn-group-xs my-1">
-                                                                    <button type="button" class="btn btn-table-action dropdown-toggle" data-toggle="dropdown">
+                                                                    <button type="button" class=" uk-button uk-button-link btn-table-action dropdown-toggle" data-toggle="dropdown">
                                                                         <i class="fa fa-ellipsis-v fa-fw" aria-hidden="true"></i>
                                                                         <span class="sr-only">
 																		Actions
@@ -103,7 +103,7 @@
                                                                         @endif
                                                                     </div>
                                                                 </div>
-                                                                {{ $pendingPayment->user->name }}
+                                                                {{ substr($pendingPayment->user->name,0,15) }}
                                                                 <strong>{{ $pendingPayment->amount }} €</strong>
                                                             </li>
                                                         @endforeach
@@ -304,9 +304,7 @@
 {{--                                                </label>--}}
                                             </div>
                                             <a href="{{ url('users/reports/operations') }}" class="btn btn-primary" type="button">
-                                                <svg class="c-icon">
-                                                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-cloud-download"></use>
-                                                </svg>
+                                                        <i class="cil-library"></i>
                                             </a>
                                         </div>
                                     </div>
@@ -387,6 +385,7 @@
 {{--    <div class="modal fade" id="modalApprove" tabindex="-1" role="dialog" aria-labelledby="modalApproveLabel" aria-hidden="true">--}}
 {{--        <div class="modal-dialog" role="document">--}}
 {{--            <div class="modal-content">--}}
+{{--                <div class="modal-header">--}}
 {{--                <div class="modal-header">--}}
 {{--                    <h5 class="modal-title" id="modalApproveLabel">Approve user</h5>--}}
 {{--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
