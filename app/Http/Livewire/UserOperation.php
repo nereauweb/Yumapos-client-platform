@@ -63,8 +63,6 @@ class UserOperation extends Component
         })
         ->when(($this->to !== null && !empty($this->to)), function ($query) {
             $query->where('created_at', '<=', $this->to);
-        })->when($this->to == null && $this->from == null && $this->selectedCountry == null, function ($query) {
-            $query->where('created_at', today());
         })->when($this->selectedCountry, function ($query) {
             $query->where('request_country_iso', $this->selectedCountry);
         })->when($this->selectedOperator, function ($query) {
