@@ -40,8 +40,9 @@ class Operation extends Component
 
         $date_begin = ($this->from && !is_null($this->from)) ? $this->from . ' 00:00:00' : date("Y-m-d") . ' 00:00:00';
         $date_end = ($this->to && !is_null($this->to)) ? $this->to . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
-        $operations = ServiceOperation::when(date('d m Y',strtotime($date_begin)) == date('d m Y',strtotime($date_end)), function ($query) use ($date_begin, $date_end) {
-                $query->where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end);
+        $operations = ServiceOperation::where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end)
+            ->when(date('d m Y',strtotime($date_begin)) == date('d m Y',strtotime($date_begin)), function ($query) use ($date_begin, $date_end) {
+                $query->where('created_at', '>=', $date_begin);
             })->when($this->sortField, function ($query) {
             $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
         })->when($this->selectedCountry, function ($query) {
