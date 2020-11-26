@@ -365,7 +365,7 @@ if (!user_identifier) {
     user_object.isUser = true;
     user_object.user_id = user_id;
     initialUserData();
-    loadTotals('user','day', 0, 0, 0);
+    loadTotals('user','day', 0, 0, user_object);
     let checkedFilter = document.querySelector('input[name="filterSelected"]:checked');
     checkedFilter.parentElement.classList.add('active');
     agent_identifier.onchange = () => {
