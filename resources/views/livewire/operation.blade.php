@@ -77,8 +77,8 @@
                         <button class="btn btn-success" id="commitData" wire:click="commit">Commit</button>
                     </div>
                 </div>
-                <div style="overflow:auto;">
-                    <table class="table table-striped table-bordered col-filtered-datatable" id="admin-table">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered col-filtered-datatable" id="admin-table" style="overflow-x: auto;">
                         <thead>
                             <tr class="cursorPointer">
                                 <th wire:click="sortBy('created_at')">
