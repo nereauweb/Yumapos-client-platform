@@ -56,7 +56,7 @@ class UserOperation extends Component
         $date_end = ($this->to && !is_null($this->to)) ? $this->to . ' 23:59:59' : null;
         $this->operations = auth()->user()->serviceOperations()->when((!is_null($date_begin) && !is_null($date_end)), function ($query) use ($date_begin, $date_end) {
             if (date('d-m-Y', strtotime($date_begin)) == date('d-m-Y', strtotime($date_end))) {
-                $query->where('created_at', '=', $date_begin);
+                $query->where('created_at', '>=', $date_begin);
             } else {
                 $query->where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end);
             }
