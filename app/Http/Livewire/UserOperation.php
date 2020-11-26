@@ -55,9 +55,10 @@ class UserOperation extends Component
         $date_begin = ($this->from && !is_null($this->from)) ? $this->from . ' 00:00:00' : date('Y-m-d').' 00:00:00';
         $date_end = ($this->to && !is_null($this->to)) ? $this->to . ' 23:59:59' : date('Y-m-d').' 23:59:59';
         $this->operations = auth()->user()->serviceOperations()->where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end)
-        ->when(($this->to !== null && !empty($this->to)), function ($query) {
-            $query->where('created_at', '<=', $this->to);
-        })->when($this->selectedCountry, function ($query) {
+            ->when(date('d m Y',strtotime($date_begin)) == date('d m Y',strtotime($date_begin)), function ($query) use ($date_begin, $date_end) {
+                $query->where('created_at', '>=', $date_begin);
+            })
+        ->when($this->selectedCountry, function ($query) {
             $query->where('request_country_iso', $this->selectedCountry);
         })->when($this->selectedOperator, function ($query) {
 //            implement logic to fetch data related to selected query
