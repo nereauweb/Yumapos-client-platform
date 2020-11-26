@@ -14,11 +14,10 @@ class GroupComponent extends Component
     {
         if ($this->roleSelected == 4) {
             $groups = UsersGroup::where('type', '=', 2)->get();
-        } else if ($this->roleSelected == 2) {
-            $groups = UsersGroup::where('type', '=', 1)->get();
         } else {
-            $groups = [];
+            $groups = null;
         }
-        return view('livewire.group-component', compact('groups'));
+        $defaultGroup = UsersGroup::where('type', '=', 1)->get();
+        return view('livewire.group-component', compact('groups', 'defaultGroup'));
     }
 }

@@ -24,9 +24,9 @@
             @endif
         </div>
     </div>
-    @if($roleSelected)
+    @if($roleSelected && !is_null($groups))
         <div class="form-group has-feedback row">
-            <label for="group" class="col-md-3 control-label">Choose a group for {{ $roleSelected }}</label>
+            <label for="group" class="col-md-3 control-label">Choose a group for {{ $roleSelected == 4 ? 'Agent' : 'User' }}</label>
             <div class="col-md-9">
                 <div class="input-group">
                     <select name="group_id" id="group" class="custom-select form-control">
@@ -43,4 +43,21 @@
             </div>
         </div>
     @endif
+    <div class="form-group has-feedback row">
+        <label for="group" class="col-md-3 control-label">Choose a group for User</label>
+        <div class="col-md-9">
+            <div class="input-group">
+                <select name="default_group_id" id="default_group" class="custom-select form-control">
+                    @foreach($defaultGroup as $group)
+                        <option value="{{ $group->id }}">{{ $group->name }}</option>
+                    @endforeach
+                </select>
+                <div class="input-group-append">
+                    <label class="input-group-text" for="role">
+                        <i class="{{ trans('forms.create_user_icon_role') }}" aria-hidden="true"></i>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

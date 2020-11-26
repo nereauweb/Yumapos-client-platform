@@ -5,6 +5,8 @@ namespace App\Http\Livewire;
 use App\Models\ApiReloadlyOperator;
 use App\Models\ApiReloadlyOperatorCountry;
 use App\Models\ServiceCountry;
+use App\Models\ServiceOperator;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -44,21 +46,23 @@ class UserOperation extends Component
     public function render()
     {
         $this->load();
-        return view('livewire.user-operation', ['operations' => $this->operations]);
+        $operators = ServiceOperator::orderBy('name', 'asc')->get();
+        return view('livewire.user-operation', ['operations' => $this->operations, 'operatorsData' => $operators]);
     }
 
     public function load()
     {
-//        $this->countries = ApiReloadlyOperatorCountry::select('name', 'isoName')->groupBy('name', 'isoName')->get();
-//        $this->operators = ApiReloadlyOperator::all();
-        $this->countries = ServiceCountry::all();
-        $this->operations = auth()->user()->serviceOperations()->when(($this->from !== null && !empty($this->from)), function ($query) {
-            $query->where('created_at', '>=', $this->from);
-        })->when(($this->to !== null && !empty($this->to)), function ($query) {
+        $date_begin = ($this->from && !is_null($this->from)) ? $this->from . ' 00:00:00' : date("Y-m-d") . ' 00:00:00';
+        $date_end = ($this->to && !is_null($this->to)) ? $this->to . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
+        $this->operations = auth()->user()->serviceOperations()->where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end)
+        ->when(($this->to !== null && !empty($this->to)), function ($query) {
             $query->where('created_at', '<=', $this->to);
+        })->when($this->to == null && $this->from == null && $this->selectedCountry == null, function ($query) {
+            $query->where('created_at', today());
         })->when($this->selectedCountry, function ($query) {
             $query->where('request_country_iso', $this->selectedCountry);
         })->when($this->selectedOperator, function ($query) {
+//            implement logic to fetch data related to selected query
             $query->where('request_operatorId', $this->selectedOperator);
         })->paginate(10);
     }

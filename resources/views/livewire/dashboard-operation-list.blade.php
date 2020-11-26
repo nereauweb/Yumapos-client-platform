@@ -23,7 +23,7 @@
                                     <input wire:model="filterSelected" value="month" name="filterSelectedOperation" type="radio" autocomplete="off"> Month
                                 </label>
                             </div>
-							<a href="{{ route('admin.report.operations') }}" class="btn btn-primary" type="button">
+							<a href="{{ auth()->user()->hasRole('admin') ? route('admin.report.operations') : url('users/reports/operations')  }}" class="btn btn-primary" type="button">
 								<i class="cil-library"></i>
 							</a>
                         </div>

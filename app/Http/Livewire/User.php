@@ -71,7 +71,7 @@ class User extends Component
 
 
 
-        $cities = UserCompanyData::distinct()->get('legal_seat_city');
+        $cities = UserCompanyData::distinct()->where('legal_seat_city', '!=', null)->get('legal_seat_city');
 
         $this->totalBalance = AppUser::where('state', 1)->sum('plafond');
         $this->negativeBalance = AppUser::where('plafond', '<', 0)->where('state', 1)->sum('plafond');

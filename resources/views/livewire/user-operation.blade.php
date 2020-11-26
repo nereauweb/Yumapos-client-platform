@@ -34,21 +34,23 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="js-select-countries">Choose operator</label>
-                                    <select wire:model.defer="selectedOperator" class="form-control">
-                                        <option value="0" selected>All</option>
-
-                                    </select>
-                                </div>
-                            </div>
+{{--                            <div class="col">--}}
+{{--                                <div class="form-group">--}}
+{{--                                    <label for="js-select-countries">Choose operator</label>--}}
+{{--                                    <select wire:model.defer="selectedOperator" class="form-control">--}}
+{{--                                        <option value="0" selected>All</option>--}}
+{{--                                        @foreach($operatorsData as $operatorval)--}}
+{{--                                            <option value="{{ $operatorval->name }}">{{ $operatorval->name }}</option>--}}
+{{--                                        @endforeach--}}
+{{--                                    </select>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
                             <div class="col mt-2">
                                 <button class="btn btn-success" wire:click="load" id="commitData">commit</button>
                             </div>
                         </div>
-                        <div style="overflow:auto;">
-                            <table class="table table-striped table-bordered col-filtered-datatable" id="admin-table">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered col-filtered-datatable" id="admin-table" style="overflow-x:auto;">
                                 <thead>
                                 <tr>
                                     <th>Date</th>

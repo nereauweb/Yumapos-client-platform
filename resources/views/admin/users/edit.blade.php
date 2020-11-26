@@ -9,19 +9,19 @@
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             {!! trans('usersmanagement.editing-user', ['name' => $user->name]) !!}
-                            @if($user->hasRole('sales'))
-                                <form action="{{ route('admin.user.change-role', $user) }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="sales-to-user" value="1">
-                                    <button class="btn btn-warning">Make agent simple user</button>
-                                </form>
-                            @else
-                                <form action="{{ route('admin.user.change-role', $user) }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="user-to-sales" value="1">
-                                    <button class="btn btn-behance">Make {{ $user->name }} agent</button>
-                                </form>
-                            @endif
+{{--                            @if($user->hasRole('sales'))--}}
+{{--                                <form action="{{ route('admin.user.change-role', $user) }}" method="POST">--}}
+{{--                                    @csrf--}}
+{{--                                    <input type="hidden" name="sales-to-user" value="1">--}}
+{{--                                    <button class="btn btn-warning">Make agent simple user</button>--}}
+{{--                                </form>--}}
+{{--                            @else--}}
+{{--                                <form action="{{ route('admin.user.change-role', $user) }}" method="POST">--}}
+{{--                                    @csrf--}}
+{{--                                    <input type="hidden" name="user-to-sales" value="1">--}}
+{{--                                    <button class="btn btn-behance">Make {{ $user->name }} agent</button>--}}
+{{--                                </form>--}}
+{{--                            @endif--}}
 								{{--
 							{!! Form::open(array('route' => ['system.users.impersonate', $user->id], 'method' => 'PUT', 'role' => 'form', 'class' => 'needs-validation')) !!}
 								{!! csrf_field() !!}
