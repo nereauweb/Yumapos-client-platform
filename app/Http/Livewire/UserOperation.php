@@ -34,14 +34,6 @@ class UserOperation extends Component
 
     private $operations;
 
-    public function mount()
-    {
-        $this->totalOperations = auth()->user()->serviceOperations()->count();
-        $this->finalAmount = auth()->user()->serviceOperations()->sum('final_amount');
-        $this->userDiscount = auth()->user()->serviceOperations()->sum('user_discount');
-        $this->userGain = auth()->user()->serviceOperations()->sum('user_gain');
-        $this->userTotalGain = auth()->user()->serviceOperations()->sum('user_total_gain');
-    }
 
     public function render()
     {
@@ -63,7 +55,7 @@ class UserOperation extends Component
         })->when($this->selectedOperator, function ($query) {
 //            implement logic to fetch data related to selected query
             $query->where('request_operatorId', $this->selectedOperator);
-        });
+        })->paginate(10);
 
         $this->totalOperations = $this->operations->count();
         $this->finalAmount = $this->operations->sum('final_amount');
@@ -71,6 +63,5 @@ class UserOperation extends Component
         $this->userGain = $this->operations->sum('user_gain');
         $this->userTotalGain = $this->operations->sum('user_total_gain');
 
-        $this->operations->paginate(10);
     }
 }
