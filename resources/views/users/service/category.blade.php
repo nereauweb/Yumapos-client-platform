@@ -67,7 +67,57 @@ $(document).ready(function(){
 			],
 		@endif
 	});
-	iti._bindDropdownListeners = function() {};
+	iti._bindDropdownListeners = function() {
+                    var _this9 = this;
+                    // when mouse over a list item, just highlight that one
+                    // we add the class "highlight", so if they hit "enter" we know which one to select
+                    this._handleMouseoverCountryList = function(e) {
+                        // handle event delegation, as we're listening for this event on the countryList
+                        var listItem = _this9._getClosestListItem(e.target);
+                        if (listItem) _this9._highlightListItem(listItem, false);
+                    };
+                    this.countryList.addEventListener("mouseover", this._handleMouseoverCountryList);
+                    // listen for country selection
+                    this._handleClickCountryList = function(e) {
+                        var listItem = _this9._getClosestListItem(e.target);
+                        if (listItem) _this9._selectListItem(listItem);
+                    };
+                    this.countryList.addEventListener("click", this._handleClickCountryList);
+                    // click off to close
+                    // (except when this initial opening click is bubbling up)
+                    // we cannot just stopPropagation as it may be needed to close another instance
+                    var isOpening = true;
+					/*
+                    this._handleClickOffToClose = function() {
+                        if (!isOpening) _this9._closeDropdown();
+                        isOpening = false;
+                    };
+                    document.documentElement.addEventListener("click", this._handleClickOffToClose);
+					*/
+                    // listen for up/down scrolling, enter to select, or letters to jump to country name.
+                    // use keydown as keypress doesn't fire for non-char keys and we want to catch if they
+                    // just hit down and hold it to scroll down (no keyup event).
+                    // listen on the document because that's where key events are triggered if no input has focus
+                    var query = "";
+                    var queryTimer = null;
+                    this._handleKeydownOnDropdown = function(e) {
+                        // prevent down key from scrolling the whole page,
+                        // and enter key from submitting a form etc
+                        e.preventDefault();
+                        // up and down to navigate
+                        if (e.key === "ArrowUp" || e.key === "Up" || e.key === "ArrowDown" || e.key === "Down") _this9._handleUpDownKey(e.key); else if (e.key === "Enter") _this9._handleEnterKey(); else if (e.key === "Escape") _this9._closeDropdown(); else if (/^[a-zA-ZÀ-ÿа-яА-Я ]$/.test(e.key)) {
+                            // jump to countries that start with the query string
+                            if (queryTimer) clearTimeout(queryTimer);
+                            query += e.key.toLowerCase();
+                            _this9._searchForCountry(query);
+                            // if the timer hits 1 second, reset the query
+                            queryTimer = setTimeout(function() {
+                                query = "";
+                            }, 1e3);
+                        }
+                    };
+                    document.addEventListener("keydown", this._handleKeydownOnDropdown);
+                };
 	iti._showDropdown();
 	input.addEventListener("countrychange", function() {
 		var country = iti.getSelectedCountryData();

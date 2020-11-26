@@ -167,7 +167,7 @@
                                                 {!! csrf_field() !!}
                                                 <button class="dropdown-item" type="submit">Approve</button>
                                                 {!! Form::close() !!}
-                                                {!! Form::open(['route' => ['admin.payments.destroy', $payment->id],
+                                                {!! Form::open(['route' => ['admin.payments.reject', $payment->id],
                                                 'method' => 'DELETE', 'role' => 'form']) !!}
                                                 {!! csrf_field() !!}
                                                 <button class="dropdown-item" type="submit">Reject</button>

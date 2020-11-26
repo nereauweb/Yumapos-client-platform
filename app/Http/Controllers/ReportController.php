@@ -41,6 +41,7 @@ class ReportController extends Controller
 			$operations->where('user_id',$user_id);
 		}
 		$operations = $operations->get();
+		$operations = ServiceOperation::all();
         return view('admin/report/operations',compact('operations','date_begin','date_end','users','user_name','user_id'));
 	}
 
