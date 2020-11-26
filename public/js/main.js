@@ -334,7 +334,7 @@ if (!user_identifier) {
                     break;
                 case 'yesterday':
                     fetchData('/user/internal/services', 'yesterday', 0, 0, user_object);
-                    loadTotals('user','yesterday', 0, 0);
+                    loadTotals('user','yesterday', 0, 0, user_object);
                     break;
                 case 'week':
                     fetchData('/user/internal/services', 'week', 0, 0, user_object);
@@ -374,7 +374,7 @@ if (!user_identifier) {
                 user_object.isUser = true;
                 user_object.user_id = user_id;
                 initialUserData();
-                loadTotals('user','day', 0, 0, 0);
+                loadTotals('user','day', 0, 0, user_object);
                 checkedFilter.parentElement.classList.add('active');
 
                 filters.forEach(filter => {
@@ -389,7 +389,7 @@ if (!user_identifier) {
                                 break;
                             case 'yesterday':
                                 fetchData('/user/internal/services', 'yesterday', 0, 0, user_object);
-                                loadTotals('user','yesterday', 0, 0);
+                                loadTotals('user','yesterday', 0, 0, user_object);
                                 break;
                             case 'week':
                                 fetchData('/user/internal/services', 'week', 0, 0, user_object);
