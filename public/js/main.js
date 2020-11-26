@@ -325,39 +325,40 @@ if (!user_identifier) {
     filters.forEach(filter => {
         filter.onchange = (e) => {
             e.preventDefault();
-            let countrified = country_filter.value;
-            let operatorField = operator_filter.value;
+            // let countrified = country_filter.value;
+            // let operatorField = operator_filter.value;
             switch (filter.value) {
                 case 'day':
-                    fetchData('/user/internal/services', 'day', countrified, operatorField, user_object);
-                    loadTotals('user','day', countrified, operatorField, user_object);
+                    fetchData('/user/internal/services', 'day', 0, 0, user_object);
+                    loadTotals('user','day', 0, 0, user_object);
                     break;
                 case 'yesterday':
-                    fetchData('/user/internal/services', 'yesterday', countrified, operatorField, user_object);
-                    loadTotals('user','yesterday', countrified, operatorField);
+                    fetchData('/user/internal/services', 'yesterday', 0, 0, user_object);
+                    loadTotals('user','yesterday', 0, 0);
                     break;
                 case 'week':
-                    fetchData('/user/internal/services', 'week', countrified, operatorField, user_object);
-                    loadTotals('user','week', countrified, operatorField, user_object);
+                    fetchData('/user/internal/services', 'week', 0, 0, user_object);
+                    loadTotals('user','week', 0, 0, user_object);
                     break;
                 case 'month':
-                    fetchData('/user/internal/services', 'month', countrified, operatorField, user_object);
-                    loadTotals('user','month', countrified, operatorField, user_object);
+                    fetchData('/user/internal/services', 'month', 0, 0, user_object);
+                    loadTotals('user','month', 0, 0, user_object);
                     break;
                 default:
                     alert('coding error!');
             }
         }
 
-        operator_filter.onchange = () => {
-            fetchData('/user/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
-            loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
-        }
+        // operator_filter.onchange = () => {
+        //     fetchData('/user/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+        //     loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+        // }
 
-        country_filter.onchange = () => {
-            fetchData('/user/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
-            loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
-        }
+
+        // country_filter.onchange = () => {
+        //     fetchData('/user/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+        //     loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+        // }
     });
 
 } else if (user_identifier && agent_identifier) {
@@ -379,39 +380,39 @@ if (!user_identifier) {
                 filters.forEach(filter => {
                     filter.onchange = (e) => {
                         e.preventDefault();
-                        let countrified = country_filter.value;
-                        let operatorField = operator_filter.value;
+                        // let countrified = country_filter.value;
+                        // let operatorField = operator_filter.value;
                         switch (filter.value) {
                             case 'day':
-                                fetchData('/user/internal/services', 'day', countrified, operatorField, user_object);
-                                loadTotals('user','day', countrified, operatorField, user_object);
+                                fetchData('/user/internal/services', 'day', 0, 0, user_object);
+                                loadTotals('user','day', 0, 0, user_object);
                                 break;
                             case 'yesterday':
-                                fetchData('/user/internal/services', 'yesterday', countrified, operatorField, user_object);
-                                loadTotals('user','yesterday', countrified, operatorField);
+                                fetchData('/user/internal/services', 'yesterday', 0, 0, user_object);
+                                loadTotals('user','yesterday', 0, 0);
                                 break;
                             case 'week':
-                                fetchData('/user/internal/services', 'week', countrified, operatorField, user_object);
-                                loadTotals('user','week', countrified, operatorField, user_object);
+                                fetchData('/user/internal/services', 'week', 0, 0, user_object);
+                                loadTotals('user','week', 0, 0, user_object);
                                 break;
                             case 'month':
-                                fetchData('/user/internal/services', 'month', countrified, operatorField, user_object);
-                                loadTotals('user','month', countrified, operatorField, user_object);
+                                fetchData('/user/internal/services', 'month', 0, 0, user_object);
+                                loadTotals('user','month', 0, 0, user_object);
                                 break;
                             default:
                                 alert('coding error!');
                         }
                     }
 
-                    operator_filter.onchange = () => {
-                        fetchData('/user/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
-                        loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
-                    }
-
-                    country_filter.onchange = () => {
-                        fetchData('/user/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
-                        loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
-                    }
+                    // operator_filter.onchange = () => {
+                    //     fetchData('/user/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+                    //     loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+                    // }
+                    //
+                    // country_filter.onchange = () => {
+                    //     fetchData('/user/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+                    //     loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+                    // }
                 });
                 break;
             case '2':
@@ -424,39 +425,39 @@ if (!user_identifier) {
                 filters.forEach(filter => {
                     filter.onchange = (e) => {
                         e.preventDefault();
-                        let countrified = country_filter.value;
-                        let operatorField = operator_filter.value;
+                        // let countrified = country_filter.value;
+                        // let operatorField = operator_filter.value;
                         switch (filter.value) {
                             case 'day':
-                                fetchData('/sales/reports/internal', 'day', countrified, operatorField, user_object);
-                                loadAgentTotals('day', countrified, operatorField, user_object);
+                                fetchData('/sales/reports/internal', 'day', 0, 0, user_object);
+                                loadAgentTotals('day', 0, 0, user_object);
                                 break;
                             case 'yesterday':
-                                fetchData('/sales/reports/internal', 'yesterday', countrified, operatorField, user_object);
-                                loadAgentTotals('yesterday', countrified, operatorField, user_object);
+                                fetchData('/sales/reports/internal', 'yesterday', 0, 0, user_object);
+                                loadAgentTotals('yesterday', 0, 0, user_object);
                                 break;
                             case 'week':
-                                fetchData('/sales/reports/internal', 'week', countrified, operatorField, user_object);
-                                loadAgentTotals('week', countrified, operatorField, user_object);
+                                fetchData('/sales/reports/internal', 'week', 0, 0, user_object);
+                                loadAgentTotals('week', 0, 0, user_object);
                                 break;
                             case 'month':
-                                fetchData('/sales/reports/internal', 'month', countrified, operatorField, user_object);
-                                loadAgentTotals('month', countrified, operatorField, user_object);
+                                fetchData('/sales/reports/internal', 'month', 0, 0, user_object);
+                                loadAgentTotals('month', 0, 0, user_object);
                                 break;
                             default:
                                 alert('coding error!');
                         }
                     }
 
-                    operator_filter.onchange = () => {
-                        fetchData('/sales/reports/internal', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
-                        loadAgentTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
-                    }
-
-                    country_filter.onchange = () => {
-                        fetchData('/sales/reports/internal', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
-                        loadAgentTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
-                    }
+                    // operator_filter.onchange = () => {
+                    //     fetchData('/sales/reports/internal', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+                    //     loadAgentTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+                    // }
+                    //
+                    // country_filter.onchange = () => {
+                    //     fetchData('/sales/reports/internal', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+                    //     loadAgentTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+                    // }
                 });
                 break;
             default:
