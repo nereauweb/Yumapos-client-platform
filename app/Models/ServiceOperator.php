@@ -23,6 +23,19 @@ class ServiceOperator extends Model
 		'reloadly_operatorId',
 	];
 	
+	public function provider(){
+		/*
+		if($this->master == 'reloadly'|| ($this->reloadly && \Auth::user()->id != 15)){	
+			return 'reloadly';
+		}		
+		if($this->master == 'ding' && \Auth::user()->id == 15){
+			return 'ding';
+		}
+		return false;
+		*/
+		return $this->master;
+	}
+	
 	public function main(){
 		if ($this->master=="reloadly"){
 			return $this->reloadly();

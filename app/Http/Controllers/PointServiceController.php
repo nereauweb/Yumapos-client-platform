@@ -30,11 +30,14 @@ class PointServiceController extends Controller
 		{
 			$category = ServiceCategory::findOrFail($category_id);			
 			$operator = ServiceOperator::findOrFail($operator_id);	
+			/*
 			if ($category->operator_list_type == 'include'){
 				$operators = $category->operators()->where('country_id',$operator->country->id)->get();			
 			} else {
 				$operators = $category->operators()->where('country_id','!=',$operator->country->id)->get();					
 			}
+			*/
+			$operators = ServiceOperator::where('country_id',$operator->country->id)->get();	
 		} 
 		catch (Exception $ex)
 		{
@@ -91,11 +94,15 @@ class PointServiceController extends Controller
 		if (!$operator){			
 			return back()->withError('No operator found for number '.$phone_number.' ('.$data['provider_code'].')');
 		}
+		//$operators = $category->allowed_operators()->where('country_id',$operator->country->id);
+		/*
 		if ($category->operator_list_type == 'include'){
 			$operators = $category->operators()->where('country_id',$operator->country->id)->get();			
 		} else {
 			$operators = $category->operators()->where('country_id','!=',$operator->country->id)->get();					
 		}
+		*/
+		$operators = ServiceOperator::where('country_id',$operator->country->id)->get();	
 		return view('users/service/preview', compact('data', 'category', 'operator', 'phone_number', 'operators'));
     }
 	
@@ -103,7 +110,7 @@ class PointServiceController extends Controller
 		
 		$service_operator = ServiceOperator::findOrFail($request->input('operator_id'));
 		
-		if($service_operator->master == 'reloadly'|| ($service_operator->reloadly && Auth::user()->id != 15)){				
+		if($service_operator->master == 'reloadly'){				
 			$request_data = [
 				'request_local' 					=> $request->input('local') ? $request->input('local') : 0,
 				'request_operator_id' 				=> $service_operator->reloadly->operatorId,
@@ -118,7 +125,7 @@ class PointServiceController extends Controller
 			return redirect()->route('users.services.reloadly.transaction.result');		
 		}
 		
-		if($service_operator->master == 'ding' && Auth::user()->id == 15){				
+		if($service_operator->master == 'ding'){				
 			$request_data = [
 				'request_local' 					=> $request->input('local') ? $request->input('local') : 0,
 				'request_operator_ProviderCode' 	=> $service_operator->ding->ProviderCode,

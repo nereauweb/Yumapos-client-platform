@@ -48,6 +48,7 @@ a.operator-choice * {
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <h3>Selected operator</h3>
+							{{ $category->name }}
                         </div>
                     </div>
                     <div class="card-body">
@@ -107,7 +108,7 @@ a.operator-choice * {
 									</div>
 								</div>
 								
-								@if($operator->master == 'reloadly')
+								@if($operator->provider() == 'reloadly')
 									@if($operator->reloadly->denominationType=="FIXED")
 										@php
 											$configuration = $operator->reloadly->configurations->where('group_id', Auth::user()->group_id)->first();
@@ -254,7 +255,7 @@ a.operator-choice * {
 									<input type="hidden" name="country_iso" value="{{ $operator->reloadly->country->isoName }}">
 									<input type="hidden" name="local" id="local" value="0">
 								
-								@elseif($operator->master == 'ding' && $operator->ding->products()->count()>0)
+								@elseif($operator->provider() == 'ding' && $operator->ding->products()->count()>0)
 									@if($operator->ding->products_type()=="FIXED")
 										@php
 											$configuration = $operator->ding->configurations->where('group_id', Auth::user()->group_id)->first();
@@ -362,7 +363,7 @@ a.operator-choice * {
 						
 										{!! Form::button('Finalize', array('id' => 'finalizer', 'class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => 'Confirm submit', 'data-message' => 'Please confirm operation to continue')) !!}
 													
-									@elseif($operator->ding->product_type()=="RANGE")
+									@elseif($operator->ding->products_type()=="RANGE")
 										
 										<input type="hidden" name="product_sku" value="{{ $operator->ding->products()->first()->SkuCode }}">
 										<div class="form-group row">
@@ -473,7 +474,7 @@ a.operator-choice * {
 					final_amount_destination = parseFloat($(this).data("local-amount"));
 					$("#final_amount").val(final_amount.toFixed(2));
 					$("#final_amount_destination").val(final_amount_destination.toFixed(2));
-					@if ($operator->master == "ding"){
+					@if ($operator->provider() == "ding"){
 						var productSku = $(this).data('sku-code');
 						$("#product-sku").val(productSku);
 					}

@@ -541,8 +541,14 @@ class ApiDingController extends Controller
 			}
 		}
 		if ($operator->products_type()=="RANGE"){
+			$product = ApiDingProduct::where("SkuCode", $request_data['request_product_sku'])->first();
+			if (!$product){
+				$response['result'] = -1;
+				$response['message'] = 'Processing error, could not find related product data.';
+				return view('users/service/result', ['response' => $response]);
+			}
 			$user_discount = $configuration ? round(($configuration->discount_percent/100) * $request_amount,3) : 0;
-			$sent_amount = round($final_expected_destination_amount / $operator->fx->rate,3);
+			$sent_amount = round($final_expected_destination_amount / $product->fx_rate(),3);
 			$platform_gain = $request_amount - $sent_amount;
 		}
 
