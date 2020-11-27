@@ -6,22 +6,46 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
+                    @if($user->hasRole('sales'))
+                        <form action="{{ route('admin.user.change-role', $user) }}" method="POST" class="form-inline py-4">
+                            @csrf
+                            <div class="form-group px-3">
+                                <select name="group_id" id="group_id" class="form-control @error('group_id') is-invalid @enderror">
+                                    <option selected value="{{ $user->group->id }}">{{ $user->group->name }}</option>
+                                    @foreach($userGroups as $userGroup)
+                                        <option value="{{$userGroup->id}}">{{ $userGroup->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <input type="hidden" name="sales-to-user" value="1">
+                            <button class="btn btn-warning">Update role (change agent to simple user)</button>
+                        </form>
+                    @else
+                        <form class="px-3 py-4 form-inline" action="{{ route('admin.user.change-role', $user) }}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <select name="group_id" id="group_id" class="form-control @error('group_id') is-invalid @enderror">
+                                    <option selected disabled>Choose a User group</option>
+                                    @foreach($userGroups as $userGroup)
+                                        <option value="{{$userGroup->id}}">{{ $userGroup->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group mx-4">
+                                <select name="agent_group_id" id="agent_group_id" class="form-control @error('agent_group_id') is-invalid @enderror">
+                                    <option selected disabled>Choose an Agent group</option>
+                                    @foreach($agentGroups as $agentGroup)
+                                        <option value="{{$agentGroup->id}}">{{ $agentGroup->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <input type="hidden" name="user-to-sales" value="1">
+                            <button class="btn btn-behance">Update role (change simple user to an agent)</button>
+                        </form>
+                    @endif
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             {!! trans('usersmanagement.editing-user', ['name' => $user->name]) !!}
-{{--                            @if($user->hasRole('sales'))--}}
-{{--                                <form action="{{ route('admin.user.change-role', $user) }}" method="POST">--}}
-{{--                                    @csrf--}}
-{{--                                    <input type="hidden" name="sales-to-user" value="1">--}}
-{{--                                    <button class="btn btn-warning">Make agent simple user</button>--}}
-{{--                                </form>--}}
-{{--                            @else--}}
-{{--                                <form action="{{ route('admin.user.change-role', $user) }}" method="POST">--}}
-{{--                                    @csrf--}}
-{{--                                    <input type="hidden" name="user-to-sales" value="1">--}}
-{{--                                    <button class="btn btn-behance">Make {{ $user->name }} agent</button>--}}
-{{--                                </form>--}}
-{{--                            @endif--}}
 								{{--
 							{!! Form::open(array('route' => ['system.users.impersonate', $user->id], 'method' => 'PUT', 'role' => 'form', 'class' => 'needs-validation')) !!}
 								{!! csrf_field() !!}
@@ -215,7 +239,6 @@
 													@endif
 												</div>
 											</div>
-
 											<div class="pw-change-container">
 												<div class="form-group has-feedback row {{ $errors->has('password') ? ' has-error ' : '' }}">
 

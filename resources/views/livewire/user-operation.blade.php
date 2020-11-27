@@ -20,6 +20,19 @@
                             </dl>
                         </div>
                         <div class="row align-items-center">
+                            <div class="col-sm">
+                                <fieldset class="form-group">
+                                    <label>Search by operation ID</label>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" wire:model.defer="operationId" placeholder="search by operation id">
+                                        <span class="input-group-append">
+                                            <span class="input-group-text bg-primary">
+                                                <button wire:click="searchById" style="border: none;outline: none; background: none;" class="cil-search btn-behance"></button>
+                                            </span>
+                                        </span>
+                                    </div>
+                                </fieldset>
+                            </div>
                             <div class="col">
                                 @include('livewire.partials.daterange')
                             </div>

@@ -29,7 +29,7 @@
             <label for="group" class="col-md-3 control-label">Choose a group for {{ $roleSelected == 4 ? 'Agent' : 'User' }}</label>
             <div class="col-md-9">
                 <div class="input-group">
-                    <select name="group_id" id="group" class="custom-select form-control">
+                    <select name="agent_group_id" id="group" class="custom-select form-control">
                         @foreach($groups as $group)
                             <option value="{{ $group->id }}">{{ $group->name }}</option>
                         @endforeach
@@ -47,7 +47,7 @@
         <label for="group" class="col-md-3 control-label">Choose a group for User</label>
         <div class="col-md-9">
             <div class="input-group">
-                <select name="default_group_id" id="default_group" class="custom-select form-control">
+                <select name="group_id" id="default_group" class="custom-select form-control">
                     @foreach($defaultGroup as $group)
                         <option value="{{ $group->id }}">{{ $group->name }}</option>
                     @endforeach

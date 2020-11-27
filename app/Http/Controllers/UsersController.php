@@ -78,8 +78,10 @@ class UsersController extends Controller
     {
 		$users = User::all();
 		$roles = Role::all();
+		$agentGroups = UsersGroup::where('type', 2)->get();
+		$userGroups = UsersGroup::where('type', 1)->get();
         $user = User::find($id);
-        return view('admin.users.edit', compact('users','roles','user'));
+        return view('admin.users.edit', compact('users','roles','user', 'agentGroups', 'userGroups'));
     }
 
     /**
@@ -190,6 +192,7 @@ class UsersController extends Controller
                 'password'              => 'required|min:6|max:20|confirmed',
                 'password_confirmation' => 'required|same:password',
                 'role'                  => 'required',
+                'group_id'              => 'required',
             ],
             [
                 'name.unique'         => trans('auth.userNameTaken'),
@@ -215,13 +218,13 @@ class UsersController extends Controller
             'parent_id'        => $request->input('parent') ? $request->input('parent') : 0,
             'password'         => bcrypt($request->input('password')),
             'remember_token'   => Str::random(64),
+            'group_id'         => $request->input('group_id')
         ]);
 
         $user->assignRole($request->input('role'));
-
-		if($request->input('group')!=0){
-			$user->group_id = $request->input('group');
-		}
+        if ($user->hasRole('sales')) {
+            $user->agent_group_id = $request->input('agent_group_id');
+        }
 
 		$user->company_data()->create([
             'referent_name'	   => $request->input('first_name'),
@@ -297,11 +300,22 @@ class UsersController extends Controller
     public function changeRole(User $user)
     {
         if (request()->has('sales-to-user')) {
+            request()->validate([
+               'group_id' => 'required'
+            ]);
+            $user->update(['group_id' => request()->group_id]);
             $user->removeRole('sales');
         } else if (request()->has('user-to-sales')) {
+            request()->validate([
+                'agent_group_id' => 'required',
+                'group_id' => 'required'
+            ]);
+            $user->update([
+               'group_id' => request()->group_id,
+               'agent_group_id' => request()->agent_group_id
+            ]);
             $user->assignRole('sales');
         }
-
         return back()->with(['status' => 'success', 'message'=> 'user role got changed successfully']);
     }
 }
