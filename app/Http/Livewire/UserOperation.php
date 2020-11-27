@@ -29,6 +29,8 @@ class UserOperation extends Component
     public $selectedCountry;
     public $selectedOperator;
 
+    public $operationId;
+
 //    public $countries;
 //    public $operators;
 
@@ -57,6 +59,10 @@ class UserOperation extends Component
             $query->where('request_operatorId', $this->selectedOperator);
         });
 
+        if ($this->operationId) {
+            $this->operations = auth()->user()->serviceOperations()->where('id', $this->operationId);
+        }
+
         $this->totalOperations = $this->operations->count();
         $this->finalAmount = $this->operations->sum('final_amount');
         $this->userDiscount = $this->operations->sum('user_discount');
@@ -65,4 +71,6 @@ class UserOperation extends Component
 
         $this->operations = $this->operations->paginate(10);
     }
+
+    public function searchById() {}
 }

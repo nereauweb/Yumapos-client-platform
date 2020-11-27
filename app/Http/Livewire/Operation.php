@@ -24,6 +24,15 @@ class Operation extends Component
     public $selectedCountry;
     public $selectedOperator;
 
+    public $operationsSum;
+    public $totalCommissions;
+    public $totalGrossPlatformGain;
+    public $totalNetPlatformGains;
+    public $sentAmount;
+    public $platformTotalGain;
+
+    public $operationId;
+
 
     public $totalOperationsCount;
 
@@ -50,11 +59,22 @@ class Operation extends Component
         })->when($this->selectedOperator, function ($query) {
             $query->where('request_operatorId', '=', $this->selectedOperator);
         });
+
+        if ($this->operationId) {
+            $operations = ServiceOperation::where('id', $this->operationId);
+        }
+
         $this->totalOperationsCount = $operations->count();
         if ($user_id != 0) {
             $operations->where('user_id', $user_id);
             $this->totalOperationsCount = $operations->count();
         }
+        $this->operationsSum = $operations->sum('user_discount');
+        $this->totalCommissions = $operations->sum('platform_commission');
+        $this->totalGrossPlatformGain = $operations->sum('platform_total_gain');
+        $this->totalNetPlatformGains = $operations->sum('platform_total_gain') - $operations->sum('user_discount');
+        $this->sentAmount = $operations->sum('sent_amount');
+        $this->platformTotalGain = $operations->sum('platform_total_gain') - $operations->sum('user_discount');
         $operations = $operations->paginate(10);
         return view('livewire.operation', compact('operations','users', 'user_name', 'date_begin', 'date_end', 'user_id'));
     }
@@ -75,4 +95,6 @@ class Operation extends Component
             $this->userSelected = null;
         }
     }
+
+    public function searchById() {}
 }

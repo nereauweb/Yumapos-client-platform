@@ -14,20 +14,33 @@
                         <dt class="col-sm-5">Operations</dt>
                         <dd class="col-sm-7">{{ $totalOperationsCount }}</dd>
                         <dt class="col-sm-5">Total User discounts</dt>
-                        <dd class="col-sm-7">{{ $operations->sum('user_discount') }} €</dd>
+                        <dd class="col-sm-7">{{ $operationsSum }} €</dd>
                         <dt class="col-sm-5">Total Commissions</dt>
-                        <dd class="col-sm-7">{{ $operations->sum('platform_commission') }} €</dd>
+                        <dd class="col-sm-7">{{ $totalCommissions }} €</dd>
                         <dt class="col-sm-5">Total gross Plaform gains</dt>
-                        <dd class="col-sm-7">{{ $operations->sum('platform_total_gain') }} €</dd>
+                        <dd class="col-sm-7">{{ $totalGrossPlatformGain }} €</dd>
                         <dt class="col-sm-5">Total net Platform gains</dt>
-                        <dd class="col-sm-7">{{ $operations->sum('platform_total_gain') - $operations->sum('user_discount') }} €</dd>
+                        <dd class="col-sm-7">{{ $totalNetPlatformGains }} €</dd>
                         <dt class="col-sm-5">Volume (user amount) {{ $selectedCountry ? 'Country ISO '.$selectedCountry : 'country' }}</dt>
                         {{--                        at final amount should be used: user_amount --}}
-                        <dd class="col-sm-7">{{ $operations->sum('sent_amount') }} €</dd>
+                        <dd class="col-sm-7">{{ $sentAmount }} €</dd>
                         <dt class="col-sm-5">Platform total gain {{ $selectedOperator ? 'Operator id '.$selectedOperator : 'operator' }}</dt>
-                        <dd class="col-sm-7">{{ $operations->sum('platform_total_gain') - $operations->sum('user_discount') }} €</dd>
+                        <dd class="col-sm-7">{{ $platformTotalGain }} €</dd>
                 </div>
                 <div class="">
+                    <div class="col-sm">
+                        <fieldset class="form-group">
+                            <label>Search by operation ID</label>
+                            <div class="input-group">
+                                <input class="form-control" type="text" wire:model.defer="operationId" placeholder="search by operation id">
+                                <span class="input-group-append">
+                                <span class="input-group-text bg-primary">
+                                    <button wire:click="searchById" style="border: none;outline: none; background: none;" class="cil-search btn-behance"></button>
+                                </span>
+                            </span>
+                            </div>
+                        </fieldset>
+                    </div>
                     <div class="col-sm">
                         @include('livewire.partials.daterange')
                     </div>
