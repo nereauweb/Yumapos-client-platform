@@ -1,6 +1,6 @@
-<div>
+<div class="card">
+    <div>
     @include('livewire.loader')
-    <div class="card">
         <div class="card-header">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <h3>{{ $user_name }} operations {{ date('d/m/Y', strtotime($date_begin)) }} -
@@ -8,7 +8,7 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="uk-width-1-1 uk-child-width-1-2" uk-grid>
+            <div class="uk-width-1-1 uk-grid uk-child-width-1-2" uk-grid>
                 <div class="">
                     <dl class="row uk-padding-small">
                         <dt class="col-sm-5">Operations</dt>
