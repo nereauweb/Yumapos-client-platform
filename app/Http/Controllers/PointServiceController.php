@@ -120,6 +120,7 @@ class PointServiceController extends Controller
 				'user_gain' 						=> $request->input('gain'),
 				'final_amount' 						=> $request->input('final_amount'),
 				'final_expected_destination_amount' => $request->input('final_amount_destination'),
+				'category_id' 						=> $request->category_id,
 			];
 			$request->session()->flash('request_data', $request_data);
 			return redirect()->route('users.services.reloadly.transaction.result');		
@@ -136,6 +137,7 @@ class PointServiceController extends Controller
 				'user_gain' 						=> $request->input('gain'),
 				'final_amount' 						=> $request->input('final_amount'),
 				'final_expected_destination_amount' => $request->input('final_amount_destination'),
+				'category_id' 						=> $request->category_id,
 			];
 			$request->session()->flash('request_data', $request_data);
 			return redirect()->route('users.services.ding.transaction.result');		

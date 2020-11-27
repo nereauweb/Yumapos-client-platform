@@ -5,6 +5,7 @@ namespace App;
 use App\Models\ApiReloadlyOperator;
 use App\Models\Payment;
 use App\Models\ServiceOperation;
+use App\Models\UsersGroupConfiguration;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -25,7 +26,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'parent_id', 'parent_percent', 'plafond', 'debt_limit', 'group_id', 'state', 'credit'
+        'name', 'email', 'password', 'parent_id', 'parent_percent', 'plafond', 'debt_limit', 'group_id', 'agent_group_id', 'state', 'credit'
     ];
 
     /**
@@ -69,6 +70,17 @@ class User extends Authenticatable
 	public function group() {
 		return $this->hasOne('App\Models\UsersGroup','id','group_id');
     }
+
+	public function agent_group() {
+		return $this->hasOne('App\Models\UsersGroup','id','agent_group_id');
+    }
+	
+	public function agent_commission($target_group_id,$category_id){
+		return UsersGroupConfiguration::where('group_id',$this->agent_group_id)
+			->where('target_group_id',$target_group_id)
+			->where('category_id',$category_id)
+			->first();
+	}
 
 	public function configuration() {
 		return $this->hasOne('App\Models\UserConfiguration','user_id');

@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UsersGroupConfiguration;
 use App\Models\AgentOperation;
 use App\Models\ApiReloadlyCall;
 use App\Models\ApiReloadlyOperation;
 use App\Models\ApiReloadlyOperator;
 use App\Models\ServiceOperation;
+use App\User;
 use Auth;
-
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-
 
 class ApiReloadlyController extends Controller
 {
@@ -299,7 +299,8 @@ class ApiReloadlyController extends Controller
 		$request_recipient_phone 			= $request_data['request_recipient_phone'];
 		$user_gain 							= $request_data['user_gain'];
 		$final_amount 						= $request_data['final_amount'];
-		$final_expected_destination_amount 	= $request_data['final_expected_destination_amount'];
+		$final_expected_destination_amount 	= $request_data['final_expected_destination_amount'];		
+		$category_id 						= $request_data['category_id'];
 
 		$operator = ApiReloadlyOperator::where('operatorId',$request_operator_id)->first();
 		//$original_expected_destination_amount = $request_amount * $operator->fx->rate;
@@ -425,13 +426,24 @@ class ApiReloadlyController extends Controller
 			$operation = ServiceOperation::create($response);
 			$response['operation_id'] = $operation->id;
 			if ($user->parent_id && $user->parent_id != 0){
-				AgentOperation::create([
-					'user_id'				=> $user->parent_id,
-					'service_operation_id'	=> $operation->id,
-					'original_amount'		=> $user_cost,
-					'applied percentage'	=> $user->parent_percent,
-					'commission'			=> round(($user_cost * ( $user->parent_percent / 100 )),2),
-				]);
+				$agent = User::find($user->parent_id);
+				if ($agent){
+					$commission = $agent->agent_commission($user->group_id,$category_id);
+					if ($commission){
+						if ($commission->type=='percent'){
+							$agent_amount = round(($user_cost * ( $commission->amount / 100 )),2);
+						} else {
+							$agent_amount = $commission->amount;
+						}
+						AgentOperation::create([
+							'user_id'				=> $agent_id,
+							'service_operation_id'	=> $operation->id,
+							'original_amount'		=> $user_cost,
+							'applied_commission_id'	=> $commission->parent_percent,
+							'commission'			=> $agent_amount,
+						]);
+					}
+				}
 			}
 		} else {
 			$response['result'] = 0;

@@ -83,7 +83,7 @@
                         <select name="users[]" id="users" class="selectized" multiple required>
                             <option value="">Seleziona</option>
                             @foreach ($users as $user)
-                                <option value="{{ $user->id }}" {{ $user->group_id == $group->id ? 'selected' : '' }}>
+                                <option value="{{ $user->id }}" {{ $user->agent_group_id == $group->id ? 'selected' : '' }}>
                                     {{ $user->name }}
                                 </option>
                             @endforeach
@@ -119,13 +119,14 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function () {
-			$(".selectized").selectize({
+			var select = $(".selectized").selectize({
 				placeholder: 'Aggiungi',
 				allowClear: true,
 				create: false,
 				highlight: true,
 				diacritics: true
 			});
+			select.clearCache();
 		});
 	</script>
 @endsection

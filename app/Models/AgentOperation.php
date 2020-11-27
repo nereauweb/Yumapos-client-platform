@@ -21,7 +21,7 @@ class AgentOperation extends Model
 		'user_id',
 		'service_operation_id',
 		'original_amount',
-		'applied percentage',
+		'applied_commission_id',
 		'commission',
 		];
 		

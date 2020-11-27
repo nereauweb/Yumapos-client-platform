@@ -70,7 +70,9 @@ a.operator-choice * {
 							</h2>
 							
 							{!! Form::open(array('route' => 'users.services.transaction', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation form-horizontal')) !!}
-								{!! csrf_field() !!}
+								{!! csrf_field() !!}	
+								<input type="hidden" name="category_id" id="category_id" value="{{ $category->id }}">
+								
 								@if(isset($phone_number))
 								<h3 class="">{{ $phone_number }}</h3>	
 								<input type="hidden" name="recipient_phone" id="recipient_phone" value="{{ $phone_number }}">

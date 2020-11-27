@@ -76,7 +76,7 @@
                                         @endif
                                     </th>
                                     <th>
-                                        <span>Applied percentage</span>
+                                        <span>Applied commission ID</span>
                                     </th>
                                     <th  wire:click="sortBy('commission')">
                                         <span>Agent commission</span>
@@ -97,7 +97,7 @@
                                             <td>{{ $operation->service_operation_id }}</td>
                                             <td>{{ $operation->pointOperation->user->name ?? '' }}</td>
                                             <td>{{ round($operation->original_amount, 2) }}&nbsp;&euro;</td>
-                                            <td>{{ round($operation->applied_percentage, 2) }}&nbsp;%</td>
+                                            <td>{{ $operation->applied_commission_id }}</td>
                                             <td>{{ round($operation->commission, 2) }}&nbsp;&euro;</td>
                                         </tr>
                                     @endforeach

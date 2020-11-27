@@ -100,7 +100,6 @@ class UsersGroupsController extends Controller
     public function update(Request $request, $id)
     {
         $group = UsersGroup::find($id);
-
 		$validator = Validator::make($request->all(),
             [
                 'name'                  => 'required|max:127',
@@ -111,14 +110,11 @@ class UsersGroupsController extends Controller
                 'name.max'       		=> 'nome troppo lungo',
             ]
         );
-
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-        }
-		
+        }		
         $group->name 		= $request->input('name');
-        $group->description = $request->input('description') ? $request->input('description') : "";
-		
+        $group->description = $request->input('description') ? $request->input('description') : "";		
 		if ($group->type==1){			
 			$group->discount	= $request->input('discount');
 		} else {
@@ -136,21 +132,27 @@ class UsersGroupsController extends Controller
 					}
 				}
 			}
-		}
-		
-		
+		}	
 		$group->save();
-
 		if($request->input('users')){
-			foreach($request->input('users') as $user_id){
-				$user = User::find($user_id);
-				if ($user->group_id != $group->id){
-					$user->group_id = $group->id;
-					$user->save();
+			if ($group->type==1){	
+				foreach($request->input('users') as $user_id){
+					$user = User::find($user_id);
+					if ($user->group_id != $group->id){
+						$user->group_id = $group->id;
+						$user->save();
+					}
+				}
+			} else {
+				foreach($request->input('users') as $user_id){
+					$user = User::find($user_id);
+					if ($user->agent_group_id != $group->id){
+						$user->agent_group_id = $group->id;
+						$user->save();
+					}
 				}
 			}
 		}
-
         return back()->with(['status' => 'success', 'message' => 'Gruppo aggiornato con successo']);
 	}
 
@@ -218,12 +220,12 @@ class UsersGroupsController extends Controller
     {
         $group = UsersGroup::findOrFail($id);
 		if ($group->type == 1) {
-			$users = User::whereHas("roles", function($q){ $q->where("name", "user"); })->get();			
+			$users = User::role('user')->get();			
 			return view('admin/users/group-edit',compact('group','users'));
 		}
 		if ($group->type == 2) {
-			$users = User::whereHas("roles", function($q){ $q->where("name", "sales"); })->get();	
-		$target_groups = UsersGroup::where('type',1)->get();
+			$users = User::role('sales')->get();	
+			$target_groups = UsersGroup::where('type',1)->get();
 			$categories = ServiceCategory::all();		
 			return view('admin/users/group-edit-agent',compact('group','users','target_groups','categories'));
 		}

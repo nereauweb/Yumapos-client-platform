@@ -2,35 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Ding\Model\InternationalDialingInfo;
 use App\Models\AgentOperation;
-use App\Models\ServiceOperation;
-
 use App\Models\ApiDingCountry;
 use App\Models\ApiDingCountryInternationalDialingInformation;
-use App\Http\Ding\Model\InternationalDialingInfo;
 use App\Models\ApiDingCountryRegionCode;
 use App\Models\ApiDingCurrency;
+use App\Models\ApiDingOperation;
 use App\Models\ApiDingOperator;
 use App\Models\ApiDingOperatorPaymentType;
 use App\Models\ApiDingOperatorRegionCode;
 use App\Models\ApiDingOperatorState;
+use App\Models\ApiDingPaymentType;
 use App\Models\ApiDingProduct;
 use App\Models\ApiDingProductBenefit;
 use App\Models\ApiDingProductMaximum;
 use App\Models\ApiDingProductMinimum;
-use App\Models\ApiDingPaymentType;
-use App\Models\ApiDingSettingDefinition;
 use App\Models\ApiDingRegion;
-
-use App\Models\ApiDingOperation;
-
+use App\Models\ApiDingSettingDefinition;
+use App\Models\ServiceOperation;
+use App\User;
 use Auth;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-
 
 class ApiDingController extends Controller
 {
@@ -509,6 +505,7 @@ class ApiDingController extends Controller
 		$final_amount 						= $request_data['final_amount'];
 		$final_expected_destination_amount 	= $request_data['final_expected_destination_amount'];
 		$internalRef						= Auth::user()->id .'.'. time();
+		$category_id 						= $request_data['category_id'];
 
 		$operator = ApiDingOperator::where('ProviderCode',$request_operator_ProviderCode)->first();
 		//$original_expected_destination_amount = $request_amount * $operator->fx->rate;
@@ -583,7 +580,7 @@ class ApiDingController extends Controller
 		try{
 			$data = $this->ding->SendTransfer([
 				'SkuCode' => $request_product_sku,
-				'SendValue' => $request_amount,
+				'SendValue' => $sent_amount,
 				'SendCurrencyIso' => $request_send_currency_iso,
 				'AccountNumber' => str_replace('+','',$request_recipient_phone),
 				'DistributorRef' => $internalRef,
@@ -661,7 +658,7 @@ class ApiDingController extends Controller
 			'CompletedUtc' 				=> $data['transfer_record']['completed_utc'],
 			'ProcessingState' 			=> $data['transfer_record']['processing_state'],
 			'ReceiptText' 				=> $data['transfer_record']['receipt_text'],
-			'ReceiptParams' 			=> implode(',',$data['transfer_record']['receipt_params']),
+			'ReceiptParams' 			=> is_array($data['transfer_record']['receipt_params']) ? implode(',',$data['transfer_record']['receipt_params']) : $data['transfer_record']['receipt_params'],
 			'AccountNumber' 			=> $data['transfer_record']['account_number'],			
 			'DistributorRef' 			=> $data['transfer_id']['distributor_ref'],
 			'TransferRef' 				=> $data['transfer_id']['transfer_ref'],		
@@ -696,13 +693,24 @@ class ApiDingController extends Controller
 		$operation = ServiceOperation::create($response);
 		$response['operation_id'] = $operation->id;
 		if ($user->parent_id && $user->parent_id != 0){
-			AgentOperation::create([
-				'user_id'				=> $user->parent_id,
-				'service_operation_id'	=> $operation->id,
-				'original_amount'		=> $user_cost,
-				'applied percentage'	=> $user->parent_percent,
-				'commission'			=> round(($user_cost * ( $user->parent_percent / 100 )),2),
-			]);
+			$agent = User::find($user->parent_id);
+			if ($agent){
+				$commission = $agent->agent_commission($user->group_id,$category_id);
+				if ($commission){
+					if ($commission->type=='percent'){
+						$agent_amount = round(($user_cost * ( $commission->amount / 100 )),2);
+					} else {
+						$agent_amount = $commission->amount;
+					}
+					AgentOperation::create([
+						'user_id'				=> $agent_id,
+						'service_operation_id'	=> $operation->id,
+						'original_amount'		=> $user_cost,
+						'applied_commission_id'	=> $commission->parent_percent,
+						'commission'			=> $agent_amount,
+					]);
+				}
+			}
 		}
 
 		return view('users/service/result', ['log' => $this->log, 'data' => $data, 'response' => $response, 'operator' => $operator] );
