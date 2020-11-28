@@ -73,6 +73,7 @@
       gtag('config', 'UA-118965717-5');
     </script>
 	--}}
+	@yield('early_javascript')
   </head>
   <style>
 	@yield('style')

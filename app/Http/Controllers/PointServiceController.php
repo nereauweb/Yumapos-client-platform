@@ -86,7 +86,13 @@ class PointServiceController extends Controller
 			return back()->withError('We are sorry, an error occurred while reading the search result data.');
 		}
 		try{
-			$data = $result->getItems()[0]->getData();
+			$items_array = $result->getItems();
+			if (!isset($items_array)||!$items_array||!is_array($items_array)){ 
+				return back()->withError('We are sorry, we could find no correspondance for the given number.');
+			}
+			$data = $items_array[0]->getData();
+		} catch (\App\Http\Ding\ApiException $ex){
+			return back()->withError($ex->getResponseBody());
 		} catch (Exception $ex){
 			return back()->withError($ex->getMessage());	
 		}	

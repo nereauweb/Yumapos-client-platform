@@ -120,17 +120,9 @@
                                 <i class="cil-arrow-top"></i>
                             @endif
                         </th>
-                        <th wire:click="sortBy('reloadly_transactionId')">
-                            <span>Reloadly trans. ID</span>
+                        <th wire:click="sortBy('provider')">
+                            <span>Provider</span>
                             @if($sortAsc && $sortField == 'reloadly_transactionId')
-                                <i class="cil-arrow-bottom"></i>
-                            @else
-                                <i class="cil-arrow-top"></i>
-                            @endif
-                        </th>
-                        <th wire:click="sortBy('api_reloadly_calls_id')">
-                            <span>API call ID</span>
-                            @if($sortAsc && $sortField == 'api_reloadly_calls_id')
                                 <i class="cil-arrow-bottom"></i>
                             @else
                                 <i class="cil-arrow-top"></i>
@@ -155,7 +147,8 @@
                         </th>
                         <th>Expected destination amount</th>
                         <th>&Delta; Paid/Sent amount</th>
-                        <th>Commission</th>
+                        <th>Agent commission</th>
+                        <th>Platform commission</th>
                         <th>Gross platform gain</th>
                         <th>User discount</th>
                         <th>Net platform gain</th>
@@ -169,8 +162,7 @@
                                 <td>{{ $operation->user->name ?? '' }} [Id {{ $operation->user->id ?? '' }}]
                                 </td>
                                 <td>{{ $operation->id }}</td>
-                                <td>{{ $operation->reloadly_transactionId }}</td>
-                                <td>{{ $operation->api_reloadly_calls_id }}</td>
+                                <td><a href="#"  onclick="details({{ $operation->id }})">{{ $operation->provider }}</a></td>
                                 <td>{{ $operation->request_country_iso }}</td>
                                 <td>{{ $operation->operator_name() }}</td>
                                 <td>{{ $operation->request_recipient_phone }}</td>
@@ -178,6 +170,7 @@
                                 </td>
                                 <td>{{ round($operation->final_amount - $operation->user_gain - $operation->sent_amount, 2) }}&nbsp;&euro;
                                 </td>
+                                <td>{{ $operation->agent_commission ? round($operation->agent_commission, 2) : 0 }}&nbsp;&euro;</td>
                                 <td>{{ round($operation->platform_commission, 2) }}&nbsp;&euro;</td>
                                 <td>{{ round($operation->platform_total_gain, 2) }}&nbsp;&euro;</td>
                                 <td>{{ round($operation->user_discount, 2) }}&nbsp;&euro;</td>

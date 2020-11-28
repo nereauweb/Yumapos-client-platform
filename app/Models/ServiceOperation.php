@@ -26,6 +26,7 @@ class ServiceOperation extends Model
 		'api_reloadly_operations_id',
 		'reloadly_transactionId',
 		'ding_TransferRef',
+		'api_ding_call_id',
 		'api_ding_operation_id',
 		'result',
 		'request_operatorId',
@@ -63,6 +64,10 @@ class ServiceOperation extends Model
 //		return $this->hasOne('App\Models\ApiReloadlyOperator','id','request_operatorId');
         return $this->hasOne('App\Models\ApiReloadlyOperator','operatorId','request_operatorId');
     }
+
+	public function ding_call(){
+		return $this->hasOne('App\Models\ApiDingCall','id','api_ding_call_id');
+	}
 
 	public function ding_operation(){
 		return $this->hasOne('App\Models\ApiDingOperation','id','api_ding_operation_id');

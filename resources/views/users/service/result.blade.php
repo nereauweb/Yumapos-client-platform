@@ -29,7 +29,6 @@
 					@else
 						<div class="card-body">
 							Operation success!
-							<pre><?php var_dump($data); ?></pre>
 							<br><hr><br>
 							<dl class="row">
 					

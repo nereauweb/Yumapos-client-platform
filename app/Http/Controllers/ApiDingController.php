@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Ding\Model\InternationalDialingInfo;
 use App\Models\AgentOperation;
+use App\Models\ApiDingCall;
 use App\Models\ApiDingCountry;
 use App\Models\ApiDingCountryInternationalDialingInformation;
 use App\Models\ApiDingCountryRegionCode;
@@ -31,7 +32,7 @@ use Illuminate\Support\Facades\Validator;
 class ApiDingController extends Controller
 {
 	private $token = '';
-	private $test = true;
+	private $test = false;
 
 	public $log = '';
 	public $call_id = 0;
@@ -577,6 +578,20 @@ class ApiDingController extends Controller
 			return view('users/service/result', ['response' => $response]);
 		}
 
+		$call = ApiDingCall::create([
+			'user_id' 		=> Auth::user()->id,
+			'type' 			=> 'POST',
+			'path' 			=> '/api/V1/SendTransfer',
+			'parameters' 	=> "'SkuCode' => $request_product_sku,
+				'SendValue' => $sent_amount,
+				'SendCurrencyIso' => $request_send_currency_iso,
+				'AccountNumber' => ".str_replace('+','',$request_recipient_phone).",
+				'DistributorRef' => $internalRef,
+				'ValidateOnly' => ". $this->test ? 'true' : 'false'
+		]);		
+		
+		$response['api_ding_call_id'] = $call->id;
+			
 		try{
 			$data = $this->ding->SendTransfer([
 				'SkuCode' => $request_product_sku,
@@ -600,7 +615,9 @@ class ApiDingController extends Controller
 				'AccountNumber' => $request_recipient_phone,
 				'DistributorRef' => Auth::user()->id .'.'. time(),
 				'ValidateOnly' => $this->test ? 'true' : 'false',
-				];
+				];		
+			$call->raw_answer = $ex->getResponseBody();
+			$call->save();
 			$data['response'] = $ex->getResponseBody();
 			return view('users/service/result', ['log' => $this->log, 'data' => $data, 'response' => -1, 'operator' => $operator] );
 		} catch (Exception $ex){
@@ -612,6 +629,8 @@ class ApiDingController extends Controller
 				'DistributorRef' => Auth::user()->id .'.'. time(),
 				'ValidateOnly' => $this->test ? 'true' : 'false',
 				];
+			$call->raw_answer = $ex->getMessage();
+			$call->save();
 			$data['response'] = $ex->getMessage();
 			return view('users/service/result', ['log' => $this->log, 'data' => $data, 'response' => -1, 'operator' => $operator] );
 		}
@@ -646,8 +665,12 @@ class ApiDingController extends Controller
 			$data_builder['transfer_record'] = $record;
 			$data_builder['price'] = $record['price']->getData();
 			$data_builder['transfer_id'] = $record['transfer_id']->getData();
-			$data = $data_builder;
-		} else {
+			$data = $data_builder;			
+			$call->raw_answer = json_encode($data_builder);
+			$call->save();
+		} else {		
+			$call->raw_answer = json_encode($data);
+			$call->save();
 			return view('users/service/result', ['log' => $this->log, 'data' => $data, 'response' => -1, 'operator' => $operator] );
 		}
 		

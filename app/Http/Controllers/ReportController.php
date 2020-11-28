@@ -44,6 +44,12 @@ class ReportController extends Controller
 		$operations = ServiceOperation::all();
         return view('admin/report/operations',compact('operations','date_begin','date_end','users','user_name','user_id'));
 	}
+	
+	public function operation_details(Request $request, $id)
+    {
+		$operation = ServiceOperation::find($id);
+        return view('admin/report/details',compact('operation'));
+	}
 
 	// function added by @lhajdari (copy of operations function, on this case we query to specific kind of users, that's the only difference from above function)
 	public function agentOperations(Request $request)
