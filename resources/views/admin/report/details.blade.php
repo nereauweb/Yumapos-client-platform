@@ -20,7 +20,7 @@
 						<dd class="col-sm-7">{{ $operation->id }}</dd>
 					
 						<dt class="col-sm-5">Provider operation ID</dt>
-						<dd class="col-sm-7">{{ $operation->provider == 'reloadly' ? $operation->api_reloadly_operations_id : $operation->api_ding_operation_id }}</dd>
+						<dd class="col-sm-7">{{ $operation->provider == 'reloadly' ? $operation->reloadly_operation->transactionId : $operation->ding_operation->TransferRef }}</dd>
 					
 						<dt class="col-sm-5">System call ID</dt>
 						<dd class="col-sm-7">{{ $operation->provider == 'reloadly' ? $operation->api_reloadly_calls_id : $operation->api_ding_call_id }}</dd>						
