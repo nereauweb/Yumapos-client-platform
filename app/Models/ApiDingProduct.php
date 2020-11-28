@@ -39,6 +39,31 @@ class ApiDingProduct extends Model
 		
 	public $type = '';
 	public $fx_rate = 0;
+	
+	private $config_min_amount = 0;
+	private $config_max_amount = 0;
+	
+	public function minAmount($group_id){
+		if ($this->config_min_amount == 0){
+			$original_minimum = $this->minimum->SendValue;
+			$base_fx_rate = $this->fx_rate();
+			$applied_fx_rate = $this->config_rate($group_id);
+			$changed = $original_minimum / $applied_fx_rate;
+			$this->config_min_amount = ($changed * $base_fx_rate)+0.01;
+		}
+		return $this->config_min_amount;
+	}
+	
+	public function maxAmount($group_id){
+		if ($this->config_max_amount == 0){
+			$original_maximum = $this->maximum->SendValue;
+			$base_fx_rate = $this->fx_rate();
+			$applied_fx_rate = $this->config_rate($group_id);
+			$changed = $original_maximum / $applied_fx_rate;
+			$this->config_max_amount = $changed * $base_fx_rate;
+		}
+		return $this->config_max_amount;
+	}
 
 	public function setting_definitions(){ return $this->hasMany('App\Models\ApiDingProductSettingDefinition','product_id'); }
 	public function maximum(){ return $this->hasOne('App\Models\ApiDingProductMaximum','product_id'); }
