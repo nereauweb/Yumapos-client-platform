@@ -299,23 +299,25 @@ class UsersController extends Controller
 
     public function changeRole(User $user)
     {
-        if (request()->has('sales-to-user')) {
-            request()->validate([
-               'group_id' => 'required'
+		request()->validate([
+		   'role' => 'required',
+		   'group_id' => 'required'
+		]);
+		$user->group_id = request()->group_id;		
+		if (request()->role=='user'){
+			$user->removeRole('sales');
+			$user->agent_group_id = NULL;
+		}
+		if (request()->role=='sales'){
+			request()->validate([
+                'agent_group_id' => 'required'
             ]);
-            $user->update(['group_id' => request()->group_id]);
-            $user->removeRole('sales');
-        } else if (request()->has('user-to-sales')) {
-            request()->validate([
-                'agent_group_id' => 'required',
-                'group_id' => 'required'
-            ]);
-            $user->update([
-               'group_id' => request()->group_id,
-               'agent_group_id' => request()->agent_group_id
-            ]);
-            $user->assignRole('sales');
-        }
-        return back()->with(['status' => 'success', 'message'=> 'user role got changed successfully']);
+			if(!$user->hasRole('sales')){
+				$user->assignRole('sales');
+			}			
+			$user->agent_group_id = request()->agent_group_id;
+		}
+		$user->save();
+        return back()->with(['status' => 'success', 'message'=> 'Role and groups updated successfully']);
     }
 }

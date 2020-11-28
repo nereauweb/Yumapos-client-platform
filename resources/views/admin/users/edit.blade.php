@@ -6,43 +6,32 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    @if($user->hasRole('sales'))
-                        <form action="{{ route('admin.user.change-role', $user) }}" method="POST" class="form-inline py-4">
-                            @csrf
-                            <div class="form-group px-3">
-                                <select name="group_id" id="group_id" class="form-control @error('group_id') is-invalid @enderror">
-                                    <option selected value="{{ $user->group->id }}">{{ $user->group->name }}</option>
-                                    @foreach($userGroups as $userGroup)
-                                        <option value="{{$userGroup->id}}">{{ $userGroup->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <input type="hidden" name="sales-to-user" value="1">
-                            <button class="btn btn-warning">Update role (change agent to simple user)</button>
-                        </form>
-                    @else
-                        <form class="px-3 py-4 form-inline" action="{{ route('admin.user.change-role', $user) }}" method="POST">
-                            @csrf
-                            <div class="form-group">
-                                <select name="group_id" id="group_id" class="form-control @error('group_id') is-invalid @enderror">
-                                    <option selected disabled>Choose a User group</option>
-                                    @foreach($userGroups as $userGroup)
-                                        <option value="{{$userGroup->id}}">{{ $userGroup->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group mx-4">
-                                <select name="agent_group_id" id="agent_group_id" class="form-control @error('agent_group_id') is-invalid @enderror">
-                                    <option selected disabled>Choose an Agent group</option>
-                                    @foreach($agentGroups as $agentGroup)
-                                        <option value="{{$agentGroup->id}}">{{ $agentGroup->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <input type="hidden" name="user-to-sales" value="1">
-                            <button class="btn btn-behance">Update role (change simple user to an agent)</button>
-                        </form>
-                    @endif
+					<form class="px-3 py-4 form-inline" action="{{ route('admin.user.change-role', $user) }}" method="POST">
+						@csrf
+						<div class="form-group mx-4">
+							<select name="role" id="role" class="form-control @error('role') is-invalid @enderror">
+								<option value="user" @if(!$user->hasRole('sales')) selected @endif>Point</option>
+								<option value="sales" @if($user->hasRole('sales')) selected @endif>Agent</option>
+							</select>
+						</div>
+						<div class="form-group mx-4">
+							<select name="group_id" id="group_id" class="form-control @error('group_id') is-invalid @enderror">
+								<option selected disabled>Choose a User group</option>
+								@foreach($userGroups as $userGroup)
+									<option value="{{$userGroup->id}}" @if($userGroup->id==$user->group_id) selected @endif>{{ $userGroup->name }}</option>
+								@endforeach
+							</select>
+						</div>
+						<div class="form-group mx-4">
+							<select name="agent_group_id" id="agent_group_id" class="form-control @error('agent_group_id') is-invalid @enderror">
+								<option selected disabled>Choose an Agent group</option>
+								@foreach($agentGroups as $agentGroup)
+									<option value="{{$agentGroup->id}}" @if($agentGroup->id==$user->agent_group_id) selected @endif>{{ $agentGroup->name }}</option>
+								@endforeach
+							</select>
+						</div>
+						<button class="btn btn-behance">Update</button>
+					</form>
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             {!! trans('usersmanagement.editing-user', ['name' => $user->name]) !!}
@@ -119,25 +108,6 @@
 													@if ($errors->has('parent'))
 														<span class="help-block">
 															<strong>{{ $errors->first('parent') }}</strong>
-														</span>
-													@endif
-												</div>
-											</div>
-
-											<div class="form-group has-feedback row {{ $errors->has('parent_percent') ? ' has-error ' : '' }}">
-												{!! Form::label('parent_percent', 'Percentuale referente', array('class' => 'col-md-3 control-label')); !!}
-												<div class="col-md-9">
-													<div class="input-group">
-														{!! Form::number('parent_percent', $user->parent_percent, array('id' => 'parent_percent', 'class' => 'form-control', 'placeholder' => 'Percentuale referente', 'min' => '0', 'step' => '0.01')) !!}
-														<div class="input-group-append">
-															<label for="parent_percent" class="input-group-text">
-																%
-															</label>
-														</div>
-													</div>
-													@if ($errors->has('parent_percent'))
-														<span class="help-block">
-															<strong>{{ $errors->first('parent_percent') }}</strong>
 														</span>
 													@endif
 												</div>

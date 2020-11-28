@@ -431,17 +431,20 @@ class ApiReloadlyController extends Controller
 					$commission = $agent->agent_commission($user->group_id,$category_id);
 					if ($commission){
 						if ($commission->type=='percent'){
-							$agent_amount = round(($user_cost * ( $commission->amount / 100 )),2);
+							$agent_amount = round(($user_cost * ( $commission->amount / 100 )),3);
 						} else {
 							$agent_amount = $commission->amount;
 						}
 						AgentOperation::create([
-							'user_id'				=> $agent_id,
+							'user_id'				=> $agent->id,
 							'service_operation_id'	=> $operation->id,
 							'original_amount'		=> $user_cost,
-							'applied_commission_id'	=> $commission->parent_percent,
+							'applied_commission_id'	=> $commission->id,
 							'commission'			=> $agent_amount,
 						]);
+						$operation->agent_commission = $agent_amount;
+						$operation->platform_total_gain = $response['platform_total_gain'] - $agent_amount;
+						$operation->save();
 					}
 				}
 			}

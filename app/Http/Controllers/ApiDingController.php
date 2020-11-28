@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\Validator;
 class ApiDingController extends Controller
 {
 	private $token = '';
-	private $test = false;
+	private $test = true;
 
 	public $log = '';
 	public $call_id = 0;
@@ -703,12 +703,15 @@ class ApiDingController extends Controller
 						$agent_amount = $commission->amount;
 					}
 					AgentOperation::create([
-						'user_id'				=> $agent_id,
+						'user_id'				=> $agent->id,
 						'service_operation_id'	=> $operation->id,
 						'original_amount'		=> $user_cost,
-						'applied_commission_id'	=> $commission->parent_percent,
+						'applied_commission_id'	=> $commission->id,
 						'commission'			=> $agent_amount,
 					]);
+					$operation->agent_commission = $agent_amount;
+					$operation->platform_total_gain = $response['platform_total_gain'] - $agent_amount;
+					$operation->save();
 				}
 			}
 		}

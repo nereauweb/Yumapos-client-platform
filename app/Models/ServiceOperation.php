@@ -45,6 +45,7 @@ class ServiceOperation extends Model
 		'user_old_plafond',
 		'user_new_plafond',
 		'user_total_gain',
+		'agent_commission',
 		'platform_total_gain',
 		'report_status',
 		'report_notes',
