@@ -101,6 +101,7 @@
                         </div>
                     </div>
                 </div>
+            </div>
         @endif
         @if (auth()->user()->hasRole('user'))
         <div class="row">

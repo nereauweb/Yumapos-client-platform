@@ -155,12 +155,12 @@
                                                         </select>
                                                     </div>
                                                     <div class="ml-3">
-{{--                                                        <select id="operator-selected" autocomplete="off" class="form-control">--}}
-{{--                                                            <option value="0">All operators</option>--}}
-{{--                                                            @foreach(\App\Models\ApiReloadlyOperator::orderBy('name', 'asc')->distinct()->get() as $operator)--}}
-{{--                                                                <option value="{{$operator->operatorId}}">{{ $operator->name }}</option>--}}
-{{--                                                            @endforeach--}}
-{{--                                                        </select>--}}
+                                                        <select id="operator-selected" autocomplete="off" class="form-control">
+                                                            <option value="0">All operators</option>
+                                                            @foreach(\App\Models\ServiceOperator::orderBy('name', 'asc')->pluck('name','id') as $key => $operator)
+                                                                <option value="{{ $key }}">{{ $operator}}</option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
                                                     <div class="btn-group btn-group-toggle mx-3" data-toggle="buttons">
                                                         <label class="btn btn-outline-secondary">
@@ -410,12 +410,12 @@ $(document).ready(function(){
                                                 </select>
                                             </div>
                                             <div class="ml-3">
-{{--                                                <select id="operator-selected" autocomplete="off" class="form-control">--}}
-{{--                                                    <option value="0">All operators</option>--}}
-{{--                                                    @foreach(\App\Models\ServiceOperator::all() as $operator)--}}
-{{--                                                        <option value="{{$operator->id}}">{{ $operator->name }}</option>--}}
-{{--                                                    @endforeach--}}
-{{--                                                </select>--}}
+                                                <select id="operator-selected" autocomplete="off" class="form-control">
+                                                    <option value="0">All operators</option>
+                                                    @foreach(\App\Models\ServiceOperator::orderBy('name', 'asc')->pluck('name','id') as $key => $operator)
+                                                        <option value="{{ $key }}">{{ $operator}}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                             <input hidden value="{{ auth()->id() }}" id="identifier-custom">
                                             <div class="btn-group btn-group-toggle mx-3" data-toggle="buttons">

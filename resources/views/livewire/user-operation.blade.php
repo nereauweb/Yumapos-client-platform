@@ -55,8 +55,8 @@
                                         @php
                                             $check = '';
                                         @endphp
-                                        @foreach(auth()->user()->serviceOperations()->distinct()->get() as $operation)
-                                            <option value="{{ $operation->provider == 'reloadly' ? $operation->reloadly_operator->request_operatorId : $operation->ding_operator->request_ProviderCode }}">{{ $operation->provider == 'reloadly' ? $operation->reloadly_operator->name : $operation->ding_operator->name }}</option>
+                                        @foreach($operatorsData as $key => $operator)
+                                            <option value="{{ $key }}">{{ $operator }}</option>
                                         @endforeach
                                     </select>
                                 </div>

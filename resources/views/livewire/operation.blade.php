@@ -80,8 +80,8 @@
                             <label for="js-select-operators">Choose operator</label>
                             <select wire:model.defer="selectedOperator" class="form-control">
                                 <option value="0" selected>All</option>
-                                @foreach($serviceOperators as $operator)
-                                    <option value="{{ $operator->master == 'reloadly' ? $operator->reloadly_operatorId.'-'.$operator->master : $operator->ding_ProviderCode.'-'.$operator->master }}">{{ $operator->name }}</option>
+                                @foreach($usedOperators as $key => $operator)
+                                    <option value="{{ $key }}">{{ $operator }}</option>
                                 @endforeach
                             </select>
                         </div>
