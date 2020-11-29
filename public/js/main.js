@@ -282,7 +282,7 @@ if (/backend/.test(window.location.href)) {
             filter.onchange = (e) => {
                 e.preventDefault();
                 let  countrified = country_filter.value;
-                let  operatorField = 0;
+                let  operatorField = operator_filter.value;
                 switch (filter.value) {
                     case 'day':
                         fetchData('/admin/internal/services', 'day', countrified, operatorField);
@@ -328,23 +328,23 @@ if (/backend/.test(window.location.href)) {
             filter.onchange = (e) => {
                 e.preventDefault();
                 let countrified = country_filter.value;
-                let operatorField = 0;
+                let operatorField = operator_filter.value;
                 switch (filter.value) {
                     case 'day':
-                        fetchData('/user/internal/services', 'day', countrified, 0, user_object);
-                        loadTotals('user','day', countrified, 0, user_object);
+                        fetchData('/user/internal/services', 'day', countrified, operatorField, user_object);
+                        loadTotals('user','day', countrified, operatorField, user_object);
                         break;
                     case 'yesterday':
-                        fetchData('/user/internal/services', 'yesterday', countrified, 0, user_object);
-                        loadTotals('user','yesterday', countrified, 0, user_object);
+                        fetchData('/user/internal/services', 'yesterday', countrified, operatorField, user_object);
+                        loadTotals('user','yesterday', countrified, operatorField, user_object);
                         break;
                     case 'week':
-                        fetchData('/user/internal/services', 'week', countrified, 0, user_object);
-                        loadTotals('user','week', countrified, 0, user_object);
+                        fetchData('/user/internal/services', 'week', countrified, operatorField, user_object);
+                        loadTotals('user','week', countrified, operatorField, user_object);
                         break;
                     case 'month':
-                        fetchData('/user/internal/services', 'month', countrified, 0, user_object);
-                        loadTotals('user','month', countrified, 0, user_object);
+                        fetchData('/user/internal/services', 'month', countrified, operatorField, user_object);
+                        loadTotals('user','month', countrified, operatorField, user_object);
                         break;
                     default:
                         alert('coding error!');
@@ -353,7 +353,7 @@ if (/backend/.test(window.location.href)) {
 
             operator_filter.onchange = () => {
                 fetchData('/user/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
-                loadTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
+                loadTotals('user',document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
             }
 
 
@@ -382,7 +382,7 @@ if (/backend/.test(window.location.href)) {
                 filter.onchange = (e) => {
                     e.preventDefault();
                     let countrified = country_filter.value;
-                    let operatorField = 0;
+                    let operatorField = operator_filter.value;
                     switch (filter.value) {
                         case 'day':
                             fetchData('/user/internal/services', 'day', countrified, operatorField, user_object);
@@ -426,7 +426,7 @@ if (/backend/.test(window.location.href)) {
                 filter.onchange = (e) => {
                     e.preventDefault();
                     let countrified = country_filter.value;
-                    let operatorField = 0;
+                    let operatorField = operator_filter.value;
                     switch (filter.value) {
                         case 'day':
                             fetchData('/sales/reports/internal', 'day', countrified, operatorField, user_object);
@@ -475,7 +475,7 @@ if (/backend/.test(window.location.href)) {
                         filter.onchange = (e) => {
                             e.preventDefault();
                             let countrified = country_filter.value;
-                            let operatorField = 0;
+                            let operatorField = operator_filter.value;
                             switch (filter.value) {
                                 case 'day':
                                     fetchData('/user/internal/services', 'day', countrified, operatorField, user_object);
@@ -520,7 +520,7 @@ if (/backend/.test(window.location.href)) {
                         filter.onchange = (e) => {
                             e.preventDefault();
                             let countrified = country_filter.value;
-                            let operatorField = 0;
+                            let operatorField = operator_filter.value;
                             switch (filter.value) {
                                 case 'day':
                                     fetchData('/sales/reports/internal', 'day', countrified, operatorField, user_object);

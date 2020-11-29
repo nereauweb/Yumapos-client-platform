@@ -59,8 +59,10 @@ class UserOperation extends Component
             $query->where('request_country_iso', $this->selectedCountry);
         })->when($this->selectedOperator, function ($query) {
             $selectedOperator = ServiceOperator::findOrFail($this->selectedOperator);
-            if (is_null($selectedOperator->reloadly_operatorId)) {
-                $query->where('request_ProviderCode', $selectedOperator->ding_ProviderCode)->orWhere('request_operatorId', $selectedOperator->reloadly_operatorId);
+            if (is_null($selectedOperator->reloadly_operatorId) && !is_null($selectedOperator->ding_ProviderCode)) {
+                $query->where('request_ProviderCode', $selectedOperator->ding_ProviderCode);
+            } else if (is_null($selectedOperator->ding_ProviderCode) && !is_null($selectedOperator->reloadly_operatorId)) {
+                $query->where('request_operatorId', $selectedOperator->reloadly_operatorId);
             } else {
                 $query->where('request_operatorId', $selectedOperator->reloadly_operatorId)->orWhere('request_ProviderCode', $selectedOperator->ding_ProviderCode);
             }
