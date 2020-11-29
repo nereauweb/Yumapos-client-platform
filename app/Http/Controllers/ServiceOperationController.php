@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ServiceOperation;
+use App\Models\ServiceOperator;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -171,7 +172,12 @@ class ServiceOperationController extends Controller
         return $query->when($request['country'], function ($q) use ($concatstr, $request) {
             $q->where($concatstr.'request_country_iso', '=', $request['country']);
         })->when($request['operator'], function ($q) use ($concatstr, $request) {
-            $q->where($concatstr.'request_operatorId', $request['operator']);
+            $operatorToCheck = ServiceOperator::findOrFail($request['operator']);
+            if (is_null($operatorToCheck->reloadly_operatorId)) {
+                $q->where($concatstr.'request_ProviderCode', $operatorToCheck->ding_ProviderCode)->orWhere($concatstr.'request_operatorId', $operatorToCheck->reloadly_operatorId);
+            } else {
+                $q->where($concatstr.'request_operatorId', $operatorToCheck->reloadly_operatorId)->orWhere($concatstr.'request_ProviderCode', $operatorToCheck->ding_ProviderCode);
+            }
         })->when($request['isUser'], function ($q) use ($concatstr, $request) {
             $q->where($concatstr.'user_id', $request['user_id']);
         });
@@ -182,7 +188,8 @@ class ServiceOperationController extends Controller
         return $query->when($request['country'], function ($q) use ($concatstr, $request) {
             $q->where($concatstr.'request_country_iso', '=', $request['country']);
         })->when($request['operator'], function ($q) use ($concatstr, $request) {
-            $q->where($concatstr.'request_operatorId', $request['operator']);
+            $operatorToCheck = ServiceOperator::findOrFail($request['operator']);
+            $q->where($concatstr.'request_operatorId', $operatorToCheck->reloadly_operatorId)->orWhere($concatstr.'request_ProviderCode', $operatorToCheck->ding_ProviderCode);
         });
     }
 

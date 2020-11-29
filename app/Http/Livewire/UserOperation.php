@@ -35,17 +35,20 @@ class UserOperation extends Component
 //    public $operators;
 
     private $operations;
-
+    private $usedOperators;
 
     public function render()
     {
         $this->load();
         $operators = auth()->user()->serviceOperations;
-        return view('livewire.user-operation', ['operations' => $this->operations, 'operatorsData' => $operators]);
+        return view('livewire.user-operation', ['operations' => $this->operations, 'operatorsData' => $this->usedOperators]);
     }
 
     public function load()
     {
+
+        $this->usedOperators = ServiceOperator::orderBy('name', 'asc')->pluck('name','id');
+
         $date_begin = ($this->from && !is_null($this->from)) ? $this->from . ' 00:00:00' : date('Y-m-d').' 00:00:00';
         $date_end = ($this->to && !is_null($this->to)) ? $this->to . ' 23:59:59' : date('Y-m-d').' 23:59:59';
         $this->operations = auth()->user()->serviceOperations()->where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end)
@@ -55,8 +58,12 @@ class UserOperation extends Component
         ->when($this->selectedCountry, function ($query) {
             $query->where('request_country_iso', $this->selectedCountry);
         })->when($this->selectedOperator, function ($query) {
-//            implement logic to fetch data related to selected query
-            $query->where('request_operatorId', $this->selectedOperator);
+            $selectedOperator = ServiceOperator::findOrFail($this->selectedOperator);
+            if (is_null($selectedOperator->reloadly_operatorId)) {
+                $query->where('request_ProviderCode', $selectedOperator->ding_ProviderCode)->orWhere('request_operatorId', $selectedOperator->reloadly_operatorId);
+            } else {
+                $query->where('request_operatorId', $selectedOperator->reloadly_operatorId)->orWhere('request_ProviderCode', $selectedOperator->ding_ProviderCode);
+            }
         });
 
         if ($this->operationId) {

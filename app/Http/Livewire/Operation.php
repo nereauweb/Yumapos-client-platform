@@ -40,6 +40,8 @@ class Operation extends Component
     public function render()
     {
         $users = User::pluck('name', 'id');
+
+        $usedOperators = ServiceOperator::orderBy('name', 'asc')->pluck('name','id');
         $user_name = "All users";
         $user_id = 0;
         if ($this->userSelected !== 0 && !is_null($this->userSelected)) {
@@ -47,7 +49,7 @@ class Operation extends Component
             $user_name = $user->name;
             $user_id = $user->id;
         }
-        $serviceOperators = ServiceOperator::orderBy('name', 'asc')->get();
+
         $date_begin = ($this->from && !is_null($this->from)) ? $this->from . ' 00:00:00' : date("Y-m-d") . ' 00:00:00';
         $date_end = ($this->to && !is_null($this->to)) ? $this->to . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
             $operations = ServiceOperation::where('created_at', '>=', $date_begin)->where('created_at', '<=', $date_end)
@@ -58,13 +60,11 @@ class Operation extends Component
         })->when($this->selectedCountry, function ($query) {
 	        $query->where('request_country_iso', '=', $this->selectedCountry);
         })->when($this->selectedOperator, function ($query) {
-            $operatorData = explode('-', $this->selectedOperator);
-            $operatorId = $operatorData[0];
-            $operatorMaster = $operatorData[1];
-            if ($operatorMaster == 'reloadly') {
-                $query->where('request_operatorId', $operatorId);
-            } else if ($operatorMaster == 'ding') {
-                $query->where('request_ProviderCode', $operatorId);
+            $selectedOperator = ServiceOperator::findOrFail($this->selectedOperator);
+            if (is_null($selectedOperator->reloadly_operatorId)) {
+                $query->where('request_ProviderCode', $selectedOperator->ding_ProviderCode)->orWhere('request_operatorId', $selectedOperator->reloadly_operatorId);
+            } else {
+                $query->where('request_operatorId', $selectedOperator->reloadly_operatorId)->orWhere('request_ProviderCode', $selectedOperator->ding_ProviderCode);
             }
         });
 
@@ -84,7 +84,7 @@ class Operation extends Component
         $this->sentAmount = $operations->sum('sent_amount');
         $this->platformTotalGain = $operations->sum('platform_total_gain') - $operations->sum('user_discount');
         $operations = $operations->paginate(10);
-        return view('livewire.operation', compact('operations','users', 'user_name', 'date_begin', 'date_end', 'user_id', 'serviceOperators'));
+        return view('livewire.operation', compact('operations','users', 'user_name', 'date_begin', 'date_end', 'user_id', 'usedOperators'));
     }
 
     public function sortBy($field)
