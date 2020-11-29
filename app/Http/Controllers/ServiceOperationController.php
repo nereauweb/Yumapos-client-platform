@@ -177,6 +177,15 @@ class ServiceOperationController extends Controller
         });
     }
 
+    private function appendAgentFilter($query, $request, $concatstr = null)
+    {
+        return $query->when($request['country'], function ($q) use ($concatstr, $request) {
+            $q->where($concatstr.'request_country_iso', '=', $request['country']);
+        })->when($request['operator'], function ($q) use ($concatstr, $request) {
+            $q->where($concatstr.'request_operatorId', $request['operator']);
+        });
+    }
+
     public function agentOperations($type)
     {
         if ($type == 'day') {
@@ -184,7 +193,10 @@ class ServiceOperationController extends Controller
                 ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
                 ->select(DB::raw('count(service_operations.id) as operations, sum(service_operations.platform_total_gain) - sum(service_operations.user_discount) as gain_data, sum(service_operations.sent_amount) - sum(service_operations.platform_commission) as cost, sum(service_operations.user_amount) as amount_data, HOUR(service_operations.created_at) as label'))
                 ->where('agent_operations.user_id', auth()->id())
-//                ->whereDate('created_at', '=', $this->day)
+                ->whereDate('service_operations.created_at', '=', $this->day)
+                ->when(request()->all(), function ($query) {
+                    $this->appendAgentFilter($query, request()->all(), 'service_operations.');
+                })
                 ->groupBy('label')
                 ->get();
             return response()->json($platformTotalOperations, 200);
@@ -192,11 +204,8 @@ class ServiceOperationController extends Controller
             $platformTotalOperations = DB::table('service_operations')
                 ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
                 ->select(DB::raw('count(service_operations.id) as operations, sum(service_operations.platform_total_gain) - sum(service_operations.user_discount) as gain_data, sum(service_operations.sent_amount) - sum(service_operations.platform_commission) as cost, sum(service_operations.user_amount) as amount_data, HOUR(service_operations.created_at) as label'))
-//                ->whereDate('service_operations.created_at', '=', $this->yesterday)
+                ->whereDate('service_operations.created_at', '=', $this->yesterday)
                 ->where('agent_operations.user_id', auth()->id())
-                ->when(request()->all(), function ($query) {
-                    $this->appendDefaultFilters($query, request()->all());
-                })
                 ->groupBy('label')
                 ->get();
             return response()->json($platformTotalOperations, 200);
@@ -204,10 +213,8 @@ class ServiceOperationController extends Controller
             $platformTotalOperations = DB::table('service_operations')
                 ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
                 ->select(DB::raw('count(service_operations.id) as operations, sum(service_operations.platform_total_gain) - sum(service_operations.user_discount) as gain_data, sum(service_operations.sent_amount) - sum(service_operations.platform_commission) as cost, sum(service_operations.user_amount) as amount_data, DAY(service_operations.created_at) as label'))
-                ->when(request()->all(), function ($query) {
-                    $this->appendDefaultFilters($query, request()->all());
-                })
-//                ->whereBetween('service_operations.created_at', $this->week)
+                ->whereBetween('service_operations.created_at', $this->week)
+                ->where('agent_operations.user_id', auth()->id())
                 ->groupBy('label')
                 ->get();
             return response()->json($platformTotalOperations, 200);
@@ -215,10 +222,8 @@ class ServiceOperationController extends Controller
             $platformMonthlyTotalOperations = DB::table('service_operations')
                 ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
                 ->select(DB::raw('count(service_operations.id) as operations, sum(service_operations.platform_total_gain) - sum(service_operations.user_discount) as gain_data, sum(service_operations.sent_amount) - sum(service_operations.platform_commission) as cost, sum(service_operations.user_amount) as amount_data, DAY(service_operations.created_at) as day ,DATE_FORMAT(service_operations.created_at, "%D") as label'))
-                ->when(request()->all(), function ($query) {
-                    $this->appendDefaultFilters($query, request()->all());
-                })
-//                ->whereMonth('service_operations.created_at', '=', $this->month)
+                ->where('agent_operations.user_id', auth()->id())
+                ->whereMonth('service_operations.created_at', '=', $this->month)
                 ->groupBy(['label', 'day'])
                 ->get();
             return response()->json($platformMonthlyTotalOperations, 200);
@@ -231,112 +236,92 @@ class ServiceOperationController extends Controller
             case 'day':
                 $totalsForOperations = DB::table('service_operations')
                     ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
-//                    ->whereDate('service_operations.created_at', '=', $this->day)
+                    ->whereDate('service_operations.created_at', '=', $this->day)
                     ->where('agent_operations.user_id', auth()->id())
-                    ->when(request()->all(), function ($query) {
-                        $this->appendDefaultFilters($query, request()->all(), 'service_operations.');
-                    })->count();
+                    ->count();
                 $totalsForGain = DB::table('service_operations')
                     ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
                     ->select(DB::raw('sum(service_operations.platform_total_gain - service_operations.user_discount) as gainSumPerDay'))
-//                    ->whereDate('service_operations.created_at', '=', $this->day)
+                    ->whereDate('service_operations.created_at', '=', $this->day)
                     ->where('agent_operations.user_id', auth()->id())
-                    ->when(request()->all(), function ($query) {
-                        $this->appendDefaultFilters($query, request()->all(), 'service_operations.');
-                    })->first();
+                    ->first();
                 $totalsForCost = DB::table('service_operations')
                     ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
-//                    ->whereDate('service_operations.created_at', '=', $this->day)
+                    ->whereDate('service_operations.created_at', '=', $this->day)
                     ->select(DB::raw('sum(service_operations.sent_amount - service_operations.platform_commission) as costSumPerDay'))
                     ->where('agent_operations.user_id', auth()->id())
-                    ->when(request()->all(), function ($query) {
-                        $this->appendDefaultFilters($query, request()->all(), 'service_operations.');
-                    })->first();
+                    ->first();
                 $totalsForAmount = DB::table('service_operations')
                     ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
                     ->where('agent_operations.user_id', auth()->id())
-//                    ->whereDate('service_operations.created_at', '=', $this->day)
-                    ->when(request()->all(), function ($query) {
-                        $this->appendDefaultFilters($query, request()->all(), 'service_operations.');
-                })->sum('service_operations.user_amount');
+                    ->whereDate('service_operations.created_at', '=', $this->day)
+                    ->sum('service_operations.user_amount');
                 break;
             case 'yesterday':
                 $totalsForOperations = DB::table('service_operations')
                     ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
-//                    ->whereDate('service_operations.created_at', '=', $this->yesterday)
-                    ->when(request()->all(), function ($query) {
-                        $this->appendDefaultFilters($query, request()->all(), 'service_operations.');
-                    })->count();
+                    ->whereDate('service_operations.created_at', '=', $this->yesterday)
+                    ->where('agent_operations.user_id', auth()->id())
+                    ->count();
                 $totalsForGain = DB::table('service_operations')
                     ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
-//                    ->whereDate('service_operations.created_at', '=', $this->yesterday)
-                    ->when(request()->all(), function ($query) {
-                        $this->appendDefaultFilters($query, request()->all(), 'service_operations.');
-                    })->select(DB::raw('sum(service_operations.platform_total_gain - service_operations.user_discount) as gainSumPerDay'))->first();
+                    ->whereDate('service_operations.created_at', '=', $this->yesterday)
+                    ->where('agent_operations.user_id', auth()->id())
+                    ->select(DB::raw('sum(service_operations.platform_total_gain - service_operations.user_discount) as gainSumPerDay'))->first();
                 $totalsForCost = DB::table('service_operations')
                     ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
-//                    ->whereDate('service_operations.created_at', '=', $this->yesterday)
-                    ->when(request()->all(), function ($query) {
-                        $this->appendDefaultFilters($query, request()->all(), 'service_operations.');
-                    })->select(DB::raw('sum(sent_amount - platform_commission) as costSumPerDay'))->first();
+                    ->whereDate('service_operations.created_at', '=', $this->yesterday)
+                    ->where('agent_operations.user_id', auth()->id())
+                    ->select(DB::raw('sum(sent_amount - platform_commission) as costSumPerDay'))->first();
                 $totalsForAmount = DB::table('service_operations')
                     ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
-//                    ->whereDate('created_at', '=', $this->yesterday)
-                    ->when(request()->all(), function ($query) {
-                        $this->appendDefaultFilters($query, request()->all(), 'service_operations.');
-                    })->sum('user_amount');
+                    ->whereDate('service_operations.created_at', '=', $this->yesterday)
+                    ->where('agent_operations.user_id', auth()->id())
+                    ->sum('user_amount');
                 break;
             case 'week':
                 $totalsForOperations = DB::table('service_operations')
                     ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
-//                    ->whereBetween('service_operations.created_at', $this->week)
-                    ->when(request()->all(), function ($query) {
-                        $this->appendDefaultFilters($query, request()->all(), 'service_operations.');
-                    })->count();
+                    ->whereBetween('service_operations.created_at', $this->week)
+                    ->where('agent_operations.user_id', auth()->id())
+                    ->count();
                 $totalsForGain =  DB::table('service_operations')
                     ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
-//                    ->whereBetween('service_operations.created_at', $this->week)
-                    ->when(request()->all(), function ($query) {
-                        $this->appendDefaultFilters($query, request()->all(), 'service_operations.');
-                    })->select(DB::raw('sum(service_operations..platform_total_gain - service_operations..user_discount) as gainSumPerDay'))->first();
+                    ->whereBetween('service_operations.created_at', $this->week)
+                    ->where('agent_operations.user_id', auth()->id())
+                    ->select(DB::raw('sum(service_operations.platform_total_gain - service_operations.user_discount) as gainSumPerDay'))->first();
                 $totalsForCost = DB::table('service_operations')
                     ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
-//                    ->whereBetween('service_operations.created_at', $this->week)
-                    ->when(request()->all(), function ($query) {
-                        $this->appendDefaultFilters($query, request()->all(), 'service_operations.');
-                    })->select(DB::raw('sum(service_operations.sent_amount - service_operations.platform_commission) as costSumPerDay'))->first();
+                    ->whereBetween('service_operations.created_at', $this->week)
+                    ->where('agent_operations.user_id', auth()->id())
+                    ->select(DB::raw('sum(service_operations.sent_amount - service_operations.platform_commission) as costSumPerDay'))->first();
                 $totalsForAmount = DB::table('service_operations')
                     ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
-//                    ->whereBetween('service_operations.created_at', $this->week)
-                    ->when(request()->all(), function ($query) {
-                        $this->appendDefaultFilters($query, request()->all(), 'service_operations.');
-                    })->sum('service_operations.user_amount');
+                    ->whereBetween('service_operations.created_at', $this->week)
+                    ->where('agent_operations.user_id', auth()->id())
+                    ->sum('service_operations.user_amount');
                 break;
             case 'month':
                 $totalsForOperations = DB::table('service_operations')
                     ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
-//                    ->whereMonth('service_operations.created_at', '=', $this->month)
-                    ->when(request()->all(), function ($query) {
-                        $this->appendDefaultFilters($query, request()->all(), 'service_operations.');
-                    })->count();
+                    ->whereMonth('service_operations.created_at', '=', $this->month)
+                    ->where('agent_operations.user_id', auth()->id())
+                    ->count();
                 $totalsForGain = DB::table('service_operations')
                     ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
-//                    ->whereMonth('service_operations.created_at', '=', $this->month)
-                    ->when(request()->all(), function ($query) {
-                        $this->appendDefaultFilters($query, request()->all(), 'service_operations.');
-                    })->select(DB::raw('sum(service_operations.platform_total_gain - service_operations.user_discount) as gainSumPerDay'))->first();
+                    ->whereMonth('service_operations.created_at', '=', $this->month)
+                    ->where('agent_operations.user_id', auth()->id())
+                    ->select(DB::raw('sum(service_operations.platform_total_gain - service_operations.user_discount) as gainSumPerDay'))->first();
                 $totalsForCost = DB::table('service_operations')
                     ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
-//                    ->whereMonth('service_operations.created_at', '=', $this->month)
-                    ->when(request()->all(), function ($query) {
-                        $this->appendDefaultFilters($query, request()->all(), 'service_operations.');
-                })->select(DB::raw('sum(service_operations.sent_amount - service_operations.platform_commission) as costSumPerDay'))->first();
+                    ->whereMonth('service_operations.created_at', '=', $this->month)
+                    ->where('agent_operations.user_id', auth()->id())
+                    ->select(DB::raw('sum(service_operations.sent_amount - service_operations.platform_commission) as costSumPerDay'))->first();
                 $totalsForAmount = DB::table('service_operations')
                     ->join('agent_operations', 'service_operations.id', '=', 'agent_operations.service_operation_id')
-//                    ->whereMonth('created_at', '=', $this->month)
-                    ->when(request()->all(), function ($query) {
-                        $this->appendDefaultFilters($query, request()->all(), 'service_operations.');
-                })->sum('service_operations.user_amount');
+                    ->whereMonth('service_operations.created_at', '=', $this->month)
+                    ->where('agent_operations.user_id', auth()->id())
+                    ->sum('service_operations.user_amount');
                 break;
             default:
                 $totalsForOperations = 'NOT SET!';

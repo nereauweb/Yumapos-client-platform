@@ -147,6 +147,20 @@ class UsersController extends Controller
 			UserCompanyData::create($data);
 		}
 
+		if ($user->hasRole('sales') && $request->role == 'user') {
+		    $user->removeRole('sales');
+		    $user->update([
+		       'group_id' => $request->group_id
+            ]);
+        } else if ($request->role == 'sales') {
+		    $user->update([
+		        'agent_group_id' => $request->agent_group_id,
+                'group_id' => $request->group_id
+            ]);
+
+		    $user->assignRole('sales');
+        }
+
 //        $request->session()->flash('message', 'Successfully updated user');
 		return redirect('users')->with(['status' => 'success', 'message' => 'Successfully updated user']);
     }
@@ -226,6 +240,7 @@ class UsersController extends Controller
             $user->agent_group_id = $request->input('agent_group_id');
         }
 
+
 		$user->company_data()->create([
             'referent_name'	   => $request->input('first_name'),
             'referent_surname' => $request->input('last_name'),
@@ -303,7 +318,7 @@ class UsersController extends Controller
 		   'role' => 'required',
 		   'group_id' => 'required'
 		]);
-		$user->group_id = request()->group_id;		
+		$user->group_id = request()->group_id;
 		if (request()->role=='user'){
 			$user->removeRole('sales');
 			$user->agent_group_id = NULL;
@@ -314,7 +329,7 @@ class UsersController extends Controller
             ]);
 			if(!$user->hasRole('sales')){
 				$user->assignRole('sales');
-			}			
+			}
 			$user->agent_group_id = request()->agent_group_id;
 		}
 		$user->save();

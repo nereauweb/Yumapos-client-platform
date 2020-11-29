@@ -47,17 +47,20 @@
                                     </select>
                                 </div>
                             </div>
-{{--                            <div class="col">--}}
-{{--                                <div class="form-group">--}}
-{{--                                    <label for="js-select-countries">Choose operator</label>--}}
-{{--                                    <select wire:model.defer="selectedOperator" class="form-control">--}}
-{{--                                        <option value="0" selected>All</option>--}}
-{{--                                        @foreach($operatorsData as $operatorval)--}}
-{{--                                            <option value="{{ $operatorval->name }}">{{ $operatorval->name }}</option>--}}
-{{--                                        @endforeach--}}
-{{--                                    </select>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="js-select-countries">Choose operator</label>
+                                    <select wire:model.defer="selectedOperator" class="form-control">
+                                        <option value="0" selected>All</option>
+                                        @php
+                                            $check = '';
+                                        @endphp
+                                        @foreach(auth()->user()->serviceOperations()->distinct()->get() as $operation)
+                                            <option value="{{ $operation->provider == 'reloadly' ? $operation->reloadly_operator->request_operatorId : $operation->ding_operator->request_ProviderCode }}">{{ $operation->provider == 'reloadly' ? $operation->reloadly_operator->name : $operation->ding_operator->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                             <div class="col mt-2">
                                 <button class="btn btn-success" wire:click="load" id="commitData">commit</button>
                             </div>

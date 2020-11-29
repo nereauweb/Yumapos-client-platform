@@ -75,17 +75,17 @@
                             </select>
                         </div>
                     </div>
-                    {{--                    <div class="col">--}}
-                    {{--                        <div class="form-group">--}}
-                    {{--                            <label for="js-select-countries">Choose operator</label>--}}
-                    {{--                            <select wire:model.defer="selectedOperator" class="form-control">--}}
-                    {{--                                <option value="0" selected>All</option>--}}
-                    {{--                                @foreach($operators as $operator)--}}
-                    {{--                                    <option value="{{ $operator->operatorId }}">{{ $operator->name }}</option>--}}
-                    {{--                                @endforeach--}}
-                    {{--                            </select>--}}
-                    {{--                        </div>--}}
-                    {{--                    </div>--}}
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="js-select-operators">Choose operator</label>
+                            <select wire:model.defer="selectedOperator" class="form-control">
+                                <option value="0" selected>All</option>
+                                @foreach($serviceOperators as $operator)
+                                    <option value="{{ $operator->master == 'reloadly' ? $operator->reloadly_operatorId.'-'.$operator->master : $operator->ding_ProviderCode.'-'.$operator->master }}">{{ $operator->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <div class="col-sm mt-2">
                         <button class="btn btn-success" id="commitData" wire:click="commit">Commit</button>
                     </div>
