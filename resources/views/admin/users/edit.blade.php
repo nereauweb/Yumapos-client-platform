@@ -6,32 +6,32 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-					<form class="px-3 py-4 form-inline" action="{{ route('admin.user.change-role', $user) }}" method="POST">
-						@csrf
-						<div class="form-group mx-4">
-							<select name="role" id="role" class="form-control @error('role') is-invalid @enderror">
-								<option value="user" @if(!$user->hasRole('sales')) selected @endif>Point</option>
-								<option value="sales" @if($user->hasRole('sales')) selected @endif>Agent</option>
-							</select>
-						</div>
-						<div class="form-group mx-4">
-							<select name="group_id" id="group_id" class="form-control @error('group_id') is-invalid @enderror">
-								<option selected disabled>Choose a User group</option>
-								@foreach($userGroups as $userGroup)
-									<option value="{{$userGroup->id}}" @if($userGroup->id==$user->group_id) selected @endif>{{ $userGroup->name }}</option>
-								@endforeach
-							</select>
-						</div>
-						<div class="form-group mx-4">
-							<select name="agent_group_id" id="agent_group_id" class="form-control @error('agent_group_id') is-invalid @enderror">
-								<option selected disabled>Choose an Agent group</option>
-								@foreach($agentGroups as $agentGroup)
-									<option value="{{$agentGroup->id}}" @if($agentGroup->id==$user->agent_group_id) selected @endif>{{ $agentGroup->name }}</option>
-								@endforeach
-							</select>
-						</div>
-						<button class="btn btn-behance">Update</button>
-					</form>
+{{--					<form class="px-3 py-4 form-inline" action="{{ route('admin.user.change-role', $user) }}" method="POST">--}}
+{{--						@csrf--}}
+{{--						<div class="form-group mx-4">--}}
+{{--							<select name="role" id="role" class="form-control @error('role') is-invalid @enderror">--}}
+{{--								<option value="user" @if(!$user->hasRole('sales')) selected @endif>Point</option>--}}
+{{--								<option value="sales" @if($user->hasRole('sales')) selected @endif>Agent</option>--}}
+{{--							</select>--}}
+{{--						</div>--}}
+{{--						<div class="form-group mx-4">--}}
+{{--							<select name="group_id" id="group_id" class="form-control @error('group_id') is-invalid @enderror">--}}
+{{--								<option selected disabled>Choose a User group</option>--}}
+{{--								@foreach($userGroups as $userGroup)--}}
+{{--									<option value="{{$userGroup->id}}" @if($userGroup->id==$user->group_id) selected @endif>{{ $userGroup->name }}</option>--}}
+{{--								@endforeach--}}
+{{--							</select>--}}
+{{--						</div>--}}
+{{--						<div class="form-group mx-4">--}}
+{{--							<select name="agent_group_id" id="agent_group_id" class="form-control @error('agent_group_id') is-invalid @enderror">--}}
+{{--								<option selected disabled>Choose an Agent group</option>--}}
+{{--								@foreach($agentGroups as $agentGroup)--}}
+{{--									<option value="{{$agentGroup->id}}" @if($agentGroup->id==$user->agent_group_id) selected @endif>{{ $agentGroup->name }}</option>--}}
+{{--								@endforeach--}}
+{{--							</select>--}}
+{{--						</div>--}}
+{{--						<button class="btn btn-behance">Update</button>--}}
+{{--					</form>--}}
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             {!! trans('usersmanagement.editing-user', ['name' => $user->name]) !!}
@@ -209,6 +209,59 @@
 													@endif
 												</div>
 											</div>
+
+                                            <div class="form-group has-feedback row {{ $errors->has('role') ? ' has-error ' : '' }}">
+                                                <label for="role" class="col-md-3 control-label">Client role</label>
+                                                <div class="col-md-9">
+                                                    <div class="input-group">
+                                                        <select name="role" id="role" class="form-control @error('role') is-invalid @enderror">
+                                                            <option value="user" @if(!$user->hasRole('sales')) selected @endif>Point</option>
+                                                            <option value="sales" @if($user->hasRole('sales')) selected @endif>Agent</option>
+                                                        </select>
+                                                    </div>
+                                                    @if ($errors->has('role'))
+                                                        <span class="help-block">
+															<strong>{{ $errors->first('role') }}</strong>
+														</span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="form-group has-feedback row {{ $errors->has('group_id') ? ' has-error ' : '' }}">
+                                                <label for="group_id" class="col-md-3 control-label">Client Group id</label>
+                                                <div class="col-md-9">
+                                                    <div class="input-group">
+                                                        <select name="group_id" id="group_id" class="form-control @error('group_id') is-invalid @enderror">
+                                                            <option selected disabled>Choose a User group</option>
+                                                            @foreach($userGroups as $userGroup)
+                                                                <option value="{{$userGroup->id}}" @if($userGroup->id==$user->group_id) selected @endif>{{ $userGroup->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    @if ($errors->has('group_id'))
+                                                        <span class="help-block">
+															<strong>{{ $errors->first('group_id') }}</strong>
+														</span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div id="hideIfRolePointSelected" class="form-group has-feedback row {{ $errors->has('agent_group_id') ? ' has-error ' : '' }}">
+                                                <label for="agent_group_id" class="col-md-3 control-label">Agent group id</label>
+                                                <div class="col-md-9">
+                                                    <div class="input-group">
+                                                        <select name="agent_group_id" id="agent_group_id" class="form-control @error('agent_group_id') is-invalid @enderror">
+                                                            <option selected disabled>Choose an Agent group</option>
+                                                            @foreach($agentGroups as $agentGroup)
+                                                                <option value="{{$agentGroup->id}}" @if($agentGroup->id==$user->agent_group_id) selected @endif>{{ $agentGroup->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    @if ($errors->has('agent_group_id'))
+                                                        <span class="help-block">
+															<strong>{{ $errors->first('agent_group_id') }}</strong>
+														</span>
+                                                    @endif
+                                                </div>
+                                            </div>
 											<div class="pw-change-container">
 												<div class="form-group has-feedback row {{ $errors->has('password') ? ' has-error ' : '' }}">
 
@@ -607,5 +660,11 @@
 		region = $("#legal_seat_region").val();
 		$("#operative_seat_region").val(region);
 	}
+
+    $('#role').val() == 'user' ? $('#hideIfRolePointSelected').hide() : $('#hideIfRolePointSelected').show();
+
+	$('#role').change(() => {
+	    $('#role').val() == 'user' ? $('#hideIfRolePointSelected').hide() : $('#hideIfRolePointSelected').show();
+    });
   </script>
 @endsection

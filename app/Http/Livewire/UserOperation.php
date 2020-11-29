@@ -40,7 +40,7 @@ class UserOperation extends Component
     public function render()
     {
         $this->load();
-        $operators = ServiceOperator::orderBy('name', 'asc')->get();
+        $operators = auth()->user()->serviceOperations;
         return view('livewire.user-operation', ['operations' => $this->operations, 'operatorsData' => $operators]);
     }
 

@@ -155,12 +155,12 @@
                                                         </select>
                                                     </div>
                                                     <div class="ml-3">
-                                                        <select id="operator-selected" autocomplete="off" class="form-control">
-                                                            <option value="0">All operators</option>
-                                                            @foreach(\App\Models\ApiReloadlyOperator::orderBy('name', 'asc')->distinct()->get() as $operator)
-                                                                <option value="{{$operator->operatorId}}">{{ $operator->name }}</option>
-                                                            @endforeach
-                                                        </select>
+{{--                                                        <select id="operator-selected" autocomplete="off" class="form-control">--}}
+{{--                                                            <option value="0">All operators</option>--}}
+{{--                                                            @foreach(\App\Models\ApiReloadlyOperator::orderBy('name', 'asc')->distinct()->get() as $operator)--}}
+{{--                                                                <option value="{{$operator->operatorId}}">{{ $operator->name }}</option>--}}
+{{--                                                            @endforeach--}}
+{{--                                                        </select>--}}
                                                     </div>
                                                     <div class="btn-group btn-group-toggle mx-3" data-toggle="buttons">
                                                         <label class="btn btn-outline-secondary">
@@ -386,37 +386,37 @@ $(document).ready(function(){
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-center">
-{{--                                    <div>--}}
-{{--                                        <div class="d-flex align-items-center">--}}
-{{--                                            <h4 class="card-title mb-0">Operations Report</h4>--}}
-{{--                                            @role('sales')--}}
-{{--                                            <div class="ml-3">--}}
-{{--                                                <select id="graph-selected" autocomplete="off" class="form-control">--}}
-{{--                                                    <option value="1">User Chart</option>--}}
-{{--                                                    <option value="2">Agent Chart</option>--}}
-{{--                                                </select>--}}
-{{--                                            </div>--}}
-{{--                                            @endrole--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
+                                    <div>
+                                        <div class="d-flex align-items-center">
+                                            <h4 class="card-title mb-0">Operations Report</h4>
+                                            @role('sales')
+                                            <div class="ml-3">
+                                                <select id="graph-selected" autocomplete="off" class="form-control">
+                                                    <option value="1" selected>User Chart</option>
+                                                    <option value="2">Agent Chart</option>
+                                                </select>
+                                            </div>
+                                            @endrole
+                                        </div>
+                                    </div>
                                     <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
                                         <div class="d-flex">
-{{--                                            <div>--}}
-{{--                                                <select id="country-selected" autocomplete="off" class="form-control">--}}
-{{--                                                    <option value="0">All countries</option>--}}
-{{--                                                    @foreach(\App\Models\ServiceCountry::orderBy('name', 'asc')->get() as $country)--}}
-{{--                                                        <option value="{{$country->iso}}">{{ $country->name }}</option>--}}
-{{--                                                    @endforeach--}}
-{{--                                                </select>--}}
-{{--                                            </div>--}}
-{{--                                            <div class="ml-3">--}}
+                                            <div>
+                                                <select id="country-selected" autocomplete="off" class="form-control">
+                                                    <option value="0">All countries</option>
+                                                    @foreach(\App\Models\ServiceCountry::orderBy('name', 'asc')->get() as $country)
+                                                        <option value="{{$country->iso}}">{{ $country->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="ml-3">
 {{--                                                <select id="operator-selected" autocomplete="off" class="form-control">--}}
 {{--                                                    <option value="0">All operators</option>--}}
 {{--                                                    @foreach(\App\Models\ServiceOperator::all() as $operator)--}}
 {{--                                                        <option value="{{$operator->id}}">{{ $operator->name }}</option>--}}
 {{--                                                    @endforeach--}}
 {{--                                                </select>--}}
-{{--                                            </div>--}}
+                                            </div>
                                             <input hidden value="{{ auth()->id() }}" id="identifier-custom">
                                             <div class="btn-group btn-group-toggle mx-3" data-toggle="buttons">
                                                 <label class="btn btn-outline-secondary">
@@ -425,12 +425,12 @@ $(document).ready(function(){
                                                 <label class="btn btn-outline-secondary">
                                                     <input id="option_yesterday" value="yesterday" name="filterSelected" type="radio" autocomplete="off"> Yesterday
                                                 </label>
-{{--                                                <label class="btn btn-outline-secondary">--}}
-{{--                                                    <input id="option_week" value="week" name="filterSelected" type="radio" autocomplete="off"> Week--}}
-{{--                                                </label>--}}
-{{--                                                <label class="btn btn-outline-secondary">--}}
-{{--                                                    <input id="option2month" value="month" name="filterSelected" type="radio" autocomplete="off"> Month--}}
-{{--                                                </label>--}}
+                                                <label class="btn btn-outline-secondary">
+                                                    <input id="option_week" value="week" name="filterSelected" type="radio" autocomplete="off"> Week
+                                                </label>
+                                                <label class="btn btn-outline-secondary">
+                                                    <input id="option2month" value="month" name="filterSelected" type="radio" autocomplete="off"> Month
+                                                </label>
                                             </div>
                                             <a href="{{ url('users/reports/operations') }}" class="btn btn-primary" type="button">
                                                         <i class="cil-library"></i>
