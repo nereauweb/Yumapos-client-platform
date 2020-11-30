@@ -11,27 +11,53 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="uk-padding-small">
-                            <dl class="row">
-                                <dt class="col-sm-5">Operations
-                                <dt>
-                                <dd class="col-sm-7">{{ $operationsCount }}</dd>
-                                <dt class="col-sm-5">Total User discounts
-                                <dt>
-                                <dd class="col-sm-7">{{ $operations->sum('user_discount') }} €</dd>
-                                <dt class="col-sm-5">Total Commissions
-                                <dt>
-                                <dd class="col-sm-7">{{ $operations->sum('platform_commission') }} €</dd>
-                                <dt class="col-sm-5">Total gross Plaform gains
-                                <dt>
-                                <dd class="col-sm-7">{{ $operations->sum('platform_total_gain') }} €</dd>
-                                <dt class="col-sm-5">Total net Platform gains
-                                <dt>
-                                <dd class="col-sm-7">
-                                    {{ $operations->sum('platform_total_gain') - $operations->sum('user_discount') }} €
-                                </dd>
-                            </dl>
+                        <div class="d-md-flex justify-content-between align-items-center">
+                            <div class="uk-padding-small w-100">
+                                <dl class="row">
+                                    <dt class="col-sm-5">Operations
+                                    <dt>
+                                    <dd class="col-sm-7">{{ $operationsCount }}</dd>
+                                    {{--                                <dt class="col-sm-5">Total User discounts--}}
+                                    {{--                                <dt>--}}
+                                    {{--                                <dd class="col-sm-7">{{ $operations->sum('user_discount') }} €</dd>--}}
+                                    {{--                                <dt class="col-sm-5">Total Commissions--}}
+                                    {{--                                <dt>--}}
+                                    {{--                                <dd class="col-sm-7">{{ $operations->sum('platform_commission') }} €</dd>--}}
+                                    {{--                                <dt class="col-sm-5">Total gross Plaform gains--}}
+                                    {{--                                <dt>--}}
+                                    {{--                                <dd class="col-sm-7">{{ $operations->sum('platform_total_gain') }} €</dd>--}}
+                                </dl>
+                            </div>
+                            <div class="w-100">
+                                <div class="col-sm">
+                                    <fieldset class="form-group">
+                                        <label>Search by ID</label>
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" wire:model.defer="operationId" placeholder="Search by id..">
+                                            <span class="input-group-append">
+                                            <span class="input-group-text bg-primary">
+                                                <button wire:click="searchById" style="border: none;outline: none; background: none;" class="cil-search btn-behance"></button>
+                                            </span>
+                                        </span>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
                         </div>
+{{--                        <div class="uk-padding-small">--}}
+{{--                            <dl class="row">--}}
+{{--                                <dt class="col-sm-5">Operations--}}
+{{--                                <dt>--}}
+{{--                                <dd class="col-sm-7">{{ $operationsCount }}</dd>--}}
+{{--                                <dt class="col-sm-5">Total User discounts<dt>--}}
+{{--                                <dd class="col-sm-7">{{ $operations->sum('user_discount') }} €</dd>--}}
+{{--                                <dt class="col-sm-5">Total Commissions<dt>--}}
+{{--                                <dd class="col-sm-7">{{ $operations->sum('platform_commission') }} €</dd>--}}
+{{--                                <dt class="col-sm-5">Total gross Plaform gains--}}
+{{--                                <dt>--}}
+{{--                                <dd class="col-sm-7">{{ $operations->sum('platform_total_gain') }} €</dd>--}}
+{{--                            </dl>--}}
+{{--                        </div>--}}
                         <div class="row align-items-end">
                             <div class="col-6">
                                 @include('livewire.partials.daterange')

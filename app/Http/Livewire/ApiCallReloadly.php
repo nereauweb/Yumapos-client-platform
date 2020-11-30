@@ -18,6 +18,8 @@ class ApiCallReloadly extends Component
     public $from;
     public $to;
 
+    public $operationId;
+
     public $userSelected;
 
     public $operationsCount;
@@ -34,9 +36,14 @@ class ApiCallReloadly extends Component
 
         $this->operationsCount = $operations->count();
 
+        if ($this->operationId !== 0 && !is_null($this->operationId)) {
+            $operations = $operations->where('id', $this->operationId);
+        }
+
         $operations = $operations->paginate(10);
 
         $users = \App\User::role('user')->get();
+
 
         return view('livewire.api-call-reloadly', compact('operations', 'date_begin', 'date_end', 'users'));
     }
@@ -53,4 +60,6 @@ class ApiCallReloadly extends Component
     }
 
     public function commit() {}
+
+    public function searchById() {}
 }
