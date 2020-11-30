@@ -22,7 +22,6 @@
                         <dt class="col-sm-5">Total net Platform gains</dt>
                         <dd class="col-sm-7">{{ $totalNetPlatformGains }} €</dd>
                         <dt class="col-sm-5">Volume (user amount) {{ $selectedCountry ? 'Country ISO '.$selectedCountry : 'country' }}</dt>
-                        {{--                        at final amount should be used: user_amount --}}
                         <dd class="col-sm-7">{{ $sentAmount }} €</dd>
                         <dt class="col-sm-5">Platform total gain {{ $selectedOperator ? 'Operator id '.$selectedOperator : 'operator' }}</dt>
                         <dd class="col-sm-7">{{ $platformTotalGain }} €</dd>

@@ -18,6 +18,8 @@ class ApiCallDing extends Component
     public $from;
     public $to;
 
+    public $operationId;
+
     public $userSelected;
 
     public $operationsCount;
@@ -31,6 +33,10 @@ class ApiCallDing extends Component
         })->when($this->userSelected, function($query) {
             $query->where('user_id', $this->userSelected);
         });
+
+        if ($this->operationId !== 0 && !is_null($this->operationId)) {
+            $operations = $operations->where('id', '=', $this->operationId);
+        }
 
         $this->operationsCount = $operations->count();
 
@@ -53,4 +59,6 @@ class ApiCallDing extends Component
     }
 
     public function commit() {}
+
+    public function searchById() {}
 }
