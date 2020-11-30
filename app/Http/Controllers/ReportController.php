@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\AgentOperationsExport;
 use App\Models\ApiReloadlyCall;
+use App\Models\ApiDingCall;
 use App\Models\ServiceOperation;
 use App\User;
 use Auth;
@@ -89,7 +90,7 @@ class ReportController extends Controller
     {
 		$date_begin = $request->input('date_begin') ? $request->input('date_begin') . ' 00:00:00' : date("Y-m-d") . ' 00:00:00';
 		$date_end = $request->input('date_end') ? $request->input('date_end') . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
-		$operations = DB::table('service_operations')
+		$operations = DB::table('service_operations')		
 					->join('users', 'users.id', '=', 'service_operations.user_id')
 					->join('users_company_data as companies', 'companies.user_id', '=', 'service_operations.user_id')
 					->join('api_reloadly_operators as operators', 'operators.operatorId', '=', 'service_operations.request_operatorId')
@@ -97,21 +98,23 @@ class ReportController extends Controller
 					->selectRaw('
 						service_operations.created_at,
 						companies.company_name,
+						users.id as user_id,
 						users.name as user_name,
 						companies.operative_seat_city,
 						groups.name as group_name,
 						service_operations.request_recipient_phone,
 						operators.name as operator_name,
-						(service_operations.user_old_plafond - service_operations.user_new_plafond + service_operations.user_discount) as user_amount,
+						(service_operations.user_old_plafond - service_operations.user_new_plafond + service_operations.user_discount) as user_amount,				
 						service_operations.user_discount,
 						service_operations.user_gain,
-						service_operations.user_total_gain,
-						service_operations.final_amount,
-						service_operations.sent_amount,
-						service_operations.platform_commission,
+						service_operations.user_total_gain,	
+						service_operations.final_amount,						
+						service_operations.sent_amount,						
+						service_operations.platform_commission,			
 						service_operations.platform_total_gain,
-						(service_operations.platform_total_gain - service_operations.user_discount) as platform_net_total_gain
-						')
+						(service_operations.platform_total_gain - service_operations.user_discount) as platform_net_total_gain	,	
+						service_operations.user_new_plafond
+						')									
 					->where('service_operations.created_at','>=',$date_begin)
 					->where('service_operations.created_at','<=',$date_end);
 		if($request->input('user')){
@@ -119,10 +122,10 @@ class ReportController extends Controller
 		}
 		$operations = $operations->get();
         return Excel::download(new SimpleOperationsExport($operations), 'operations.xlsx');
-
+		
 		//"Data","Nome Commerciale","Nome Utente","Città","Nome Listino","Numero Ricaricato","Operatore Mobile","Importo Ricarica Euro","Sconto utente","Sovrapprezzo applicato da utente","Guadagno totale utente","Vendita finale ricarica","Costo ricarica a Yuma","Sconto fornitore","Profitto Lordo Yuma","Profitto Netto Yuma"
 		//"Costo Netto a Yuma","Incasso da Utente","Provvigione Commerciale","Fee da Utente","Provvigione per Utente","Profitto Utente","Vendita finale ricarica"
-
+		
     }
 
     public function calls(Request $request)
@@ -131,6 +134,22 @@ class ReportController extends Controller
 		$date_end = $request->input('date_end') ? $request->input('date_end') . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
 		$operations = ApiReloadlyCall::where('created_at','>=',$date_begin)->where('created_at','<=',$date_end)->get();
         return view('admin/report/calls',compact('operations','date_begin','date_end'));
+    }
+
+    public function reloadly_calls(Request $request)
+    {
+		$date_begin = $request->input('date_begin') ? $request->input('date_begin') . ' 00:00:00' : date("Y-m-d") . ' 00:00:00';
+		$date_end = $request->input('date_end') ? $request->input('date_end') . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
+		$operations = ApiReloadlyCall::where('created_at','>=',$date_begin)->where('created_at','<=',$date_end)->get();
+        return view('admin/report/calls-reloadly',compact('operations','date_begin','date_end'));
+    }
+
+    public function ding_calls(Request $request)
+    {
+		$date_begin = $request->input('date_begin') ? $request->input('date_begin') . ' 00:00:00' : date("Y-m-d") . ' 00:00:00';
+		$date_end = $request->input('date_end') ? $request->input('date_end') . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
+		$operations = ApiDingCall::where('created_at','>=',$date_begin)->where('created_at','<=',$date_end)->get();
+        return view('admin/report/calls-ding',compact('operations','date_begin','date_end'));
     }
 
 

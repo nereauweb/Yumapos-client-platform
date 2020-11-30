@@ -51,7 +51,7 @@ class ServiceOperationController extends Controller
                 ->when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })
-                ->whereBetween('created_at', $this->week)
+                ->whereDate('created_at', '>=', date('Y-m-d H:i:s',strtotime('-7 days')))
 //            ->whereDate('created_at', '=', Carbon::now()->toDateString())
                 ->groupBy('label')
                 ->get();
@@ -118,17 +118,17 @@ class ServiceOperationController extends Controller
                 $totalsForOperations = ServiceOperation::when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })
-                ->whereBetween('created_at', $this->week)
+                ->whereDate('created_at', '>=', date('Y-m-d H:i:s',strtotime('-7 days')))
                 ->count();
                 $totalsForGain = ServiceOperation::when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })->select(DB::raw('sum(platform_total_gain - user_discount) as gainSumPerDay'))
-                ->whereBetween('created_at', $this->week)
+                ->whereDate('created_at', '>=', date('Y-m-d H:i:s',strtotime('-7 days')))
                 ->first();
                 $totalsForCost = ServiceOperation::when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());
                 })->select(DB::raw('sum(sent_amount - platform_commission) as costSumPerDay'))
-                ->whereBetween('created_at', $this->week)
+                ->whereDate('created_at', '>=', date(strtotime('-7 days')))
                 ->first();
                 $totalsForAmount = ServiceOperation::when(request()->all(), function ($query) {
                     $this->appendDefaultFilters($query, request()->all());

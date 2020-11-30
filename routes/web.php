@@ -336,6 +336,8 @@ Route::group(['middleware' => ['get.menu']], function () {
 			Route::get('/export', 'ReportController@export_operations')->name('admin.report.operations.export');
 			Route::get('/export/simple', 'ReportController@export_operations_simple')->name('admin.report.operations.export.simple');
 			Route::get('/calls', 'ReportController@calls')->name('admin.report.calls');
+			Route::get('/calls/reloadly', 'ReportController@reloadly_calls')->name('admin.report.calls.reloadly');
+			Route::get('/calls/ding', 'ReportController@ding_calls')->name('admin.report.calls.ding');
 			Route::get('/{id}/details', 'ReportController@operation_details')->name('admin.report.operation.details');
         });
 
