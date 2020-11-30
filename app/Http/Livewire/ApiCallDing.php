@@ -32,7 +32,7 @@ class ApiCallDing extends Component
             $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
         })->when($this->userSelected, function($query) {
             $query->where('user_id', $this->userSelected);
-        });
+        })->orderBy('id', 'desc');;
 
         if ($this->operationId !== 0 && !is_null($this->operationId)) {
             $operations = $operations->where('id', '=', $this->operationId);

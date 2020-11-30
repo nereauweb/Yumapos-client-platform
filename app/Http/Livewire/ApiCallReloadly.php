@@ -32,7 +32,7 @@ class ApiCallReloadly extends Component
             $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
         })->when($this->userSelected, function($query) {
             $query->where('user_id', $this->userSelected);
-        });
+        })->orderBy('id', 'desc');
 
         $this->operationsCount = $operations->count();
 
