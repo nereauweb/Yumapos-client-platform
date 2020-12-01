@@ -30,6 +30,7 @@ class AgentOperation extends Component
     public function render()
     {
         $users = User::pluck('name','id');
+        $agents = User::role('sales')->pluck('name', 'id');
 		$useridsCollection = User::role('sales')->pluck('id');
         $user_name = "All agents";
 
@@ -61,7 +62,7 @@ class AgentOperation extends Component
 
         $operations = $operations->paginate(10);
 
-        return view('livewire.agent-operation', compact('operations','date_begin','date_end','users','user_name','user_id'));
+        return view('livewire.agent-operation', compact('operations','date_begin','date_end','users','user_name','user_id', 'agents'));
     }
 
     public function commit() {}

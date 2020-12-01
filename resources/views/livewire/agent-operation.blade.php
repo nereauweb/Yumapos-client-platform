@@ -34,7 +34,7 @@
                                         <label for="exampleFormControlSelect1">Agent</label>
                                         <select wire:model.defer="agentSelected" class="form-control custom-select" name="user">
                                             <option value="0" selected>All agents</option>
-                                            @foreach ($users as $key => $agent)
+                                            @foreach ($agents as $key => $agent)
                                                 @if (!is_null($agent))
                                                     <option value="{{ $key }}">{{ $agent }}</option>
                                                 @endif
