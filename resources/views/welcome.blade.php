@@ -385,23 +385,23 @@ $(document).ready(function(){
                 @else
                         <div class="card">
                             <div class="card-body">
-                                <div class="d-flex justify-content-between align-center">
+                                <div>
                                     <div>
                                         <div class="d-flex align-items-center">
                                             <h4 class="card-title mb-0">Operations Report</h4>
+                                        </div>
+                                    </div>
+                                    <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
+                                        <div class="row">
                                             @role('sales')
-                                            <div class="ml-3">
+                                            <div class="col-6 mt-3">
                                                 <select id="graph-selected" autocomplete="off" class="form-control">
                                                     <option value="1" selected>User Chart</option>
                                                     <option value="2">Agent Chart</option>
                                                 </select>
                                             </div>
                                             @endrole
-                                        </div>
-                                    </div>
-                                    <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
-                                        <div class="d-flex">
-                                            <div>
+                                            <div class="col-6 mt-3">
                                                 <select id="country-selected" autocomplete="off" class="form-control">
                                                     <option value="0">All countries</option>
                                                     @foreach(\App\Models\ServiceCountry::orderBy('name', 'asc')->get() as $country)
@@ -409,7 +409,7 @@ $(document).ready(function(){
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="ml-3">
+                                            <div class="col-6 mt-3">
                                                 <select id="operator-selected" autocomplete="off" class="form-control">
                                                     <option value="0">All operators</option>
                                                     @foreach(\App\Models\ServiceOperator::orderBy('name', 'asc')->pluck('name','id') as $key => $operator)
@@ -417,24 +417,26 @@ $(document).ready(function(){
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <input hidden value="{{ auth()->id() }}" id="identifier-custom">
-                                            <div class="btn-group btn-group-toggle mx-3" data-toggle="buttons">
-                                                <label class="btn btn-outline-secondary">
-                                                    <input id="option1day" value="day" name="filterSelected" type="radio" autocomplete="off" checked> Day
-                                                </label>
-                                                <label class="btn btn-outline-secondary">
-                                                    <input id="option_yesterday" value="yesterday" name="filterSelected" type="radio" autocomplete="off"> Yesterday
-                                                </label>
-                                                <label class="btn btn-outline-secondary">
-                                                    <input id="option_week" value="week" name="filterSelected" type="radio" autocomplete="off"> Week
-                                                </label>
-                                                <label class="btn btn-outline-secondary">
-                                                    <input id="option2month" value="month" name="filterSelected" type="radio" autocomplete="off"> Month
-                                                </label>
+                                            <div class="col-6 mt-3">
+                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    <label class="btn btn-outline-secondary">
+                                                        <input id="option1day" value="day" name="filterSelected" type="radio" autocomplete="off" checked> Day
+                                                    </label>
+                                                    <label class="btn btn-outline-secondary">
+                                                        <input id="option_yesterday" value="yesterday" name="filterSelected" type="radio" autocomplete="off"> Yesterday
+                                                    </label>
+                                                    <label class="btn btn-outline-secondary">
+                                                        <input id="option_week" value="week" name="filterSelected" type="radio" autocomplete="off"> Week
+                                                    </label>
+                                                    <label class="btn btn-outline-secondary">
+                                                        <input id="option2month" value="month" name="filterSelected" type="radio" autocomplete="off"> Month
+                                                    </label>
+                                                </div>
+                                                <a href="{{ url('users/reports/operations') }}" class="btn btn-primary" type="button">
+                                                    <i class="cil-library"></i>
+                                                </a>
                                             </div>
-                                            <a href="{{ url('users/reports/operations') }}" class="btn btn-primary" type="button">
-                                                        <i class="cil-library"></i>
-                                            </a>
+                                            <input hidden value="{{ auth()->id() }}" id="identifier-custom">
                                         </div>
                                     </div>
                                 </div>

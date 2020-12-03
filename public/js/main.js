@@ -312,6 +312,8 @@ if (/backend/.test(window.location.href)) {
         }
 
         operator_filter.onchange = () => {
+            console.log(document.querySelector('input[name="filterSelected"]:checked').value);
+            console.log(country_filter.value, operator_filter.value);
             fetchData('/admin/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
             loadTotals('admin',document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
         }
@@ -409,7 +411,7 @@ if (/backend/.test(window.location.href)) {
                     fetchData('/user/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
                     loadTotals('user', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value, user_object);
                 }
-                //
+
                 country_filter.onchange = () => {
                     fetchData('/user/internal/services', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
                     loadTotals('user',document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value, user_object);
@@ -454,7 +456,7 @@ if (/backend/.test(window.location.href)) {
                     fetchData('/sales/reports/internal', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
                     loadAgentTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
                 }
-                //
+
                 country_filter.onchange = () => {
                     fetchData('/sales/reports/internal', document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
                     loadAgentTotals(document.querySelector('input[name="filterSelected"]:checked').value, country_filter.value, operator_filter.value);
@@ -564,7 +566,7 @@ if (/backend/.test(window.location.href)) {
 
 // loads the items below chart when initialized
     function loadTotals(path,type, country, operator, user_object) {
-        console.log(type);
+        // console.log(type);
         fetch(`/${path}/internal/services/operations/totals/${type}`, {
             method: 'POST',
             headers: {
