@@ -463,6 +463,7 @@ a.operator-choice * {
 			var final_amount_destination = 0.00;
 			var local = 0;
 			@if($operator->type()=="FIXED")
+			/*
 				$(".amounts").click(function(){
 					local = $(this).data("local");
 					if (local==1){
@@ -484,6 +485,34 @@ a.operator-choice * {
 					}
 					@endif
 				});
+			*/	
+				$(".amount-choice").click(function(e){
+					e.preventDefault();
+					$(".amount-choice").removeClass('selected');
+					$(this).addClass('selected');
+					input = $(this).find("input").first();
+					input.prop('checked',true);
+					local = input.data("local");
+					if (local==1){
+						final_amount_destination = parseFloat(input.val());
+					}
+					$("#local").val(local);
+					amount = parseFloat(input.data("amount"));
+					fxRate = parseFloat(input.data("fxrate"));
+					gain = (gain_percent/100) * amount;
+					gain = gain;
+					$("#gain").val(gain.toFixed(2));
+					final_amount = amount + gain;
+					final_amount_destination = parseFloat(input.data("local-amount"));
+					$("#final_amount").val(final_amount.toFixed(2));
+					$("#final_amount_destination").val(final_amount_destination.toFixed(2));
+					@if ($operator->provider() == "ding"){
+						var productSku = $(this).data('sku-code');
+						$("#product-sku").val(productSku);
+					}
+					@endif
+				});
+				
 				$("#gain").change(function(){
 					if( !$("#gain").val() ) {
 						$("#gain").val() = 0;
@@ -494,8 +523,7 @@ a.operator-choice * {
 					final_amount = amount + gain;
 					$("#final_amount").val(final_amount.toFixed(2))
 				});
-			@else
-				
+			@else				
 				$("#amount").change(function(){
 					amount = parseFloat($(this).val());
 					min = parseFloat($(this).data('min')) ?? 0;
@@ -556,28 +584,7 @@ a.operator-choice * {
 				});
 			</script>
 		@endif
-		<script>
-			$(".amount-choice").click(function(e){
-				e.preventDefault();
-				$(".amount-choice").removeClass('selected');
-				$(this).addClass('selected');
-				input = $(this).find("input").first();
-				input.prop('checked',true);
-				local = input.data("local");
-				if (local==1){
-					final_amount_destination = parseFloat(input.val());
-				}
-				$("#local").val(local);
-				amount = parseFloat(input.data("amount"));
-				fxRate = parseFloat(input.data("fxrate"));
-				gain = (gain_percent/100) * amount;
-				gain = gain;
-				$("#gain").val(gain.toFixed(2));
-				final_amount = amount + gain;
-				final_amount_destination = parseFloat(input.data("local-amount"));
-				$("#final_amount").val(final_amount.toFixed(2));
-				$("#final_amount_destination").val(final_amount_destination.toFixed(2));
-			});
+		<script>			
 			$(".operator-choice").click(function(e){
 				e.preventDefault();
 				/*
