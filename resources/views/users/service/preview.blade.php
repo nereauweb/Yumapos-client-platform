@@ -507,7 +507,7 @@ a.operator-choice * {
 					$("#final_amount").val(final_amount.toFixed(2));
 					$("#final_amount_destination").val(final_amount_destination.toFixed(2));
 					@if ($operator->provider() == "ding"){
-						var productSku = $(this).data('sku-code');
+						var productSku = input.data('sku-code');
 						$("#product-sku").val(productSku);
 					}
 					@endif
