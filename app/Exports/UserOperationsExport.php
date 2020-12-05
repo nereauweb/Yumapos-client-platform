@@ -26,14 +26,15 @@ class UserOperationsExport implements FromCollection, WithHeadings, WithMapping
     public function headings(): array
     {
         return [
-            "Operatore","Numero Ricaricato","Importo Ricarica", "Sovrapprezzo al cliente", "Totale Ricarica", "Sconto piattaforma", "Guadagno totale", "data"
+            "Operatore", "Paese", "Numero Ricaricato","Importo Ricarica", "Sovrapprezzo al cliente", "Totale Ricarica", "Sconto piattaforma", "Guadagno totale", "data"
         ];
     }
 
     public function map($row): array
     {
         return [
-            $row->operator->name.' ('.$row->operator->country->name.')',
+            $row->operator_name(),
+            $row->country_name(),
             $row->request_recipient_phone,
             $row->user_amount,
             $row->user_gain,

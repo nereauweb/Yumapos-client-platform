@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\UserOperationsExport;
 use App\Models\ServiceOperation;
+use App\Models\ServiceOperator;
 use Auth;
 
 use Illuminate\Http\Request;
@@ -31,7 +32,14 @@ class PointReportController extends Controller
         })->when($request->selectedCountry, function ($query) use ($request) {
             $query->where('request_country_iso', $request->selectedCountry);
         })->when($request->selectedOperator, function ($query) use ($request) {
-            $query->where('request_operatorId', $request->selectedOperator);
+            $selectedOperator = ServiceOperator::findOrFail($request->selectedOperator);
+            if (is_null($selectedOperator->reloadly_operatorId) && !is_null($selectedOperator->ding_ProviderCode)) {
+                $query->where('request_ProviderCode', $selectedOperator->ding_ProviderCode);
+            } else if (is_null($selectedOperator->ding_ProviderCode) && !is_null($selectedOperator->reloadly_operatorId)) {
+                $query->where('request_operatorId', $selectedOperator->reloadly_operatorId);
+            } else {
+                $query->where('request_operatorId', $selectedOperator->reloadly_operatorId)->orWhere('request_ProviderCode', $selectedOperator->ding_ProviderCode);
+            }
         })->get();
 
         return Excel::download(new UserOperationsExport($userOperations), 'user_operations.xlsx');
