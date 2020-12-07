@@ -36,7 +36,7 @@ class PaymentsController extends Controller
                 $query->where('payments.type', $request->typeSelected);
             })->when(!is_null($request->stateSelected), function ($query) use ($request) {
                 $query->where('payments.approved', $request->stateSelected);
-        })->select("payments.id","payments.date","payments.user_id","u.name","p.company_name","payments.amount","payments.details","payments.created_at","payments.updated_at")->get();
+        })->select("payments.id","payments.date","payments.user_id","u.name","p.company_name","payments.amount", "payments.type", "payments.details","payments.created_at","payments.updated_at")->get();
         return Excel::download(new PaymentsExport($payments), 'payments.xlsx');
     }
 
@@ -94,58 +94,6 @@ class PaymentsController extends Controller
             return back()->with(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
-//    ####old function#####
-//    public function store(Request $request)
-//    {
-//        $validator = $this->validateData($request->all());
-//
-//        if ($validator->fails()) {
-//            return back()->withErrors($validator)->withInput();
-//        }
-//
-//		$date = \DateTime::createFromFormat("d/m/Y",$request->input('date'));
-//
-//		if (!$date) {
-//            return back()->withErrors($validator)->withInput();
-//        }
-//        try {
-//            DB::beginTransaction();
-//            $payment = Payment::create([
-//                'date'		=> $date->format("Y-m-d H:i:s"),
-//                'amount'	=> $request->input('amount'),
-//                'user_id'	=> $request->input('user_id'),
-//                'details'	=> $request->input('details'),
-//                'approved'	=> 1,
-//                'type'      => 1,
-//                'update_balance' => 1
-//            ]);
-//
-//            $file = $request->file('document');
-//            if ($file) {
-//                $filename = 'payment-'.$payment->user->name.'-' . time() . '.' . $file->getClientOriginalExtension();
-//                $path = $file->storeAs('payments', $filename);
-//                $payment->documents()->create([
-//                    'label' => $payment->user->name.'-document-'.time(),
-//                    'filename' => $path
-//                ]);
-//            }
-//
-//            $payment->user()->update([
-//                'plafond' => $payment->user->plafond + $request->input('amount')
-//            ]);
-//            DB::commit();
-//            return redirect()->route('admin.payments.index')->with(['status' => 'success', 'message' => 'Payment added, user balance updated']);
-//        } catch (\Exception $e) {
-//		    DB::rollBack();
-//            return redirect()->route('admin.payments.index')->with(['status' => 'error', 'message' => $e->getMessage()]);
-//        }
-//    }
-
-    public function show($id)
-	{
-
-    }
-
     public function edit(Request $request, $id)
     {
         $payment = Payment::findOrFail($id);
@@ -426,17 +374,6 @@ class PaymentsController extends Controller
             }
         }
     }
-//    ####OLD CODE####
-//    public function payUserStore(Request $request)
-//    {
-//        if ($request->updateUserBalance) {
-//            $this->storePayment($request->all(), true);
-//            return redirect()->route('admin.payments.index')->with(['status' => 'success', 'message' => 'Payment added, user balance updated']);
-//        } else {
-//            $this->storePayment($request->all(), false);
-//            return redirect()->route('admin.payments.index')->with(['status' => 'success', 'message' => 'Payment added, user balance remains the same']);
-//        }
-//    }
 
     public function cancel(Payment $payment)
     {
@@ -510,45 +447,6 @@ class PaymentsController extends Controller
             DB::rollBack();
             return back()->with(['status' => 'error', 'message' => $e->getMessage()]);
         }
-//        ####OLD CODE#####
-//        $payment = Payment::findOrFail($payment);
-//        $amountToBeRemoved = $payment->amount;
-//        try {
-//            if ($payment->update_balance == 0 && $payment->update_credit == 0) {
-//                $payment->update([
-//                    'approved' => '-1'
-//                ]);
-//                $updatedRelation = $payment->type == 3 ? 'Provider' : 'User';
-//                return back()->with(['status' => 'success', 'message' => 'payment canceled successfully,'.$updatedRelation.' balance remains the same!']);
-//            } else if($payment->update_credit == 1) {
-//                DB::beginTransaction();
-//                $payment->update([
-//                    'approved' => '-1'
-//                ]);
-//                $payment->user()->update([
-//                    'credit' => (float)$payment->user->credit + (float)$amountToBeRemoved
-//                ]);
-//                DB::commit();
-//                return back()->with(['status' => 'success', 'message' => 'credit canceled successfully, agent credit restored']);
-//            } else {
-//                try {
-//                    DB::beginTransaction();
-//                    $payment->update([
-//                        'approved' => '-1'
-//                    ]);
-//                    $payment->user()->update([
-//                        'plafond' => (float)$payment->user->plafond - (float)$amountToBeRemoved
-//                    ]);
-//                    DB::commit();
-//                    return back()->with(['status' => 'success', 'message' => 'payment canceled successfully, user balance updated!']);
-//                } catch (QueryException $q) {
-//                    DB::rollBack();
-//                    return back()->with(['status' => 'error', 'message' => $q->getMessage()]);
-//                }
-//            }
-//        } catch (\Exception $e) {
-//            dd($e->getMessage());
-//        }
     }
 
     public function recover(Payment $payment)
@@ -667,41 +565,6 @@ class PaymentsController extends Controller
         }
     }
 
-    //  ###OLD CODE####
-//    public function recover($payment)
-//    {
-//        $payment = Payment::findOrFail($payment);
-//        if ($payment->update_balance === 0 && $payment->update_credit == 0) {
-//            $payment->update([
-//                'approved' => 1
-//            ]);
-//            $updatedRelation = $payment->type == 3 ? 'Provider' : 'User';
-//            return back()->with(['status' => 'success', 'message' => 'payment recovered, '.$updatedRelation.' balance remains the same!']);
-//        } else if ($payment->update_credit == 1) {
-//            $payment->update([
-//                'approved' => 1,
-//            ]);
-//            $payment->user()->update([
-//               'credit' => (float)$payment->user->credit - (float)$payment->amount
-//            ]);
-//            return back()->with(['status' => 'success', 'message' => 'agent credit recovered']);
-//        } else if ($payment->update_balance === 1) {
-//            try {
-//                DB::beginTransaction();
-//                $payment->update([
-//                    'approved' => 1
-//                ]);
-//                $payment->user()->update([
-//                   'plafond' => $payment->user->plafond + $payment->amount
-//                ]);
-//                DB::commit();
-//                return back()->with(['status' => 'success', 'message' => 'payment recovered, user balance updated!']);
-//            } catch (\Exception $e) {
-//                DB::rollBack();
-//            }
-//        }
-//        return back()->with(['status' => 'warning', 'message' => 'payment not found!']);
-//    }
 
     public function trashed()
     {

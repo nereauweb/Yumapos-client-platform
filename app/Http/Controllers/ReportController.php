@@ -6,6 +6,7 @@ use App\Exports\AgentOperationsExport;
 use App\Models\ApiReloadlyCall;
 use App\Models\ApiDingCall;
 use App\Models\ServiceOperation;
+use App\Models\ServiceOperator;
 use App\User;
 use Auth;
 
@@ -45,7 +46,7 @@ class ReportController extends Controller
 		$operations = ServiceOperation::all();
         return view('admin/report/operations',compact('operations','date_begin','date_end','users','user_name','user_id'));
 	}
-	
+
 	public function operation_details(Request $request, $id)
     {
 		$operation = ServiceOperation::find($id);
@@ -81,7 +82,21 @@ class ReportController extends Controller
     {
 		$date_begin = $request->input('date_begin') ? $request->input('date_begin') . ' 00:00:00' : date("Y-m-d") . ' 00:00:00';
 		$date_end = $request->input('date_end') ? $request->input('date_end') . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
-		$operations = ServiceOperation::select("id","user_id","api_reloadly_calls_id","api_reloadly_operations_id","reloadly_transactionId","result","request_operatorId","request_amount","request_local","request_country_iso","request_recipient_phone","original_expected_destination_amount","final_expected_destination_amount","sent_amount","user_amount","user_gain","final_amount","user_discount","platform_commission","user_old_plafond","user_new_plafond","user_total_gain","platform_total_gain","created_at")->where('created_at','>=',$date_begin)->where('created_at','<=',$date_end)->get();
+		$operations = ServiceOperation::select("id","user_id","api_reloadly_calls_id","api_reloadly_operations_id","reloadly_transactionId","result","request_operatorId","request_amount","request_local","request_country_iso","request_recipient_phone","original_expected_destination_amount","final_expected_destination_amount","sent_amount","user_amount","user_gain","final_amount","user_discount","platform_commission","user_old_plafond","user_new_plafond","user_total_gain","platform_total_gain","created_at")
+            ->where('created_at','>=',$date_begin)
+            ->where('created_at','<=',$date_end)
+            ->when($request->input('operatorId'), function($query) use ($request) {
+                $selectedOperator = ServiceOperator::findOrFail($request->operatorId);
+                if (is_null($selectedOperator->reloadly_operatorId) && !is_null($selectedOperator->ding_ProviderCode)) {
+                    $query->where('service_operations.request_ProviderCode', $selectedOperator->ding_ProviderCode);
+                } else if (is_null($selectedOperator->ding_ProviderCode) && !is_null($selectedOperator->reloadly_operatorId)) {
+                    $query->where('service_operations.request_operatorId', $selectedOperator->reloadly_operatorId);
+                } else {
+                    $query->where('service_operations.request_operatorId', $selectedOperator->reloadly_operatorId)->orWhere('service_operations.request_ProviderCode', $selectedOperator->ding_ProviderCode);
+                }
+            })->when($request->isoName, function ($query) use ($request) {
+                $query->where('service_operations.request_country_iso', $request->isoName);
+            })->get();
         return Excel::download(new OperationsExport($operations), 'operations.xlsx');
     }
 
@@ -90,7 +105,7 @@ class ReportController extends Controller
     {
 		$date_begin = $request->input('date_begin') ? $request->input('date_begin') . ' 00:00:00' : date("Y-m-d") . ' 00:00:00';
 		$date_end = $request->input('date_end') ? $request->input('date_end') . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
-		$operations = DB::table('service_operations')		
+		$operations = DB::table('service_operations')
 					->join('users', 'users.id', '=', 'service_operations.user_id')
 					->join('users_company_data as companies', 'companies.user_id', '=', 'service_operations.user_id')
 					->join('api_reloadly_operators as operators', 'operators.operatorId', '=', 'service_operations.request_operatorId')
@@ -104,28 +119,38 @@ class ReportController extends Controller
 						groups.name as group_name,
 						service_operations.request_recipient_phone,
 						operators.name as operator_name,
-						(service_operations.user_old_plafond - service_operations.user_new_plafond + service_operations.user_discount) as user_amount,				
+						(service_operations.user_old_plafond - service_operations.user_new_plafond + service_operations.user_discount) as user_amount,
 						service_operations.user_discount,
 						service_operations.user_gain,
-						service_operations.user_total_gain,	
-						service_operations.final_amount,						
-						service_operations.sent_amount,						
-						service_operations.platform_commission,			
+						service_operations.user_total_gain,
+						service_operations.final_amount,
+						service_operations.sent_amount,
+						service_operations.platform_commission,
 						service_operations.platform_total_gain,
-						(service_operations.platform_total_gain - service_operations.user_discount) as platform_net_total_gain	,	
+						(service_operations.platform_total_gain - service_operations.user_discount) as platform_net_total_gain	,
 						service_operations.user_new_plafond
-						')									
+						')
 					->where('service_operations.created_at','>=',$date_begin)
-					->where('service_operations.created_at','<=',$date_end);
+					->where('service_operations.created_at','<=',$date_end)
+		            ->when($request->input('operatorId'), function($query) use ($request) {
+                        $selectedOperator = ServiceOperator::findOrFail($request->operatorId);
+                        if (is_null($selectedOperator->reloadly_operatorId) && !is_null($selectedOperator->ding_ProviderCode)) {
+                            $query->where('service_operations.request_ProviderCode', $selectedOperator->ding_ProviderCode);
+                        } else if (is_null($selectedOperator->ding_ProviderCode) && !is_null($selectedOperator->reloadly_operatorId)) {
+                            $query->where('service_operations.request_operatorId', $selectedOperator->reloadly_operatorId);
+                        } else {
+                            $query->where('service_operations.request_operatorId', $selectedOperator->reloadly_operatorId)->orWhere('service_operations.request_ProviderCode', $selectedOperator->ding_ProviderCode);
+                        }
+                    });
 		if($request->input('user')){
 			$operations->where('service_operations.user_id',$request->input('user'));
 		}
 		$operations = $operations->get();
         return Excel::download(new SimpleOperationsExport($operations), 'operations.xlsx');
-		
+
 		//"Data","Nome Commerciale","Nome Utente","Città","Nome Listino","Numero Ricaricato","Operatore Mobile","Importo Ricarica Euro","Sconto utente","Sovrapprezzo applicato da utente","Guadagno totale utente","Vendita finale ricarica","Costo ricarica a Yuma","Sconto fornitore","Profitto Lordo Yuma","Profitto Netto Yuma"
 		//"Costo Netto a Yuma","Incasso da Utente","Provvigione Commerciale","Fee da Utente","Provvigione per Utente","Profitto Utente","Vendita finale ricarica"
-		
+
     }
 
     public function calls(Request $request)

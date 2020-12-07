@@ -26,6 +26,14 @@
 							<a href="{{ auth()->user()->hasRole('admin') ? route('admin.report.operations') : url('users/reports/operations')  }}" class="btn btn-primary" type="button">
 								<i class="cil-library"></i>
 							</a>
+                            @if(auth()->user()->hasRole('admin'))
+                            <div class="ml-2">
+                                <div class="d-flex">
+                                    <input class="form-control" wire:model.defer="userEmail" type="text" placeholder="search user by email">
+                                    <button class="btn btn-primary" wire:click="searchByEmail">Search</button>
+                                </div>
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
