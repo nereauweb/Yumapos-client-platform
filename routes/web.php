@@ -188,6 +188,9 @@ Route::group(['middleware' => ['get.menu']], function () {
 
     Route::group(['middleware' => ['role:admin']], function () {
 
+        Route::get('/admin/account', 'AdminController@index');
+        Route::put('/admin/account/{admin}', 'AdminController@update')->name('admin.updatePassword');
+
         Route::post('/admin/users/change-role/{user}', 'UsersController@changeRole')->name('admin.user.change-role');
 
         Route::put('admin/agent/user/approve', 'AgentController@approve')->name('admin.agent.user.approve');
