@@ -114,6 +114,18 @@ class PointServiceController extends Controller
 	
 	public function user_recharge_request(Request $request){
 		
+		if(!$request->input('final_amount')){
+			$response['result'] = -1;
+			$response['message'] = 'Request incomplete. Please reload page and repeat request.';
+			return view('users/service/result', ['response' => $response]);
+		}
+		
+		if(\Auth::user()->plafond - ($request->input('final_amount')-$request->input('gain')) < \Auth::user()->debt_limit){
+			$response['result'] = -1;
+			$response['message'] = 'Insufficient balance, please add credit to your balance to finalize operation or contact administration.';
+			return view('users/service/result', ['response' => $response]);
+		}
+		
 		$service_operator = ServiceOperator::findOrFail($request->input('operator_id'));
 		
 		if($service_operator->master == 'reloadly'){				
