@@ -54,40 +54,6 @@ class PaymentFileController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\PaymentFile  $paymentFile
-     * @return \Illuminate\Http\Response
-     */
-    public function show(PaymentFile $paymentFile)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\PaymentFile  $paymentFile
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(PaymentFile $paymentFile)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\PaymentFile  $paymentFile
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, PaymentFile $paymentFile)
-    {
-        //
-    }
-
 
     public function destroy($paymentFile)
     {

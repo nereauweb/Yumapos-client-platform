@@ -53,7 +53,7 @@ class Menus implements MenuInterface{
             $this->mb->addLink('Loading Buttons',   '/buttons/loading-buttons');
         $this->mb->endDropdown();
         $this->mb->addLink('Charts', '/charts', 'cui-chart-pie');
-        $this->mb->beginDropdown('Editors', 'cui-code');  
+        $this->mb->beginDropdown('Editors', 'cui-code');
             $this->mb->addLink('Code Editor',           '/editors/code-editor');
             $this->mb->addLink('Markdown',              '/editors/markdown-editor');
             $this->mb->addLink('Rich Text Editor',      '/editors/text-editor');
@@ -61,7 +61,7 @@ class Menus implements MenuInterface{
         $this->mb->beginDropdown('Forms', 'cui-notes');
             $this->mb->addLink('Basic Forms',           '/forms/basic-forms');
             $this->mb->addLink('Advanced',              '/forms/advanced-forms');
-            $this->mb->addLink('Validation',      '/forms/validation');        
+            $this->mb->addLink('Validation',      '/forms/validation');
         $this->mb->endDropdown();
         $this->mb->addLink('Google Maps', '/google-maps', 'cui-map');
         $this->mb->beginDropdown('Icons', 'cui-star');
@@ -106,9 +106,6 @@ class Menus implements MenuInterface{
     }
 
     public function get($roles, $locale){
-
-        //var_dump($roles);
-        //die();
 
         $roles = explode(',', $roles);
         if(empty($roles)){

@@ -57,7 +57,7 @@ class UsersGroupsController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-		
+
 		if ($request->type == 1) {
 			$group = UsersGroup::create([
 				'type'             	=> $request->type,
@@ -112,10 +112,10 @@ class UsersGroupsController extends Controller
         );
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-        }		
+        }
         $group->name 		= $request->input('name');
-        $group->description = $request->input('description') ? $request->input('description') : "";		
-		if ($group->type==1){			
+        $group->description = $request->input('description') ? $request->input('description') : "";
+		if ($group->type==1){
 			$group->discount	= $request->input('discount');
 		} else {
 			foreach ($request->configurations as $target_group_id => $cat_configuration){
@@ -132,10 +132,10 @@ class UsersGroupsController extends Controller
 					}
 				}
 			}
-		}	
+		}
 		$group->save();
 		if($request->input('users')){
-			if ($group->type==1){	
+			if ($group->type==1){
 				foreach($request->input('users') as $user_id){
 					$user = User::find($user_id);
 					if ($user->group_id != $group->id){
@@ -178,16 +178,6 @@ class UsersGroupsController extends Controller
 
     public function list()
     {
-	/*
-		$paginationEnabled = true;
-		$paginationListSize = 15;
-        if ($paginationEnabled) {
-            $providers = $providers = DB::table('providers')->paginate($paginationListSize);
-        } else {
-
-            $providers = DB::table('providers')->get();
-        }
-	*/
 		$groups = UsersGroup::all();
         return view('admin/users/groups-list', compact('groups'));
     }
@@ -200,11 +190,11 @@ class UsersGroupsController extends Controller
     {
 		return view('admin/users/group-create');
 	}
-	
+
 	public function create_agent()
     {
 		$target_groups = UsersGroup::where('type',1)->get();
-		$categories = ServiceCategory::all();		
+		$categories = ServiceCategory::all();
 		return view('admin/users/group-create-agent',compact('target_groups','categories'));
 	}
 
@@ -220,13 +210,13 @@ class UsersGroupsController extends Controller
     {
         $group = UsersGroup::findOrFail($id);
 		if ($group->type == 1) {
-			$users = User::role('user')->get();			
+			$users = User::role('user')->get();
 			return view('admin/users/group-edit',compact('group','users'));
 		}
 		if ($group->type == 2) {
-			$users = User::role('sales')->get();	
+			$users = User::role('sales')->get();
 			$target_groups = UsersGroup::where('type',1)->get();
-			$categories = ServiceCategory::all();		
+			$categories = ServiceCategory::all();
 			return view('admin/users/group-edit-agent',compact('group','users','target_groups','categories'));
 		}
     }

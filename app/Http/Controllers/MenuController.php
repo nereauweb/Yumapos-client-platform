@@ -59,13 +59,6 @@ class MenuController extends Controller
         return redirect()->route('menu.menu.edit', ['id'=>$request->input('id')]);
     }
 
-    /*
-    public function show(Request $request){
-        return view('dashboard.editmenu.menu.show',[
-            'menulist'  => Menulist::where('id', '=', $request->input('id'))->first()
-        ]);
-    }
-    */
 
     public function delete(Request $request){
         $menus = Menus::where('menu_id', '=', $request->input('id'))->first();

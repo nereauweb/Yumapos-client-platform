@@ -36,10 +36,6 @@ class PointPaymentsController extends Controller
             $query->where('approved', '=', $request->state);
         })->select('id', 'date', 'amount', 'type', 'details', 'approved', 'created_at', 'updated_at')->get();
 
-//		$payments = Payment::select("payments.id","payments.date","payments.user_id","users.name","payments.amount","payments.details","payments.created_at","payments.updated_at")
-//			->join('users', 'users.id', '=', 'payments.user_id')
-//			->where('users.id',\Auth::user()->id)
-//			->get();
         return Excel::download(new PaymentsExport($payments, 'user'), 'payments.xlsx');
     }
 
@@ -99,25 +95,5 @@ class PointPaymentsController extends Controller
 		    DB::rollBack();
             return redirect()->route('users.payments.index')->with(['status' => 'error', 'message' => $q->getMessage()]);
         }
-    }
-
-    public function show($id)
-	{
-
-    }
-
-    public function edit($id)
-    {
-
-    }
-
-    public function update(Request $request,$id)
-    {
-
-    }
-
-    public function destroy($id, Request $request)
-    {
-
     }
 }

@@ -45,33 +45,14 @@ class GetSidebarMenu implements MenuInterface{
         $this->getMenuFromDB($menuId, $role, $locale);
         $rfd = new RenderFromDatabaseData;
         return $rfd->render($this->menu);
-        /*
-        $roles = explode(',', $roles);
-        if(empty($roles)){
-            $this->getGuestMenu($locale, $menuId);
-        }elseif(in_array('admin', $roles)){
-            $this->getAdminMenu($locale, $menuId);
-        }elseif(in_array('user', $roles)){
-            $this->getUserMenu($locale, $menuId);
-        }else{
-            $this->getGuestMenu($locale, $menuId);
-        }
-        $rfd = new RenderFromDatabaseData;
-        return $rfd->render($this->menu);
-        */
     }
 
     public function getAll( $locale, $menuId=2 ){
-        /*
-        $this->menu = Menus::select('menus.*')
-            ->where('menus.menu_id', '=', 1)
-            ->orderBy('menus.sequence', 'asc')->get();
-        */
         $this->menu = Menus::join('menus_lang', 'menus.id', '=', 'menus_lang.menus_id')
             ->select('menus.*', 'menus_lang.name as name')
             ->where('menus.menu_id', '=',  $menuId)
             ->where('menus_lang.lang', '=', $locale)
-            ->orderBy('menus.sequence', 'asc')->get();   
+            ->orderBy('menus.sequence', 'asc')->get();
         $rfd = new RenderFromDatabaseData;
         return $rfd->render($this->menu);
     }

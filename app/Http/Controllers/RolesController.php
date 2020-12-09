@@ -12,15 +12,6 @@ use App\Models\RoleHierarchy;
 class RolesController extends Controller
 {
 
-    /*
-    public function index()
-    {
-        return view('dashboard.roles.index', array(
-            'roles'      => Role::all(),
-            'hierarchy'  => RoleHierarchy::all()
-        ));
-    }
-    */
     public function index()
     {
         $roles = DB::table('roles')
