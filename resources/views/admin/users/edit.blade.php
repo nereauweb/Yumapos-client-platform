@@ -151,6 +151,25 @@
 												</div>
 											</div>
 
+											<div class="form-group has-feedback row {{ $errors->has('credit') ? ' has-error ' : '' }}">
+												{!! Form::label('credit', 'Credit', array('class' => 'col-md-3 control-label')); !!}
+												<div class="col-md-9">
+													<div class="input-group">
+														{!! Form::number('credit', $user->credit, array('id' => 'credit', 'class' => 'form-control', 'placeholder' => 'Credit', 'min' => '0', 'step' => '0.001')) !!}
+														<div class="input-group-append">
+															<label for="credit" class="input-group-text">
+																€
+															</label>
+														</div>
+													</div>
+													@if ($errors->has('credit'))
+														<span class="help-block">
+															<strong>{{ $errors->first('credit') }}</strong>
+														</span>
+													@endif
+												</div>
+											</div>
+
 											@endif
 <?php /*
 											<div class="form-group has-feedback row {{ $errors->has('first_name') ? ' has-error ' : '' }}">

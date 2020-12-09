@@ -184,11 +184,18 @@ class ApiReloadlyController extends Controller
 		try{
 			$call = $this->get_call('/accounts/balance');
 			if (isset($call['data']['balance'])){
+				
+				$reloadly_balance_cache = Cache::get('reloadly_cache_balance');
+				$reloadly_balance_cache[date('w')] = $call['data']['balance'];
+				Cache::forever('reloadly_cache_balance', $reloadly_balance_cache);	
+
+/*				
 				if (Cache::has('reloadly_cache_balance_'.date('w'))[date('w')]) {
 					Cache::forget('reloadly_cache_balance_'.date('w')[date('w')]);
 				}
                 Cache::forever('reloadly_cache_balance_'.date('w'), [date('w') => $call['data']['balance']]);
 //				Cache::forever('reloadly_cache_balance_'.date('w'), $call['data']['balance']);
+*/
 				return response()->json($call['data']['balance'], 200);
 			}
 			return 'error';
@@ -406,6 +413,11 @@ class ApiReloadlyController extends Controller
 				unset($data['balanceInfo']);
 			}
 			$reloadlyOperation = ApiReloadlyOperation::create($data);
+			
+			$reloadly_balance_cache = Cache::get('reloadly_cache_balance');
+			$reloadly_balance_cache[date('w')] = $reloadlyOperation->balance_newBalance;
+			Cache::forever('reloadly_cache_balance', $reloadly_balance_cache);			
+			
 			$response['api_reloadly_operations_id'] = $reloadlyOperation->id;
 			$response['reloadly_transactionId'] = $reloadlyOperation->transactionId;
 
@@ -445,6 +457,8 @@ class ApiReloadlyController extends Controller
 						$operation->agent_commission = $agent_amount;
 						$operation->platform_total_gain = $response['platform_total_gain'] - $agent_amount;
 						$operation->save();
+						$agent->credit += $agent->amount();
+						$agent->save();
 					}
 				}
 			}
@@ -616,6 +630,7 @@ class ApiReloadlyController extends Controller
 
 	public function graph_data()
     {
+		/*
         if (Cache::has('reloadly_cache_balance_'.date('w'))) {
             $key = Cache::get('reloadly_cache_balance_'.date('w'));
             $key[date('w')] = "1540";;
@@ -629,17 +644,40 @@ class ApiReloadlyController extends Controller
         } else {
             Cache::forever('reloadly_cache_balance_'.date('w'), [date('w') => '1540']);
         }
-
-        $key = Cache::get('reloadly_cache_balance_'.date('w'));
+		*/
+		
+        $reloadly_balance_cache = Cache::get('reloadly_cache_balance');
+		
+		if (!isset($reloadly_balance_cache[date('w')])) {
+			$reloadly_balance_cache[date('w')] = 0;
+		}
+		if (!isset($reloadly_balance_cache[date('w',strtotime("-1 day"))])) {
+			$reloadly_balance_cache[date('w',strtotime("-1 day"))] = 0;
+		}
+		if (!isset($reloadly_balance_cache[date('w',strtotime("-2 day"))])) {
+			$reloadly_balance_cache[date('w',strtotime("-2 day"))] = 0;
+		}
+		if (!isset($reloadly_balance_cache[date('w',strtotime("-3 day"))])) {
+			$reloadly_balance_cache[date('w',strtotime("-3 day"))] = 0;
+		}
+		if (!isset($reloadly_balance_cache[date('w',strtotime("-4 day"))])) {
+			$reloadly_balance_cache[date('w',strtotime("-4 day"))] = 0;
+		}
+		if (!isset($reloadly_balance_cache[date('w',strtotime("-5 day"))])) {
+			$reloadly_balance_cache[date('w',strtotime("-5 day"))] = 0;
+		}		
+		if (!isset($reloadly_balance_cache[date('w',strtotime("-6 day"))])) {
+			$reloadly_balance_cache[date('w',strtotime("-6 day"))] = 0;
+		}
 
         $return = [
-            'Today' => $key[date('w')],
-            'Yesterday' => $key[date('w',strtotime("-1 day"))],
-            'Two days ago' => $key[date('w',strtotime("-2 days"))],
-            'Three days ago' => $key[date('w',strtotime("-3 days"))],
-            'Four days ago' => $key[date('w',strtotime("-4 days"))],
-            'Five days ago' => $key[date('w',strtotime("-5 days"))],
-            'Six days ago' => $key[date('w',strtotime("-6 days"))]
+            'Today' => $reloadly_balance_cache[date('w')],
+            'Yesterday' => $reloadly_balance_cache[date('w',strtotime("-1 day"))],
+            'Two days ago' => $reloadly_balance_cache[date('w',strtotime("-2 days"))],
+            'Three days ago' => $reloadly_balance_cache[date('w',strtotime("-3 days"))],
+            'Four days ago' => $reloadly_balance_cache[date('w',strtotime("-4 days"))],
+            'Five days ago' => $reloadly_balance_cache[date('w',strtotime("-5 days"))],
+            'Six days ago' => $reloadly_balance_cache[date('w',strtotime("-6 days"))]
         ];
 
         return response()->json(['graph_data' => $return], 200);

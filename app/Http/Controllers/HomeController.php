@@ -8,6 +8,8 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Cache;
+
 class HomeController extends Controller
 {
 
@@ -38,6 +40,15 @@ class HomeController extends Controller
     }
 	
 	public function admin(){
+		
+		/* manual ad hoc run to adjust agent credit (only good before any payment has been made)
+		$sales = User::role('sales')->get();
+		foreach ($sales as $agent){
+			$agent->credit = DB::table('agent_operations')->where('user_id',$agent->id)->sum('commission');
+			$agent->save();
+		}
+		*/
+		
 		$paymentsCount = Payment::where('approved', 0)->count();
 		$paymentsPending = Payment::where('approved', 0)->limit(3)->orderBy('created_at', 'desc')->get();
 
@@ -55,7 +66,11 @@ class HomeController extends Controller
 		];
 
 		$users = User::orderBy('state', 'asc')->paginate(10, ['*'], 'users');
-		return view('welcome', compact( 'paymentsData', 'usersData'));
+		
+		$reloadly_balance_cache = Cache::get('reloadly_cache_balance');
+		$ding_balance_cache = Cache::get('ding_cache_balance');
+		
+		return view('welcome', compact( 'paymentsData', 'usersData', 'reloadly_balance_cache', 'ding_balance_cache'));
 	}
 	
 	public function user(){

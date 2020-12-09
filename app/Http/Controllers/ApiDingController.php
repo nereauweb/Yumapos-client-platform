@@ -419,10 +419,18 @@ class ApiDingController extends Controller
         try{
 			$result = $this->ding->getBalance();
 			if (isset($result['balance'])){
+				
+				/*
 				if (Cache::has('ding_cache_balance_'.date('w'))) {
 					Cache::forget('ding_cache_balance_'.date('w'));
 				}
 				Cache::forever('ding_cache_balance_'.date('w'), $result['balance']);
+				*/
+				
+				$ding_balance_cache = Cache::get('ding_cache_balance');
+				$ding_balance_cache[date('w')] = $result['balance'];
+				Cache::forever('ding_cache_balance', $ding_balance_cache);
+				
 				return response()->json($result['balance'], 200);
 			}
 			return 'error';
@@ -735,6 +743,8 @@ class ApiDingController extends Controller
 					$operation->agent_commission = $agent_amount;
 					$operation->platform_total_gain = $response['platform_total_gain'] - $agent_amount;
 					$operation->save();
+					$agent->credit += $agent->amount();
+					$agent->save();
 				}
 			}
 		}
@@ -744,6 +754,7 @@ class ApiDingController extends Controller
 
     public function graph_data()
     {
+		/*
         if (Cache::has('ding_cache_balance_'.date('w'))) {
             $key = Cache::get('ding_cache_balance_'.date('w'));
             $key[date('w')] = "1200";;
@@ -757,17 +768,40 @@ class ApiDingController extends Controller
         } else {
             Cache::forever('ding_cache_balance_'.date('w'), [date('w') => '1300']);
         }
+		*/
 
-        $key = Cache::get('ding_cache_balance_'.date('w'));
-
+        $ding_balance_cache = Cache::get('ding_cache_balance');
+		
+		if (!isset($ding_balance_cache[date('w')])) {
+			$ding_balance_cache[date('w')] = 0;
+		}
+		if (!isset($ding_balance_cache[date('w',strtotime("-1 day"))])) {
+			$ding_balance_cache[date('w',strtotime("-1 day"))] = 0;
+		}
+		if (!isset($ding_balance_cache[date('w',strtotime("-2 day"))])) {
+			$ding_balance_cache[date('w',strtotime("-2 day"))] = 0;
+		}
+		if (!isset($ding_balance_cache[date('w',strtotime("-3 day"))])) {
+			$ding_balance_cache[date('w',strtotime("-3 day"))] = 0;
+		}
+		if (!isset($ding_balance_cache[date('w',strtotime("-4 day"))])) {
+			$ding_balance_cache[date('w',strtotime("-4 day"))] = 0;
+		}
+		if (!isset($ding_balance_cache[date('w',strtotime("-5 day"))])) {
+			$ding_balance_cache[date('w',strtotime("-5 day"))] = 0;
+		}		
+		if (!isset($ding_balance_cache[date('w',strtotime("-6 day"))])) {
+			$ding_balance_cache[date('w',strtotime("-6 day"))] = 0;
+		}
+		
         $return = [
-            'Six days ago' => $key[date('w',strtotime("-6 days"))],
-            'Five days ago' => $key[date('w',strtotime("-5 days"))],
-            'Four days ago' => $key[date('w',strtotime("-4 days"))],
-            'Three days ago' => $key[date('w',strtotime("-3 days"))],
-            'Two days ago' => $key[date('w',strtotime("-2 days"))],
-            'Yesterday' => $key[date('w',strtotime("-1 day"))],
-            'Today' => $key[date('w')],
+            'Six days ago' => $ding_balance_cache[date('w',strtotime("-6 days"))],
+            'Five days ago' => $ding_balance_cache[date('w',strtotime("-5 days"))],
+            'Four days ago' => $ding_balance_cache[date('w',strtotime("-4 days"))],
+            'Three days ago' => $ding_balance_cache[date('w',strtotime("-3 days"))],
+            'Two days ago' => $ding_balance_cache[date('w',strtotime("-2 days"))],
+            'Yesterday' => $ding_balance_cache[date('w',strtotime("-1 day"))],
+            'Today' => $ding_balance_cache[date('w')],
         ];
 
         return response()->json(['graph_data' => $return], 200);

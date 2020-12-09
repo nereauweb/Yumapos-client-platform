@@ -111,6 +111,14 @@
                         <i class="cil-arrow-top"></i>
                     @endif
                 </th>
+                <th wire:click="sortBy('credit')">
+                    <span>Balance (€)</span>
+                    @if($sortAsc && $sortField == 'credit')
+                        <i class="cil-arrow-bottom"></i>
+                    @else
+                        <i class="cil-arrow-top"></i>
+                    @endif
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -151,6 +159,7 @@
                     <td>{{ $user->email }}</td>
                     <td>{{ implode(',', $user->getRoleNames()->toArray()) }}</td>
                     <td>{{ $user->plafond }}</td>
+                    <td>{{ $user->credit }}</td>
                 </tr>
             @endforeach
         </tbody>
