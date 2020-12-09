@@ -39,18 +39,37 @@ class ApiDingController extends Controller
 
 	private $ding = null;
 
+	private static $dingStatic = null;
+
     public function __construct()
     {
         $this->middleware('auth');
         $this->middleware('role:admin|user|sales');
 
         $this->ding = new \App\Http\Ding\Api\V1Api();
+        self::$dingStatic = $this->ding;
     }
 
 	public function index(Request $request)
 	{
 		return view('admin/api/ding/command-list');
 	}
+
+    public static function get_cache_balance_static(){
+        try{
+            $result = self::$dingStatic->getBalance();
+            if (isset($result['balance'])){
+                $ding_balance_cache = Cache::get('ding_cache_balance');
+                $ding_balance_cache[date('w')] = $result['balance'];
+                Cache::forever('ding_cache_balance', $ding_balance_cache);
+                return response()->json($result['balance'], 200);
+            }
+            return 'error';
+        } catch (Exception $ex){
+            $result = $ex->getMessage();
+            return 'error';
+        }
+    }
 
 	public function ErrorCodeDescriptions(Request $request)
 	{
@@ -366,18 +385,6 @@ class ApiDingController extends Controller
 					}
 				}
 				$result.= "<li> $product_data[sku_code]  $product_data[default_display_text] Provider $product_data[provider_code]";
-				/*
-				$product_description_data = $this->ding->GetProductDescriptions(['en'],$product_data['sku_code']);
-				if ($product_description_data){
-					$product->DisplayText 			= $product_description_data->getItems()[0]['display_text'];
-					$product->DescriptionMarkdown 	= $product_description_data->getItems()[0]['description_markdown'];
-					$product->ReadMoreMarkdown 		= $product_description_data->getItems()[0]['read_more_markdown'];
-					$product->description_localization_key = $product_description_data->getItems()[0]['localization_key'];
-					$product->description_language_code =  $product_description_data->getItems()[0]['language_code'];
-					$product->save();
-					$result.= "<br> + description saved ".$product_description_data->getItems()[0]['display_text'];
-				}
-				*/
 				$result.= "</li>";
 			}
 			$result.= "</ol><br>Total: " . $index;
@@ -419,18 +426,10 @@ class ApiDingController extends Controller
         try{
 			$result = $this->ding->getBalance();
 			if (isset($result['balance'])){
-				
-				/*
-				if (Cache::has('ding_cache_balance_'.date('w'))) {
-					Cache::forget('ding_cache_balance_'.date('w'));
-				}
-				Cache::forever('ding_cache_balance_'.date('w'), $result['balance']);
-				*/
-				
 				$ding_balance_cache = Cache::get('ding_cache_balance');
 				$ding_balance_cache[date('w')] = $result['balance'];
 				Cache::forever('ding_cache_balance', $ding_balance_cache);
-				
+
 				return response()->json($result['balance'], 200);
 			}
 			return 'error';
@@ -596,10 +595,10 @@ class ApiDingController extends Controller
 				'AccountNumber' => ".str_replace('+','',$request_recipient_phone).",
 				'DistributorRef' => $internalRef,
 				'ValidateOnly' => ". $this->test ? 'true' : 'false'
-		]);		
-		
+		]);
+
 		$response['api_ding_call_id'] = $call->id;
-			
+
 		try{
 			$data = $this->ding->SendTransfer([
 				'SkuCode' => $request_product_sku,
@@ -623,7 +622,7 @@ class ApiDingController extends Controller
 				'AccountNumber' => $request_recipient_phone,
 				'DistributorRef' => Auth::user()->id .'.'. time(),
 				'ValidateOnly' => $this->test ? 'true' : 'false',
-				];		
+				];
 			$call->raw_answer = $ex->getResponseBody();
 			$call->save();
 			$data['response'] = $ex->getResponseBody();
@@ -642,47 +641,23 @@ class ApiDingController extends Controller
 			$data['response'] = $ex->getMessage();
 			return view('users/service/result', ['log' => $this->log, 'data' => $data, 'response' => -1, 'operator' => $operator] );
 		}
-		/*
 
-		if($request_local==1){
-			$data = $this->post_call('/topups', [
-				'operatorId' => $request_operator_id,
-				'amount' => $request_amount,
-				'useLocalAmount' => 'true',
-				'recipientPhone' => "{
-					\"countryCode\": \"".$request_country_iso."\",
-					\"number\": \"".$request_recipient_phone."\"
-				  }"
-			], true);
-		} else {
-			$data = $this->post_call('/topups', [
-				'operatorId' => $request_operator_id,
-				'amount' => $sent_amount,
-				'recipientPhone' => "{
-					\"countryCode\": \"".$request_country_iso."\",
-					\"number\": \"".$request_recipient_phone."\"
-				  }"
-			], true);
-		}
-		$response['api_reloadly_calls_id'] = $this->call_id;
-
-		*/
 
 		if ($data->getResultCode()==1){
 			$record = $data->getTransferRecord()->getData();
 			$data_builder['transfer_record'] = $record;
 			$data_builder['price'] = $record['price']->getData();
 			$data_builder['transfer_id'] = $record['transfer_id']->getData();
-			$data = $data_builder;			
+			$data = $data_builder;
 			$call->raw_answer = json_encode($data_builder);
 			$call->save();
-		} else {		
+		} else {
 			$call->raw_answer = json_encode($data);
 			$call->save();
 			return view('users/service/result', ['log' => $this->log, 'data' => $data, 'response' => -1, 'operator' => $operator] );
 		}
-		
-		$dingOperation = ApiDingOperation::create([		
+
+		$dingOperation = ApiDingOperation::create([
 			'SkuCode' 					=> $data['transfer_record']['sku_code'],
 			'CommissionApplied' 		=> $data['transfer_record']['commission_applied'],
 			'StartedUtc' 				=> $data['transfer_record']['started_utc'],
@@ -690,9 +665,9 @@ class ApiDingController extends Controller
 			'ProcessingState' 			=> $data['transfer_record']['processing_state'],
 			'ReceiptText' 				=> $data['transfer_record']['receipt_text'],
 			'ReceiptParams' 			=> is_array($data['transfer_record']['receipt_params']) ? implode(',',$data['transfer_record']['receipt_params']) : $data['transfer_record']['receipt_params'],
-			'AccountNumber' 			=> $data['transfer_record']['account_number'],			
+			'AccountNumber' 			=> $data['transfer_record']['account_number'],
 			'DistributorRef' 			=> $data['transfer_id']['distributor_ref'],
-			'TransferRef' 				=> $data['transfer_id']['transfer_ref'],		
+			'TransferRef' 				=> $data['transfer_id']['transfer_ref'],
 			'SendCurrencyIso' 			=> $data['price']['send_currency_iso'],
 			'CustomerFee' 				=> $data['price']['customer_fee'],
 			'DistributorFee' 			=> $data['price']['distributor_fee'],
@@ -754,24 +729,8 @@ class ApiDingController extends Controller
 
     public function graph_data()
     {
-		/*
-        if (Cache::has('ding_cache_balance_'.date('w'))) {
-            $key = Cache::get('ding_cache_balance_'.date('w'));
-            $key[date('w')] = "1200";;
-            $key[date('w',strtotime("-1 day"))] = "1300";
-            $key[date('w',strtotime("-2 days"))] = "1200";
-            $key[date('w',strtotime("-3 days"))] = "1300";
-            $key[date('w',strtotime("-4 days"))] = "1100";
-            $key[date('w',strtotime("-5 days"))] = "1200";
-            $key[date('w',strtotime("-6 days"))] = "1100";
-            Cache::forever('ding_cache_balance_'.date('w'), $key);
-        } else {
-            Cache::forever('ding_cache_balance_'.date('w'), [date('w') => '1300']);
-        }
-		*/
-
         $ding_balance_cache = Cache::get('ding_cache_balance');
-		
+
 		if (!isset($ding_balance_cache[date('w')])) {
 			$ding_balance_cache[date('w')] = 0;
 		}
@@ -789,11 +748,11 @@ class ApiDingController extends Controller
 		}
 		if (!isset($ding_balance_cache[date('w',strtotime("-5 day"))])) {
 			$ding_balance_cache[date('w',strtotime("-5 day"))] = 0;
-		}		
+		}
 		if (!isset($ding_balance_cache[date('w',strtotime("-6 day"))])) {
 			$ding_balance_cache[date('w',strtotime("-6 day"))] = 0;
 		}
-		
+
         $return = [
             'Six days ago' => $ding_balance_cache[date('w',strtotime("-6 days"))],
             'Five days ago' => $ding_balance_cache[date('w',strtotime("-5 days"))],

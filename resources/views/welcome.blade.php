@@ -39,7 +39,7 @@
                                             <div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
                                                 <div>
                                                     <div class="text-value-lg">
-                                                        @if($ding_balance_cache[date('w')])
+                                                        @if(!is_null($ding_balance_cache) && $ding_balance_cache[date('w')])
                                                             <span id="ding-balance">{{ $ding_balance_cache[date('w')] }}</span> €
                                                         @else
                                                            <span id="ding-balance">Out of sync</span>
@@ -378,7 +378,7 @@ $(document).ready(function(){
 			}
 		});
 	}).catch(e => {
-		console.log(e);
+		alert(e.message);
 	});
 });
 </script>
@@ -513,26 +513,6 @@ $(document).ready(function(){
             </div>
         </div>
     </div>
-{{--    <div class="modal fade" id="modalApprove" tabindex="-1" role="dialog" aria-labelledby="modalApproveLabel" aria-hidden="true">--}}
-{{--        <div class="modal-dialog" role="document">--}}
-{{--            <div class="modal-content">--}}
-{{--                <div class="modal-header">--}}
-{{--                <div class="modal-header">--}}
-{{--                    <h5 class="modal-title" id="modalApproveLabel">Approve user</h5>--}}
-{{--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
-{{--                        <span aria-hidden="true">&times;</span>--}}
-{{--                    </button>--}}
-{{--                </div>--}}
-{{--                <div class="modal-body">--}}
-{{--                    ...--}}
-{{--                </div>--}}
-{{--                <div class="modal-footer">--}}
-{{--                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>--}}
-{{--                    <button type="button" class="btn btn-primary" id="saveUserModalBtn">Save changes</button>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
 @endsection
 
 @section('javascript')
@@ -553,27 +533,5 @@ $(document).ready(function(){
 				}
 			});
 		});
-
-		// $('#saveUserModalBtn').click((e) => {
-		//     e.preventDefault();
-		//     fetch('/admin/agent/user/approve', {
-		//         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //             "Accept": "application/json, text-plain, */*",
-        //             'X-CSRF-TOKEN': document.getElementsByName('csrf-token')[0].getAttribute('content')
-        //         },
-        //         body: JSON.stringify({
-        //             parent_percent: '',
-        //             debt_limit:'',
-        //             group_id: '',
-        //             plafond: '',
-        //             user_id: '',
-        //         })
-        //     }).then(response => response.json()).then(res => () => {
-        //         console.log(res);
-        //     }).catch();
-        // })
-
 	</script>
 @endsection
