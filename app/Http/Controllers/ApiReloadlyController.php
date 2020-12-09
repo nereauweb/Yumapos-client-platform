@@ -457,7 +457,7 @@ class ApiReloadlyController extends Controller
 						$operation->agent_commission = $agent_amount;
 						$operation->platform_total_gain = $response['platform_total_gain'] - $agent_amount;
 						$operation->save();
-						$agent->credit += $agent->amount();
+						$agent->credit += $agent_amount;
 						$agent->save();
 					}
 				}

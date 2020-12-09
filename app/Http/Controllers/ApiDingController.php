@@ -729,7 +729,7 @@ class ApiDingController extends Controller
 				$commission = $agent->agent_commission($user->group_id,$category_id);
 				if ($commission){
 					if ($commission->type=='percent'){
-						$agent_amount = round(($user_cost * ( $commission->amount / 100 )),2);
+						$agent_amount = round(($user_cost * ( $commission->amount / 100 )),3);
 					} else {
 						$agent_amount = $commission->amount;
 					}
@@ -743,7 +743,7 @@ class ApiDingController extends Controller
 					$operation->agent_commission = $agent_amount;
 					$operation->platform_total_gain = $response['platform_total_gain'] - $agent_amount;
 					$operation->save();
-					$agent->credit += $agent->amount();
+					$agent->credit += $agent_amount;
 					$agent->save();
 				}
 			}
