@@ -29,7 +29,7 @@ class DashboardOperationList extends Component
             })->orderBy('amount', 'desc')->groupBy('request_country_iso')->take(5)->get();
             $this->operationsList = ServiceOperation::where('user_id', auth()->id())->select(DB::raw('sum(user_amount) amount, service_operations.*'))->when($this->filterSelected, function ($query) {
                 $this->filter($query);
-            })->orderBy('amount', 'desc')->groupBy('request_operatorId')->take(5)->get();
+            })->orderBy('amount', 'desc')->groupBy('request_operatorId', 'request_ProviderCode')->take(5)->get();
             $services = auth()->user()->accessServices($this->filterSelected);
         } else {
 
@@ -49,7 +49,9 @@ class DashboardOperationList extends Component
                 })->orderBy('amount', 'desc')->groupBy('request_country_iso')->take(5)->get();
                 $this->operationsList = ServiceOperation::select(DB::raw('sum(user_amount) amount, service_operations.*'))->when($this->filterSelected, function ($query) {
                     $this->filter($query);
-                })->orderBy('amount', 'desc')->groupBy('request_operatorId')->take(5)->get();
+                })->orderBy('amount', 'desc')->when(true, function ($query) {
+                    $query->groupBy('request_ProviderCode', 'request_operatorId');
+                })->take(5)->get();
             }
 
             $services = auth()->user()->adminAccessServices($this->filterSelected);
