@@ -1,5 +1,4 @@
-@extends('layouts.app')
-
+@extends('dashboard.authBase')
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -45,3 +44,6 @@
     </div>
 </div>
 @endsection
+@section('javascript')
+@endsection
+
