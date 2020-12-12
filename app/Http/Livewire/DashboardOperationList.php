@@ -50,7 +50,7 @@ class DashboardOperationList extends Component
                 $this->operationsList = ServiceOperation::select(DB::raw('sum(user_amount) amount, service_operations.*'))->when($this->filterSelected, function ($query) {
                     $this->filter($query);
                 })->orderBy('amount', 'desc')->when(true, function ($query) {
-                    $query->groupBy('request_ProviderCode', 'request_operatorId');
+                    $query->groupBy('request_operatorId', 'request_ProviderCode');
                 })->take(5)->get();
             }
 
