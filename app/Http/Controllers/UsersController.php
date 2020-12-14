@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Exports\UsersExport;
 use App\Mail\ConfirmationMail;
+use App\Mail\UpdatedPasswordMail;
 use Illuminate\Http\Request;
 use App\User;
 use App\Models\UserCompanyData;
 use App\Models\UsersGroup;
 
+use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\HasEventBus;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
@@ -95,7 +98,7 @@ class UsersController extends Controller
     {
         $request->validate([
             'name'       => 'required|min:1|max:256',
-            'email'      => 'required|email|max:256'
+            'email'      => 'required|email|max:256',
         ]);
         $user = User::find($id);
         $user->name       = $request->input('name');
@@ -111,6 +114,15 @@ class UsersController extends Controller
 		if ($request->input('debt_limit')){
 			$user->debt_limit 	= $request->input('debt_limit');
 		}
+
+		if ($request->input('password')) {
+		    if ($request->input('password') == $request->input('password_confirmation')) {
+                $user->password = Hash::make($request->input('password'));
+                Mail::to($user->email)->send(new UpdatedPasswordMail($user, $request->input('password')));
+            } else {
+		        return back()->with(['status' => 'error', 'message' => 'user passwords do not match']);
+            }
+        }
 
         $user->save();
 
