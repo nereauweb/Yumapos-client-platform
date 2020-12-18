@@ -1,16 +1,16 @@
 @component('mail::message')
-    # Password Updated
+# Password Updated
 
-    Your password has been changed through admin:<br>
-    # email: {{ $user->email }}<br>
-    # password: {{ $password }}<br>
+Your password has been changed through admin:<br>
+# email: {{ $user->email }}<br>
+# password: {{ $password }}<br>
 
-    # use those credentials login
+# use those credentials login
 
-    @component('mail::button', ['url' => 'http://test.yumapos.it/login'])
-        Login
-    @endcomponent
+@component('mail::button', ['url' => 'http://test.yumapos.it/login'])
+    Login
+@endcomponent
 
-    Thanks,<br>
-    {{ config('app.name') }}
+Thanks,<br>
+{{ config('app.name') }}
 @endcomponent

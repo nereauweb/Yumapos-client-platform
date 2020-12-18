@@ -20,7 +20,6 @@ Route::group(['middleware' => ['get.menu']], function () {
 
 	Route::get('/', function () {
 		if (Auth::User()){
-            //return view('dashboard.homepage');
 			return redirect('/backend');
 		} else {
 			return redirect('login');
@@ -37,88 +36,6 @@ Route::group(['middleware' => ['get.menu']], function () {
 	Route::get('/page', function () {       return view('frontend.page'); });
 
 	Route::get('/backend', 'HomeController@index')->name('home');
-
-	/*
-    Route::group(['middleware' => ['role:user']], function () {
-        Route::get('/colors', function () {     return view('dashboard.colors'); });
-        Route::get('/typography', function () { return view('dashboard.typography'); });
-        Route::get('/charts', function () {     return view('dashboard.charts'); });
-        Route::get('/widgets', function () {    return view('dashboard.widgets'); });
-        Route::get('/google-maps', function(){  return view('dashboard.googlemaps'); });
-        Route::get('/404', function () {        return view('dashboard.404'); });
-        Route::get('/500', function () {        return view('dashboard.500'); });
-        Route::prefix('base')->group(function () {
-            Route::get('/breadcrumb', function(){   return view('dashboard.base.breadcrumb'); });
-            Route::get('/cards', function(){        return view('dashboard.base.cards'); });
-            Route::get('/carousel', function(){     return view('dashboard.base.carousel'); });
-            Route::get('/collapse', function(){     return view('dashboard.base.collapse'); });
-
-            Route::get('/jumbotron', function(){    return view('dashboard.base.jumbotron'); });
-            Route::get('/list-group', function(){   return view('dashboard.base.list-group'); });
-            Route::get('/navs', function(){         return view('dashboard.base.navs'); });
-            Route::get('/pagination', function(){   return view('dashboard.base.pagination'); });
-
-            Route::get('/popovers', function(){     return view('dashboard.base.popovers'); });
-            Route::get('/progress', function(){     return view('dashboard.base.progress'); });
-            Route::get('/scrollspy', function(){    return view('dashboard.base.scrollspy'); });
-            Route::get('/switches', function(){     return view('dashboard.base.switches'); });
-
-            Route::get('/tabs', function () {       return view('dashboard.base.tabs'); });
-            Route::get('/tooltips', function () {   return view('dashboard.base.tooltips'); });
-        });
-        Route::prefix('buttons')->group(function () {
-            Route::get('/buttons', function(){          return view('dashboard.buttons.buttons'); });
-            Route::get('/button-group', function(){     return view('dashboard.buttons.button-group'); });
-            Route::get('/dropdowns', function(){        return view('dashboard.buttons.dropdowns'); });
-            Route::get('/brand-buttons', function(){    return view('dashboard.buttons.brand-buttons'); });
-            Route::get('/loading-buttons', function(){  return view('dashboard.buttons.loading-buttons'); });
-        });
-        Route::prefix('editors')->group(function () {
-            Route::get('/code-editor', function(){          return view('dashboard.editors.code-editor'); });
-            Route::get('/markdown-editor', function(){      return view('dashboard.editors.markdown-editor'); });
-            Route::get('/text-editor', function(){          return view('dashboard.editors.text-editor'); });
-        });
-
-        Route::prefix('forms')->group(function () {
-            Route::get('/basic-forms', function(){          return view('dashboard.forms.basic-forms'); });
-            Route::get('/advanced-forms', function(){       return view('dashboard.forms.advanced-forms'); });
-            Route::get('/validation', function(){           return view('dashboard.forms.validation'); });
-        });
-
-        Route::prefix('icon')->group(function () {  // word: "icons" - not working as part of adress
-            Route::get('/coreui-icons', function(){         return view('dashboard.icons.coreui-icons'); });
-            Route::get('/flags', function(){                return view('dashboard.icons.flags'); });
-            Route::get('/brands', function(){               return view('dashboard.icons.brands'); });
-        });
-        Route::prefix('notifications')->group(function () {
-            Route::get('/alerts', function(){               return view('dashboard.notifications.alerts'); });
-            Route::get('/badge', function(){                return view('dashboard.notifications.badge'); });
-            Route::get('/modals', function(){               return view('dashboard.notifications.modals'); });
-            Route::get('/toastr', function(){               return view('dashboard.notifications.toastr'); });
-        });
-        Route::prefix('plugins')->group(function () {
-            Route::get('/calendar', function(){             return view('dashboard.plugins.calendar'); });
-            Route::get('/draggable-cards', function(){      return view('dashboard.plugins.draggable-cards'); });
-            Route::get('/spinners', function(){             return view('dashboard.plugins.spinners'); });
-        });
-        Route::prefix('tables')->group(function () {
-            Route::get('/tables', function () {             return view('dashboard.tables.tables'); });
-            Route::get('/datatables', function () {         return view('dashboard.tables.datatables'); });
-        });
-
-        Route::prefix('apps')->group(function () {
-            Route::prefix('invoicing')->group(function () {
-                Route::get('/invoice', function () {        return view('dashboard.apps.invoicing.invoice'); });
-            });
-            Route::prefix('email')->group(function () {
-                Route::get('/inbox', function () {          return view('dashboard.apps.email.inbox'); });
-                Route::get('/message', function () {        return view('dashboard.apps.email.message'); });
-                Route::get('/compose', function () {        return view('dashboard.apps.email.compose'); });
-            });
-        });
-        Route::resource('notes', 'NotesController');
-    });
-	*/
 
     Auth::routes();
 
@@ -146,12 +63,10 @@ Route::group(['middleware' => ['get.menu']], function () {
 		Route::prefix('/users/services')->group(function () {
 			Route::get('/category/{id}', 'PointServiceController@category')->name('users.services.category');
 			Route::get('/input', 'PointServiceController@input')->name('users.services.input');
-			//Route::post('/preview', 'ApiReloadlyController@user_input_phone_number')->name('users.services.preview');
 			Route::post('/preview', 'PointServiceController@preview')->name('users.services.preview');
 			Route::put('/preview/category/{id}', 'PointServiceController@preview_category')->name('users.services.preview.category');
 			Route::get('/preview/operator/{category_id}/{operator_id}/{phone_number}', 'PointServiceController@user_operator_selected')->name('users.services.preview.operator');
 			Route::post('/transaction', 'PointServiceController@user_recharge_request')->name('users.services.transaction');
-			//Route::post('/reloadly/transaction', 'ApiReloadlyController@user_recharge_request')->name('users.services.reloadly.transaction');
 			Route::get('/ding/transaction/result', 'ApiDingController@user_recharge')->name('users.services.ding.transaction.result');
 			Route::get('/reloadly/transaction/result', 'ApiReloadlyController@user_recharge')->name('users.services.reloadly.transaction.result');
 			Route::get('/print/{id}', 'PointServiceController@print')->name('users.services.print');
@@ -212,13 +127,10 @@ Route::group(['middleware' => ['get.menu']], function () {
 
         // referents paths
         Route::prefix('/admin/referents')->group(function () {
-//            Route::get('/', 'ProviderReferentController@index')->name('admin.referents.index');
             Route::post('/', 'ProviderReferentController@store')->name('admin.referents.store');
             Route::get('/create', 'ProviderReferentController@create')->name('admin.referents.create');
-//            Route::get('/{id}/edit', 'ProviderReferentController@edit')->name('admin.referents.edit');
             Route::put('/{id}', 'ProviderReferentController@update')->name('admin.referents.update');
             Route::delete('/{id}', 'ProviderReferentController@destroy')->name('admin.referents.destroy');
-            // deleted providers
             Route::get('/trash', 'ProviderReferentController@trash')->name('admin.referents.trash');
             Route::put('/restore/{provider}', 'ProviderReferentController@restore')->name('admin.referents.restore');
         });
@@ -316,8 +228,6 @@ Route::group(['middleware' => ['get.menu']], function () {
         Route::post('/admin/internal/services/countries/{country}', 'ServiceOperationController@countries');  // data for operations
 
 		Route::prefix('/admin/service')->group(function () {
-			//Route::get('/associations', 'ServiceController@associations')->name('admin.service.associations');
-			//Route::post('admin/service/associations/setMaster', 'ServiceController@associations_set_master')->name('admin.service.associations.set_master');
 
 			Route::get('/categories', 'ServiceController@categories')->name('admin.service.category.manage');
 			Route::get('/categories/{id}/data', 'ServiceController@category_data')->name('admin.service.category.data');

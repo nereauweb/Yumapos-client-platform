@@ -17,15 +17,6 @@
                                     <dt class="col-sm-5">Operations
                                     <dt>
                                     <dd class="col-sm-7">{{ $operationsCount }}</dd>
-                                    {{--                                <dt class="col-sm-5">Total User discounts--}}
-                                    {{--                                <dt>--}}
-                                    {{--                                <dd class="col-sm-7">{{ $operations->sum('user_discount') }} €</dd>--}}
-                                    {{--                                <dt class="col-sm-5">Total Commissions--}}
-                                    {{--                                <dt>--}}
-                                    {{--                                <dd class="col-sm-7">{{ $operations->sum('platform_commission') }} €</dd>--}}
-                                    {{--                                <dt class="col-sm-5">Total gross Plaform gains--}}
-                                    {{--                                <dt>--}}
-                                    {{--                                <dd class="col-sm-7">{{ $operations->sum('platform_total_gain') }} €</dd>--}}
                                 </dl>
                             </div>
                             <div class="w-100">
@@ -44,20 +35,6 @@
                                 </div>
                             </div>
                         </div>
-{{--                        <div class="uk-padding-small">--}}
-{{--                            <dl class="row">--}}
-{{--                                <dt class="col-sm-5">Operations--}}
-{{--                                <dt>--}}
-{{--                                <dd class="col-sm-7">{{ $operationsCount }}</dd>--}}
-{{--                                <dt class="col-sm-5">Total User discounts<dt>--}}
-{{--                                <dd class="col-sm-7">{{ $operations->sum('user_discount') }} €</dd>--}}
-{{--                                <dt class="col-sm-5">Total Commissions<dt>--}}
-{{--                                <dd class="col-sm-7">{{ $operations->sum('platform_commission') }} €</dd>--}}
-{{--                                <dt class="col-sm-5">Total gross Plaform gains--}}
-{{--                                <dt>--}}
-{{--                                <dd class="col-sm-7">{{ $operations->sum('platform_total_gain') }} €</dd>--}}
-{{--                            </dl>--}}
-{{--                        </div>--}}
                         <div class="row align-items-end">
                             <div class="col-6">
                                 @include('livewire.partials.daterange')

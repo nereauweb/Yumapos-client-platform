@@ -8,7 +8,7 @@
         </h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
-      <div class="modal-body">		
+      <div class="modal-body">
         <div class="form-group has-feedback row {{ $errors->has('quantity') ? ' has-error ' : '' }}">
 			{!! Form::label('quantity', 'Quantità', array('class' => 'col-md-3 control-label')); !!}
 			<div class="col-md-9">
@@ -30,4 +30,5 @@
     </div>
 	{!! Form::close() !!}
   </div>
+</div>
 </div>

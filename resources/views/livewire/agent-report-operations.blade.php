@@ -106,13 +106,6 @@
                             </table>
                             {{ $operations->links() }}
                         </div>
-{{--                        <form action="{{ route('admin.report.agent.export') }}" method="GET">--}}
-{{--                            @csrf--}}
-{{--                            <input type="hidden" name="to" value="{{ $to }}">--}}
-{{--                            <input type="hidden" name="from" value="{{ $from }}">--}}
-{{--                            <input type="hidden" name="agentSelected" value="{{ $agentSelected }}">--}}
-{{--                            <button class="btn btn-success">Export</button>--}}
-{{--                        </form>--}}
                     </div>
                 </div>
             </div>

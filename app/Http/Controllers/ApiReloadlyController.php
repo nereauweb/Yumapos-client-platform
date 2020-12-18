@@ -266,25 +266,6 @@ class ApiReloadlyController extends Controller
 		return view('users/service/preview', ['log' => $this->log, 'data' => $data, 'operator' => $operator, 'phone_number' => $full_number] );
     }
 
-	/*
-	public function user_recharge_request(Request $request){
-		$request_data = [
-			'request_local' 					=> $request->input('local') ? $request->input('local') : 0,
-			'request_operator_id' 				=> $request->input('operator_id'),
-			'request_amount' 					=> $request->input('amount'),
-			'request_country_iso' 				=> $request->input('country_iso'),
-			'request_recipient_phone' 			=> $request->input('recipient_phone'),
-			'user_gain' 						=> $request->input('gain'),
-			'final_amount' 						=> $request->input('final_amount'),
-			'final_expected_destination_amount' => $request->input('final_amount_destination'),
-		];
-		$request->session()->flash('request_data', $request_data);
-		return redirect()->route('users.services.reloadly.transaction.result');
-	}
-	*/
-
-	// two distinct functions passing data through session to avoid multiple submits...
-
 	public function user_recharge(Request $request)
     {
 		$request_data = $request->session()->get('request_data');
@@ -302,7 +283,6 @@ class ApiReloadlyController extends Controller
 		$category_id 						= $request_data['category_id'];
 
 		$operator = ApiReloadlyOperator::where('operatorId',$request_operator_id)->first();
-		//$original_expected_destination_amount = $request_amount * $operator->fx->rate;
 
 		$configuration = $operator->configuration(Auth::user()->group_id);
 

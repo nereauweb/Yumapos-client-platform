@@ -11,42 +11,42 @@
                             <h3>Ding requests</h3>
                         </div>
                     </div>
-                    <div class="card-body">						
+                    <div class="card-body">
 						<ul class="nav uk-text-default flex-column">
 							<li class="nav-item">
-								Error code descriptions 
+								Error code descriptions
 								<a href="{{ url('/admin/api/ding/ErrorCodeDescriptions') }}">READ</a>
 							</li>
 							<li class="nav-item">
-								Currencies 
+								Currencies
 								<a href="{{ url('/admin/api/ding/Currencies') }}">READ</a>
 								|
 								<a href="{{ url('/admin/api/ding/Currencies/save') }}">SAVE</a>
 							</li>
 							<li class="nav-item">
-								Regions 
+								Regions
 								<a href="{{ url('/admin/api/ding/Regions') }}">READ</a>
 								|
 								<a href="{{ url('/admin/api/ding/Regions/save') }}">SAVE</a>
 							</li>
 							<li class="nav-item">
-								Countries 
+								Countries
 								<a href="{{ url('/admin/api/ding/Countries') }}">READ</a>
 								|
 								<a href="{{ url('/admin/api/ding/Countries/save') }}">SAVE</a>
 							</li>
 							<li class="nav-item">
-								Providers 
+								Providers
 								<a href="{{ url('/admin/api/ding/Providers') }}">READ</a>
 								|
 								<a href="{{ url('/admin/api/ding/Providers/save') }}">SAVE</a>
 							</li>
 							<li class="nav-item">
-								ProviderStatus 
+								ProviderStatus
 								<a href="{{ url('/admin/api/ding/ProviderStatus') }}">READ</a>
 							</li>
 							<li class="nav-item">
-								Products 
+								Products
 								<a href="{{ url('/admin/api/ding/Products') }}">READ</a>
 								|
 								<a href="{{ url('/admin/api/ding/Products/save') }}">SAVE</a>
@@ -62,13 +62,13 @@
 								<a href="{{ url('/admin/api/ding/Balance') }}">READ</a>
 							</li>
 							<li class="nav-item">
-								Promotions 
+								Promotions
 								<a href="{{ url('/admin/api/ding/Promotions') }}">READ</a>
 								|
 								<a href="{{ url('/admin/api/ding/Promotions/save') }}">SAVE</a>
 							</li>
 							<li class="nav-item">
-								Promotions descriptions 
+								Promotions descriptions
 								<a href="{{ url('/admin/api/ding/PromotionDescriptions') }}">READ</a>
 								|
 								<a href="{{ url('/admin/api/ding/PromotionDescriptions/save') }}">SAVE</a>
@@ -85,60 +85,6 @@
 								{!! Form::close() !!}
 							</div>
 						</div>
-						{{--
-						<div class="uk-padding-small" uk-grid>
-							<div class="uk-width-1-4">Send transfer</div>
-							<div class="uk-width-3-4">
-								{!! Form::open(array('route' => 'admin.api.ding.fx_rates', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation')) !!}
-								{!! csrf_field() !!}
-									Operator id
-									<input name="operator_id" class="uk-input uk-form-width-medium uk-form-small" type="number" min="0" step="1" required >
-									Amount
-									<input name="amount" class="uk-input uk-form-width-medium uk-form-small" type="number" min="0" step="0.01" required >
-									<button type="submit" class="uk-button uk-button-small uk-button-primary">Request</button>
-								{!! Form::close() !!}
-							</div>
-						</div>
-						<div class="uk-padding-small" uk-grid>
-							<div class="uk-width-1-4">Estimate prices</div>
-							<div class="uk-width-3-4">
-								{!! Form::open(array('route' => 'admin.api.ding.recharge', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation')) !!}
-								{!! csrf_field() !!}
-									Operator id
-									<input name="operator_id" class="uk-input uk-form-width-medium uk-form-small" type="number" min="0" step="1" required >
-									Amount
-									<input name="amount" class="uk-input uk-form-width-medium uk-form-small" type="number" min="0" step="0.01" required >
-									<button type="submit" class="uk-button uk-button-small uk-button-primary">Request</button>
-								{!! Form::close() !!}
-							</div>
-						</div>
-						<div class="uk-padding-small" uk-grid>
-							<div class="uk-width-1-4">List transfer records</div>
-							<div class="uk-width-3-4">
-								{!! Form::open(array('route' => 'admin.api.ding.recharge', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation')) !!}
-								{!! csrf_field() !!}
-									Operator id
-									<input name="operator_id" class="uk-input uk-form-width-medium uk-form-small" type="number" min="0" step="1" required >
-									Amount
-									<input name="amount" class="uk-input uk-form-width-medium uk-form-small" type="number" min="0" step="0.01" required >
-									<button type="submit" class="uk-button uk-button-small uk-button-primary">Request</button>
-								{!! Form::close() !!}
-							</div>
-						</div>
-						<div class="uk-padding-small" uk-grid>
-							<div class="uk-width-1-4">Cancel transfers</div>
-							<div class="uk-width-3-4">
-								{!! Form::open(array('route' => 'admin.api.ding.recharge', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation')) !!}
-								{!! csrf_field() !!}
-									Operator id
-									<input name="operator_id" class="uk-input uk-form-width-medium uk-form-small" type="number" min="0" step="1" required >
-									Amount
-									<input name="amount" class="uk-input uk-form-width-medium uk-form-small" type="number" min="0" step="0.01" required >
-									<button type="submit" class="uk-button uk-button-small uk-button-primary">Request</button>
-								{!! Form::close() !!}
-							</div>
-						</div>
-						--}}
                     </div>
                 </div>
             </div>

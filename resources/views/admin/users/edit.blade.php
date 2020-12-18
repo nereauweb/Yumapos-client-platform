@@ -6,41 +6,9 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-{{--					<form class="px-3 py-4 form-inline" action="{{ route('admin.user.change-role', $user) }}" method="POST">--}}
-{{--						@csrf--}}
-{{--						<div class="form-group mx-4">--}}
-{{--							<select name="role" id="role" class="form-control @error('role') is-invalid @enderror">--}}
-{{--								<option value="user" @if(!$user->hasRole('sales')) selected @endif>Point</option>--}}
-{{--								<option value="sales" @if($user->hasRole('sales')) selected @endif>Agent</option>--}}
-{{--							</select>--}}
-{{--						</div>--}}
-{{--						<div class="form-group mx-4">--}}
-{{--							<select name="group_id" id="group_id" class="form-control @error('group_id') is-invalid @enderror">--}}
-{{--								<option selected disabled>Choose a User group</option>--}}
-{{--								@foreach($userGroups as $userGroup)--}}
-{{--									<option value="{{$userGroup->id}}" @if($userGroup->id==$user->group_id) selected @endif>{{ $userGroup->name }}</option>--}}
-{{--								@endforeach--}}
-{{--							</select>--}}
-{{--						</div>--}}
-{{--						<div class="form-group mx-4">--}}
-{{--							<select name="agent_group_id" id="agent_group_id" class="form-control @error('agent_group_id') is-invalid @enderror">--}}
-{{--								<option selected disabled>Choose an Agent group</option>--}}
-{{--								@foreach($agentGroups as $agentGroup)--}}
-{{--									<option value="{{$agentGroup->id}}" @if($agentGroup->id==$user->agent_group_id) selected @endif>{{ $agentGroup->name }}</option>--}}
-{{--								@endforeach--}}
-{{--							</select>--}}
-{{--						</div>--}}
-{{--						<button class="btn btn-behance">Update</button>--}}
-{{--					</form>--}}
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             {!! trans('usersmanagement.editing-user', ['name' => $user->name]) !!}
-								{{--
-							{!! Form::open(array('route' => ['system.users.impersonate', $user->id], 'method' => 'PUT', 'role' => 'form', 'class' => 'needs-validation')) !!}
-								{!! csrf_field() !!}
-								{!! Form::button('Impersonifica', array('class' => 'btn btn-successe','type' => 'submit')) !!}
-							{!! Form::close() !!}
-								--}}
                             <div class="pull-right">
                                 <a href="{{ url('/users') }}" class="btn btn-light btn-sm float-right uk-margin-left" data-toggle="tooltip" data-placement="top" title="{{ trans('usersmanagement.tooltips.back-users') }}">
                                     <i class="fa fa-fw fa-reply-all" aria-hidden="true"></i>

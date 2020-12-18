@@ -84,8 +84,6 @@ class Payment extends Component
                 # code...
                 break;
         }
-
-        // $this->customSort = $tableColumn
     }
 
     function commit() {

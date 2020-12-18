@@ -93,14 +93,6 @@ class PointServiceController extends Controller
 		if (!$operator){
 			return redirect()->route('users.services.category',[$category->id])->withError('No operator found for number '.$phone_number.' ('.$data['provider_code'].')');
 		}
-		//$operators = $category->allowed_operators()->where('country_id',$operator->country->id);
-		/*
-		if ($category->operator_list_type == 'include'){
-			$operators = $category->operators()->where('country_id',$operator->country->id)->get();
-		} else {
-			$operators = $category->operators()->where('country_id','!=',$operator->country->id)->get();
-		}
-		*/
 		$operators = ServiceOperator::where('country_id',$operator->country->id)->get();
 		return view('users/service/preview', compact('data', 'category', 'operator', 'phone_number', 'operators'));
     }

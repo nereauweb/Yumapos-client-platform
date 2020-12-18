@@ -31,8 +31,6 @@ class UserOperation extends Component
 
     public $operationId;
 
-//    public $countries;
-//    public $operators;
 
     private $operations;
     private $usedOperators;

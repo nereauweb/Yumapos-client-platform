@@ -36,10 +36,6 @@
 								<br><hr><br>
 							@endforeach
 						@endif
-						{{--
-						<hr>
-						<pre>{!! var_dump($result) !!}</pre>
-						--}}
 					</div>
                 </div>
             </div>

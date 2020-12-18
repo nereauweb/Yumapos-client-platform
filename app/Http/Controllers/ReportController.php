@@ -147,10 +147,6 @@ class ReportController extends Controller
 		}
 		$operations = $operations->get();
         return Excel::download(new SimpleOperationsExport($operations), 'operations.xlsx');
-
-		//"Data","Nome Commerciale","Nome Utente","Città","Nome Listino","Numero Ricaricato","Operatore Mobile","Importo Ricarica Euro","Sconto utente","Sovrapprezzo applicato da utente","Guadagno totale utente","Vendita finale ricarica","Costo ricarica a Yuma","Sconto fornitore","Profitto Lordo Yuma","Profitto Netto Yuma"
-		//"Costo Netto a Yuma","Incasso da Utente","Provvigione Commerciale","Fee da Utente","Provvigione per Utente","Profitto Utente","Vendita finale ricarica"
-
     }
 
     public function calls(Request $request)

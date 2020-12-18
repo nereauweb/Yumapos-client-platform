@@ -32,34 +32,19 @@ class DingProducts extends Component
 
     public function render()
     {
-//        $livewireOperators = ApiDingProduct::leftJoin('api_ding_operators as operators', 'operators.ProviderCode', '=', 'api_ding_products.ProviderCode')
-//        ->select('api_reloadly_operators.*', 'fx.currencyCode as currencyCode', 'fx.rate as rate', 'country.name as countryName', 'country.isoName as isoName')->when($this->countryName, function ($query) {
-//            $query->where('name', $this->countryName);
-//        })->when($this->sortField, function ($query) {
-//            $query->orderBy('api_reloadly_operators.'.$this->sortField, $this->sortAsc ? 'asc' : 'desc');
-//        })->when(($this->start && $this->end), function ($query) {
-//            $query->where('api_reloadly_operators.created_at','>=', \Carbon\Carbon::parse($this->start))->where('api_reloadly_operators.created_at','<=', \Carbon\Carbon::parse($this->end));
-//        })->when($this->customSort, function ($query) {
-//            $query->orderBy($this->customSort, $this->sortAscCustom ? 'asc' : 'desc');
-//        })->when($this->type, function ($query) {
-//            $query->where('api_reloadly_operators.denominationType', $this->type);
-//        });
-
         $countriesList = ApiDingCountry::all();
-//
-//        $livewireOperators = $livewireOperators->distinct()->paginate(10);
 
-            $this->livewireOperators = ApiDingProduct::select('api_ding_products.*')->when($this->countryName, function ($query) {
-                $query->join('api_ding_operators as ado', 'api_ding_products.ProviderCode', 'ado.ProviderCode')->where('ado.CountryIso','=', $this->countryName);
-            })->when($this->sortField, function ($query) {
-                $query->orderBy('api_ding_products.'.$this->sortField, $this->sortAsc ? 'asc' : 'desc');
-            })->when($this->customSort, function ($query) {
-                if ($this->customSort == 'CountryName') {
-                    $query->join('api_ding_operators as ado', 'api_ding_products.ProviderCode', 'ado.ProviderCode')->join('api_ding_countries as adc', 'adc.CountryIso', 'ado.CountryIso')->orderBy('adc.'.$this->customSort, $this->sortAscCustom ? 'asc' : 'desc');
-                } else {
-                    $query->join('api_ding_operators as ado', 'api_ding_products.ProviderCode', 'ado.ProviderCode')->orderBy('ado.'.$this->customSort, $this->sortAscCustom ? 'asc' : 'desc');
-                }
-            })->paginate(10);
+        $this->livewireOperators = ApiDingProduct::select('api_ding_products.*')->when($this->countryName, function ($query) {
+            $query->join('api_ding_operators as ado', 'api_ding_products.ProviderCode', 'ado.ProviderCode')->where('ado.CountryIso','=', $this->countryName);
+        })->when($this->sortField, function ($query) {
+            $query->orderBy('api_ding_products.'.$this->sortField, $this->sortAsc ? 'asc' : 'desc');
+        })->when($this->customSort, function ($query) {
+            if ($this->customSort == 'CountryName') {
+                $query->join('api_ding_operators as ado', 'api_ding_products.ProviderCode', 'ado.ProviderCode')->join('api_ding_countries as adc', 'adc.CountryIso', 'ado.CountryIso')->orderBy('adc.'.$this->customSort, $this->sortAscCustom ? 'asc' : 'desc');
+            } else {
+                $query->join('api_ding_operators as ado', 'api_ding_products.ProviderCode', 'ado.ProviderCode')->orderBy('ado.'.$this->customSort, $this->sortAscCustom ? 'asc' : 'desc');
+            }
+        })->paginate(10);
 
         return view('livewire.ding-products', [
             'livewireProducts' => $this->livewireOperators,
