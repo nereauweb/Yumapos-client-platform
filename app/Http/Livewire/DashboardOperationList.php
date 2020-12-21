@@ -18,6 +18,12 @@ class DashboardOperationList extends Component
 
     public $isUser;
 
+    /*
+     * render function loads content to be used in tables in dashboard,
+     * first we check if the logged in user is admin/agent/user & based on result
+     * we return the desired values,
+     * We load service_operations table data
+     * */
     public function render()
     {
         if ($this->isUser) {
@@ -59,6 +65,9 @@ class DashboardOperationList extends Component
         return view('livewire.dashboard-operation-list', compact('services'));
     }
 
+    /*
+     * filter function is triggered when the day/yesterday/week/month buttons are clicked
+     * */
     public function filter($query)
     {
         $month = Carbon::now()->month;
@@ -87,7 +96,10 @@ class DashboardOperationList extends Component
         return $q;
     }
 
-    public function searchByEmail() {
 
-    }
+    /*
+     * searchById function serves for purpose of filtering by:
+     * id table, meaning it refreshes the render operation which makes available the query to filter by id
+     * */
+    public function searchByEmail() {}
 }

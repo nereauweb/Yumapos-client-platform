@@ -24,23 +24,6 @@ class AgentOperationsExport implements FromCollection, WithHeadings, WithMapping
         return $this->collection;
     }
 
-//    public function map($row): array
-//    {
-//        return [
-//            $row->user->name,
-//            $row->pointOperation->user->email ?? 'Email not set',
-//            $row->pointOperation->user->company_data->company_name ?? 'Company data relationship not set',
-//            $row->user->company_data->email,
-//            $row->original_amount,
-//            $row->applied_percentage,
-//            $row->commission
-//        ];
-//    }
-//
-//    public function headings(): array
-//    {
-//        return ['Agent name', 'User email', 'User company name', 'User company email', 'Original amount', 'Applied percentage', 'Commission'];
-//    }
 
     public function headings(): array
     {
@@ -49,6 +32,7 @@ class AgentOperationsExport implements FromCollection, WithHeadings, WithMapping
         ];
     }
 
+    // map function holds format of what to show in the data cells below headings
     public function map($row): array
     {
         return [

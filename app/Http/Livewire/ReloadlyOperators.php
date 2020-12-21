@@ -23,6 +23,7 @@ class ReloadlyOperators extends Component
     public $countryId;
     public $countryName;
 
+    // render function loads reloadly operators list
     public function render()
     {
         $livewireOperators = ApiReloadlyOperator::leftJoin('api_reloadly_operators_countries as country', 'country.parent_id', '=', 'api_reloadly_operators.id')
@@ -44,6 +45,7 @@ class ReloadlyOperators extends Component
         ]);
     }
 
+    // sortBy field orders the table based on column clicked
     public function sortBy($field)
     {
         if ($this->sortField === $field) {
@@ -56,6 +58,7 @@ class ReloadlyOperators extends Component
         $this->sortField = $field;
     }
 
+    // orders the table based on the column clicked when we need a join in the query
     public function filter($type)
     {
         if ($this->customSort === $type) {
@@ -67,23 +70,27 @@ class ReloadlyOperators extends Component
         $this->customSort = $type;
     }
 
+    // resets the date after submission of the form
     public function resetDate()
     {
         $this->start = '';
         $this->end = '';
     }
 
+    // updates value of searchData to the new value, than that is used inside the query to return the searched data
     public function search()
     {
         $this->searchData = $this->search;
     }
 
+    // resets the search
     public function resetSearch()
     {
         $this->search = '';
         $this->searchData = '';
     }
 
+    // returns operations limited to country selected
     public function commit() {
         if (isset($this->countryId)) {
             $countries = ApiReloadlyOperatorCountry::where('name', '=', $this->countryName);

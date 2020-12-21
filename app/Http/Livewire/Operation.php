@@ -37,10 +37,13 @@ class Operation extends Component
 
     public $totalOperationsCount;
 
+    /*
+     * render function loads service_operations table with its data
+     * the public variables are filled with the bindings done inside the view: livewire/operation.blade.php
+     * */
     public function render()
     {
         $users = User::pluck('name', 'id');
-
         $usedOperators = ServiceOperator::orderBy('name', 'asc')->pluck('name','id');
         $user_name = "All users";
         $user_id = 0;
@@ -88,6 +91,9 @@ class Operation extends Component
         return view('livewire.operation', compact('operations','users', 'user_name', 'date_begin', 'date_end', 'user_id', 'usedOperators'));
     }
 
+    /*
+     * sortBy function filters based on the column clicked inside view!
+     * */
     public function sortBy($field)
     {
         if ($this->sortField === $field) {
@@ -99,11 +105,15 @@ class Operation extends Component
         $this->sortField = $field;
     }
 
+    /*
+     * commit function is used when the combinations of filters inside livewire/operation.blade.php are submited
+     * */
     public function commit() {
         if ($this->userSelected == 0) {
             $this->userSelected = null;
         }
     }
 
+    // searchById is bind to button inside view: livewire/operation.blade.php to the search by id input
     public function searchById() {}
 }

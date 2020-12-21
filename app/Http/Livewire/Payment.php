@@ -33,6 +33,9 @@ class Payment extends Component
     public $typeSelected;
     public $stateSelected = null;
 
+    /*
+     * render function loads payments table data based on filters selected
+     * */
     public function render()
     {
         $this->unapprovedPayments = ModelsPayment::where('approved', 0)->count();
@@ -62,6 +65,9 @@ class Payment extends Component
         return view('livewire.payment', compact('payments', 'users'));
     }
 
+    /*
+     * sortBy function orders the table data based on the column clicked inside: livewire/payment.blade.php
+     * */
     public function sortBy($field)
     {
         if ($this->sortField === $field) {
@@ -73,6 +79,7 @@ class Payment extends Component
         $this->sortField = $field;
     }
 
+    // filterBy function orders the table column based on the relationship it has.
     public function filterBy($tableColumn) {
         $this->sortField = null;
         switch ($tableColumn) {
@@ -86,6 +93,7 @@ class Payment extends Component
         }
     }
 
+    // commit function updates texts in payments views + triggers the form submission inside livewire/payment.blade.php
     function commit() {
         if ($this->stateSelected == 'null') {
             $this->textBeforeAmount = 'Total';

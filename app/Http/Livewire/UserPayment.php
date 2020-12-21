@@ -20,17 +20,20 @@ class UserPayment extends Component
 
     private $payments;
 
+    // mount function is used when first time the view is loaded
     public function mount()
     {
         $this->load();
     }
 
+    // render function listens for changes and based on those changes loads the data
     public function render()
     {
         $this->load();
         return view('livewire.user-payment', ['payments' => $this->payments]);
     }
 
+    // load function loads the data related to payments and implements within the query the needed filters
     public function load()
     {
         $this->payments = auth()->user()->payments()->when(($this->from !== null && !empty($this->from)), function ($query) {

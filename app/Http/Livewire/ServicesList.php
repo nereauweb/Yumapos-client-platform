@@ -22,11 +22,10 @@ class ServicesList extends Component
     public $relationshipAsc = true;
     public $relationshipSortField;
 
-    public function mount()
-    {
 
-    }
-
+    /*
+     * render function loads the list of combined operatorss
+     * */
     public function render()
     {
         $ding_operators = ApiDingOperator::orderBy('Name')->pluck('ProviderCode','Name');
@@ -97,6 +96,7 @@ class ServicesList extends Component
         $this->sortField = $field;
     }
 
+    // sortByrelationship orders the table depending on column which is clicked than it orders it asc/desc.
     public function sortByRelationship($field)
     {
         if ($this->relationshipSortField === $field) {
@@ -108,5 +108,6 @@ class ServicesList extends Component
         $this->relationshipSortField = $field;
     }
 
+    // triggers the reload of render function once the combination of filters is submited
     public function commit(){}
 }

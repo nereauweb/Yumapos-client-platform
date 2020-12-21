@@ -35,6 +35,7 @@ class UserOperation extends Component
     private $operations;
     private $usedOperators;
 
+    // render function loads the client/agent operations
     public function render()
     {
         $this->load();
@@ -42,6 +43,7 @@ class UserOperation extends Component
         return view('livewire.user-operation', ['operations' => $this->operations, 'operatorsData' => $this->usedOperators]);
     }
 
+    // load function holds the loading of the data, this gets called in render function
     public function load()
     {
 
@@ -78,6 +80,6 @@ class UserOperation extends Component
 
         $this->operations = $this->operations->paginate(10);
     }
-
+    // search an operation by id
     public function searchById() {}
 }

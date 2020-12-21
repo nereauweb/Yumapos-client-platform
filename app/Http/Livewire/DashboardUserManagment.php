@@ -19,16 +19,21 @@ class DashboardUserManagment extends Component
     public $parent_percent;
     public $group_id;
 
+    /*
+     * render function loads the component in welcome.blade.php.
+     * */
     public function render()
     {
         $groups = UsersGroup::all();
         return view('livewire.dashboard-user-managment', compact('groups'));
     }
 
+    // approve function gets called when we click on approve inside dashboard when approving the users
     public function approve($id) {
         $this->user_id = $id;
     }
 
+    // store function updates the state of the user depending on if approved or not
     public function store() {
         $user = User::findOrFail($this->user_id);
         if ($user) {
@@ -51,7 +56,7 @@ class DashboardUserManagment extends Component
                     'password' => bcrypt($notHashedPassword),
                 ]);
 
-
+                // mail is sent to the user with the not hashed password
                 Mail::to($user->email)->send(new ConfirmationMail($user, $notHashedPassword));
 
                 session()->flash('success', 'User approved successfully!');
@@ -69,11 +74,12 @@ class DashboardUserManagment extends Component
             $this->emit('userClose');
         }
     }
-
+    // the user doesn't get approved
     public function destroy($id) {
         $this->user_id = $id;
     }
 
+    // the user gets removed from the list and moves to the trashed list
     public function delete()
     {
         $user = AppUser::findOrFail($this->user_id);
@@ -89,6 +95,7 @@ class DashboardUserManagment extends Component
         }
     }
 
+    // the inputs which admin has to fill gets reseted if in case there's an error in approval
     private function resetInputFields(){
         $this->parent_percent = '';
         $this->group = '';

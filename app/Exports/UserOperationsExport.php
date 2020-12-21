@@ -30,6 +30,7 @@ class UserOperationsExport implements FromCollection, WithHeadings, WithMapping
         ];
     }
 
+    // map function returns the data needed to be shown below the headings
     public function map($row): array
     {
         return [

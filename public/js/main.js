@@ -169,7 +169,7 @@ if (/backend/.test(window.location.href)) {
     const country_filter = document.getElementById('country-selected');
     const operator_filter = document.getElementById('operator-selected');
 
-// to be taken note, not very secure way of passing the user
+// fetching user from the welcome.blade.php
     const user_identifier = document.getElementById('identifier-custom');
     const agent_identifier = document.querySelector('#graph-selected');
 
@@ -182,7 +182,9 @@ if (/backend/.test(window.location.href)) {
         isUser: '',
         user_id:''
     };
-
+    /*
+    * fetchData function makes request in the endpoint which sends to ServiceOperationController
+    * */
     function fetchData(url, type, country, operator, user_object = null) {
         let custom_data = {
             amounts: [],
@@ -258,6 +260,10 @@ if (/backend/.test(window.location.href)) {
             alert(error);
         });
     }
+
+    /*
+    * initialData, initialUserData, initialAgentData all gets loaded when the dashboard for first time is loaded
+    * */
 
     const initialData = () => {
         fetchData('admin/internal/services', 'day', 0, 0, user_object);

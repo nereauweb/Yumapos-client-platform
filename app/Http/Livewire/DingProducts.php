@@ -52,6 +52,10 @@ class DingProducts extends Component
         ]);
     }
 
+    /*
+     * sortBy function serves for the purpose of applying the filters to the query inside render function,
+     * here we update the variables which we use as filters in our custom query inside render function
+     * */
     public function sortBy($field)
     {
         if ($this->sortField === $field) {

@@ -33,6 +33,8 @@ class PaymentsExport implements FromCollection, WithHeadings, WithMapping
         ];
     }
 
+    // map function returns the data needed to be shown below the headings
+    // here are two conditions which would return an excel file differently, based on the role of user
     public function map($row): array
     {
         if ($this->type == 'user') {

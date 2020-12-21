@@ -12,18 +12,17 @@ class SimpleOperationsExport implements FromCollection, WithHeadings
     {
         $this->operations = $operations;
     }
-	
+
     public function collection()
     {
         return $this->operations;
     }
-	
+
 	public function headings(): array
     {
         return [
-			//"Data","Nome Commerciale","Nome Utente","Città","Nome Listino","Numero Ricaricato","Operatore Mobile","Importo Ricarica Euro","Costo Netto a Yuma","Incasso da Utente","Provvigione Commerciale","Profitto Netto Yuma","Fee da Utente","Provvigione per Utente","Profitto Utente","Vendita finale ricarica"
 			"Data","Nome Commerciale","Id utente","Nome Utente","Città","Nome Listino","Numero Ricaricato","Operatore Mobile","Importo Ricarica Euro","Sconto utente","Sovrapprezzo applicato da utente","Guadagno totale utente","Vendita finale ricarica","Costo ricarica a Yuma","Sconto fornitore","Profitto Lordo Yuma","Profitto Netto Yuma","Nuovo plafond utente"
         ];
     }
-	
+
 }

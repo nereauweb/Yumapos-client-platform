@@ -52,6 +52,7 @@ class User extends Component
 
     private $users;
 
+    // loads the users table and its related data
     public function render()
     {
 
@@ -85,6 +86,7 @@ class User extends Component
         return view('livewire.user', compact('users', 'you', 'groups', 'cities', 'roles'));
     }
 
+    // sorts the list of users asc/desc based on column clicked inside view table (livewire/user.blade.php)
     public function sortBy($field)
     {
         if ($this->sortField === $field) {
@@ -96,6 +98,7 @@ class User extends Component
         $this->sortField = $field;
     }
 
+    // similar to sortBy but sortByrelationship is used when we have a join in the table and need to order based on that
     public function sortByRelations($field)
     {
         if ($this->sortRelations === $field) {
@@ -111,6 +114,7 @@ class User extends Component
         $this->user_id = $id;
     }
 
+    // stores the new user creation
     public function store() {
         $user = AppUser::findOrFail($this->user_id);
         if ($user) {

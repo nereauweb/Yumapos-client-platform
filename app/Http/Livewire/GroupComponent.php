@@ -10,6 +10,10 @@ class GroupComponent extends Component
     public $roles;
     public $roleSelected;
 
+    /*
+     * render function loads the group component when trying to create a user
+     * this component is called in admin/users/create.blade.php
+     * */
     public function render()
     {
         if ($this->roleSelected == 4) {

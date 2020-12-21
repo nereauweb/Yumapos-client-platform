@@ -16,6 +16,10 @@ class ServiceOperationController extends Controller
     protected $day;
     protected $yesterday;
 
+    /**
+     * ServiceOperationController constructor.
+     * the variables used inside constructor than we use in queries that we return to dashboard
+     */
     public function __construct()
     {
         $this->month = Carbon::now()->month;
@@ -23,6 +27,17 @@ class ServiceOperationController extends Controller
         $this->day = Carbon::today();
         $this->yesterday = Carbon::yesterday();
     }
+
+    /**
+     * @param $type
+     * @param null $country
+     * @param null $operator
+     * @param null $isUser
+     * operations is the endpoint which is used inside the graph and filters
+     * based on filters selected this json response holds data related to the values that filters hold
+     * the queries are built raw, the function takes into account different combinations,
+     * the requests are made inside main.js file
+     */
     public function operations($type, $country = null, $operator = null, $isUser = null) : JsonResponse
     {
         if ($type == 'day') {
@@ -70,6 +85,11 @@ class ServiceOperationController extends Controller
         return response()->json("ERROR", 500);
     }
 
+    /**
+     * @param $type
+     * totals return dynamic data here also is taken into account filter selected
+     * we return different sums for each filter
+     */
     public function totals($type) : JsonResponse
     {
         switch ($type) {
@@ -172,12 +192,22 @@ class ServiceOperationController extends Controller
         ], 200);
     }
 
+    // countries list gets called when the dropdown with countries list gets changed
     public function countries($countryIso)
     {
         $response = $this->operations(request()->filter, $countryIso);
         return response()->json($response, 200);
     }
 
+    /**
+     * @param $query
+     * @param $request
+     * @param null $concatstr
+     * @param null $type
+     * to reduce the repetition of code, this function is created,
+     * it is used in two functions totals, operations and it appends filters that those functions need,
+     * we pass the filters as parameters
+     */
     private function appendDefaultFilters($query, $request, $concatstr = null, $type = null)
     {
         $query->when($request['country'], function ($q) use ($concatstr, $request) {
@@ -196,6 +226,15 @@ class ServiceOperationController extends Controller
         });
     }
 
+    /**
+     * @param $query
+     * @param $request
+     * @param null $concatstr
+     * appendAgentFilter appends the filters to agent only view,
+     * the agent view holds two graphs:
+     * 1. as a user graph with data of its own spendings,
+     * 2. the graph of data of the clients he/she has added.
+     */
     private function appendAgentFilter($query, $request, $concatstr = null)
     {
         return $query->when($request['country'], function ($q) use ($concatstr, $request) {
@@ -212,6 +251,12 @@ class ServiceOperationController extends Controller
         });
     }
 
+    /**
+     * @param $type
+     *
+     * agentOperations function is the endpoint used in main.js
+     * it returns data based on filters, this is what loads the graphs inside agent view graph, but not in user view graph
+     */
     public function agentOperations($type)
     {
         if ($type == 'day') {
@@ -265,6 +310,7 @@ class ServiceOperationController extends Controller
         }
     }
 
+    // agent view totals with data related to only agent endpont
     public function agentTotals($type) : JsonResponse
     {
         switch ($type) {

@@ -19,6 +19,8 @@ class DingOperatorList extends Component
     public $relationshipAsc = true;
     public $relationshipSortField;
 
+    // render function loads operator list andreturns the view livewire/ding-operator-list.blade.php this component
+    // than is called inside admin/ding/list.blade.php
     public function render()
     {
         $livewireDingOperators = ApiDingOperator::select('api_ding_operators.*')->when($this->sortField, function ($query) {
@@ -36,7 +38,7 @@ class DingOperatorList extends Component
             'dingCountries' => $countriesList
         ]);
     }
-
+    // sortBy sorts the query desc/asc based on the column clicked
     public function sortBy($field)
     {
         if ($this->sortField === $field) {
@@ -48,6 +50,7 @@ class DingOperatorList extends Component
         $this->sortField = $field;
     }
 
+    // sortByRelationship function sorts the columns in table depending on what is clicked.
     public function sortByRelationship($field)
     {
         if ($this->relationshipSortField === $field) {
@@ -59,5 +62,9 @@ class DingOperatorList extends Component
         $this->relationshipSortField = $field;
     }
 
+    /*
+     * sortBy function serves for the purpose of applying the filters to the query inside render function,
+     * here we update the variables which we use as filters in our custom query inside render function
+     * */
     public function commit(){}
 }

@@ -27,8 +27,14 @@ class AgentOperation extends Component
 
     public $user_id;
 
+    /* Function to load data on each action being taken in the interface */
     public function render()
     {
+        /*
+         * Get list of operations limited to the role of agent
+         * the query that returns results is $operations variable
+         * view that gets returned is located in livewire/agent-operation.blade.php
+         * */
         $users = User::pluck('name','id');
         $agents = User::role('sales')->pluck('name', 'id');
 		$useridsCollection = User::role('sales')->pluck('id');
@@ -65,8 +71,18 @@ class AgentOperation extends Component
         return view('livewire.agent-operation', compact('operations','date_begin','date_end','users','user_name','user_id', 'agents'));
     }
 
+    /*
+     * commit function serves solely to trigger the button in interface,
+     * meaning we don't trigger anything unless button is clicked,
+     * when button gets clicked this function gets called,
+     * which triggers the load of render function with the applied filters
+     * */
     public function commit() {}
 
+    /*
+     * sortBy function serves for the purpose of applying the filters to the query inside render function,
+     * here we update the variables which we use as filters in our custom query inside render function
+     * */
     public function sortBy($field)
     {
         if ($this->sortField === $field) {
