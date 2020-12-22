@@ -270,7 +270,7 @@ $(document).ready(function(){
 			data: {
 				labels: labelsForDing,
 				datasets: [{
-					label: {{ trans('titles.balance') }},
+					label: 'Balance',
 					backgroundColor: 'transparent',
 					borderColor: 'rgba(255,255,255,.55)',
 					pointBackgroundColor: coreui.Utils.getStyle('--info'),
@@ -333,7 +333,7 @@ $(document).ready(function(){
 			data: {
 				labels: labelsForReloadly,
 				datasets: [{
-					label: {{ trans('titles.balance') }},
+					label: 'Balance',
 					backgroundColor: 'transparent',
 					borderColor: 'rgba(255,255,255,.55)',
 					pointBackgroundColor: coreui.Utils.getStyle('--primary'),
