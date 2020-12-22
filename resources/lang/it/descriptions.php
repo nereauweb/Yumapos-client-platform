@@ -20,4 +20,11 @@ return [
     'contact-admin-to-fix' => 'Your account is not configured and therefore you cannot proceed to finalize operation, please contact administration to fix this issue.',
     'error-msg-operator-data'  => 'We are sorry, an error occurred in operator data.',
     'general-error'  => 'We are sorry, an error occurred.',
+
+    // users/service/result.blade.php
+    'general-error-ownf' => 'An error occurred, operation was not finalized',
+    'stocnb-finalized' => 'Sorry, the operation could not be finalized',
+
+    // users/service/settings/account.blade.php
+    'error-msg-without-name'  => 'Undefined profile, account disabled. Please contact administration to fix this issue.'
 ];

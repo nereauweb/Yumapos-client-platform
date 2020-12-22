@@ -12,7 +12,7 @@
                     <div class="card">
                         <div class="card-header">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <h3>Update password</h3>
+                                <h3>{{ trans('titles.update-password') }}</h3>
                             </div>
                         </div>
                         <div class="card-body">
@@ -20,7 +20,7 @@
                                 @method('PUT')
                                 @csrf
                                 <div class="form-group row">
-                                    <label for="password" class="col-sm-2 col-form-label">New password</label>
+                                    <label for="password" class="col-sm-2 col-form-label">{{ trans('titles.new-password') }}</label>
                                     <div class="col-sm-10">
                                         <input type="password" name="password" class="form-control" id="password">
                                         @error('password')
@@ -31,7 +31,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="confirm_password" class="col-sm-2 col-form-label">Confirm password</label>
+                                    <label for="confirm_password" class="col-sm-2 col-form-label">{{ trans('titles.confirm-password') }}</label>
                                     <div class="col-sm-10">
                                         <input type="password" name="confirm_password" class="form-control" id="confirm_password">
                                         @error('confirm_password')
@@ -43,7 +43,7 @@
                                 </div>
                                 <div>
                                     <div class="d-flex align-items-end flex-column">
-                                        <button type="submit" class="btn btn-success">Update</button>
+                                        <button type="submit" class="btn btn-success">{{ trans('titles.update') }}</button>
                                     </div>
                                 </div>
                             </form>

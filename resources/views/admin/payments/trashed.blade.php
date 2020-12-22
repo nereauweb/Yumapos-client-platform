@@ -10,8 +10,8 @@
             <thead class="thead-light">
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Amount</th>
-                <th scope="col">User</th>
+                <th scope="col">{{ trans('titles.amount') }}</th>
+                <th scope="col">{{ trans('titles.user') }}</th>
                 <th scope="col"></th>
             </tr>
             </thead>
@@ -25,7 +25,7 @@
                         <form action="{{ route('admin.payments.recover-from-trash', $trash->id) }}" method="POST">
                             @method('PUT')
                             @csrf
-                            <button class="btn btn-success">Recover</button>
+                            <button class="btn btn-success">{{ trans('titles.recover') }}</button>
                         </form>
                     </td>
                 </tr>

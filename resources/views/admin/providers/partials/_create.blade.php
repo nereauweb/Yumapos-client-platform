@@ -8,19 +8,19 @@
         <div class="card">
             <div class="card-header" style="display: flex;justify-content: space-between;align-items: center">
                 <div>
-                    <h3>Create a provider</h3>
+                    <h3>{{ trans('titles.create-provider') }}</h3>
                 </div>
                 <div>
-                    <a href="{{ route('admin.providers.index') }}" class="btn btn-info" id="index">Providers List</a>
-                    <a href="#" class="btn btn-danger" id="create">Deleted Providers</a>
+                    <a href="{{ route('admin.providers.index') }}" class="btn btn-info" id="index">{{ trans('titles.provider-list') }}</a>
+                    <a href="#" class="btn btn-danger" id="create">{{ trans('titles.deleted-providers') }}</a>
                 </div>
             </div>
                 <form method="POST" action="{{ route('admin.providers.store')  }}">
                     @csrf
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="companyName">Ragione sociale</label>
-                            <input value="{{ old('company_name') }}" type="text" name="company_name" class="form-control @error('company_name') is-invalid @enderror" id="companyName" placeholder="Ragione sociale">
+                            <label for="companyName">{{ trans('titles.social-region') }}</label>
+                            <input value="{{ old('company_name') }}" type="text" name="company_name" class="form-control @error('company_name') is-invalid @enderror" id="companyName" placeholder="{{ trans('titles.social-region') }}">
                             @error('company_name')
                             <em class="invalid-feedback">{{ $message }}</em>
                             @enderror

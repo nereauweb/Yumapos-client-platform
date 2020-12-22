@@ -8,7 +8,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h3>Ding test - {{ $request_description }}</h3>
+                            <h3>{{ trans('titles.ding-test') }} - {{ $request_description }}</h3>
                         </div>
                     </div>
                     <div class="card-body">
@@ -17,9 +17,9 @@
 						@else
 							<dl class="uk-description-list">
 								@if (method_exists($result,'getItems'))
-									<dt>Result code</dt><dd>{{ $result->getResultCode() }}</dd>
-									<dt>Error codes</dt><dd>{{ implode(',',$result->getErrorCodes()) }}</dd>
-									<dt>Items #{{ count($result->getItems()) }}</dt>
+									<dt>{{ trans('titles.result-code') }}</dt><dd>{{ $result->getResultCode() }}</dd>
+									<dt>{{ trans('titles.error-codes') }}</dt><dd>{{ implode(',',$result->getErrorCodes()) }}</dd>
+									<dt>{{ trans('titles.items') }} #{{ count($result->getItems()) }}</dt>
 									<dd>
 										<br>
 										@foreach ($result->getItems() as $item)

@@ -8,15 +8,15 @@
                 <div class="card">
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h3>Reloadly processing</h3>
+                            <h3>{{ trans('titles.reloadly-processing') }}</h3>
                         </div>
                     </div>
                     <div class="card-body">
-						<div>Count : {{ $count }}</div>
-						<div>Log: {!! $log !!}</div>
+						<div>{{ trans('titles.count') }} : {{ $count }}</div>
+						<div>{{ trans('titles.log') }}: {!! $log !!}</div>
 						@if(isset($data))
 						<div class="uk-margin-top">
-							Debug:
+							{{ trans('titles.debug') }}:
 							<pre>{!! var_dump($data) !!}</pre>
 						</div>
 						@endif

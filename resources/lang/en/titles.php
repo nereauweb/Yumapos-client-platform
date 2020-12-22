@@ -71,8 +71,8 @@ return [
     'pending-payments'  => 'Pending payments',
     'traffic-sales'     => 'Traffic &amp; Sales',
     'user'              => 'User',
-    'country'           => 'Country',
-    'operator'          => 'Operator',
+    'country'           => 'Paese',
+    'operator'          => 'Operatore',
     'provider'          => 'Provider',
 
 
@@ -86,7 +86,7 @@ return [
     'user-to-platform'              => 'User to platform',
     'platform-to-user'              => 'Platform to user',
     'platform-to-provider'          => 'Platform to provider',
-    'state'                         => 'State',
+    'state'                         => 'Stato',
     'all'                           => 'All',
     'canceled'                      => 'Canceled',
     'pending'                       => 'Pending',
@@ -104,7 +104,7 @@ return [
     'total-amount'                  => 'Total amount',
     'total-commissions'             => 'Total commissions',
     'agent'                         => 'Agent',
-    'operation-id'                  => 'Operation ID',
+    'operation-id'                  => 'ID Operazione',
     'original-operation-id'         => 'Original operation ID',
     'point'                         => 'Point',
     'original-amount'               => 'Original amount',
@@ -134,7 +134,7 @@ return [
     'search-by-operation-id'        => 'Search by operation ID',
     'choose-country'                => 'Choose country',
     'choose-operator'               => 'Choose operator',
-    'phone-number'                  => 'Phone number',
+    'phone-number'                  => 'Numero telefonico',
     'expected-destination-amount'   => 'Expected destination amount',
     'paid-sent-amount'              => 'Paid/Sent amount',
     'platform-commission'           => 'Platform commission',
@@ -168,7 +168,7 @@ return [
     'platform-discounts'            => 'Platform discounts',
     'user-added-gains'              => 'User added gains',
     'total-user-gains'              => 'Total user gains',
-    'total-user-gain'               => 'total-user-gain',
+    'total-user-gain'               => 'Total User gain',
     'user-gain'                     => 'User Gain',
     'receipt'                       => 'Receipt',
     'open'                          => 'OPEN',
@@ -199,5 +199,142 @@ return [
     'expected-charge'               => 'Expected charge',
     'finalize'                      => 'Finalize',
     'wrong-amount'                  => 'Wrong amount',
+
+    // users/service/print.blade.php
+    // users/service/print_small.blade.php
+    'yumapos-receipt'              => 'Yumapos Receipt',
+    'social-region'                => 'Ragione sociale',
+    'address'                      => 'Indirizzo',
+    'postal-code'                  => 'P.IVA',
+    'refill-receipt'               => 'Ricevuta ricarica',
+    'operation-date'               => 'Data operazione',
+    'final-amount'                 => 'Costo operazione',
+    'estimated-recharge'           => 'Ricarica stimata',
+    'print-time'                   => 'Print time',
+
+    // users/service/result.blade.ph
+    'operation-result'                              => 'Operation result',
+    'operation-success'                             => 'Operation success!',
+    'er-amount'                                     => 'Expected received amount',
+    'total-paid'                                    => 'Total paid',
+    'user-platform-discount'                        => 'User platform discount',
+    'user-total-gain'                               => 'User total gain',
+    'print-receipt'                                 => 'Print receipt',
+
+    // users/settings/account.blade.php
+    'company-name'      => 'Company name',
+    'default-gain'      => 'Default gain',
+    'sales'             => 'Sales',
+    'percentage'        => 'Percentage',
+    'update-password'   => 'Update password',
+    'new-password'      => 'New password',
+    'confirm-password'  => 'Confirm password',
+    'update'            => 'Update',
+
+
+    // users/info.blade.php
+    'info'          => 'Info',
+    'support'       => 'Support',
+    'bank-details'  => 'Bank details',
+
+    // admin/api/ding/command-list.blade.php
+    'ding-requests'             => 'Ding requests',
+    'err-code-descriptions'     => 'Error code descriptions',
+    'read'                      => 'READ',
+    'currencies'                => 'Currencies',
+    'save'                      => 'SAVE',
+    'regions'                   => 'Regions',
+    'countries'                 => 'Countries',
+    'providers'                 => 'Providers',
+    'provider-status'           => 'ProviderStatus',
+    'products-descriptions'     => 'Products descriptions',
+    'promotions'                => 'Promotions',
+    'promotions-descriptions'   => 'Promotions descriptions',
+    'account-lookup'            => 'Account lookup',
+    'request'                   => 'Request',
+
+    // admin/api/ding/products.blade.php
+    'ding-test'                 => 'Ding test',
+    'sku-code'                  => 'sku_code',
+    'localization-key'          => 'localization_key',
+    'setting-definitions'       => 'setting_definitions',
+    'maximum'                   => 'maximum',
+    'minimum'                   => 'minimum',
+    'processing-mode'           => 'processing_mode',
+    'validity_period_iso'       => 'validity_period_iso',
+    'uat_number'                => 'uat_number',
+    'additional_information'    => 'additional_information',
+    'default_display_text'      => 'default_display_text',
+    'region_code'               => 'region_code',
+    'payment_types'             => 'payment_types',
+
+
+    // admin/api/ding/test.blade.php
+    'result-code'       => 'Result code',
+    'error-codes'       => 'Error codes',
+    'items'             => 'Items',
+
+
+    // admin/api/reloadly/command-list.blade.php
+    'reloadly-response'     => 'Reloadly response',
+    'discounts'             => 'Discounts',
+    'operators'             => 'Operators',
+    'transactions'          => 'Transactions',
+    'operator-id'           => 'Operator id',
+    'recharge'              => 'recharge',
+    'save-operators-data'   => 'Save operators data',
+    'reloadly-processing'   => 'Reloadly processing',
+    'count'                 => 'Count',
+    'debug'                 => 'Debug',
+
+    // admin/ding/details.blade.php
+    'code'                          => 'Code',
+    'customer-care-number'          => 'Customer care number',
+    'productsku'                    => 'ProductSKU',
+    'customer-fee'                  => 'Customer Fee',
+    'distributor-fee'               => 'Distributor Fee',
+    'receive-value'                 => 'Receive Value',
+    'receive-currency-iso'          => 'Receive Currency Iso',
+    'receive-value-excluding-tax'   => 'Receive Value Excluding Tax',
+    'tax-rate'                      => 'Tax Rate',
+    'tax-name'                      => 'Tax Name',
+    'tax-calculation'               => 'Tax Calculation',
+    'send-value'                    => 'Send Value',
+    'send-currencyIso'              => 'Send CurrencyIso',
+
+    // admin/ding/edit.blade.php
+    'user-group'                => 'User group',
+    'fx-variation'              => 'FX variation',
+    'discount'                  => 'Discount',
+    'enabled'                   => 'Enabled',
+    'visible'                   => 'Visible',
+    'yes'                       => 'Yes',
+    'no'                        => 'No',
+    'all-visible'               => 'All visibile',
+    'none-visible'              => 'None visible',
+
+
+    // admin/paymentfiles/create.blade.php
+    'cff-payment'       => 'Create file for payment',
+    'rtl-payments'      => 'Return to payments list',
+    'save-file'         => 'Save file',
+
+    // admin/payments/create.blade.php
+    'an-payment'        => 'Add new payment',
+
+    // admin/payments/edit.blade.php
+    'update-payment'    => 'Update payment',
+
+    // admin/payments/reduce-credit.blade.php
+    'reduce-credit'     => 'Reduce credit',
+
+    // admin/providers/partials/_create.blade.php
+    'create-provider'       => 'Create a provider',
+    'provider-list'         => 'Providers List',
+    'deleted-providers'     => 'Deleted Providers',
+
+
+
+
 
 ];
