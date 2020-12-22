@@ -6,7 +6,7 @@
             <button type="button" class="btn btn-table-action dropdown-toggle" data-toggle="dropdown">
                 {{ $user->id }}
                 <i class="fa fa-ellipsis-v fa-fw" aria-hidden="true"></i>
-                <span class="sr-only">Actions</span>
+                <span class="sr-only">{{ trans('titles.action') }}</span>
             </button>
             <div class="dropdown-menu dropdown-menu-right">
                 @if (!$user->state)
@@ -17,7 +17,7 @@
                 <a href="{{ url('/users/' . $user->id. '/edit') }}" class="dropdown-item btn-success">{{ __('coreuiforms.edit') }}</a>
                 @if (auth()->id() !== $user->id)
                     @if ($user->hasrole('user')||$user->hasrole('sales'))
-                        <a href="{{ url('/users/' . $user->id. '/impersonate') }}" class="dropdown-item btn-warning">Impersonate</a>
+                        <a href="{{ url('/users/' . $user->id. '/impersonate') }}" class="dropdown-item btn-warning">{{ trans('titles.impersonate') }}</a>
                     @endif
                     <button class="dropdown-item btn-danger" data-toggle="modal" data-target="#modalDelete"
                             wire:click="destroy({{ $user->id }})">{{ __('coreuiforms.delete') }}</button>

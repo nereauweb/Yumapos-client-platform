@@ -2,7 +2,7 @@
     <div>
         <div wire:ignore class="uk-width-expand">
             <fieldset class="form-group">
-                <label>Date</label>
+                <label>{{ trans('titles.date') }}</label>
                 <div class="input-group">
                     <span class="input-group-prepend">
                         <span class="input-group-text">

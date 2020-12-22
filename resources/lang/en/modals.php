@@ -29,4 +29,11 @@ return [
     'form_modal_default_btn_cancel' => 'Cancel',
     'form_modal_default_btn_submit' => 'Confirm Submit',
 
+    'modal-delete-confirm'          => 'Conferma eliminazione',
+    'modal-close'                   => 'chiudi',
+    'delete-element'                => 'Eliminare questo elemento?',
+
+    // modals product qty
+    'qty'                           => 'Quantità',
+    'modify-qty'                    => 'Modifica quantità',
 ];

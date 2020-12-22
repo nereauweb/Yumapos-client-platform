@@ -5,7 +5,7 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-8">
-                        <h3>Operatori</h3>
+                        <h3>{{ trans('titles.operator') }}</h3>
                     </div>
                 </div>
             </div>
@@ -13,7 +13,7 @@
                 <div class="uk-grid-small my-4 d-flex align-items-end" uk-grid>
                     <div>
                         <select wire:model.defer="countryName" name="countryName" id="countryId" class="custom-select">
-                            <option value="0">All countries</option>
+                            <option value="0">{{ trans('titles.all-countries') }}</option>
                             @foreach ($countries as $item)
                                 <option value="{{$item->name}}">{{$item->name}}</option>
                             @endforeach
@@ -21,14 +21,14 @@
                     </div>
                     <div class="input-group-append">
                         <button wire:click="commit" class="btn btn-success" type="button"
-                            id="commitBtn">Commit</button>
+                            id="commitBtn">{{ trans('titles.commit') }}</button>
                     </div>
                 </div>
                 <table class="table table-striped table-bordered col-filtered-datatable" id="admin-table">
                     <thead>
                         <tr class="cursorPointer">
                             <th wire:click="sortBy('operatorId')">
-                                <span class="mr-4">ID</span>
+                                <span class="mr-4">{{ trans('titles.id') }}</span>
                                 @if($sortAsc && $sortField == 'operatorId')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
@@ -36,14 +36,14 @@
                                 @endif
                             </th>
                             <th wire:click="filter('countryName')">
-                                <span class="mr-4">Country</span>
+                                <span class="mr-4">{{ trans('titles.country') }}</span>
                                 @if($sortAscCustom && $customSort == 'countryName')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
                                     <i class="cil-arrow-top"></i>
                                 @endif
                             </th>
-                            <th wire:click="sortBy('name')"><span class="mr-4">Name</span>
+                            <th wire:click="sortBy('name')"><span class="mr-4">{{ trans('titles.name') }}</span>
                                 @if($sortAsc && $sortField == 'name')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
@@ -51,7 +51,7 @@
                                 @endif
                             </th>
                             <th wire:click="sortBy('denominationType')">
-                                <span class="mr-4">Type</span>
+                                <span class="mr-4">{{ trans('titles.type') }}</span>
                                 @if($sortAsc && $sortField == 'denominationType')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
@@ -59,14 +59,14 @@
                                 @endif
                             </th>
                             <th wire:click="filter('currencyCode')">
-                                <span class="mr-4">FX currency</span>
+                                <span class="mr-4">{{ trans('titles.fx-currency') }}</span>
                                 @if($sortAscCustom && $customSort == 'currencyCode')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
                                     <i class="cil-arrow-top"></i>
                                 @endif
                             </th>
-                            <th wire:click="filter('rate')"><span class="mr-4">FX rate</span>
+                            <th wire:click="filter('rate')"><span class="mr-4">{{ trans('titles.fx-rate') }}</span>
                                 @if($sortAscCustom && $customSort == 'rate')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
@@ -74,7 +74,7 @@
                                 @endif
                             </th>
                             <th wire:click="sortBy('commission')">
-                                <span class="mr-4">Commission&nbsp;(€)</span>
+                                <span class="mr-4">{{ trans('titles.commission') }}&nbsp;(€)</span>
                                 @if($sortAsc && $sortField == 'commission')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
@@ -92,7 +92,7 @@
                                             {{ $operator->operatorId }}
                                             <i class="fa fa-ellipsis-v fa-fw" aria-hidden="true"></i>
                                             <span class="sr-only">
-									            Actions
+									            {{ trans('titles.actions') }}
 								            </span>
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right">
@@ -103,7 +103,7 @@
                                                             xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-magnifying-glass">
                                                         </use>
                                                     </svg>
-													<span>Details</span>
+													<span>{{ trans('titles.details') }}</span>
                                                 </a>
                                                 <a class="btn btn-info edit dropdown-item" href="#" onclick="edit({{ $operator->id }})">
                                                     <svg class="c-icon">
@@ -111,7 +111,7 @@
                                                             xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-description">
                                                         </use>
                                                     </svg>
-													<span>Edit<span>
+													<span>{{trans('titles.edit')}}<span>
                                                 </a>
                                                 @if ($operator->denominationType == 'FIXED' && $operator->localFixedAmounts->count() > 0)
                                                     <a class="btn btn-info edit-local dropdown-item" onclick="editLocal({{ $operator->id }})">
@@ -120,7 +120,7 @@
                                                                 xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-description">
                                                             </use>
                                                         </svg>
-														<span>Edit local</span>
+														<span>{{ trans('titles.edit-local') }}</span>
                                                     </a>
                                                 @endif
                                             </div>

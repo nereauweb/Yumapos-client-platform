@@ -17,10 +17,10 @@
                                                         @if(isset($reloadly_balance_cache[date('w')]))
                                                             <span id="reloadly-balance">{{ $reloadly_balance_cache[date('w')] }}</span> €
                                                         @else
-                                                           <span id="reloadly-balance">Out of sync</span>
+                                                           <span id="reloadly-balance">{{ trans('descriptions.out-of-sync-error') }}</span>
                                                         @endif
                                                     </div>
-                                                    <div class="uk-text-uppercase">Reloadly balance</div>
+                                                    <div class="uk-text-uppercase">{{ trans('titles.reloadly-balance') }}</div>
                                                 </div>
                                                 <div class="btn-group">
                                                     <a href="#" class="btn btn-pill btn-success" type="button" aria-haspopup="true" aria-expanded="false" id="reload-reloadly-balance">
@@ -42,10 +42,10 @@
                                                         @if(!is_null($ding_balance_cache) && $ding_balance_cache[date('w')])
                                                             <span id="ding-balance">{{ $ding_balance_cache[date('w')] }}</span> €
                                                         @else
-                                                           <span id="ding-balance">Out of sync</span>
+                                                           <span id="ding-balance">{{ trans('descriptions.out-of-sync-error') }}</span>
                                                         @endif
                                                     </div>
-                                                    <div class="uk-text-uppercase">Api Ding balance</div>
+                                                    <div class="uk-text-uppercase">{{ trans('titles.ding-balance') }}</div>
                                                 </div>
                                                 <div class="btn-group">
                                                     <a href="#" class="btn btn-pill btn-success" type="button" aria-haspopup="true" aria-expanded="false" id="reload-ding-balance">
@@ -65,7 +65,7 @@
                                                 <div class="d-flex justify-content-between align-items-start">
                                                     <div>
                                                         <div class="text-value-lg">{{ $paymentsData['totals'] }}</div>
-                                                        <div class="uk-text-uppercase">Pending payments</div>
+                                                        <div class="uk-text-uppercase">{{ trans('titles.pending-payments') }}</div>
                                                     </div>
                                                     <div class="btn-group">
                                                         <a class="btn btn-pill btn-primary" type="button" aria-haspopup="true" aria-expanded="false" href="{{ route('admin.payments.index') }}">
@@ -84,7 +84,7 @@
                                                                     <button type="button" class=" uk-button uk-button-link btn-table-action dropdown-toggle" data-toggle="dropdown">
                                                                         <i class="fa fa-ellipsis-v fa-fw" aria-hidden="true"></i>
                                                                         <span class="sr-only">
-																		Actions
+																		{{ trans('titles.actions') }}
 																	</span>
                                                                     </button>
                                                                     <div class="dropdown-menu dropdown-menu-right">
@@ -99,7 +99,7 @@
                                                                             {!! csrf_field() !!}
                                                                             <button class="dropdown-item" type="submit">Reject</button>
                                                                             {!! Form::close() !!}
-                                                                            <a href="{{ route('admin.payments.edit', $pendingPayment) }}" class="dropdown-item">Edit payment</a>
+                                                                            <a href="{{ route('admin.payments.edit', $pendingPayment) }}" class="dropdown-item">{{ trans('titles.edit-payment') }}</a>
                                                                         @endif
                                                                     </div>
                                                                 </div>
@@ -119,7 +119,7 @@
                                                 <div class="d-flex justify-content-between align-items-start">
                                                     <div>
                                                         <div class="text-value-lg">{{ $usersData['totals'] }}</div>
-                                                        <div class="uk-text-uppercase">Pending users</div>
+                                                        <div class="uk-text-uppercase">{{ trans('titles.pending-users') }}</div>
                                                     </div>
                                                     <div class="btn-group">
                                                         <a class="btn btn-pill btn-primary" type="button" aria-haspopup="true" aria-expanded="false" href="{{ route('users.index') }}">
@@ -141,14 +141,14 @@
 								<div class="card">
                                     <div class="card-body">
 										<div>
-											<h4 class="card-title">Operations Report</h4>
+											<h4 class="card-title">{{ trans('titles.operations-report') }}</h4>
 										</div>
                                         <div class="d-flex justify-content-between">
                                             <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
                                                 <div class="d-flex">
                                                     <div>
                                                         <select id="country-selected" autocomplete="off" class="form-control">
-                                                            <option value="0">All countries</option>
+                                                            <option value="0">{{ trans('titles.all-countries') }}</option>
                                                             @foreach(\App\Models\ServiceCountry::orderBy('name', 'asc')->get() as $country)
                                                                 <option value="{{$country->iso}}">{{ $country->name }}</option>
                                                             @endforeach
@@ -156,7 +156,7 @@
                                                     </div>
                                                     <div class="ml-3">
                                                         <select id="operator-selected" autocomplete="off" class="form-control">
-                                                            <option value="0">All operators</option>
+                                                            <option value="0">{{ trans('titles.all-operators') }}</option>
                                                             @foreach(\App\Models\ServiceOperator::orderBy('name', 'asc')->pluck('name','id') as $key => $operator)
                                                                 <option value="{{ $key }}">{{ $operator}}</option>
                                                             @endforeach
@@ -164,16 +164,16 @@
                                                     </div>
                                                     <div class="btn-group btn-group-toggle mx-3" data-toggle="buttons">
                                                         <label class="btn btn-outline-secondary">
-                                                            <input id="option1day" value="day" name="filterSelected" type="radio" autocomplete="off" checked> Day
+                                                            <input id="option1day" value="day" name="filterSelected" type="radio" autocomplete="off" checked> {{ trans('days.day') }}
                                                         </label>
                                                         <label class="btn btn-outline-secondary">
-                                                            <input id="option_yesterday" value="yesterday" name="filterSelected" type="radio" autocomplete="off"> Yesterday
+                                                            <input id="option_yesterday" value="yesterday" name="filterSelected" type="radio" autocomplete="off"> {{ trans('days.yesterday') }}
                                                         </label>
                                                         <label class="btn btn-outline-secondary">
-                                                            <input id="option_week" value="week" name="filterSelected" type="radio" autocomplete="off"> Week
+                                                            <input id="option_week" value="week" name="filterSelected" type="radio" autocomplete="off"> {{ trans('days.week') }}
                                                         </label>
                                                         <label class="btn btn-outline-secondary">
-                                                            <input id="option2month" value="month" name="filterSelected" type="radio" autocomplete="off"> Month
+                                                            <input id="option2month" value="month" name="filterSelected" type="radio" autocomplete="off"> {{ trans('days.month') }}
                                                         </label>
                                                     </div>
                                                     <a href="{{ route('admin.report.operations') }}" class="btn btn-primary" type="button">
@@ -222,25 +222,25 @@
                                     <div class="card-footer">
                                         <div class="row text-center">
                                             <div class="col-sm-12 col-md mb-sm-2 mb-0">
-                                                <div class="text-muted">Number of operations</div><strong id="operationsTotals">29.703</strong>
+                                                <div class="text-muted">{{ trans('titles.number-of-operations') }}</div><strong id="operationsTotals">29.703</strong>
                                                 <div class="progress progress-xs mt-2">
                                                     <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-md mb-sm-2 mb-0">
-                                                <div class="text-muted">Amount</div><strong id="amountTotals">24.093</strong>
+                                                <div class="text-muted">{{ trans('titles.amount') }}</div><strong id="amountTotals">24.093</strong>
                                                 <div class="progress progress-xs mt-2">
                                                     <div class="progress-bar bg-gradient-info" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-md mb-sm-2 mb-0">
-                                                <div class="text-muted">Cost</div><strong id="costTotals">78.706</strong>
+                                                <div class="text-muted">{{ trans('titles.cost') }}</div><strong id="costTotals">78.706</strong>
                                                 <div class="progress progress-xs mt-2">
                                                     <div class="progress-bar bg-gradient-warning" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-md mb-sm-2 mb-0">
-                                                <div class="text-muted">Gain</div><strong id="gainTotals">22.123</strong>
+                                                <div class="text-muted">{{ trans('titles.gain') }}</div><strong id="gainTotals">22.123</strong>
                                                 <div class="progress progress-xs mt-2">
                                                     <div class="progress-bar bg-gradient-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
@@ -270,7 +270,7 @@ $(document).ready(function(){
 			data: {
 				labels: labelsForDing,
 				datasets: [{
-					label: 'Balance',
+					label: {{ trans('titles.balance') }},
 					backgroundColor: 'transparent',
 					borderColor: 'rgba(255,255,255,.55)',
 					pointBackgroundColor: coreui.Utils.getStyle('--info'),
@@ -333,7 +333,7 @@ $(document).ready(function(){
 			data: {
 				labels: labelsForReloadly,
 				datasets: [{
-					label: 'Balance',
+					label: {{ trans('titles.balance') }},
 					backgroundColor: 'transparent',
 					borderColor: 'rgba(255,255,255,.55)',
 					pointBackgroundColor: coreui.Utils.getStyle('--primary'),
@@ -388,7 +388,7 @@ $(document).ready(function(){
                                 <div>
                                     <div>
                                         <div class="d-flex align-items-center">
-                                            <h4 class="card-title mb-0">Operations Report</h4>
+                                            <h4 class="card-title mb-0">{{ trans('titles.operations-report') }}</h4>
                                         </div>
                                     </div>
                                     <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
@@ -396,14 +396,14 @@ $(document).ready(function(){
                                             @role('sales')
                                             <div class="col-6 mt-3">
                                                 <select id="graph-selected" autocomplete="off" class="form-control">
-                                                    <option value="1" selected>User Chart</option>
-                                                    <option value="2">Agent Chart</option>
+                                                    <option value="1" selected>{{ trans('titles.user-chart') }}</option>
+                                                    <option value="2">{{ trans('titles.agent-chart') }}</option>
                                                 </select>
                                             </div>
                                             @endrole
                                             <div class="col-6 mt-3">
                                                 <select id="country-selected" autocomplete="off" class="form-control">
-                                                    <option value="0">All countries</option>
+                                                    <option value="0">{{ trans('titles.all-countries') }}</option>
                                                     @foreach(\App\Models\ServiceCountry::orderBy('name', 'asc')->get() as $country)
                                                         <option value="{{$country->iso}}">{{ $country->name }}</option>
                                                     @endforeach
@@ -411,7 +411,7 @@ $(document).ready(function(){
                                             </div>
                                             <div class="col-6 mt-3">
                                                 <select id="operator-selected" autocomplete="off" class="form-control">
-                                                    <option value="0">All operators</option>
+                                                    <option value="0">{{ trans('titles.all-operators') }}</option>
                                                     @foreach(\App\Models\ServiceOperator::orderBy('name', 'asc')->pluck('name','id') as $key => $operator)
                                                         <option value="{{ $key }}">{{ $operator}}</option>
                                                     @endforeach
@@ -420,16 +420,16 @@ $(document).ready(function(){
                                             <div class="col-6 mt-3">
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-secondary">
-                                                        <input id="option1day" value="day" name="filterSelected" type="radio" autocomplete="off" checked> Day
+                                                        <input id="option1day" value="day" name="filterSelected" type="radio" autocomplete="off" checked> {{ trans('days.day') }}
                                                     </label>
                                                     <label class="btn btn-outline-secondary">
-                                                        <input id="option_yesterday" value="yesterday" name="filterSelected" type="radio" autocomplete="off"> Yesterday
+                                                        <input id="option_yesterday" value="yesterday" name="filterSelected" type="radio" autocomplete="off"> {{ trans('days.yesterday') }}
                                                     </label>
                                                     <label class="btn btn-outline-secondary">
-                                                        <input id="option_week" value="week" name="filterSelected" type="radio" autocomplete="off"> Week
+                                                        <input id="option_week" value="week" name="filterSelected" type="radio" autocomplete="off"> {{ trans('days.week') }}
                                                     </label>
                                                     <label class="btn btn-outline-secondary">
-                                                        <input id="option2month" value="month" name="filterSelected" type="radio" autocomplete="off"> Month
+                                                        <input id="option2month" value="month" name="filterSelected" type="radio" autocomplete="off"> {{ trans('days.month') }}
                                                     </label>
                                                 </div>
                                                 <a href="{{ url('users/reports/operations') }}" class="btn btn-primary" type="button">
@@ -480,25 +480,25 @@ $(document).ready(function(){
                             <div class="card-footer">
                                 <div class="row text-center">
                                     <div class="col-sm-12 col-md mb-sm-2 mb-0">
-                                        <div class="text-muted">Number of operations</div><strong id="operationsTotals">29.703</strong>
+                                        <div class="text-muted">{{ trans('titles.number-of-operations') }}</div><strong id="operationsTotals">29.703</strong>
                                         <div class="progress progress-xs mt-2">
                                             <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md mb-sm-2 mb-0">
-                                        <div class="text-muted">Amount</div><strong id="amountTotals">24.093</strong>
+                                        <div class="text-muted">{{ trans('titles.amount') }}</div><strong id="amountTotals">24.093</strong>
                                         <div class="progress progress-xs mt-2">
                                             <div class="progress-bar bg-gradient-info" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md mb-sm-2 mb-0">
-                                        <div class="text-muted">Cost</div><strong id="costTotals">78.706</strong>
+                                        <div class="text-muted">{{ trans('titles.cost') }}</div><strong id="costTotals">78.706</strong>
                                         <div class="progress progress-xs mt-2">
                                             <div class="progress-bar bg-gradient-warning" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md mb-sm-2 mb-0">
-                                        <div class="text-muted">Gain</div><strong id="gainTotals">22.123</strong>
+                                        <div class="text-muted">{{ trans('titles.gain') }}</div><strong id="gainTotals">22.123</strong>
                                         <div class="progress progress-xs mt-2">
                                             <div class="progress-bar bg-gradient-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>

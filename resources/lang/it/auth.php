@@ -77,4 +77,8 @@ return [
     'CaptchaWrong'     => 'Captcha errato, riprova.',
     'roleRequired'     => 'Ruolo utente richiesto.',
 
+    'login-title' => 'Login',
+    'login-desc' => 'Sign In to your account',
+    'login-error' => 'Please enter correct email and password to proceed.',
+
 ];

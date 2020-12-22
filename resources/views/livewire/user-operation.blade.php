@@ -6,25 +6,25 @@
                 <div class="card">
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h3>Your operations @if($from !== null) {{ (date('d/m/Y', strtotime($from))) }} - {{ (date('d/m/Y', strtotime($to))) }} @endif</h3>
+                            <h3>{{ trans('titles.your-operations') }} @if($from !== null) {{ (date('d/m/Y', strtotime($from))) }} - {{ (date('d/m/Y', strtotime($to))) }} @endif</h3>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="uk-padding-small">
                             <dl class="row">
-                                <dt class="col-sm-5">Operations<dt><dd class="col-sm-7">{{ $totalOperations }}</dd>
-                                <dt class="col-sm-5">Total amount<dt><dd class="col-sm-7">{{ $finalAmount }} €</dd>
-                                <dt class="col-sm-5">Platform discounts<dt><dd class="col-sm-7">{{ $userDiscount }} €</dd>
-                                <dt class="col-sm-5">User added gains<dt><dd class="col-sm-7">{{ $userGain }} €</dd>
-                                <dt class="col-sm-5">Total user gains<dt><dd class="col-sm-7">{{ $userTotalGain }} €</dd>
+                                <dt class="col-sm-5">{{ trans('titles.operations') }}<dt><dd class="col-sm-7">{{ $totalOperations }}</dd>
+                                <dt class="col-sm-5">{{ trans('titles.total-amount') }}<dt><dd class="col-sm-7">{{ $finalAmount }} €</dd>
+                                <dt class="col-sm-5">{{ trans('titles.platform-discounts') }}<dt><dd class="col-sm-7">{{ $userDiscount }} €</dd>
+                                <dt class="col-sm-5">{{ trans('titles.user-added-gains') }}<dt><dd class="col-sm-7">{{ $userGain }} €</dd>
+                                <dt class="col-sm-5">{{ trans('titles.total-user-gains') }}<dt><dd class="col-sm-7">{{ $userTotalGain }} €</dd>
                             </dl>
                         </div>
                         <div class="row align-items-center">
                             <div class="col-sm">
                                 <fieldset class="form-group">
-                                    <label>Search by operation ID</label>
+                                    <label>{{ trans('titles.search-by-operation-id') }}</label>
                                     <div class="input-group">
-                                        <input class="form-control" type="text" wire:model.defer="operationId" placeholder="search by operation id">
+                                        <input class="form-control" type="text" wire:model.defer="operationId" placeholder="{{ trans('placeholders.search-by-operation-id') }}">
                                         <span class="input-group-append">
                                             <span class="input-group-text bg-primary">
                                                 <button wire:click="searchById" style="border: none;outline: none; background: none;" class="cil-search btn-behance"></button>
@@ -38,9 +38,9 @@
                             </div>
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="js-select-countries">Choose country</label>
+                                    <label for="js-select-countries">{{ trans('titles.choose-country') }}</label>
                                     <select wire:model.defer="selectedCountry" class="form-control">
-                                        <option value="0" selected>All</option>
+                                        <option value="0" selected>{{ trans('titles.all') }}</option>
                                         @foreach($countries as $country)
                                             <option value="{{ $country->isoName }}">{{ $country->name }}</option>
                                         @endforeach
@@ -49,9 +49,9 @@
                             </div>
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="js-select-countries">Choose operator</label>
+                                    <label for="js-select-countries">{{ trans('titles.choose-operator') }}</label>
                                     <select wire:model.defer="selectedOperator" class="form-control">
-                                        <option value="0" selected>All</option>
+                                        <option value="0" selected>{{ trans('titles.all') }}</option>
                                         @php
                                             $check = '';
                                         @endphp
@@ -62,23 +62,23 @@
                                 </div>
                             </div>
                             <div class="col mt-2">
-                                <button class="btn btn-success" wire:click="load" id="commitData">commit</button>
+                                <button class="btn btn-success" wire:click="load" id="commitData">{{ trans('titles.commit') }}</button>
                             </div>
                         </div>
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered col-filtered-datatable" id="admin-table" style="overflow-x:auto;">
                                 <thead>
                                 <tr>
-                                    <th>Date</th>
-                                    <th>Operation ID</th>
-                                    <th>Country</th>
-                                    <th>Operator</th>
-                                    <th>Phone number</th>
-                                    <th>Total amount</th>
-                                    <th>User gain</th>
-                                    <th>Platform discount</th>
-                                    <th>Total user gain</th>
-                                    <th>Receipt</th>
+                                    <th>{{ trans('titles.date') }}</th>
+                                    <th>{{ trans('titles.operation-id') }}</th>
+                                    <th>{{ trans('titles.country') }}</th>
+                                    <th>{{ trans('titles.operator') }}</th>
+                                    <th>{{ trans('titles.phone-number') }}</th>
+                                    <th>{{ trans('titles.total-amount') }}</th>
+                                    <th>{{ trans('titles.user-gain') }}</th>
+                                    <th>{{ trans('titles.platform-discount') }}</th>
+                                    <th>{{ trans('titles.total-user-gain') }}</th>
+                                    <th>{{ trans('titles.receipt') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -95,8 +95,8 @@
                                                 <td>{{ round($operation->user_discount,2) }}&nbsp;&euro;</td>
                                                 <td>{{ round($operation->user_total_gain,2) }}&nbsp;&euro;</td>
                                                 <td>
-                                                    <a href="/users/services/print/{{ $operation->id }}" target="_BLANK">[OPEN]</a>
-                                                    <a href="/users/services/print/{{ $operation->id }}/small" target="_BLANK">[small]</a>
+                                                    <a href="/users/services/print/{{ $operation->id }}" target="_BLANK">[{{ trans('titles.open') }}]</a>
+                                                    <a href="/users/services/print/{{ $operation->id }}/small" target="_BLANK">[{{trans('titles.small')}}]</a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -112,7 +112,7 @@
                             <input type="hidden" name="selectedCountry" value="{{ $selectedCountry }}">
                             <input type="hidden" name="selectedOperator" value="{{ $selectedOperator }}">
                             <button class="btn btn-success">
-                                Export
+                                {{ trans('titles.export') }}
                             </button>
                         </form>
                     </div>

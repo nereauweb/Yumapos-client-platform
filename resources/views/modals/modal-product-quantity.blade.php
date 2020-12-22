@@ -4,13 +4,13 @@
 	{!! Form::open(array('route' => 'admin.shop.products.quantities.update', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation')) !!}
       <div class="modal-header">
         <h4 class="modal-title">
-          Modifica quantità
+          {{ trans('modals.modify-qty') }}
         </h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body">
         <div class="form-group has-feedback row {{ $errors->has('quantity') ? ' has-error ' : '' }}">
-			{!! Form::label('quantity', 'Quantità', array('class' => 'col-md-3 control-label')); !!}
+			{!! Form::label('quantity', trans('modals.qty'), array('class' => 'col-md-3 control-label')); !!}
 			<div class="col-md-9">
 				<div class="input-group">
 					{!! Form::number('quantity', NULL, array('id' => 'quantity-modal-qnt', 'class' => 'form-control', 'placeholder' => 'Prezzo', 'min' => 0, 'step' => '1')) !!}

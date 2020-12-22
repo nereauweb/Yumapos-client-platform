@@ -26,7 +26,7 @@
     </div>
     @if($roleSelected && !is_null($groups))
         <div class="form-group has-feedback row">
-            <label for="group" class="col-md-3 control-label">Choose a group for {{ $roleSelected == 4 ? 'Agent' : 'User' }}</label>
+            <label for="group" class="col-md-3 control-label">{{ trans('descriptions.choose-a-group-for') }} {{ $roleSelected == 4 ? trans('titles.agent') : trans('titles.user') }}</label>
             <div class="col-md-9">
                 <div class="input-group">
                     <select name="agent_group_id" id="group" class="custom-select form-control">
@@ -44,7 +44,7 @@
         </div>
     @endif
     <div class="form-group has-feedback row">
-        <label for="group" class="col-md-3 control-label">Choose a group for User</label>
+        <label for="group" class="col-md-3 control-label">{{ trans('descriptions.choose-a-group-for-user') }}</label>
         <div class="col-md-9">
             <div class="input-group">
                 <select name="group_id" id="default_group" class="custom-select form-control">

@@ -6,7 +6,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h3>Calls {{ date('d/m/Y', strtotime($date_begin)) }} -
+                            <h3>{{ trans('titles.call') }} {{ date('d/m/Y', strtotime($date_begin)) }} -
                                 {{ date('d/m/Y', strtotime($date_end)) }}</h3>
                         </div>
                     </div>
@@ -14,7 +14,7 @@
                         <div class="d-md-flex justify-content-between align-items-center">
                             <div class="uk-padding-small w-100">
                                 <dl class="row">
-                                    <dt class="col-sm-5">Operations
+                                    <dt class="col-sm-5">{{ trans('titles.operations') }}
                                     <dt>
                                     <dd class="col-sm-7">{{ $operationsCount }}</dd>
                                 </dl>
@@ -22,9 +22,9 @@
                             <div class="w-100">
                                 <div class="col-sm">
                                     <fieldset class="form-group">
-                                        <label>Search by ID</label>
+                                        <label>{{ trans('titles.search-by-id') }}</label>
                                         <div class="input-group">
-                                            <input class="form-control" type="text" wire:model.defer="operationId" placeholder="Search by id..">
+                                            <input class="form-control" type="text" wire:model.defer="operationId" placeholder="{{ trans('placeholders.search-by-id') }}">
                                             <span class="input-group-append">
                                             <span class="input-group-text bg-primary">
                                                 <button wire:click="searchById" style="border: none;outline: none; background: none;" class="cil-search btn-behance"></button>
@@ -42,9 +42,9 @@
                             <div class="col-4">
                                 <div>
                                     <div class="form-group w-100">
-                                        <label for="exampleFormControlSelect1">User</label>
+                                        <label for="exampleFormControlSelect1">{{ trans('titles.user') }}</label>
                                         <select wire:model.defer="userSelected" class="form-control custom-select" name="user">
-                                            <option value="0" selected>All users</option>
+                                            <option value="0" selected>{{ trans('titles.all-users') }}</option>
                                             @foreach ($users as $user)
                                                 @if (!is_null($user))
                                                     <option value="{{ $user->id }}">{{ $user->name }}</option>
@@ -58,7 +58,7 @@
                                 <div>
                                     <div class="form-group">
                                         <div>
-                                            <button wire:click="commit" class="btn btn-success" id="commitData">Commit</button>
+                                            <button wire:click="commit" class="btn btn-success" id="commitData">{{ trans('titles.commit') }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -69,7 +69,7 @@
                                 <thead>
                                     <tr>
                                         <th wire:click="sortBy('id')">
-                                            <span>ID</span>
+                                            <span>{{ trans('titles.id') }}</span>
                                             @if($sortAsc && $sortField == 'id')
                                                 <i class="cil-arrow-bottom"></i>
                                             @else
@@ -77,7 +77,7 @@
                                             @endif
                                         </th>
                                         <th wire:click="sortBy('created_at')">
-                                            <span>Date</span>
+                                            <span>{{ trans('titles.date') }}</span>
                                             @if($sortAsc && $sortField == 'created_at')
                                                 <i class="cil-arrow-bottom"></i>
                                             @else
@@ -85,7 +85,7 @@
                                             @endif
                                         </th>
                                         <th wire:click="sortBy('user_id')">
-                                            <span>User</span>
+                                            <span>{{ trans('titles.user') }}</span>
                                             @if($sortAsc && $sortField == 'user_id')
                                                 <i class="cil-arrow-bottom"></i>
                                             @else
@@ -93,7 +93,7 @@
                                             @endif
                                         </th>
                                         <th wire:click="sortBy('type')">
-                                            <span>Type</span>
+                                            <span>{{ trans('titles.type') }}</span>
                                             @if($sortAsc && $sortField == 'type')
                                                 <i class="cil-arrow-bottom"></i>
                                             @else
@@ -101,7 +101,7 @@
                                             @endif
                                         </th>
                                         <th wire:click="sortBy('path')">
-                                            <span>Path</span>
+                                            <span>{{ trans('titles.path') }}</span>
                                             @if($sortAsc && $sortField == 'path')
                                                 <i class="cil-arrow-bottom"></i>
                                             @else
@@ -109,7 +109,7 @@
                                             @endif
                                         </th>
                                         <th wire:click="sortBy('parameters')">
-                                            <span>Parameters</span>
+                                            <span>{{ trans('titles.parameters') }}</span>
                                             @if($sortAsc && $sortField == 'parameters')
                                                 <i class="cil-arrow-bottom"></i>
                                             @else
@@ -117,9 +117,9 @@
                                             @endif
                                         </th>
                                         <th>
-                                            <span>Log</span>
+                                            <span>{{ trans('titles.log') }}</span>
                                         </th>
-                                        <th>Answer</th>
+                                        <th>{{ trans('titles.answer') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>

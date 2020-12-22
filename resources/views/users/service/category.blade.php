@@ -13,7 +13,7 @@
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <h3>{{ $category->name }}</h3>
-                            <h4>Input phone number</h4>
+                            <h4>{{ trans('titles.i-phone-number') }}</h4>
                         </div>
                     </div>
                     <div class="card-body">
@@ -23,18 +23,18 @@
 									<div class="">
 										<div class="uk-form-controls uk-grid-collapse" uk-grid>
 											<div class="uk-width-auto">
-												<label class="uk-form-label">Filter <small> *optional</small></label>
+												<label class="uk-form-label">{{ trans('titles.filter') }} <small> *{{ trans('titles.optional') }}</small></label>
 												<input id="search" class="uk-input form-control" type="text" placeholder="Filter by country name">
 											</div>
 											<div class="uk-width-expand">
-												<label class="uk-form-label">Phone n. <small>(select country code)</small> <small style="color:white;">*required</small></label>
+												<label class="uk-form-label">{{trans('titles.p-n')}}. <small>({{ trans('titles.s-c-code') }})</small> <small style="color:white;">*{{ trans('titles.required') }}</small></label>
 												<input name="number" id="phone" class="uk-input form-control" type="tel" required>
 												<input name="prefix" id="prefix" type="hidden" required>
 												<input name="country" id="country" type="hidden" required>
 											</div>
 										</div>
 									</div>
-							{!! Form::button('Search', array('class' => 'btn btn-success margin-bottom-1 mb-1 float-right','type' => 'submit' )) !!}
+							{!! Form::button(trans('titles.search'), array('class' => 'btn btn-success margin-bottom-1 mb-1 float-right','type' => 'submit' )) !!}
 						{!! Form::close() !!}
                     </div>
                 </div>
@@ -59,7 +59,7 @@ $(document).ready(function(){
 					"{{ $country->iso }}",
 				@endforeach
 			],
-		@elseif(($category->country_list_type=='exclude')) 
+		@elseif(($category->country_list_type=='exclude'))
 			excludeCountries: [
 				@foreach($category->countries as $country)
 					"{{ $country->iso }}",
