@@ -19,7 +19,7 @@
 							</div>
 							<div class="uk-text-right">
 								<a class="uk-button uk-link-reset btn btn-primary" href="/users/">
-									Lista utenti
+									{{ trans('titles.clients-list') }}
 								</a>
 							</div>
 						</div>
@@ -31,7 +31,7 @@
                             <th>{{ __('coreuiforms.users.username') }}</th>
                             <th>{{ __('coreuiforms.users.email') }}</th>
                             <th>{{ __('coreuiforms.users.roles') }}</th>
-                            <th>Balance (€)</th>
+                            <th>{{ trans('titles.balance') }} (€)</th>
                             <th></th>
                           </tr>
                         </thead>

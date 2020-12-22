@@ -16,18 +16,18 @@
         <div class="card">
             <div class="card-header" style="display: flex;justify-content: space-between;align-items: center">
                 <div>
-                    <h3>Update provider and its referents</h3>
+                    <h3>{{ trans('titles.update-pr') }}</h3>
                 </div>
                 <div>
-                    <a href="{{ route('admin.providers.index') }}" class="btn btn-info" id="index">Providers List</a>
-                    <a href="{{ route('admin.providers.trash') }}" class="btn btn-danger" id="deleted">Deleted Providers</a>
-                    <a href="{{ route('admin.referents.trash') }}" class="btn btn-danger" id="deleted-referents">Deleted Referents</a>
+                    <a href="{{ route('admin.providers.index') }}" class="btn btn-info" id="index">{{ trans('titles.providers-list') }}</a>
+                    <a href="{{ route('admin.providers.trash') }}" class="btn btn-danger" id="deleted">{{ trans('titles.deleted-providers') }}</a>
+                    <a href="{{ route('admin.referents.trash') }}" class="btn btn-danger" id="deleted-referents">{{ trans('titles.deleted-referents') }}</a>
                 </div>
             </div>
             <div uk-grid class="card-body">
                 <div class="uk-width-1-3@s">
                     <ul class="uk-tab-left" uk-tab="connect: #form-boxes;">
-                        <li class="uk-active"><a href="#">Provider</a></li>
+                        <li class="uk-active"><a href="#">{{ trans('titles.provider') }}</a></li>
                         @foreach($provider->referents as $referent)
                             <li><a href="#">{{ $referent->surname }}</a></li>
                         @endforeach
@@ -51,10 +51,10 @@
                         <ul id="form-boxes" class="uk-switcher">
                             <li class="uk-active">
                                 <div style="display: flex;justify-content: flex-end;" class="my-4">
-                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addReferentModal">Add a referent</button>
+                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addReferentModal">{{ trans('titles.add-referent') }}</button>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="company_name" class="col-sm-2 col-form-label">Ragione sociale</label>
+                                    <label for="company_name" class="col-sm-2 col-form-label">{{ trans('titles.company-name') }}</label>
                                     <div class="col-sm-10">
                                         <input value="{{ old('company_name') ?? $provider->company_name }}" type="text" class="form-control @error('company_name') is-invalid @enderror" id="company_name" name="company_name">
                                         @error('company_name')
@@ -63,43 +63,43 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="company_name" class="col-sm-2 col-form-label">Sede legale</label>
+                                    <label for="company_name" class="col-sm-2 col-form-label">{{ trans('titles.legal-seat') }}</label>
                                     <div class="col-sm-10">
-                                        <input value="{{ old('legal_seat') ?? $provider->legal_seat }}" type="text" name="legal_seat" class="form-control @error('legal_seat') is-invalid @enderror" id="legal_seat" placeholder="Sede legale">
+                                        <input value="{{ old('legal_seat') ?? $provider->legal_seat }}" type="text" name="legal_seat" class="form-control @error('legal_seat') is-invalid @enderror" id="legal_seat" placeholder="{{ trans('titles.legal-seat') }}">
                                         @error('legal_seat')
                                         <em class="invalid-feedback">{{ $message }}</em>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="legal_seat_address" class="col-sm-2 col-form-label">Sede legale - indirizzo</label>
+                                    <label for="legal_seat_address" class="col-sm-2 col-form-label">{{ trans('titles.legal-seat-address') }}</label>
                                     <div class="col-sm-10">
-                                        <input value="{{ old('legal_seat_address') ?? $provider->legal_seat_address }}" type="email" class="form-control @error('legal_seat_address') is-invalid @enderror" id="legal_seat_address" name="legal_seat_address" placeholder="Sede legale - indirizzo">
+                                        <input value="{{ old('legal_seat_address') ?? $provider->legal_seat_address }}" type="email" class="form-control @error('legal_seat_address') is-invalid @enderror" id="legal_seat_address" name="legal_seat_address" placeholder="{{ trans('titles.legal-seat-address') }}">
                                         @error('legal_seat_address')
                                         <em class="invalid-feedback">{{ $message }}</em>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="legal_seat_zip" class="col-sm-2 col-form-label">Sede legale - CAP</label>
+                                    <label for="legal_seat_zip" class="col-sm-2 col-form-label">{{ trans('titles.legal-seat-zip') }}</label>
                                     <div class="col-sm-10">
-                                        <input value="{{ old('legal_seat_zip') ?? $provider->legal_seat_zip }}" type="text" class="form-control @error('legal_seat_zip') is-invalid @enderror" id="legal_seat_zip" name="legal_seat_zip" placeholder="Sede legale - CAP">
+                                        <input value="{{ old('legal_seat_zip') ?? $provider->legal_seat_zip }}" type="text" class="form-control @error('legal_seat_zip') is-invalid @enderror" id="legal_seat_zip" name="legal_seat_zip" placeholder="{{ trans('titles.legal-seat-zip') }}">
                                         @error('legal_seat_zip')
                                         <em class="invalid-feedback">{{ $message }}</em>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="legal_seat_city" class="col-sm-2 col-form-label">Sede legale - Città</label>
+                                    <label for="legal_seat_city" class="col-sm-2 col-form-label">{{ trans('titles.legal-seat-city') }}</label>
                                     <div class="col-sm-10">
-                                        <input value="{{ old('legal_seat_city') ?? $provider->legal_seat_city }}" type="text" name="legal_seat_city" class="form-control @error('legal_seat_city') is-invalid @enderror" id="legal_seat_city" placeholder="Sede legale - Città">
+                                        <input value="{{ old('legal_seat_city') ?? $provider->legal_seat_city }}" type="text" name="legal_seat_city" class="form-control @error('legal_seat_city') is-invalid @enderror" id="legal_seat_city" placeholder="{{ trans('titles.legal-seat-city') }}">
                                         @error('legal_seat_city')
                                         <em class="invalid-feedback">{{ $message }}</em>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="legal_seat_region" class="col-sm-2 col-form-label">Sede legale - Regione</label>
+                                    <label for="legal_seat_region" class="col-sm-2 col-form-label">{{ trans('titles.legal-seat-region') }}</label>
                                     <div class="col-sm-10">
                                         <select class="form-control @error('legal_seat_region') is-invalid @enderror" id="legal_seat_region" name="legal_seat_region">
                                             <option>---</option>
@@ -113,55 +113,55 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="legal_seat_country" class="col-sm-2 col-form-label">Sede legale - Nazione</label>
+                                    <label for="legal_seat_country" class="col-sm-2 col-form-label">{{ trans('titles.legal-seat-country') }}</label>
                                     <div class="col-sm-10">
-                                        <input value="{{ old('legal_seat_country') ?? $provider->legal_seat_country }}" type="text" class="form-control @error('legal_seat_country') is-invalid @enderror" id="legal_seat_country" name="legal_seat_country" placeholder="Sede legale - Nazione">
+                                        <input value="{{ old('legal_seat_country') ?? $provider->legal_seat_country }}" type="text" class="form-control @error('legal_seat_country') is-invalid @enderror" id="legal_seat_country" name="legal_seat_country" placeholder="{{ trans('titles.legal-seat-country') }}">
                                         @error('legal_seat_country')
                                         <em class="invalid-feedback">{{ $message }}</em>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="my-4">
-                                    <button class="btn btn-success" type="button" id="btnCopy">Copia dati sede legale in sede operativa</button>
+                                    <button class="btn btn-success" type="button" id="btnCopy">{{ trans('titles.copy-content') }}</button>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="operative_seat" class="col-sm-2 col-form-label">Sede operativa</label>
+                                    <label for="operative_seat" class="col-sm-2 col-form-label">{{ trans('titles.operative-seat') }}</label>
                                     <div class="col-sm-10">
-                                        <input value="{{  old('operative_seat') ?? $provider->operative_seat }}" type="text" name="operative_seat" class="form-control @error('operative_seat') is-invalid @enderror" id="operative_seat" placeholder="Sede operativa">
+                                        <input value="{{  old('operative_seat') ?? $provider->operative_seat }}" type="text" name="operative_seat" class="form-control @error('operative_seat') is-invalid @enderror" id="operative_seat" placeholder="{{ trans('titles.operative-seat') }}">
                                         @error('operative_seat')
                                         <em class="invalid-feedback">{{ $message }}</em>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="operative_seat_address" class="col-sm-2 col-form-label">Sede operativa - indirizzo</label>
+                                    <label for="operative_seat_address" class="col-sm-2 col-form-label">{{ trans('titles.operative-seat-address') }}</label>
                                     <div class="col-sm-10">
-                                        <input value="{{  old('operative_seat_address') ?? $provider->operative_seat_address }}" type="email" class="form-control @error('operative_seat_address') is-invalid @enderror" id="operative_seat_address" name="operative_seat_address" placeholder="Sede operativa - indirizzo">
+                                        <input value="{{  old('operative_seat_address') ?? $provider->operative_seat_address }}" type="email" class="form-control @error('operative_seat_address') is-invalid @enderror" id="operative_seat_address" name="operative_seat_address" placeholder="{{ trans('titles.operative-seat-address') }}">
                                         @error('operative_seat_address')
                                         <em class="invalid-feedback">{{ $message }}</em>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="operative_seat_zip" class="col-sm-2 col-form-label">Sede operativa - CAP</label>
+                                    <label for="operative_seat_zip" class="col-sm-2 col-form-label">{{ trans('titles.operative-seat-zip') }}</label>
                                     <div class="col-sm-10">
-                                        <input value="{{  old('operative_seat_zip') ?? $provider->operative_seat_zip }}" type="text" class="form-control @error('operative_seat_zip') is-invalid @enderror" id="operative_seat_zip" name="operative_seat_zip" placeholder="Sede operativa - CAP">
+                                        <input value="{{  old('operative_seat_zip') ?? $provider->operative_seat_zip }}" type="text" class="form-control @error('operative_seat_zip') is-invalid @enderror" id="operative_seat_zip" name="operative_seat_zip" placeholder="{{ trans('titles.operative-seat-zip') }}">
                                         @error('operative_seat_zip')
                                         <em class="invalid-feedback">{{ $message }}</em>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="operative_seat_city" class="col-sm-2 col-form-label">Sede operativa - Città</label>
+                                    <label for="operative_seat_city" class="col-sm-2 col-form-label">{{ trans('titles.operative-seat-city') }}</label>
                                     <div class="col-sm-10">
-                                        <input value="{{  old('operative_seat_city') ?? $provider->operative_seat_city }}" type="text" name="operative_seat_city" class="form-control @error('operative_seat_city') is-invalid @enderror" id="operative_seat_city" placeholder="Sede operativa - Città">
+                                        <input value="{{  old('operative_seat_city') ?? $provider->operative_seat_city }}" type="text" name="operative_seat_city" class="form-control @error('operative_seat_city') is-invalid @enderror" id="operative_seat_city" placeholder="{{ trans('titles.operative-seat-city') }}">
                                         @error('operative_seat_city')
                                         <em class="invalid-feedback">{{ $message }}</em>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="operative_seat_region" class="col-sm-2 col-form-label">Sede operativa - Regione</label>
+                                    <label for="operative_seat_region" class="col-sm-2 col-form-label">{{ trans('titles.operative-seat-region') }}</label>
                                     <div class="col-sm-10">
                                         <select class="form-control @error('operative_seat_region') is-invalid @enderror" id="operative_seat_region" name="operative_seat_region">
                                             <option>---</option>
@@ -175,7 +175,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="operative_seat_country" class="col-sm-2 col-form-label">Sede operativa - Nazione</label>
+                                    <label for="operative_seat_country" class="col-sm-2 col-form-label">{{ trans('titles.operative-seat-country') }}</label>
                                     <div class="col-sm-10">
                                         <input value="{{  old('operative_seat_country') ?? $provider->operative_seat_country }}" type="text" class="form-control @error('operative_seat_country') is-invalid @enderror" id="operative_seat_country" name="operative_seat_country" placeholder="Sede operativa - Nazione">
                                         @error('operative_seat_country')
@@ -184,63 +184,63 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="vat" class="col-sm-2 col-form-label">Partita IVA</label>
+                                    <label for="vat" class="col-sm-2 col-form-label">{{ trans('titles.vat') }}</label>
                                     <div class="col-sm-10">
-                                        <input value="{{  old('vat') ?? $provider->vat }}" class="form-control @error('vat') is-invalid @enderror" id="vat" name="vat" placeholder="Partita IVA">
+                                        <input value="{{  old('vat') ?? $provider->vat }}" class="form-control @error('vat') is-invalid @enderror" id="vat" name="vat" placeholder="{{ trans('titles.vat') }}">
                                         @error('vat')
                                         <em class="invalid-feedback">{{ $message }}</em>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="tax_unique_code" class="col-sm-2 col-form-label">Codice unico destinatario</label>
+                                    <label for="tax_unique_code" class="col-sm-2 col-form-label">{{ trans('titles.tax-unique-code') }}</label>
                                     <div class="col-sm-10">
-                                        <input value="{{  old('tax_unique_code') ?? $provider->tax_unique_code }}" class="form-control @error('tax_unique_code') is-invalid @enderror" id="tax_unique_code" name="tax_unique_code" placeholder="Codice unico destinatario">
+                                        <input value="{{  old('tax_unique_code') ?? $provider->tax_unique_code }}" class="form-control @error('tax_unique_code') is-invalid @enderror" id="tax_unique_code" name="tax_unique_code" placeholder="{{ trans('titles.tax-unique-code') }}">
                                         @error('vat')
                                         <em class="invalid-feedback">{{ $message }}</em>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="pec" class="col-sm-2 col-form-label">PEC</label>
+                                    <label for="pec" class="col-sm-2 col-form-label">{{ trans('titles.pec') }}</label>
                                     <div class="col-sm-10">
-                                        <input value="{{  old('pec') ?? $provider->pec }}" class="form-control @error('pec') is-invalid @enderror" id="pec" name="pec" placeholder="PEC">
+                                        <input value="{{  old('pec') ?? $provider->pec }}" class="form-control @error('pec') is-invalid @enderror" id="pec" name="pec" placeholder="{{ trans('titles.pec') }}">
                                         @error('pec')
                                         <em class="invalid-feedback">{{ $message }}</em>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="email" class="col-sm-2 col-form-label">Email</label>
+                                    <label for="email" class="col-sm-2 col-form-label">{{ trans('titles.email') }}</label>
                                     <div class="col-sm-10">
-                                        <input value="{{  old('email') ?? $provider->email }}" type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Email">
+                                        <input value="{{  old('email') ?? $provider->email }}" type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="{{ trans('titles.email') }}">
                                         @error('email')
                                         <em class="invalid-feedback">{{ $message }}</em>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="phone" class="col-sm-2 col-form-label">Phone</label>
+                                    <label for="phone" class="col-sm-2 col-form-label">{{ trans('titles.phone') }}</label>
                                     <div class="col-sm-10">
-                                        <input value="{{  old('phone') ?? $provider->phone }}" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" placeholder="Phone">
+                                        <input value="{{  old('phone') ?? $provider->phone }}" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" placeholder="{{ trans('titles.phone') }}">
                                         @error('phone')
                                         <em class="invalid-feedback">{{ $message }}</em>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="website" class="col-sm-2 col-form-label">Insegna negozio</label>
+                                    <label for="website" class="col-sm-2 col-form-label">{{ trans('titles.website') }}</label>
                                     <div class="col-sm-10">
-                                        <input value="{{  old('website') ?? $provider->website }}" class="form-control @error('website') is-invalid @enderror" id="website" name="website" placeholder="Insegna negozio">
+                                        <input value="{{  old('website') ?? $provider->website }}" class="form-control @error('website') is-invalid @enderror" id="website" name="website" placeholder="{{ trans('titles.website') }}">
                                         @error('website')
                                         <em class="invalid-feedback">{{ $message }}</em>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="support_email" class="col-sm-2 col-form-label">Support Email</label>
+                                    <label for="support_email" class="col-sm-2 col-form-label">{{ trans('titles.support-email') }}</label>
                                     <div class="col-sm-10">
-                                        <input value="{{  old('support_email') ?? $provider->support_email }}" type="email" class="form-control @error('support_email') is-invalid @enderror" id="support_email" name="support_email" placeholder="Support Email">
+                                        <input value="{{  old('support_email') ?? $provider->support_email }}" type="email" class="form-control @error('support_email') is-invalid @enderror" id="support_email" name="support_email" placeholder="{{ trans('titles.support-email') }}">
                                         @error('support_email')
                                         <em class="invalid-feedback">{{ $message }}</em>
                                         @enderror
@@ -250,52 +250,52 @@
                             @foreach($provider->referents as $referent)
                                 <li>
                                     <div style="display: flex; justify-content: flex-end" class="my-4">
-                                        <button class="btn btn-danger deleteBtn" type="button" data-delete="{{ $referent->id }}" data-surname="{{ $referent->surname }}" data-toggle="modal" data-target="#deleteModal">Delete referent</button>
+                                        <button class="btn btn-danger deleteBtn" type="button" data-delete="{{ $referent->id }}" data-surname="{{ $referent->surname }}" data-toggle="modal" data-target="#deleteModal">{{ trans('titles.delete-referent') }}</button>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="referents[{{ $referent->id }}][name]" class="col-sm-2 col-form-label">Name</label>
+                                        <label for="referents[{{ $referent->id }}][name]" class="col-sm-2 col-form-label">{{ trans('titles.name') }}</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" value="{{ $referent->name }}" name="referents[{{ $referent->id }}][name]" id="referents[{{ $referent->id }}][name]">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="referents[{{ $referent->id }}][surname]" class="col-sm-2 col-form-label">Surname</label>
+                                        <label for="referents[{{ $referent->id }}][surname]" class="col-sm-2 col-form-label">{{ trans('titles.surname') }}</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" value="{{ $referent->surname }}" name="referents[{{ $referent->id }}][surname]" id="referents[{{ $referent->id }}][surname]">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="referents[{{ $referent->id }}][pec]" class="col-sm-2 col-form-label">Surname</label>
+                                        <label for="referents[{{ $referent->id }}][pec]" class="col-sm-2 col-form-label">{{ trans('titles.pec') }}</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" value="{{ $referent->pec }}" name="referents[{{ $referent->id }}][pec]" id="referents[{{ $referent->id }}][pec]">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="referents[{{ $referent->id }}][email]" class="col-sm-2 col-form-label">Email</label>
+                                        <label for="referents[{{ $referent->id }}][email]" class="col-sm-2 col-form-label">{{ trans('titles.email') }}</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" value="{{ $referent->email }}" name="referents[{{ $referent->id }}][email]" id="referents[{{ $referent->id }}][email]">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="referents[{{ $referent->id }}][phone]" class="col-sm-2 col-form-label">Surname</label>
+                                        <label for="referents[{{ $referent->id }}][phone]" class="col-sm-2 col-form-label">{{ trans('titles.phone') }}</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" value="{{ $referent->phone }}" name="referents[{{ $referent->id }}][phone]" id="referents[{{ $referent->id }}][phone]">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="referents[{{ $referent->id }}][mobile]" class="col-sm-2 col-form-label">Mobile</label>
+                                        <label for="referents[{{ $referent->id }}][mobile]" class="col-sm-2 col-form-label">{{ trans('titles.mobile') }}</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" value="{{ $referent->mobile }}" name="referents[{{ $referent->id }}][mobile]" id="referents[{{ $referent->id }}][mobile]">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="referents[{{ $referent->id }}][skype]" class="col-sm-2 col-form-label">Skype</label>
+                                        <label for="referents[{{ $referent->id }}][skype]" class="col-sm-2 col-form-label">{{ trans('titles.skype') }}</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" value="{{ $referent->skype }}" name="referents[{{ $referent->id }}][skype]" id="referents[{{ $referent->id }}][skype]">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="referents[{{ $referent->id }}][role]" class="col-sm-2 col-form-label">Role</label>
+                                        <label for="referents[{{ $referent->id }}][role]" class="col-sm-2 col-form-label">{{ trans('titles.role') }}</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" value="{{ $referent->role }}" name="referents[{{ $referent->id }}][role]" id="referents[{{ $referent->id }}][role]">
                                         </div>
@@ -304,7 +304,7 @@
                             @endforeach
                         </ul>
                         <div class="my-2" style="display: flex;justify-content: flex-end;">
-                            <button class="btn btn-success">Update</button>
+                            <button class="btn btn-success">{{ trans('titles.update') }}</button>
                         </div>
                     </form>
                 </div>
@@ -317,20 +317,20 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalTitle">Are you sure you want to delete referent with id: <span id="modalReferentId"></span></h5>
+                    <h5 class="modal-title" id="deleteModalTitle">{{ trans('modals.modal-delete-confirm') }} <span id="modalReferentId"></span></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    You are deleting referent: <span id="modalReferentSurname"></span>
+                    {{ trans('modals.delete-element') }}: <span id="modalReferentSurname"></span>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ trans('modals.confirm_modal_button_cancel_text') }}</button>
                     <form method="post" id="deleteReferentBtn">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Confirm</button>
+                        <button type="submit" class="btn btn-danger">{{ trans('modals.form_modal_default_title') }}</button>
                     </form>
                 </div>
             </div>

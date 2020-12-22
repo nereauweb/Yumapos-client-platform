@@ -7,14 +7,14 @@
         <div class="card">
             <div class="card-header" style="display:flex;justify-content: space-between;align-items: center;">
                 <div>
-                    <h3>Providers data</h3>
+                    <h3>{{ trans('titles.provider-data') }}</h3>
                 </div>
                 <div>
-                    <a href="{{ route('admin.providers.create') }}" class="btn btn-info" id="create">Add Provider</a>
-                    <a href="{{ route('admin.providers.trash') }}" class="btn btn-danger" id="trash">Deleted Providers</a>
+                    <a href="{{ route('admin.providers.create') }}" class="btn btn-info" id="create">{{ trans('titles.add-provider') }}</a>
+                    <a href="{{ route('admin.providers.trash') }}" class="btn btn-danger" id="trash">{{ trans('titles.deleted-providers') }}</a>
                     @if(count($providers) > 0)
-                        <a href="{{ route('admin.referents.create') }}" class="btn btn-success" id="add-referent">Add Referent</a>
-                        <a href="{{ route('admin.referents.trash') }}" class="btn btn-danger" id="trash-referent">Deleted Referents</a>
+                        <a href="{{ route('admin.referents.create') }}" class="btn btn-success" id="add-referent">{{ trans('titles.add-referent') }}</a>
+                        <a href="{{ route('admin.referents.trash') }}" class="btn btn-danger" id="trash-referent">{{ trans('titles.deleted-referents') }}</a>
                     @endif
                 </div>
             </div>
@@ -22,12 +22,12 @@
                 <table class="table table-bordered" style="overflow-y: auto;">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Company Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Website</th>
-                            <th>Support Email</th>
+                            <th>{{ trans('titles.id') }}</th>
+                            <th>{{ trans('titles.company-name') }}</th>
+                            <th>{{ trans('titles.email') }}</th>
+                            <th>{{ trans('titles.phone') }}</th>
+                            <th>{{ trans('titles.website') }}</th>
+                            <th>{{ trans('titles.support-email') }}</th>
                         </tr>
                     </thead>
                     <tbody>

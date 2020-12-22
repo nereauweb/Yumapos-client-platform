@@ -332,6 +332,164 @@ return [
     'create-provider'       => 'Create a provider',
     'provider-list'         => 'Providers List',
     'deleted-providers'     => 'Deleted Providers',
+    'legal-seat'            => 'Sede legale',
+    'legal-seat-address'    => 'Sede legale - indirizzo',
+    'legal-seat-zip'        => 'Sede legale - CAP',
+    'legal-seat-city'       => 'Sede legale - Città',
+    'legal-seat-region'     => 'Sede legale - Regione',
+    'legal-seat-country'    => 'Sede legale - Nazione',
+    'copy-content'          => 'Copia dati sede legale in sede operativa',
+    'operative-seat'        => 'Sede operativa',
+    'operative-seat-address' => 'Sede operativa - indirizzo',
+    'operative-seat-zip'    => 'Sede operativa - CAP',
+    'operative-seat-city'   => 'Sede operativa - Città',
+    'operative-seat-region' => 'Sede operativa - Regione',
+    'operative-seat-country' => 'Sede operativa - Nazione',
+    'vat'                   => 'Partita IVA',
+    'tax-unique-code'       => 'Codice unico destinatario',
+    'pec'                   => 'PEC',
+    'email'                 => 'E-mail',
+    'phone'                 => 'Phone',
+    'website'               => 'Insegna negozio',
+    'support-email'         => 'Support Email',
+
+    // admin/providers/partials/_edit.blade.php
+    'update-pr'         => 'Update provider and its referents',
+    'deleted-referents' => 'Deleted Referents',
+    'add-referent'      => 'Add a referent',
+    'delete-referent'   => 'Delete referent',
+    'surname'           => 'Surname',
+    'mobile'            => 'Mobile',
+    'skype'             => 'Skype',
+    'role'              => 'Role',
+    'save-changes'      => 'Save changes',
+    // admin/providers/index.blade.php
+    'provider-data'     => 'Providers data',
+    'add-provider'      => 'Add Provider',
+
+    'provider-trashed-data' => 'Providers trashed data',
+    'available-providers'   => 'Available Providers list',
+    'restore'               => 'Restore',
+    'referent-list'         => 'Referents List',
+    'referent'              => 'Referent',
+    'save-modification'     => 'Salva modifiche',
+    'back'                  => 'Return back',
+    'referent-data'         => 'Referent Data',
+
+    'referents-trashed-data'    => 'Referents trashed data',
+
+
+    // admin/reloadly/details.blade.php
+    'bundle'                        => 'Bundle',
+    'data'                          => 'Data',
+    'pin'                           => 'PIN',
+    'suports-local-amounts'         => 'Supports locals amounts',
+    'sender-currency'               => 'Sender currency',
+    'destination-currency'          => 'Destination currency',
+    'international-discount'        => 'International discount',
+    'local-discount'                => 'Local discount',
+    'most-popular-amount'           => 'Most popular amount',
+    'minimum-amount'                => 'Minimum amount',
+    'maximum-amount'                => 'Maximum amount',
+    'local-minimum-amount'          => 'Local minimum amount',
+    'local-maximum-amount'          => 'Local maximum amount',
+    'logos'                         => 'Logos',
+    'fixed-amounts'                 => 'Fixed amounts',
+    'fixed-amounts-descriptions'    => 'Fixed amounts descriptions',
+    'local-fixed-amounts'           => 'Local fixed amounts',
+    'local-fixed-amounts-desc'      => 'Local fixed amounts descriptions',
+    'suggested-amounts'             => 'Suggested amounts',
+    'suggested-amounts-desc'        => 'Suggested amounts descriptions',
+
+
+    // admin/reloadly/edit.blade.php
+    'configuration'                 => 'Configuration',
+
+    'provider-operation-id'         => 'Provider operation ID',
+    'system-call-id'                => 'System call ID',
+
+
+    'associations'                  => 'Associazioni',
+
+    // admin/service/categories.blade.php
+    'categories-title'              => 'Gestisci categorie servizi',
+    'new-category'                  => 'Inserisci nuova categoria',
+    'btn-new-category'              => 'Inserisci',
+    'country-list-type'             => 'Tipo lista paesi',
+    'operator-list-type'            => 'Tipo lista operatori',
+
+    // admin/service/create.blade.php
+    'create-new-service'            => 'Crea nuovo servizio',
+    'return-list-services'          => 'Torna alla lista servizi',
+    'description'                   => 'Descrizione',
+
+    // admin/service/deleted.blade.php
+    'deleted-services'              => 'Servizi eliminati',
+    'show-menu'                     => 'Mostra menu',
+    'show-list-services'            => 'Mostra lista servizi',
+    'recover-service'               => 'Ripristina servizio',
+
+    // admin/service/edit.blade.php
+    'modify-service'            => 'Modifica servizio',
+
+    // admin/users/deleted.blade.php
+    'clients-list'              => 'Lista utenti',
+
+    // admin/users/edit.blade.php
+    'client'                => 'Utente',
+    'credit'                => 'Credit',
+    'client-group-id'       => 'Client group id',
+    'agent-group-id'        => 'Agent group id',
+    'vat-percent'           => 'Percentuale IVA',
+    'withholding-tax-percent'   => 'Percentuale ritenuta d\'acconto',
+    'referent-name'             => 'Nome referente',
+    'referent-surname'          => 'Cognome referente',
+    'referent-mobile'           => 'Cellulare referente',
+    'shop-sign'                 => 'Insegna negozio',
+
+    // admin/users/group-create.blade.php
+    'create-group'              => 'Crea nuovo gruppo utenti',
+    'return-group-list'         => 'Torna alla lista gruppi utenti',
+    'group-create-btn'          => 'Crea nuovo gruppo utenti',
+
+    // admin/users/group-create-agent.blade.php
+    'group-create-agent'            => 'Crea nuovo gruppo agenti',
+    'return-agent-group-list'       => 'Torna alla lista gruppi',
+    'create-group-agent-btn'        => 'Crea nuovo gruppo agenti',
+
+
+    // admin/users/group-edit.blade.php
+    'modify-group-client'       => 'Modifica gruppo utenti',
+
+
+    // admin/users/group-edit-agent.blade.php
+    'modify-group-agent'        => 'Modifica gruppo agenti',
+
+
+    // admin/users/group-view.blade.php
+    'show-group-client'     => 'Visualizza gruppo utenti',
+    'members'               => 'Utenti inclusi',
+
+    // admin/users/groups-deleted.blade.php
+    'groups-deleted'        => 'Gruppi utente eliminati',
+    'group-client'          => 'Gruppi utenti',
+    'slug'                  => 'slug',
+    'restore-group'         => 'Ripristina gruppo',
+
+    'show-client-group'        => 'Mostra gruppo utenti',
+
+    'delete-group'  => 'Elimina gruppo utenti',
+
+    'group-agent'   => 'Gruppi agenti',
+
+    // agents/users/create.blade.php
+    'create-user'   => 'Create user',
+
+
+    'company-mobile'    => 'Cellulare referente',
+
+
+
 
 
 

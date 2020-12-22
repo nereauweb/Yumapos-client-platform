@@ -93,4 +93,8 @@ return [
     // Search Users Form
     'search-users-ph' => 'Ricerca utenti',
 
+    // admin/users/create.blade.php
+    'referent'      => 'Referente',
+
+
 ];

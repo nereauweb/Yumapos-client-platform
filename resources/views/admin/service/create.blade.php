@@ -8,12 +8,12 @@
 		<div class="card-header">
 			<div style="display: flex; justify-content: space-between; align-items: center;">
 				<span id="card_title">
-					<h1>Crea nuovo servizio</h1>
+					<h1>{{ trans('titles.create-new-service') }}</h1>
 				</span>
 				<div class="pull-right">
 					<a href="{{ url('/admin/service/list') }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="Torna alla lista servizi">
 						<i class="fa fa-fw fa-reply-all" aria-hidden="true"></i>
-						Torna alla lista servizi
+						{{ trans('titles.return-list-services') }}
 					</a>
 				</div>
 			</div>
@@ -25,7 +25,7 @@
 				{!! csrf_field() !!}
 
 				<div class="form-group has-feedback row {{ $errors->has('name') ? ' has-error ' : '' }}">
-					{!! Form::label('name', 'Nome', array('class' => 'col-md-3 control-label')); !!}
+					{!! Form::label('name', trans('titles.name'), array('class' => 'col-md-3 control-label')); !!}
 					<div class="col-md-9">
 						<div class="input-group">
 							{!! Form::text('name', NULL, array('id' => 'name', 'class' => 'form-control', 'placeholder' => 'Nome', 'required'=>'required')) !!}
@@ -39,7 +39,7 @@
 				</div>
 
 				<div class="form-group has-feedback row {{ $errors->has('category') ? ' has-error ' : '' }}">
-					{!! Form::label('category', 'Categoria', array('class' => 'col-md-3 control-label')); !!}
+					{!! Form::label('category', trans('titles.category'), array('class' => 'col-md-3 control-label')); !!}
 					<div class="col-md-9">
 						<div class="input-group">
 							@if(!empty($categories))
@@ -58,16 +58,16 @@
 							@endif
 						</div>
 						<span class="help-block">
-							<small>Inserisci nome nuova categoria o selezionane una esistente dall'elenco</small>
+							<small>{{ trans('descriptions.service-info') }}</small>
 							@if ($errors->has('category'))
-									<br><strong>{{ $errors->first('category') }}</strong>								
+									<br><strong>{{ $errors->first('category') }}</strong>
 							@endif
 						</span>
 					</div>
 				</div>
-					
+
 				<div class="form-group has-feedback row {{ $errors->has('description') ? ' has-error ' : '' }}">
-					{!! Form::label('description', 'Descrizione', array('class' => 'col-md-3 control-label')); !!}
+					{!! Form::label('description', trans('titles.description'), array('class' => 'col-md-3 control-label')); !!}
 					<div class="col-md-9">
 						<div class="input-group">
 							{!! Form::textarea('description', NULL, array('id' => 'description', 'class' => 'form-control', 'placeholder' => 'Nome')) !!}
@@ -79,9 +79,9 @@
 						@endif
 					</div>
 				</div>
-				
+
 				<div class="form-group has-feedback row {{ $errors->has('countries') ? ' has-error ' : '' }}">
-					{!! Form::label('countries', 'Paesi', array('class' => 'col-md-3 control-label')); !!}
+					{!! Form::label('countries', trans('titles.countries'), array('class' => 'col-md-3 control-label')); !!}
 					<div class="col-md-9">
 						<div class="input-group">
 							{!! Form::select('countries[]', $countries, NULL, array('id' => 'countries', 'class' => 'form-control multiple-select', 'required'=>'required', 'multiple' => 'multiple')) !!}
@@ -93,9 +93,9 @@
 						@endif
 					</div>
 				</div>
-				
+
 				<div class="form-group has-feedback row {{ $errors->has('operators') ? ' has-error ' : '' }}">
-					{!! Form::label('operators', 'Operatori', array('class' => 'col-md-3 control-label')); !!}
+					{!! Form::label('operators', trans('titles.operators'), array('class' => 'col-md-3 control-label')); !!}
 					<div class="col-md-9">
 						<div class="input-group">
 							{!! Form::select('operators[]', $operators, NULL, array('id' => 'operators', 'class' => 'form-control multiple-select', 'required'=>'required', 'multiple' => 'multiple')) !!}
@@ -107,8 +107,8 @@
 						@endif
 					</div>
 				</div>
-				
-				{!! Form::button('Crea nuovo servizio', array('class' => 'btn btn-success margin-bottom-1 mb-1 float-right','type' => 'submit' )) !!}
+
+				{!! Form::button(trans('titles.create-new-service'), array('class' => 'btn btn-success margin-bottom-1 mb-1 float-right','type' => 'submit' )) !!}
 			{!! Form::close() !!}
 		</div>
 
@@ -122,7 +122,7 @@
 			if ($("#category_id").val()==0){
 				$("#category").prop('disabled',false);
 			} else {
-				$("#category").prop('disabled',true);				
+				$("#category").prop('disabled',true);
 			}
 		});
 		$('.multiple-select').select2();

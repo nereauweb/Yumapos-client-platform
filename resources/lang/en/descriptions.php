@@ -26,5 +26,8 @@ return [
     'stocnb-finalized' => 'Sorry, the operation could not be finalized',
 
     // users/service/settings/account.blade.php
-    'error-msg-without-name'  => 'Undefined profile, account disabled. Please contact administration to fix this issue.'
+    'error-msg-without-name'  => 'Undefined profile, account disabled. Please contact administration to fix this issue.',
+
+    // admin/service/create.blade.php
+    'service-info'  => 'Inserisci nome nuova categoria o selezionane una esistente dall\'elenco',
 ];
