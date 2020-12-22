@@ -6,11 +6,11 @@
         <div class="card">
             <div class="card-header">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    Pay provider
+                    {{ trans('titles.pay-provider') }}
                     <div class="pull-right">
                         <a href="{{ url('/admin/payments/') }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="{{ trans('providersmanagement.tooltips.back-providers') }}">
                             <i class="fa fa-fw fa-reply-all" aria-hidden="true"></i>
-                            Return to payments list
+                            {{ trans('titles.rtl-payments') }}
                         </a>
                     </div>
                 </div>
@@ -20,7 +20,7 @@
                 {!! Form::open(array('route' => 'admin.payProviderStore', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation', 'enctype' => 'multipart/form-data')) !!}
                 {!! csrf_field() !!}
                 <div class="form-group has-feedback row {{ $errors->has('date') ? ' has-error ' : '' }}">
-                    {!! Form::label('date', 'Date', array('class' => 'col-md-3 control-label')); !!}
+                    {!! Form::label('date', trans('titles.date'), array('class' => 'col-md-3 control-label')); !!}
                     <div class="col-md-9">
                         <div class="input-group">
                             {!! Form::text('date', date('d m Y'), array('id' => 'date', 'class' => 'form-control', 'placeholder' => 'Date','required' => 'required')) !!}
@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="form-group has-feedback row {{ $errors->has('provider_id') ? ' has-error ' : '' }}">
-                    {!! Form::label('provider_id', 'Provider', array('class' => 'col-md-3 control-label','required' => 'required')); !!}
+                    {!! Form::label('provider_id', trans('titles.provider'), array('class' => 'col-md-3 control-label','required' => 'required')); !!}
                     <div class="col-md-9">
                         <div class="input-group">
                             <select name="provider_id" id="provider_id" class="form-control">
@@ -52,7 +52,7 @@
                 </div>
 
                 <div class="form-group has-feedback row {{ $errors->has('amount') ? ' has-error ' : '' }}">
-                    {!! Form::label('amount', 'Amount (€)', array('class' => 'col-md-3 control-label')); !!}
+                    {!! Form::label('amount', trans('titles.amount').' (€)', array('class' => 'col-md-3 control-label')); !!}
                     <div class="col-md-9">
                         <div class="input-group">
                             {!! Form::number('amount', 0, array('id' => 'amount', 'class' => 'form-control', 'min' => '0', 'step' => '0.01','required' => 'required')) !!}
@@ -71,7 +71,7 @@
                 </div>
 
                 <div class="form-group has-feedback row {{ $errors->has('details') ? ' has-error ' : '' }}">
-                    {!! Form::label('details', 'Details', array('class' => 'col-md-3 control-label')); !!}
+                    {!! Form::label('details', trans('titles.details'), array('class' => 'col-md-3 control-label')); !!}
                     <div class="col-md-9">
                         <div class="input-group">
                             <textarea name="details" id="details" rows="5" class="form-control"></textarea>
@@ -86,13 +86,13 @@
 
                 <div class="form-group has-feedback row {{ $errors->has('file') ? ' has-error ' : '' }}">
                     <div class="col-md-3 control-label">
-                        File upload
+                        {{ trans('titles.file-upload') }}
                     </div>
                     <div class="col-md-9">
                         <div class="custom-file">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="customFile" name="document">
-                                <label class="custom-file-label" for="customFile">Choose file</label>
+                                <label class="custom-file-label" for="customFile">{{ trans('titles.choose-file') }}</label>
                             </div>
                         </div>
                         @if ($errors->has('document'))
@@ -107,7 +107,7 @@
                 <input type="hidden" name="update_balance" value="0">
                 <input type="hidden" name="approved" value="1">
 
-                {!! Form::button('Pay provider', array('class' => 'btn btn-success margin-bottom-1 mb-1 float-right','type' => 'submit' )) !!}
+                {!! Form::button(trans('titles.pay-provider'), array('class' => 'btn btn-success margin-bottom-1 mb-1 float-right','type' => 'submit' )) !!}
                 {!! Form::close() !!}
             </div>
 

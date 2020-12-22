@@ -10,7 +10,7 @@
         <div class="card">
             <div class="card-header">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    {!! 'Modifica gruppo utenti' !!}
+                    {{ trans('titles.modify-group-agent') }}
                     <div class="pull-right">
                         <a href="{{ route('admin.groups.list') }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="top" title="{{ 'Torna alla lista gruppi utenti' }}">
                             <i class="fa fa-fw fa-reply-all" aria-hidden="true"></i>
@@ -25,7 +25,7 @@
                 {!! csrf_field() !!}
 
                 <div class="form-group has-feedback row {{ $errors->has('name') ? ' has-error ' : '' }}">
-					{!! Form::label('name', 'Nome', array('class' => 'col-md-3 control-label')); !!}
+					{!! Form::label('name', trans('titles.name'), array('class' => 'col-md-3 control-label')); !!}
 					<div class="col-md-9">
 						<div class="input-group">
 							{!! Form::text('name', $group->name, array('id' => 'name', 'class' => 'form-control', 'placeholder' => 'Nome','required' => 'required')) !!}
@@ -37,9 +37,9 @@
 						@endif
 					</div>
 				</div>
-				
+
 				<div class="form-group has-feedback row {{ $errors->has('description') ? ' has-error ' : '' }}">
-					{!! Form::label('description', 'Descrizione', array('class' => 'col-md-3 control-label')); !!}
+					{!! Form::label('description', trans('titles.description'), array('class' => 'col-md-3 control-label')); !!}
 					<div class="col-md-9">
 						<div class="input-group">
 							{!! Form::text('description', $group->description, array('id' => 'description', 'class' => 'form-control', 'placeholder' => 'Descrizione','required' => 'required')) !!}
@@ -50,8 +50,8 @@
 							</span>
 						@endif
 					</div>
-				</div>	
-				
+				</div>
+
 				@foreach($categories as $category)
 					@foreach($target_groups as $target_group)
 						<div class="form-group has-feedback row {{ $errors->has('categories') ? ' has-error ' : '' }}">
@@ -71,13 +71,13 @@
 									</span>
 								@endif
 							</div>
-						</div>	
+						</div>
 					@endforeach
 				@endforeach
 
                 <div class="form-group has-feedback row {{ $errors->has('users') ? ' has-error ' : '' }}">
                     <label for="users" class="col-md-3 control-label">
-                        Utenti
+                        {{ trans('titles.client') }}
                     </label>
                     <div class="col-md-9">
                         <select name="users[]" id="users" class="selectized" multiple required>

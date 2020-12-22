@@ -6,26 +6,26 @@
                 <div class="card">
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h3>Calls {{ date('d/m/Y', strtotime($date_begin)) }} -
+                            <h3>{{ trans('titles.calls') }} {{ date('d/m/Y', strtotime($date_begin)) }} -
                                 {{ date('d/m/Y', strtotime($date_end)) }}</h3>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="uk-padding-small">
                             <dl class="row">
-                                <dt class="col-sm-5">Operations
+                                <dt class="col-sm-5">{{ trans('titles.operations') }}
                                 <dt>
                                 <dd class="col-sm-7">{{ $operationsCount }}</dd>
-                                <dt class="col-sm-5">Total User discounts
+                                <dt class="col-sm-5">{{ trans('titles.total-user-discounts') }}
                                 <dt>
                                 <dd class="col-sm-7">{{ $operations->sum('user_discount') }} €</dd>
-                                <dt class="col-sm-5">Total Commissions
+                                <dt class="col-sm-5">{{ trans('titles.total-commissions') }}
                                 <dt>
                                 <dd class="col-sm-7">{{ $operations->sum('platform_commission') }} €</dd>
-                                <dt class="col-sm-5">Total gross Plaform gains
+                                <dt class="col-sm-5">{{ trans('titles.total-gross-plaform-gains') }}
                                 <dt>
                                 <dd class="col-sm-7">{{ $operations->sum('platform_total_gain') }} €</dd>
-                                <dt class="col-sm-5">Total net Platform gains
+                                <dt class="col-sm-5">{{ trans('total-net-platform-gains') }}
                                 <dt>
                                 <dd class="col-sm-7">
                                     {{ $operations->sum('platform_total_gain') - $operations->sum('user_discount') }} €
@@ -39,9 +39,9 @@
                             <div class="col-4">
                                 <div>
                                     <div class="form-group w-100">
-                                        <label for="exampleFormControlSelect1">User</label>
+                                        <label for="exampleFormControlSelect1">{{ trans('titles.user') }}</label>
                                         <select wire:model.defer="userSelected" class="form-control custom-select" name="user">
-                                            <option value="0" selected>All users</option>
+                                            <option value="0" selected>{{ trans('titles.all-users') }}</option>
                                             @foreach ($users as $user)
                                                 @if (!is_null($user))
                                                     <option value="{{ $user->id }}">{{ $user->name }}</option>
@@ -55,7 +55,7 @@
                                 <div>
                                     <div class="form-group">
                                         <div>
-                                            <button wire:click="commit" class="btn btn-success" id="commitData">Commit</button>
+                                            <button wire:click="commit" class="btn btn-success" id="commitData">{{ trans('titles.commit') }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -66,7 +66,7 @@
                                 <thead>
                                     <tr>
                                         <th wire:click="sortBy('id')">
-                                            <span>ID</span>
+                                            <span>{{ trans('titles.id') }}</span>
                                             @if($sortAsc && $sortField == 'id')
                                                 <i class="cil-arrow-bottom"></i>
                                             @else
@@ -74,7 +74,7 @@
                                             @endif
                                         </th>
                                         <th wire:click="sortBy('created_at')">
-                                            <span>Date</span>
+                                            <span>{{ trans('titles.date') }}</span>
                                             @if($sortAsc && $sortField == 'created_at')
                                                 <i class="cil-arrow-bottom"></i>
                                             @else
@@ -82,7 +82,7 @@
                                             @endif
                                         </th>
                                         <th wire:click="sortBy('user_id')">
-                                            <span>User</span>
+                                            <span>{{ trans('titles.user') }}</span>
                                             @if($sortAsc && $sortField == 'user_id')
                                                 <i class="cil-arrow-bottom"></i>
                                             @else
@@ -90,7 +90,7 @@
                                             @endif
                                         </th>
                                         <th wire:click="sortBy('type')">
-                                            <span>Type</span>
+                                            <span>{{ trans('titles.type') }}</span>
                                             @if($sortAsc && $sortField == 'type')
                                                 <i class="cil-arrow-bottom"></i>
                                             @else
@@ -98,7 +98,7 @@
                                             @endif
                                         </th>
                                         <th wire:click="sortBy('path')">
-                                            <span>Path</span>
+                                            <span>{{ trans('titles.path') }}</span>
                                             @if($sortAsc && $sortField == 'path')
                                                 <i class="cil-arrow-bottom"></i>
                                             @else
@@ -106,7 +106,7 @@
                                             @endif
                                         </th>
                                         <th wire:click="sortBy('parameters')">
-                                            <span>Parameters</span>
+                                            <span>{{ trans('titles.parameters') }}</span>
                                             @if($sortAsc && $sortField == 'parameters')
                                                 <i class="cil-arrow-bottom"></i>
                                             @else
@@ -114,9 +114,9 @@
                                             @endif
                                         </th>
                                         <th>
-                                            <span>Log</span>
+                                            <span>{{ trans('titles.log') }}</span>
                                         </th>
-                                        <th>Answer</th>
+                                        <th>{{ trans('titles.answer') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>

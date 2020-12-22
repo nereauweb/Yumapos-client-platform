@@ -10,11 +10,11 @@
         <div class="card">
             <div class="card-header">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    {!! 'Modifica gruppo utenti' !!}
+                     {{ trans('titles.modify-group-client') }}
                     <div class="pull-right">
                         <a href="{{ route('admin.groups.list') }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="top" title="{{ 'Torna alla lista gruppi utenti' }}">
                             <i class="fa fa-fw fa-reply-all" aria-hidden="true"></i>
-                            {!! 'Torna alla lista gruppi utenti' !!}
+                            {{ trans('titles.return-group-list') }}
                         </a>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
                 {!! csrf_field() !!}
 
                 <div class="form-group has-feedback row {{ $errors->has('name') ? ' has-error ' : '' }}">
-                    {!! Form::label('name', 'Nome del gruppo utenti', array('class' => 'col-md-3 control-label')); !!}
+                    {!! Form::label('name', trans('titles.name'), array('class' => 'col-md-3 control-label')); !!}
                     <div class="col-md-9">
                         <div class="input-group">
                             {!! Form::text('name', $group->name, array('id' => 'name', 'class' => 'form-control', 'placeholder' => 'Nome del gruppo utenti')) !!}
@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="form-group has-feedback row {{ $errors->has('discount') ? ' has-error ' : '' }}">
-                    {!! Form::label('discount', 'Discount %', array('class' => 'col-md-3 control-label')); !!}
+                    {!! Form::label('discount', trans('titles.discount').' %', array('class' => 'col-md-3 control-label')); !!}
                     <div class="col-md-9">
                         <div class="input-group">
                             {!! Form::number('discount', $group->discount, array('id' => 'discount', 'class' => 'form-control', 'placeholder' => 'Discount', 'min' => '0', 'step' => '0.001')) !!}
@@ -58,7 +58,7 @@
                 </div>
 
                 <div class="form-group has-feedback row {{ $errors->has('description') ? ' has-error ' : '' }}">
-                    {!! Form::label('description', 'Descrizione', array('class' => 'col-md-3 control-label')); !!}
+                    {!! Form::label('description', trans('titles.description'), array('class' => 'col-md-3 control-label')); !!}
                     <div class="col-md-9">
                         <div class="input-group">
                             {!! Form::text('description', $group->description, array('id' => 'description', 'class' => 'form-control', 'placeholder' => 'Cellulare referente','required' => 'required')) !!}
@@ -73,7 +73,7 @@
 
                 <div class="form-group has-feedback row {{ $errors->has('users') ? ' has-error ' : '' }}">
                     <label for="users" class="col-md-3 control-label">
-                        Utenti
+                        {{ trans('titles.client') }}
                     </label>
                     <div class="col-md-9">
                         <select name="users[]" id="users" class="selectized" multiple required>

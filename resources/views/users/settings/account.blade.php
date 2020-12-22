@@ -16,24 +16,24 @@
                     </div>
                     <div class="card-body">
                         @if(auth()->user()->company_data->company_name !== '' && !is_null(auth()->user()->company_data->company_name))
-                            Company name: {{ auth()->user()->company_data->company_name }}
+                            {{ trans('titles.company-name') }}: {{ auth()->user()->company_data->company_name }}
                         @endif
                         @if(auth()->user()->company_data->shop_sign !== '' && !is_null(auth()->user()->company_data->shop_sign))
                             Shop sign: {{ auth()->user()->company_data->shop_sign }}
                         @endif
-                        ID: {{ Auth::user()->id }}<br>
-                        Balance: {{ round(Auth::user()->plafond, 2) }} € <br>
-                        Profile:
+                        {{ trans('titles.id') }}: {{ Auth::user()->id }}<br>
+                        {{ trans('titles.balance') }}: {{ round(Auth::user()->plafond, 2) }} € <br>
+                        {{ trans('titles.profile') }}:
                         {{ Auth::user()->group_id && Auth::user()->group_id != 0
                                 ? Auth::user()->group()->first()->name
-                                : 'Undefined profile, account disabled. Please contact administration to fix this issue.' }}<br>
-                        Default gain: {{ Auth::user()->configuration ? Auth::user()->configuration->default_gain : 0 }}
+                                : trans('descriptions.error-msg-without-name') }}<br>
+                        {{trans('titles.default-gain')}}: {{ Auth::user()->configuration ? Auth::user()->configuration->default_gain : 0 }}
                         %<br>
                         {!! Form::open(['route' => 'users.settings.update', 'method' => 'POST', 'role' => 'form', 'class' =>
                         'needs-validation']) !!}
                         {!! csrf_field() !!}
                         <div class="form-group row">
-                            <label class="col-md-3 col-form-label" for="text-input">Gain %</label>
+                            <label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.gain') }} %</label>
                             <div class="col-md-9">
                                 <input class="form-control" id="gain" type="number" name="gain"
                                     value="{{ Auth::user()->configuration ? Auth::user()->configuration->default_gain : 0 }}"
@@ -41,7 +41,7 @@
                             </div>
                         </div>
 
-                        {!! Form::button('Edit', ['class' => 'btn btn-success margin-bottom-1 mb-1 float-right', 'type' =>
+                        {!! Form::button(trans('titles.edit'), ['class' => 'btn btn-success margin-bottom-1 mb-1 float-right', 'type' =>
                         'submit']) !!}
                         {!! Form::close() !!}
                     </div>
@@ -56,7 +56,7 @@
                     <div class="card">
                         <div class="card-header">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <h3>Sales</h3>
+                                <h3>{{ trans('titles.sales') }}</h3>
                             </div>
                         </div>
                         <div class="card-body">
@@ -66,8 +66,8 @@
                                         id="admin-table">
                                         <thead>
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Percentage</th>
+                                                <th>{{ trans('titles.name') }}</th>
+                                                <th>{{ trans('titles.percentage') }}</th>
                                                 <th>State</th>
                                             </tr>
                                         </thead>
@@ -79,9 +79,9 @@
                                                     <td>
                                                         <span class="badge px-4 py-2 @if($reference->state == 1) text-white bg-success @else text-dark bg-secondary @endif">
                                                             @if ($reference->state == 1)
-                                                                Approved
+                                                                {{ trans('titles.approved') }}
                                                             @else
-                                                                Pending
+                                                                {{ trans('titles.pending') }}
                                                             @endif
                                                         </span>
                                                     </td>
@@ -104,7 +104,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h3>Update password</h3>
+                            <h3>{{ trans('titles.update-password') }}</h3>
                         </div>
                     </div>
                     <div class="card-body">
@@ -112,7 +112,7 @@
                             @method('PUT')
                             @csrf
                             <div class="form-group row">
-                              <label for="password" class="col-sm-2 col-form-label">New password</label>
+                              <label for="password" class="col-sm-2 col-form-label">{{ trans('titles.new-password') }}</label>
                               <div class="col-sm-10">
                                 <input type="password" name="password" class="form-control" id="password">
                                 @error('password')
@@ -123,7 +123,7 @@
                               </div>
                             </div>
                             <div class="form-group row">
-                                <label for="confirm_password" class="col-sm-2 col-form-label">Confirm password</label>
+                                <label for="confirm_password" class="col-sm-2 col-form-label">{{ trans('titles.confirm-password') }}</label>
                                 <div class="col-sm-10">
                                     <input type="password" name="confirm_password" class="form-control" id="confirm_password">
                                     @error('confirm_password')
@@ -135,7 +135,7 @@
                             </div>
                             <div>
                             <div class="d-flex align-items-end flex-column">
-                                <button type="submit" class="btn btn-success">Update</button>
+                                <button type="submit" class="btn btn-success">{{ trans('titles.update') }}</button>
                                 </div>
                             </div>
                           </form>

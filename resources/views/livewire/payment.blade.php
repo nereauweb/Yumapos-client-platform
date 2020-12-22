@@ -4,24 +4,24 @@
         <div class="card-header">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span id="card_title">
-                    Payments
+                    {{ trans('titles.payments') }}
                 </span>
                 <div class="pull-right">
                     <a class="btn btn-danger" href="{{ route('admin.trashedPayments') }}">
                         <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
-                        List of trashed payments
+                        {{ trans('titles.list-trashed-payments') }}
                     </a>
                     <a class="btn btn-info" href="{{ route('admin.payUser') }}">
                         <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
-                        Pay user
+                        {{ trans('titles.pay-user') }}
                     </a>
                     <a class="btn btn-info" href="{{ route('admin.payProvider') }}">
                         <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
-                        Pay provider
+                        {{ trans('titles.pay-provider') }}
                     </a>
                     <a class="btn btn-success" href="/admin/payments/create">
                         <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
-                        Add payment
+                        {{ trans('titles.add-payment') }}
                     </a>
                 </div>
             </div>
@@ -29,14 +29,14 @@
 
         <div class="card-body">
 
-            <h1>Payments</h1>
+            <h1>{{ trans('titles.payments') }}</h1>
             <div class="uk-padding-small">
                 <dl class="row">
-                    <dt class="col-sm-5">Total positive balance:</dt>
+                    <dt class="col-sm-5">{{ trans('descriptions.total-positive-balance') }}:</dt>
                     <dd class="col-sm-7">{{ $positiveBalance }}&euro;</dd>
-                    <dt class="col-sm-5">Total negative balance:</dt>
+                    <dt class="col-sm-5">{{ trans('descriptions.total-negative-balance') }}:</dt>
                     <dd class="col-sm-7">{{ $negativeBalance }}&euro;</dd>
-                    <dt class="col-sm-5">Difference between positive/negative balance:</dt>
+                    <dt class="col-sm-5">{{ trans('descriptions.difference-between-negpos-balance') }}:</dt>
                     <dd class="col-sm-7">{{ $diffBalance }}&euro;</dd>
                 </dl>
             </div>
@@ -47,12 +47,12 @@
                 <div class="col">
                     <div>
                         <div class="form-group w-100">
-                            <label for="exampleFormControlSelect1">Type</label>
+                            <label for="exampleFormControlSelect1">{{ trans('titles.type') }}</label>
                             <select wire:model.defer="typeSelected" class="form-control custom-select" name="user">
-                                <option value="0" selected>All Types</option>
-                                <option value="1">User to platform</option>
-                                <option value="2">Platform to user</option>
-                                <option value="3">Platform to provider</option>
+                                <option value="0" selected>{{ trans('titles.all-types') }}</option>
+                                <option value="1">{{ trans('titles.user-to-platform') }}</option>
+                                <option value="2">{{ trans('titles.platform-to-user') }}</option>
+                                <option value="3">{{ trans('titles.platform-to-provider') }}</option>
                             </select>
                         </div>
                     </div>
@@ -60,12 +60,12 @@
                 <div class="col">
                     <div>
                         <div class="form-group w-100">
-                            <label for="exampleFormControlSelect1">State</label>
+                            <label for="exampleFormControlSelect1">{{ trans('titles.state') }}</label>
                             <select wire:model.defer="stateSelected" class="form-control custom-select" name="state">
-                                <option selected value="null">All</option>
-                                <option value="-1">Canceled</option>
-                                <option value="0">Pending</option>
-                                <option value="1">Approved</option>
+                                <option selected value="null">{{ trans('titles.all') }}</option>
+                                <option value="-1">{{ trans('titles.canceled') }}</option>
+                                <option value="0">{{ trans('titles.pending') }}</option>
+                                <option value="1">{{ trans('titles.approved') }}</option>
                             </select>
                         </div>
                     </div>
@@ -73,9 +73,9 @@
                 <div class="col">
                     <div>
                         <div class="form-group w-100">
-                            <label for="exampleFormControlSelect1">User</label>
+                            <label for="exampleFormControlSelect1">{{ trans('titles.user') }}</label>
                             <select wire:model.defer="userSelected" class="form-control custom-select" name="user">
-                                <option value="0" selected>All users</option>
+                                <option value="0" selected>{{ trans('titles.all-users') }}</option>
                                 @foreach ($users as $user)
                                     @if (!is_null($user) && $user->hasRole(['user', 'sales']))
                                         <option value="{{ $user->id }}">{{ $user->email }}</option>
@@ -89,7 +89,7 @@
                     <div>
                         <div class="form-group">
                             <div>
-                                <button wire:click="commit" class="btn btn-success w-100" id="commitData">Commit</button>
+                                <button wire:click="commit" class="btn btn-success w-100" id="commitData">{{ trans('titles.commit') }}</button>
                             </div>
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                         <tr>
                             <th class="no-search"></th>
                             <th wire:click="sortBy('date')">
-                                <span>Date</span>
+                                <span>{{ trans('titles.date') }}</span>
                                 @if($sortAsc && $sortField == 'date')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
@@ -109,7 +109,7 @@
                                 @endif
                             </th>
                             <th wire:click="filterBy('users.name')">
-                                <span>User</span>
+                                <span>{{ trans('titles.user') }}</span>
                                 @if($sortAsc && $filterByModel == 'users.name')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
@@ -117,7 +117,7 @@
                                 @endif
                             </th>
                             <th wire:click="sortBy('amount')">
-                                <span>Amount</span>
+                                <span>{{ trans('titles.amount') }}</span>
                                 @if($sortAsc && $sortField == 'amount')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
@@ -125,13 +125,13 @@
                                 @endif
                             </th>
                             <th>
-                                <span>Details</span>
+                                <span>{{ trans('titles.details') }}</span>
                             </th>
                             <th>
-                                <span>Document/s</span>
+                                <span>{{ trans('titles.documents') }}</span>
                             </th>
                             <th wire:click="sortBy('type')">
-                                <span>Type</span>
+                                <span>{{ trans('titles.type') }}</span>
                                 @if($sortAsc && $sortField == 'type')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
@@ -139,7 +139,7 @@
                                 @endif
                             </th>
                             <th wire:click="sortBy('approved')">
-                                <span>Approved</span>
+                                <span>{{ trans('titles.approved') }}</span>
                                 @if($sortAsc && $sortField == 'approved')
                                     <i class="cil-arrow-bottom"></i>
                                 @else
@@ -165,25 +165,25 @@
                                                 {!! Form::open(['route' => ['admin.payments.updatePaymentStatus', $payment->id],
                                                 'method' => 'PUT', 'role' => 'form']) !!}
                                                 {!! csrf_field() !!}
-                                                <button class="dropdown-item" type="submit">Approve</button>
+                                                <button class="dropdown-item" type="submit">{{ trans('titles.approve') }}</button>
                                                 {!! Form::close() !!}
                                                 {!! Form::open(['route' => ['admin.payments.reject', $payment->id],
                                                 'method' => 'DELETE', 'role' => 'form']) !!}
                                                 {!! csrf_field() !!}
-                                                <button class="dropdown-item" type="submit">Reject</button>
+                                                <button class="dropdown-item" type="submit">{{ trans('titles.reject') }}</button>
                                                 {!! Form::close() !!}
-                                                <a href="{{ route('admin.payments.edit', $payment) }}" class="dropdown-item">Edit payment</a>
+                                                <a href="{{ route('admin.payments.edit', $payment) }}" class="dropdown-item">{{ trans('titles.edit-payment') }}</a>
                                             @elseif($payment->approved == 1)
                                                 <form action="{{ route('admin.payments.cancel', $payment->id) }}" method="post">
                                                     @csrf
                                                     @method('PUT')
-                                                    <button class="btn dropdown-item" type="submit">Cancel payment</button>
+                                                    <button class="btn dropdown-item" type="submit">{{ trans('titles.cancel-payment') }}</button>
                                                 </form>
                                             @else
                                                 <form action="{{ route('admin.payments.recover', $payment->id) }}" method="post">
                                                     @csrf
                                                     @method('PUT')
-                                                    <button class="btn dropdown-item">Recover</button>
+                                                    <button class="btn dropdown-item">{{ trans('titles.recover') }}</button>
                                                 </form>
                                             @endif
                                         </div>
@@ -236,11 +236,11 @@
                                 </td>
                                 <td>
                                     @if($payment->approved == 1)
-                                        <span class="badge bg-success">Approved</span>
+                                        <span class="badge bg-success">{{ trans('titles.approved') }}</span>
                                     @elseif($payment->approved == -1)
-                                        <span class="badge bg-danger">Canceled</span>
+                                        <span class="badge bg-danger">{{ trans('titles.canceled') }}</span>
                                     @else
-                                        <span class="badge bg-warning">Pending</span>
+                                        <span class="badge bg-warning">{{ trans('titles.pending') }}</span>
                                     @endif
                                 </td>
                             </tr>
@@ -259,7 +259,7 @@
                 <input type="hidden" value="{{ $userSelected }}" name="userSelected">
                 <input type="hidden" value="{{ $typeSelected }}" name="typeSelected">
                 <input type="hidden" value="{{ $stateSelected }}" name="stateSelected">
-                {!! Form::button('Export', ['class' => 'btn btn-success', 'type' => 'submit']) !!}
+                {!! Form::button(trans('titles.export'), ['class' => 'btn btn-success', 'type' => 'submit']) !!}
                 {!! Form::close() !!}
             </div>
 

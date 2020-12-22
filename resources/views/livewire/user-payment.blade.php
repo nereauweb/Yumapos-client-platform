@@ -7,25 +7,25 @@
                 <div style="display: flex; justify-content: space-between; align-items: center;">
 
 				<span id="card_title">
-					Payments
+					{{ trans('titles.payments') }}
 				</span>
 
                     <div class="btn-group pull-right btn-group-xs">
                         <a class="dropdown-item" href="/users/payments/create">
                             <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
-                            Add payment
+                            {{ trans('titles.add-payment') }}
                         </a>
                     </div>
                 </div>
             </div>
             <div class="card-body">
 
-                <h1>Payments</h1>
+                <h1>{{ trans('titles.payments') }}</h1>
                 <div class="calculations my-4">
                     <div class="row">
                         <div class="col-4">
                             <span class="font-weight-bold">
-                                Platform to you:
+                                {{ trans('titles.platform-to-you') }}:
                             </span>
                         </div>
                         <div class="col-4">
@@ -37,7 +37,7 @@
                     <div class="row">
                         <div class="col-4">
                             <span class="font-weight-bold">
-                                Your approved balance to platform:
+                                {{ trans('titles.approved-balance-to-platform') }}:
                             </span>
                         </div>
                         <div class="col-4">
@@ -48,7 +48,7 @@
                     </div>
                     <div class="row">
                         <div class="col-4">
-                            <span class="font-weight-bold">Difference between balances:</span>
+                            <span class="font-weight-bold">{{ trans('titles.difference-between-balances') }}:</span>
                         </div>
                         <div class="col-4">
                             <span class="font-weight-bold">{{ $totalBalance - $negativeBalance }} &euro;</span>
@@ -56,7 +56,7 @@
                     </div>
                     <div class="row">
                         <div class="col-4">
-                            <span class="font-weight-bold">Your plafond amount:</span>
+                            <span class="font-weight-bold">{{ trans('titles.your-plafond-amount') }}:</span>
                         </div>
                         <div class="col-4">
                             <span class="font-weight-bold">{{ auth()->user()->plafond }} &euro;</span>
@@ -69,28 +69,28 @@
                     </div>
                     <div class="col mt-1">
                         <fieldset class="form-group">
-                            <label for="state">State</label>
+                            <label for="state">{{ trans('titles.state') }}</label>
                             <select class="form-control" name="state" wire:model.defer="state" id="state">
-                                <option value="" selected>All</option>
-                                <option value="-1">Rejected</option>
-                                <option value="00">Pending</option>
-                                <option value="1">Approved</option>
+                                <option value="" selected>{{ trans('titles.all') }}</option>
+                                <option value="-1">{{ trans('titles.rejected') }}</option>
+                                <option value="00">{{ trans('titles.pending') }}</option>
+                                <option value="1">{{ trans('titles.approved') }}</option>
                             </select>
                         </fieldset>
                     </div>
                     <div class="col">
-                        <button id="commitData" class="mt-3 btn btn-success" wire:click="load">commit</button>
+                        <button id="commitData" class="mt-3 btn btn-success" wire:click="load">{{ trans('titles.commit') }}</button>
                     </div>
                 </div>
                 <div class="table-responsive users-table ">
                     <table class="table table-bordered col-filtered-datatable">
                         <thead class="thead">
                         <tr>
-                            <th>Date</th>
-                            <th>Amount</th>
-                            <th>Details</th>
-                            <th>Approved</th>
-                            <th>Type</th>
+                            <th>{{ trans('titles.date') }}</th>
+                            <th>{{ trans('titles.amount') }}</th>
+                            <th>{{ trans('titles.details') }}</th>
+                            <th>{{ trans('titles.approved') }}</th>
+                            <th>{{ trans('titles.type') }}</th>
                         </tr>
                         </thead>
                         <tbody id="users_table">
@@ -111,7 +111,7 @@
                                             <i class="cil-x"></i>
                                         @endif
                                     </td>
-                                    <td>{{ $payment->type == 1 ? 'You to platform' : 'Platform to you' }}</td>
+                                    <td>{{ $payment->type == 1 ? trans('titles.you-to-platform') : trans('titles.platform-to-you') }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -125,7 +125,7 @@
                     <input type="hidden" name="from" value="{{ $from }}">
                     <input type="hidden" name="to" value="{{ $to }}">
                     <input type="hidden" name="state" value="{{ $state }}">
-                    {!! Form::button('Export', array('class' => 'btn btn-success','type' => 'submit' )) !!}
+                    {!! Form::button(trans('titles.export'), array('class' => 'btn btn-success','type' => 'submit' )) !!}
                     {!! Form::close() !!}
                 </div>
 

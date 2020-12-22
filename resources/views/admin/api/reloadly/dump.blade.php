@@ -8,11 +8,11 @@
                 <div class="card">
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h3>Reloadly response</h3>
+                            <h3>{{ trans('titles.reloadly-response') }}</h3>
                         </div>
                     </div>
                     <div class="card-body">
-						Log: {!! $log !!}
+						{{ trans('titles.log') }}: {!! $log !!}
 						<pre>{!! var_dump($data) !!}</pre>
                     </div>
                 </div>

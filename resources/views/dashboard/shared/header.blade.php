@@ -40,14 +40,14 @@
         <ul class="c-header-nav">
             @hasanyrole('sales|user')
             <li class="c-header-nav-item px-3">
-                Balance {{ Auth::user()->plafond }} €
+                {{ trans('titles.balance') }} {{ Auth::user()->plafond }} €
             </li>
             <li class="c-header-nav-item-px-3">
-                <a href="{{ route('users.payments.create') }}" class="btn btn-success">Payment</a>
+                <a href="{{ route('users.payments.create') }}" class="btn btn-success">{{ trans('titles.payment') }}</a>
             </li>
             @endrole
 			<li class="c-header-nav-item px-3">
-				<form action="/logout" method="POST"> @csrf <button type="submit" class="btn btn-ghost-dark btn-block light">Logout</button></form>
+				<form action="/logout" method="POST"> @csrf <button type="submit" class="btn btn-ghost-dark btn-block light">{{ trans('titles.logout') }}</button></form>
 			</li>
         </ul>
 
@@ -57,7 +57,7 @@
         <div class="c-subheader px-3">
           <!-- Breadcrumb-->
           <ol class="breadcrumb border-0 m-0">
-          <li class="breadcrumb-item"><a href="/">Home</a></li>
+          <li class="breadcrumb-item"><a href="/">{{ trans('titles.home') }}</a></li>
             <?php $segments = ''; ?>
             @for($i = 1; $i <= count(Request::segments()); $i++)
                 <?php $segments .= '/'. Request::segment($i); ?>

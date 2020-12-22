@@ -12,7 +12,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h3>Input phone number</h3>
+                            <h3>{{ trans('titles.i-phone-number') }}</h3>
                         </div>
                     </div>
                     <div class="card-body">
@@ -22,18 +22,18 @@
 									<div class="">
 										<div class="uk-form-controls uk-grid-collapse" uk-grid>
 											<div class="uk-width-auto">
-												<label class="uk-form-label uk-dark">Filter <small> *optional</small></label>
+												<label class="uk-form-label uk-dark">{{ trans('titles.filter') }} <small> *{{ trans('titles.optional') }}</small></label>
 												<input id="search" class="uk-input form-control" type="text" placeholder="Filter by country name">
 											</div>
 											<div class="uk-width-expand">
-												<label class="uk-form-label uk-dark">Phone n. <small>(select country code)</small> <small style="color:white;">*required</small></label>
+												<label class="uk-form-label uk-dark">{{trans('titles.p-n')}}. <small>({{ trans('titles.s-c-code') }})</small> <small style="color:white;">*{{ trans('titles.required') }}</small></label>
 												<input name="number" id="phone" class="uk-input form-control" type="tel" required>
 												<input name="prefix" id="prefix" type="hidden" required>
 												<input name="country" id="country" type="hidden" required>
 											</div>
 										</div>
 									</div>
-							{!! Form::button('Search', array('class' => 'btn btn-success margin-bottom-1 mb-1 float-right','type' => 'submit' )) !!}
+							{!! Form::button(trans('titles.search'), array('class' => 'btn btn-success margin-bottom-1 mb-1 float-right','type' => 'submit' )) !!}
 						{!! Form::close() !!}
                     </div>
                 </div>

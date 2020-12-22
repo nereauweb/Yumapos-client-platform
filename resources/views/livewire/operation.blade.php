@@ -3,7 +3,7 @@
     @include('livewire.loader')
         <div class="card-header">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h3>{{ $user_name }} operations {{ date('d/m/Y', strtotime($date_begin)) }} -
+                <h3>{{ $user_name }} {{ trans('titles.operations') }} {{ date('d/m/Y', strtotime($date_begin)) }} -
                     {{ date('d/m/Y', strtotime($date_end)) }}</h3>
             </div>
         </div>
@@ -11,27 +11,27 @@
             <div class="uk-width-1-1 uk-grid uk-child-width-1-2" uk-grid>
                 <div class="">
                     <dl class="row uk-padding-small">
-                        <dt class="col-sm-5">Operations</dt>
+                        <dt class="col-sm-5">{{ trans('titles.operations') }}</dt>
                         <dd class="col-sm-7">{{ $totalOperationsCount }}</dd>
-                        <dt class="col-sm-5">Total User discounts</dt>
+                        <dt class="col-sm-5">{{ trans('titles.total-user-discounts') }}</dt>
                         <dd class="col-sm-7">{{ $operationsSum }} €</dd>
-                        <dt class="col-sm-5">Total Commissions</dt>
+                        <dt class="col-sm-5">{{ trans('titles.total-commissions') }}</dt>
                         <dd class="col-sm-7">{{ $totalCommissions }} €</dd>
-                        <dt class="col-sm-5">Total gross Plaform gains</dt>
+                        <dt class="col-sm-5">{{ trans('titles.total-gross-plaform-gains') }}</dt>
                         <dd class="col-sm-7">{{ $totalGrossPlatformGain }} €</dd>
-                        <dt class="col-sm-5">Total net Platform gains</dt>
+                        <dt class="col-sm-5">{{ trans('titles.total-net-platform-gains') }}</dt>
                         <dd class="col-sm-7">{{ $totalNetPlatformGains }} €</dd>
-                        <dt class="col-sm-5">Volume (user amount) {{ $selectedCountry ? 'Country ISO '.$selectedCountry : 'country' }}</dt>
+                        <dt class="col-sm-5">{{ trans('titles.volume-user-amount') }} {{ $selectedCountry ? trans('titles.country').' ISO '.$selectedCountry : trans('titles.country') }}</dt>
                         <dd class="col-sm-7">{{ $sentAmount }} €</dd>
-                        <dt class="col-sm-5">Platform total gain {{ $selectedOperator ? 'Operator id '.$selectedOperator : 'operator' }}</dt>
+                        <dt class="col-sm-5">{{ trans('titles.platform-total-gain') }} {{ $selectedOperator ? 'Operator id '.$selectedOperator : 'operator' }}</dt>
                         <dd class="col-sm-7">{{ $platformTotalGain }} €</dd>
                 </div>
                 <div class="">
                     <div class="col-sm">
                         <fieldset class="form-group">
-                            <label>Search by operation ID</label>
+                            <label>{{ trans('titles.search-by-operation-id') }}</label>
                             <div class="input-group">
-                                <input class="form-control" type="text" wire:model.defer="operationId" placeholder="search by operation id">
+                                <input class="form-control" type="text" wire:model.defer="operationId" placeholder="{{ trans('placeholders.search-by-operation-id') }}">
                                 <span class="input-group-append">
                                 <span class="input-group-text bg-primary">
                                     <button wire:click="searchById" style="border: none;outline: none; background: none;" class="cil-search btn-behance"></button>
@@ -45,7 +45,7 @@
                     </div>
                     <div class="col-sm">
                         <fieldset class="form-group">
-                            <label>User</label>
+                            <label>{{ trans('titles.user') }}</label>
                             <div class="input-group">
                             <span class="input-group-prepend">
                                 <span class="input-group-text">
@@ -54,7 +54,7 @@
                             </span>
                                 <select wire:model.defer="userSelected" class="form-control custom-select" name="user">
                                     <option value="0" @if ($user_id == 0) selected
-                                        @endif>All users</option>
+                                        @endif>{{ trans('titles.all-users') }}</option>
                                     @foreach ($users as $list_user_id => $list_user_name)
                                         <option value="{{ $list_user_id }}" @if ($user_id == $list_user_id) selected
                                             @endif>{{ $list_user_name }}</option>
@@ -65,9 +65,9 @@
                     </div>
                     <div class="col">
                         <div class="form-group">
-                            <label for="js-select-countries">Choose country</label>
+                            <label for="js-select-countries">{{ trans('titles.choose-country') }}</label>
                             <select wire:model.defer="selectedCountry" class="form-control">
-                                <option value="0" selected>All</option>
+                                <option value="0" selected>{{ trans('titles.all') }}</option>
                                 @foreach($countries as $country)
                                     <option value="{{ $country->isoName }}">{{ $country->name }}</option>
                                 @endforeach
@@ -76,9 +76,9 @@
                     </div>
                     <div class="col">
                         <div class="form-group">
-                            <label for="js-select-operators">Choose operator</label>
+                            <label for="js-select-operators">{{ trans('titles.choose-operator') }}</label>
                             <select wire:model.defer="selectedOperator" class="form-control">
-                                <option value="0" selected>All</option>
+                                <option value="0" selected>{{ trans('titles.all') }}</option>
                                 @foreach($usedOperators as $key => $operator)
                                     <option value="{{ $key }}">{{ $operator }}</option>
                                 @endforeach
@@ -86,7 +86,7 @@
                         </div>
                     </div>
                     <div class="col-sm mt-2">
-                        <button class="btn btn-success" id="commitData" wire:click="commit">Commit</button>
+                        <button class="btn btn-success" id="commitData" wire:click="commit">{{ trans('titles.commit') }}</button>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@
                     <thead>
                     <tr class="cursorPointer">
                         <th wire:click="sortBy('created_at')">
-                            <span>Date</span>
+                            <span>{{ trans('titles.date') }}</span>
                             @if($sortAsc && $sortField == 'created_at')
                                 <i class="cil-arrow-bottom"></i>
                             @else
@@ -103,7 +103,7 @@
                             @endif
                         </th>
                         <th>
-                            <span>User</span>
+                            <span>{{ trans('titles.user') }}</span>
                             {{-- <svg width="20" height="20" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -112,7 +112,7 @@
                             </svg> --}}
                         </th>
                         <th wire:click="sortBy('id')">
-                            <span>Operation ID</span>
+                            <span>{{ trans('titles.operation-id') }}</span>
                             @if($sortAsc && $sortField == 'id')
                                 <i class="cil-arrow-bottom"></i>
                             @else
@@ -120,7 +120,7 @@
                             @endif
                         </th>
                         <th wire:click="sortBy('provider')">
-                            <span>Provider</span>
+                            <span>{{ trans('titles.provider') }}</span>
                             @if($sortAsc && $sortField == 'reloadly_transactionId')
                                 <i class="cil-arrow-bottom"></i>
                             @else
@@ -128,29 +128,29 @@
                             @endif
                         </th>
                         <th wire:click="sortBy('request_country_iso')">
-                            <span>Country</span>
+                            <span>{{ trans('titles.country') }}</span>
                             @if($sortAsc && $sortField == 'request_country_iso')
                                 <i class="cil-arrow-bottom"></i>
                             @else
                                 <i class="cil-arrow-top"></i>
                             @endif
                         </th>
-                        <th>Operator</th>
+                        <th>{{ trans('titles.operator') }}</th>
                         <th wire:click="sortBy('request_recipient_phone')">
-                            <span>Phone number</span>
+                            <span>{{ trans('titles.phone-number') }}</span>
                             @if($sortAsc && $sortField == 'request_country_iso')
                                 <i class="cil-arrow-bottom"></i>
                             @else
                                 <i class="cil-arrow-top"></i>
                             @endif
                         </th>
-                        <th>Expected destination amount</th>
-                        <th>&Delta; Paid/Sent amount</th>
-                        <th>Agent commission</th>
-                        <th>Platform commission</th>
-                        <th>Gross platform gain</th>
-                        <th>User discount</th>
-                        <th>Net platform gain</th>
+                        <th>{{ trans('titles.expected-destination-amount') }}</th>
+                        <th>&Delta; {{ trans('titles.paid-sent-amount') }}</th>
+                        <th>{{ trans('titles.agent-commission') }}</th>
+                        <th>{{ trans('titles.platform-commission') }}</th>
+                        <th>{{ trans('titles.gross-platform-gain') }}</th>
+                        <th>{{ trans('titles.user-discount') }}</th>
+                        <th>{{ trans('titles.net-platform-gain') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -186,7 +186,7 @@
                 {!! Form::open(['route' => 'admin.report.operations.export', 'method' => 'GET', 'role' => 'form',
                 'class' => 'needs-validation uk-margin-bottom']) !!}
                 {!! csrf_field() !!}
-                {!! Form::button('Export', ['class' => 'btn btn-success', 'type' => 'submit']) !!}
+                {!! Form::button(trans('titles.export'), ['class' => 'btn btn-success', 'type' => 'submit']) !!}
                 <input type="hidden" name="date_begin" value="{{ date('Y-m-d', strtotime($date_begin)) }}">
                 <input type="hidden" name="date_end" value="{{ date('Y-m-d', strtotime($date_end)) }}">
                 <input type="hidden" name="isoName" value="{{ $selectedCountry }}">
@@ -195,7 +195,7 @@
                 {!! Form::open(['route' => 'admin.report.operations.export.simple', 'method' => 'GET', 'role' =>
                 'form', 'class' => 'needs-validation uk-margin-bottom']) !!}
                 {!! csrf_field() !!}
-                {!! Form::button('Formatted export', ['class' => 'btn btn-success', 'type' => 'submit']) !!}
+                {!! Form::button(trans('titles.formatted-export'), ['class' => 'btn btn-success', 'type' => 'submit']) !!}
                 <input type="hidden" name="date_begin" value="{{ date('Y-m-d', strtotime($date_begin)) }}">
                 <input type="hidden" name="date_end" value="{{ date('Y-m-d', strtotime($date_end)) }}">
                 {!! Form::close() !!}

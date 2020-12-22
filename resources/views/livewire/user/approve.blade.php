@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalApproveTitle">Approval of user: {{ $user_id }}</h5>
+                <h5 class="modal-title" id="modalApproveTitle">{{ trans('titles.approval-of-user') }}: {{ $user_id }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -11,10 +11,10 @@
                 <div class="modal-body">
                     <form>
                         <div class="form-group has-feedback row">
-                            <label for="parent_percent" class="col-md-3 control-label">Percentuale referente</label>
+                            <label for="parent_percent" class="col-md-3 control-label">{{ trans('titles.referal-percentage') }}</label>
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    <input wire:model.defer="parent_percent" id="parent_percent" class="form-control" placeholder="Percentuale referente"
+                                    <input wire:model.defer="parent_percent" id="parent_percent" class="form-control" placeholder="{{ trans('titles.referal-percentage') }}"
                                         min="0" step="0.01" name="parent_percent" type="number">
                                     <div class="input-group-append">
                                         <label for="parent_percent" class="input-group-text">
@@ -28,7 +28,7 @@
                             </div>
                         </div>
                         <div class="form-group has-feedback row ">
-                            <label for="group" class="col-md-3 control-label">Ruolo utente</label>
+                            <label for="group" class="col-md-3 control-label">{{ trans('titles.user-role') }}</label>
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <select wire:model.defer="group_id" class="form-control" id="group" name="group_id">
@@ -49,7 +49,7 @@
                             </div>
                         </div>
                         <div class="form-group has-feedback row ">
-                            <label for="group" class="col-md-3 control-label">Plafond</label>
+                            <label for="group" class="col-md-3 control-label">{{ trans('titles.plafond') }}</label>
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <input wire:model.defer="plafond" class="form-control" id="plafond" name="plafond" />
@@ -65,7 +65,7 @@
                             </div>
                         </div>
                         <div class="form-group has-feedback row ">
-                            <label for="debt_limit" class="col-md-3 control-label">Plafond limit</label>
+                            <label for="debt_limit" class="col-md-3 control-label">{{ trans('titles.plafond-limit') }}</label>
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <input wire:model.defer="debt_limit" class="form-control" id="debt_limit" name="debt_limit" />
@@ -84,8 +84,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success" wire:click.prevent="store()">Approve</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ trans('titles.close') }}</button>
+                    <button type="submit" class="btn btn-success" wire:click.prevent="store()">{{ trans('titles.approve') }}</button>
                 </div>
             </form>
         </div>

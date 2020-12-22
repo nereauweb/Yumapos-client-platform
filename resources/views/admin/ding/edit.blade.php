@@ -10,27 +10,27 @@
             <div class="col-lg-12">
 				<div class="uk-modal-dialog uk-modal-body" id="content">
 					<button class="uk-modal-close-default" type="button" uk-close></button>
-					<h2 class="uk-text-secondary">{{ $operator->Name }} | Configuration</h2>					
+					<h2 class="uk-text-secondary">{{ $operator->Name }} | Configuration</h2>
 					<div class="uk-margin-small-top" id="modal-submit-response"></div>
-					
+
 					@if($operator->products)
-						
+
 						{!! Form::open(array('route' => ['admin.ding.update', $operator->id], 'method' => 'PUT', 'role' => 'form', 'class' => 'needs-validation')) !!}
 
 						{!! csrf_field() !!}
-						
+
 						<div uk-overflow-auto>
-						
+
 						@foreach ($operator->ordered_products() as $product)
-						
+
 							@if($product->type()=="RANGE")
 									<table class="table light">
 										<thead>
 											<tr>
-												<th>User group</th>
-												<th>% FX variation</th>
-												<th>% Discount</th>
-												<th>Enabled</th>
+												<th>{{ trans('titles.user-group') }}</th>
+												<th>% {{ trans('titles.fx-variation') }}</th>
+												<th>% {{ trans('titles.discount') }}</th>
+												<th>{{ trans('titles.enabled') }}</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -51,29 +51,29 @@
 												</td>
 												<td>
 													<select name="group[{{$group->id}}][enabled]" class="form-control form-control-sm form-control-dark is-visible">
-														<option value="1" {{ $configuration&&$configuration->enabled==1 ? 'selected' : '' }}>Yes</option>
-														<option value="0" {{ $configuration&&$configuration->enabled==0 ? 'selected' : '' }}>No</option>
+														<option value="1" {{ $configuration&&$configuration->enabled==1 ? 'selected' : '' }}>{{ trans('titles.yes') }}</option>
+														<option value="0" {{ $configuration&&$configuration->enabled==0 ? 'selected' : '' }}>{{ trans('titles.no') }}</option>
 													</select>
 												</td>
 											</tr>
 										@endforeach
 										</tbody>
 									</table>
-							@elseif($product->type()=="FIXED")				
+							@elseif($product->type()=="FIXED")
 									<table class="table light">
 										<thead>
 											<tr>
-												<th>Enabled</th>
+												<th>{{ trans('titles.enabled') }}</th>
 												@foreach($groups as $group)
 													@php
-														$configuration = $operator->configurations->where('group_id', $group->id)->first();	
+														$configuration = $operator->configurations->where('group_id', $group->id)->first();
 													@endphp
 													<th>
 														{{ $group->name }}<br>
 														<select name="group[{{$group->id}}][enabled]" class="form-control form-control-sm form-control-dark is-visible">
-															<option value="1" {{ $configuration&&$configuration->enabled==1 ? 'selected' : '' }}>Yes</option>
-															<option value="0" {{ $configuration&&$configuration->enabled==0 ? 'selected' : '' }}>No</option>
-														</select>												
+															<option value="1" {{ $configuration&&$configuration->enabled==1 ? 'selected' : '' }}>{{ trans('titles.yes') }}</option>
+															<option value="0" {{ $configuration&&$configuration->enabled==0 ? 'selected' : '' }}>{{ trans('titles.no') }}</option>
+														</select>
 													</th>
 												@endforeach
 											</tr>
@@ -81,22 +81,22 @@
 										<tbody>
 											<tr>
 												<td><strong>{{round($product->minimum->SendValue,3)}}&nbsp;€</strong><br><small>{{round($product->minimum->ReceiveValue,3)}} {{ $product->minimum->ReceiveCurrencyIso }}&nbsp;{{$product->destinationCurrencySymbol}}</td>
-												@foreach($groups as $group)									
+												@foreach($groups as $group)
 													@php
-														$configuration = $operator->configurations->where('group_id', $group->id)->first();	
+														$configuration = $operator->configurations->where('group_id', $group->id)->first();
 														if ($configuration) {
 															$amount_configuration = $configuration->amounts->where('original_amount',$product->minimum->SendValue)->first();
 														}
 													@endphp
 													<td>
-														Amount €
+														{{ trans('titles.amount') }} €
 														<input name="group[{{$group->id}}][{{$product->minimum->SendValue}}][amount]" type="number" class="form-control form-control-sm form-control-dark" step="0.01" value="{{ isset($amount_configuration)&&$amount_configuration ? $amount_configuration->final_amount : 0 }}">
-														Discount %
+														{{ trans('titles.discount') }} %
 														<input name="group[{{$group->id}}][{{$product->minimum->SendValue}}][discount]" type="number" class="form-control form-control-sm form-control-dark" step="0.01" value="{{ isset($amount_configuration)&&$amount_configuration ? $amount_configuration->discount : 0 }}">
-														Visible
+														{{ trans('titles.visible') }}
 														<select name="group[{{$group->id}}][{{$product->minimum->SendValue}}][visible]" class="form-control form-control-sm form-control-dark is-visible">
-															<option value="1" {{ isset($amount_configuration)&&$amount_configuration&&$amount_configuration->visible==1 ? 'selected' : '' }}>Yes</option>
-															<option value="0" {{ isset($amount_configuration)&&$amount_configuration&&$amount_configuration->visible==0 ? 'selected' : '' }}>No</option>
+															<option value="1" {{ isset($amount_configuration)&&$amount_configuration&&$amount_configuration->visible==1 ? 'selected' : '' }}>{{ trans('titles.yes') }}</option>
+															<option value="0" {{ isset($amount_configuration)&&$amount_configuration&&$amount_configuration->visible==0 ? 'selected' : '' }}>{{ trans('titles.no') }}</option>
 														</select>
 													</td>
 												@endforeach
@@ -106,24 +106,24 @@
 							@else
 								- Error: denomination type "{{$product->type()}}" not recognized
 							@endif
-						
+
 						@endforeach
 								</div>
 						@if($operator->products_type()=="FIXED")
 								<div class="uk-width-1-1 uk-flex uk-flex-center uk-margin-top">
 									<div>
-										<a class="uk-button" id="all-visible">All visibile</a>
-										<a class="uk-button" id="none-visible">None visible</a>
+										<a class="uk-button" id="all-visible">{{ trans('titles.all-visible') }}</a>
+										<a class="uk-button" id="none-visible">{{ trans('titles.none-visible') }}</a>
 									</div>
 								</div>
 						@endif
 						@if($operator->products_type()=="RANGE"||$operator->products_type()=="FIXED")
-							{!! Form::button(trans('forms.save-changes'), array('class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => trans('modals.edit_user__modal_text_confirm_title'), 'data-message' => trans('modals.edit_user__modal_text_confirm_message'))) !!}	
+							{!! Form::button(trans('forms.save-changes'), array('class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => trans('modals.edit_user__modal_text_confirm_title'), 'data-message' => trans('modals.edit_user__modal_text_confirm_message'))) !!}
 						@endif
 						{!! Form::close() !!}
-						
+
 					@endif
-				</div>	
+				</div>
 			</div>
 		</div>
 	</div>

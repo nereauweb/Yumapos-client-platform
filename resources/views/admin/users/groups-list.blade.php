@@ -27,14 +27,14 @@
                 <div style="display: flex; justify-content: space-between; align-items: center;">
 
 				<span id="card_title">
-					<h1>Gruppi utenti</h1>
+					<h1>{{ trans('titles.group-client') }}</h1>
 				</span>
 
                     <div class="btn-group btn-success pull-right btn-group-xs">
 
                         <a class="dropdown-item" href="/admin/users/groups/create">
                             <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
-                            Crea nuovo gruppo utenti
+                            {{ trans('titles.create-group') }}
                         </a>
                     </div>
                 </div>
@@ -42,15 +42,15 @@
 
             <div class="card-body">
 
-                
+
 
                 <div>
                     <table class="table table-bordered">
                         <thead>
                         <tr>
-                            <th>Id</th>
-                            <th>Nome</th>
-                            <th>Descrizione</th>
+                            <th>{{ trans('titles.id') }}</th>
+                            <th>{{ trans('titles.name') }}</th>
+                            <th>{{ trans('titles.description') }}</th>
                         </tr>
                         </thead>
                         <tbody id="users_table">
@@ -63,20 +63,20 @@
                                             {{ $group->id }}
                                             <i class="fa fa-ellipsis-v fa-fw" aria-hidden="true"></i>
                                             <span class="sr-only">
-									            Actions
+									            {{ trans('titles.actions') }}
 								            </span>
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right">
                                             <div class="uk-width-small">
                                                 <a class="btn btn-sm btn-success btn-block dropdown-item" href="{{ URL::to('admin/users/groups/' . $group->id) }}" data-toggle="tooltip" title="Show">
-                                                    Mostra gruppo utenti
+                                                    {{ trans('titles.show-client-group') }}
                                                 </a>
                                                 <a class="btn btn-sm btn-info btn-block dropdown-item" href="{{ URL::to('admin/users/groups/' . $group->id . '/edit') }}" data-toggle="tooltip" title="Edit">
-                                                    Modifica gruppo utenti
+                                                    {{ trans('titles.modify-group-client') }}
                                                 </a>
                                                 {!! Form::open(array('url' => 'admin/users/groups/' . $group->id, 'class' => '', 'data-toggle' => 'tooltip', 'title' => 'Delete')) !!}
                                                 {!! Form::hidden('_method', 'DELETE') !!}
-                                                {!! Form::button('Elimina gruppo utenti', array('class' => 'btn btn-danger btn-sm dropdown-item','type' => 'button', 'style' =>'width: 100%;' ,'data-toggle' => 'modal', 'data-target' => '#confirmDelete', 'data-title' => 'Delete Provider', 'data-message' => 'Are you sure you want to delete this group ?')) !!}
+                                                {!! Form::button(trans('titles.group-delete'), array('class' => 'btn btn-danger btn-sm dropdown-item','type' => 'button', 'style' =>'width: 100%;' ,'data-toggle' => 'modal', 'data-target' => '#confirmDelete', 'data-title' => 'Delete Provider', 'data-message' => 'Are you sure you want to delete this group ?')) !!}
                                                 {!! Form::close() !!}
                                             </div>
                                         </div>
@@ -94,21 +94,21 @@
                 </div>
             </div>
         </div>
-		
+
 		<div class="card">
             <div class="card-header">
 
                 <div style="display: flex; justify-content: space-between; align-items: center;">
 
 				<span id="card_title">
-					<h1>Gruppi agenti</h1>
+					<h1>{{ trans('titles.group-agent') }}</h1>
 				</span>
 
                     <div class="btn-group btn-success pull-right btn-group-xs">
 
                         <a class="dropdown-item" href="/admin/users/groups/create-agent">
                             <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
-                            Crea nuovo gruppo agenti
+                            {{ trans('titles.group-create-agent') }}
                         </a>
                     </div>
                 </div>
@@ -116,15 +116,15 @@
 
             <div class="card-body">
 
-                
+
 
                 <div>
                     <table class="table table-bordered">
                         <thead>
                         <tr>
-                            <th>Id</th>
-                            <th>Nome</th>
-                            <th>Descrizione</th>
+                            <th>{{ trans('titles.id') }}</th>
+                            <th>{{ trans('titles.name') }}</th>
+                            <th>{{ trans('titles.description') }}</th>
                         </tr>
                         </thead>
                         <tbody id="users_table">
@@ -137,20 +137,20 @@
                                             {{ $group->id }}
                                             <i class="fa fa-ellipsis-v fa-fw" aria-hidden="true"></i>
                                             <span class="sr-only">
-									            Actions
+									            {{ trans('titles.actions') }}
 								            </span>
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right">
                                             <div class="uk-width-small">
                                                 <a class="btn btn-sm btn-success btn-block dropdown-item" href="{{ URL::to('admin/users/groups/' . $group->id) }}" data-toggle="tooltip" title="Show">
-                                                    Mostra gruppo utenti
+                                                    {{ trans('titles.show-client-group') }}
                                                 </a>
                                                 <a class="btn btn-sm btn-info btn-block dropdown-item" href="{{ URL::to('admin/users/groups/' . $group->id . '/edit') }}" data-toggle="tooltip" title="Edit">
-                                                    Modifica gruppo utenti
+                                                    {{ trans('titles.modify-group-client') }}
                                                 </a>
                                                 {!! Form::open(array('url' => 'admin/users/groups/' . $group->id, 'class' => '', 'data-toggle' => 'tooltip', 'title' => 'Delete')) !!}
                                                 {!! Form::hidden('_method', 'DELETE') !!}
-                                                {!! Form::button('Elimina gruppo utenti', array('class' => 'btn btn-danger btn-sm dropdown-item','type' => 'button', 'style' =>'width: 100%;' ,'data-toggle' => 'modal', 'data-target' => '#confirmDelete', 'data-title' => 'Delete Provider', 'data-message' => 'Are you sure you want to delete this group ?')) !!}
+                                                {!! Form::button(trans('titles.delete-group'), array('class' => 'btn btn-danger btn-sm dropdown-item','type' => 'button', 'style' =>'width: 100%;' ,'data-toggle' => 'modal', 'data-target' => '#confirmDelete', 'data-title' => 'Delete Provider', 'data-message' => 'Are you sure you want to delete this group ?')) !!}
                                                 {!! Form::close() !!}
                                             </div>
                                         </div>
@@ -168,7 +168,7 @@
                 </div>
             </div>
         </div>
-		
+
     </div>
 
 	@include('modals.modal-delete')

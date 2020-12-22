@@ -62,7 +62,7 @@
                             </div>
 
 							<div class="form-group has-feedback row {{ $errors->has('parent') ? ' has-error ' : '' }}">
-                                {!! Form::label('parent', 'Referente', array('class' => 'col-md-3 control-label')); !!}
+                                {!! Form::label('parent', trans('forms.referent'), array('class' => 'col-md-3 control-label')); !!}
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <select class="custom-select form-control" name="parent" id="parent">

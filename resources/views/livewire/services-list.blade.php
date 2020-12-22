@@ -6,13 +6,13 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
 
 				<span id="card_title">
-					<h1>Servizi</h1>
+					<h1>{{ trans('titles.services') }}</h1>
 				</span>
 
                 <div class="btn-group pull-right btn-group-xs">
                     <div>
                         <a href="/admin/service/categories" class="btn btn-primary btn-save uk-margin-right">
-                            <span class="uk-margin-small-right" uk-icon="list"></span>Categorie
+                            <span class="uk-margin-small-right" uk-icon="list"></span>{{ trans('titles.category') }}
                         </a>
                     </div>
                 </div>
@@ -21,14 +21,14 @@
                 <div class="row">
                     <div class="col-4">
                         <select wire:model.defer="countrySelected" class="form-control">
-                            <option value="0">All countries</option>
+                            <option value="0">{{ trans('titles.all-countries') }}</option>
                             @foreach($countriesList as $country)
                                 <option value="{{ $country->id }}">{{ $country->name }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="col-3">
-                        <button wire:click="commit" class="btn btn-success">Commit</button>
+                        <button wire:click="commit" class="btn btn-success">{{ trans('titles.commit') }}</button>
                     </div>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                     <thead class="thead">
                     <tr>
                         <th wire:click="sortByRelationship('country')">
-                            <span>Country</span>
+                            <span>{{ trans('titles.country') }}</span>
                             @if($relationshipAsc && $relationshipSortField == 'country')
                                 <i class="cil-arrow-bottom"></i>
                             @else
@@ -48,16 +48,16 @@
                             @endif
                         </th>
                         <th wire:click="sortBy('name')">
-                            <span>Nome</span>
+                            <span>{{ trans('titles.name') }}</span>
                             @if($sortAsc && $sortField == 'name')
                                 <i class="cil-arrow-bottom"></i>
                             @else
                                 <i class="cil-arrow-top"></i>
                             @endif
                         </th>
-                        <th>Default</th>
+                        <th>{{ trans('titles.default') }}</th>
                         <th wire:click="sortByRelationship('ding')">
-                            <span>Ding</span>
+                            <span>{{ trans('titles.ding') }}</span>
                             @if($relationshipAsc && $relationshipSortField == 'ding')
                                 <i class="cil-arrow-bottom"></i>
                             @else
@@ -65,7 +65,7 @@
                             @endif
                         </th>
                         <th wire:click="sortByRelationship('reloadly')">
-                            <span>Reloadly</span>
+                            <span>{{ trans('titles.reloadly') }}</span>
                             @if($relationshipAsc && $relationshipSortField == 'reloadly')
                                 <i class="cil-arrow-bottom"></i>
                             @else

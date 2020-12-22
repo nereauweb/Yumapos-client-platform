@@ -20,7 +20,7 @@
 					</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
-						<span class="sr-only">close</span>
+						<span class="sr-only">{{ trans('modals.modal-close') }}</span>
 					</button>
 				</div>
 				<div class="modal-body">

@@ -12,7 +12,7 @@
 	color: #353535;
 }
 a.amount-choice * {
-	cursor: pointer;	
+	cursor: pointer;
 }
 .amount-choice.selected .form-check {
 	background: #23ec23;
@@ -29,7 +29,7 @@ a.amount-choice * {
 	color: #353535;
 }
 a.operator-choice * {
-	cursor: pointer;	
+	cursor: pointer;
 }
 .operator-choice.selected .form-check {
 	background: #23ec23;
@@ -53,41 +53,41 @@ a.operator-choice * {
                     </div>
                     <div class="card-body">
 						@if(!Auth::user()->group_id||Auth::user()->group_id==0)
-							
-							Your account is not configured and therefore you cannot proceed to finalize operation, please contact administration to fix this issue.
-						
+
+							{{ trans('descriptions.contact-admin-to-fix') }}
+
 						@elseif(isset($data['message']))
-						
+
 							{{ $data['message'] }}
-							
+
 						@elseif($operator && is_object($operator))
-							
+
 							<h2 class="">
 								@if ($operator->reloadly && $operator->reloadly->logoUrls)
 									<img src="{{ $operator->reloadly->logoUrls->first()->url }}">
 								@endif
-								{{ $operator->name }} 
+								{{ $operator->name }}
 							</h2>
-							
+
 							{!! Form::open(array('route' => 'users.services.transaction', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation form-horizontal')) !!}
-								{!! csrf_field() !!}	
+								{!! csrf_field() !!}
 								<input type="hidden" name="category_id" id="category_id" value="{{ $category->id }}">
-								
+
 								@if(isset($phone_number))
-								<h3 class="">{{ $phone_number }}</h3>	
+								<h3 class="">{{ $phone_number }}</h3>
 								<input type="hidden" name="recipient_phone" id="recipient_phone" value="{{ $phone_number }}">
 								@else
 									<div class="uk-margin-bottom">
-										<label class="uk-form-label uk-dark">Phone n. <small>(without country code)</small> <small style="color:white;">*required</small></label>
+                                        <label class="uk-form-label uk-dark">{{trans('titles.p-n')}}. <small>({{ trans('titles.s-c-code') }})</small> <small style="color:white;">*{{ trans('titles.required') }}</small></label>
 										<div class="uk-form-controls">
 											<input name="number" id="number" class="uk-input form-control" type="tel" required>
 											<input type="hidden" name="recipient_phone" id="recipient_phone" value="">
 										</div>
 									</div>
-								@endif						
-								
+								@endif
+
 								<div class="form-group row">
-									<label class="col-md-3 col-form-label" for="text-input">Change operator</label>
+									<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.change-operator') }}</label>
 									<div class="col-md-9">
 										<div class="uk-child-width-auto uk-grid-collapse uk-flex uk-flex-wrap" uk-grid>
 										@foreach($operators as $availableOperator)
@@ -97,19 +97,19 @@ a.operator-choice * {
 												data-phone-number="{{ $phone_number }}"
 										>
 											<div class="form-check">
-												<input 
-													class="form-check-input operators" 
-													id="operator-{{$availableOperator->id}}" 
-													type="radio" 
+												<input
+													class="form-check-input operators"
+													id="operator-{{$availableOperator->id}}"
+													type="radio"
 													value="{{$availableOperator->id}}" >
 												<label class="form-check-label" operator="radio{{$availableOperator->id}}">{{ $availableOperator->name }}</label>
-											</div>		
+											</div>
 										</a>
 										@endforeach
 										</div>
 									</div>
 								</div>
-								
+
 								@if($operator->provider() == 'reloadly')
 									@if($operator->reloadly->denominationType=="FIXED")
 										@php
@@ -117,12 +117,12 @@ a.operator-choice * {
 										@endphp
 										<div class="form-group row uk-margin-top">
 											<div class="col-md-3 col-form-label">
-												Choose amount
+												{{ trans('titles.choose-amount') }}
 											</div>
 											<div class="col-md-9 col-form-label uk-flex uk-flex-wrap">
 											@foreach($operator->reloadly->fixedAmounts as $index => $element)
 												@php
-													$user_amount = round($element->amount,2);												
+													$user_amount = round($element->amount,2);
 													if ($configuration&&$configuration->amounts){
 														$amount_configuration = $configuration->amounts->where('original_amount',$element->amount)->first();
 														if($amount_configuration && $amount_configuration->visible==0){
@@ -136,19 +136,19 @@ a.operator-choice * {
 												@endphp
 												<a href="#" class="amount-choice">
 													<div class="form-check">
-														<input 
-															class="form-check-input amounts" 
-															id="radio{{$index}}" 
-															type="radio" 
-															value="{{$element->amount}}" 
-															name="amount" 
+														<input
+															class="form-check-input amounts"
+															id="radio{{$index}}"
+															type="radio"
+															value="{{$element->amount}}"
+															name="amount"
 															data-amount="{{ $user_amount }}"
 															data-local="0"
 															data-local-amount="{{ $element->amount * $fxrate}}"
 															data-fxrate="{{ $fxrate }}"
 															required >
 														<label class="form-check-label" for="radio{{$index}}">{{ $user_amount }} €</label>
-													</div>		
+													</div>
 												</a>
 											@endforeach
 											@if($configuration&&$operator->reloadly->localFixedAmounts->count()>0&&$configuration->local_amounts)
@@ -162,56 +162,56 @@ a.operator-choice * {
 													@endphp
 												<a href="#" class="amount-choice">
 													<div class="form-check">
-														<input 
-															class="form-check-input amounts" 
-															id="radio{{$index}}" 
-															type="radio" 
-															value="{{$element->amount}}" 
-															name="amount" 
+														<input
+															class="form-check-input amounts"
+															id="radio{{$index}}"
+															type="radio"
+															value="{{$element->amount}}"
+															name="amount"
 															data-local="1"
 															data-amount="{{ $user_amount }}"
 															data-fxrate="{{ $operator->reloadly->config_rate(Auth::user()->group_id) }}"
 															data-local-amount="{{ $element->amount }}"
 															required >
 														<label class="form-check-label" for="radio{{$index}}">{{ round($element->amount,2) }} {{ $operator->reloadly->destinationCurrencySymbol }}</label>
-													</div>	
-												</a>										
+													</div>
+												</a>
 												@endforeach
 											@endif
 											</div>
 										</div>
 										<div class="form-group row">
-											<label class="col-md-3 col-form-label" for="text-input">Gain €</label>
+											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.gain') }} €</label>
 											<div class="col-md-9">
 												<input class="form-control" id="gain" type="number" name="gain" value="" step="0.01" required>
 											</div>
 										</div>
 										<div class="form-group row">
-											<label class="col-md-3 col-form-label" for="text-input">Final €</label>
+											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.final-c') }} €</label>
 											<div class="col-md-9">
 												<input class="form-control" id="final_amount" type="text" name="final_amount" value="" step="0.01" readonly>
 											</div>
 										</div>
 										<div class="form-group row">
-											<label class="col-md-3 col-form-label" for="text-input">Expected charge {{ $operator->reloadly->destinationCurrencySymbol }}</label>
+											<label class="col-md-3 col-form-label" for="text-input">{{ trans('expected-charge') }} {{ $operator->reloadly->destinationCurrencySymbol }}</label>
 											<div class="col-md-9">
 												<input class="form-control" id="final_amount_destination" type="text" name="final_amount_destination" value="" step="0.01" readonly>
 											</div>
 										</div>
-						
-										{!! Form::button('Finalize', array('id' => 'finalizer', 'class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => 'Confirm submit', 'data-message' => 'Please confirm operation to continue')) !!}
-													
+
+										{!! Form::button(trans('titles.finalize'), array('id' => 'finalizer', 'class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => 'Confirm submit', 'data-message' => 'Please confirm operation to continue')) !!}
+
 									@elseif($operator->reloadly->denominationType=="RANGE")
-									
+
 										<div class="form-group row">
-											<label class="col-md-3 col-form-label" for="text-input">Amount&nbsp;€ ({{number_format($operator->reloadly->minAmount(Auth::user()->group_id),2)}}/{{number_format($operator->reloadly->maxAmount(Auth::user()->group_id),2)}})</label>
+											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.amount') }}&nbsp;€ ({{number_format($operator->reloadly->minAmount(Auth::user()->group_id),2)}}/{{number_format($operator->reloadly->maxAmount(Auth::user()->group_id),2)}})</label>
 											<div class="col-md-9">
-												<input 
-													class="form-control" 
-													id="amount" 
-													type="number" 
+												<input
+													class="form-control"
+													id="amount"
+													type="number"
 													name="amount"
-													value="" 
+													value=""
 													step="0.01"
 													@if ($operator->reloadly->minAmount)
 														{!! 'min="'.number_format($operator->reloadly->minAmount(Auth::user()->group_id),2).'"' !!}
@@ -222,42 +222,42 @@ a.operator-choice * {
 														{!! 'data-max="'.number_format($operator->reloadly->maxAmount(Auth::user()->group_id),2).'"' !!}
 													@endif
 													data-fxrate="{{ round($operator->reloadly->config_rate(Auth::user()->group_id),3) }}"
-													data-local="0" 
+													data-local="0"
 													required >
-												<p class="uk-text-danger" id="amount-alert" style="display:none;">Wrong amount</p>
+												<p class="uk-text-danger" id="amount-alert" style="display:none;">{{ trans('titles.wrong-amount') }}</p>
 											</div>
 										</div>
 										<div class="form-group row">
-											<label class="col-md-3 col-form-label" for="text-input">Gain €</label>
+											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.gain') }} €</label>
 											<div class="col-md-9">
 												<input class="form-control" id="gain" type="number" name="gain" value="" step="0.01" required>
 											</div>
 										</div>
 										<div class="form-group row">
-											<label class="col-md-3 col-form-label" for="text-input">Final €</label>
+											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.final-c') }} €</label>
 											<div class="col-md-9">
 												<input class="form-control" id="final_amount" type="text" name="final_amount" value="" step="0.01" readonly>
 											</div>
 										</div>
 										<div class="form-group row">
-											<label class="col-md-3 col-form-label" for="text-input">Expected charge {{ $operator->reloadly->destinationCurrencySymbol }}</label>
+											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.expected-charge') }} {{ $operator->reloadly->destinationCurrencySymbol }}</label>
 											<div class="col-md-9">
 												<input class="form-control" id="final_amount_destination" type="number" name="final_amount_destination" value="" step="0.01">
 											</div>
 										</div>
-						
-										{!! Form::button('Finalize', array('id' => 'finalizer', 'class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => 'Confirm submit', 'data-message' => 'Please confirm operation to continue')) !!}
-								
+
+										{!! Form::button(trans('titles.finalize'), array('id' => 'finalizer', 'class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => 'Confirm submit', 'data-message' => 'Please confirm operation to continue')) !!}
+
 									@else
-										
-										We are sorry, an error occurred in operator data.
-										
+
+										{{ trans('descriptions.error-msg-operator-data') }}
+
 									@endif
-									
+
 									<input type="hidden" name="operator_id" value="{{ $operator->id }}">
 									<input type="hidden" name="country_iso" value="{{ $operator->reloadly->country->isoName }}">
 									<input type="hidden" name="local" id="local" value="0">
-								
+
 								@elseif($operator->provider() == 'ding' && $operator->ding->products()->count()>0)
 									@if($operator->ding->products_type()=="FIXED")
 										@php
@@ -265,12 +265,12 @@ a.operator-choice * {
 										@endphp
 										<div class="form-group row uk-margin-top">
 											<div class="col-md-3 col-form-label">
-												Choose amount
+												{{ trans('titles.choose-amount') }}
 											</div>
 											<div class="col-md-9 col-form-label uk-flex uk-flex-wrap">
 											@foreach($operator->ding->ordered_products() as $index => $element)
 												@php
-													$user_amount = round($element->minimum->SendValue,2);												
+													$user_amount = round($element->minimum->SendValue,2);
 													if ($configuration&&$configuration->amounts){
 														$amount_configuration = $configuration->amounts->where('original_amount',$element->minimum->SendValue)->first();
 														if($amount_configuration && $amount_configuration->visible==0){
@@ -285,12 +285,12 @@ a.operator-choice * {
 												<div>
 													<a href="#" class="amount-choice">
 														<div class="form-check">
-															<input 
-																class="form-check-input amounts" 
-																id="radio{{$index}}" 
-																type="radio" 
-																value="{{$element->minimum->SendValue}}" 
-																name="amount" 
+															<input
+																class="form-check-input amounts"
+																id="radio{{$index}}"
+																type="radio"
+																value="{{$element->minimum->SendValue}}"
+																name="amount"
 																data-amount="{{ $user_amount }}"
 																data-local="0"
 																data-local-amount="{{ $element->minimum->ReceiveValue}}"
@@ -302,9 +302,9 @@ a.operator-choice * {
 																{{ round($user_amount,2) }} {{ $element->minimum->SendCurrencyIso }}
 																</strong>
 																<hr class="uk-margin-remove">
-																{{ round($element->minimum->ReceiveValue,2) }} {{ $element->minimum->ReceiveCurrencyIso }}																
+																{{ round($element->minimum->ReceiveValue,2) }} {{ $element->minimum->ReceiveCurrencyIso }}
 															</label>
-														</div>			
+														</div>
 													</a>
 												</div>
 											@endforeach
@@ -320,12 +320,12 @@ a.operator-choice * {
 													@endphp
 													<a href="#" class="amount-choice">
 														<div class="form-check">
-															<input 
-																class="form-check-input amounts" 
-																id="radio{{$index}}" 
-																type="radio" 
-																value="{{$element->minimum->SendValue}}" 
-																name="amount" 
+															<input
+																class="form-check-input amounts"
+																id="radio{{$index}}"
+																type="radio"
+																value="{{$element->minimum->SendValue}}"
+																name="amount"
 																data-local="1"
 																data-amount="{{ $user_amount }}"
 																data-fxrate="{{ $fxrate }}"
@@ -337,103 +337,103 @@ a.operator-choice * {
 																{{ round($user_amount,2) }} {{ $element->minimum->SendCurrencyIso }}
 																</strong>
 																<hr class="uk-margin-remove">
-																{{ round($element->minimum->ReceiveValue,2) }} {{ $element->minimum->ReceiveCurrencyIso }}																
+																{{ round($element->minimum->ReceiveValue,2) }} {{ $element->minimum->ReceiveCurrencyIso }}
 															</label>
-														</div>			
+														</div>
 													</a>
 												@endforeach
 											@endif
 											</div>
 										</div>
 										<div class="form-group row">
-											<label class="col-md-3 col-form-label" for="text-input">Gain €</label>
+											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.gain') }} €</label>
 											<div class="col-md-9">
 												<input class="form-control" id="gain" type="number" name="gain" value="" step="0.01" required>
 											</div>
 										</div>
 										<div class="form-group row">
-											<label class="col-md-3 col-form-label" for="text-input">Final €</label>
+											<label class="col-md-3 col-form-label" for="text-input">{{trans('titles.final-c')}} €</label>
 											<div class="col-md-9">
 												<input class="form-control" id="final_amount" type="text" name="final_amount" value="" step="0.01" readonly>
 											</div>
 										</div>
 										<div class="form-group row">
-											<label class="col-md-3 col-form-label" for="text-input">Expected charge {{ $operator->ding->products()->first()->minimum->ReceiveCurrencyIso }}</label>
+											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.expected-charge') }} {{ $operator->ding->products()->first()->minimum->ReceiveCurrencyIso }}</label>
 											<div class="col-md-9">
 												<input class="form-control" id="final_amount_destination" type="text" name="final_amount_destination" value="" step="0.01" readonly>
 											</div>
 										</div>
-						
-										{!! Form::button('Finalize', array('id' => 'finalizer', 'class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => 'Confirm submit', 'data-message' => 'Please confirm operation to continue')) !!}
-													
+
+										{!! Form::button(trans('titles.finalize'), array('id' => 'finalizer', 'class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => 'Confirm submit', 'data-message' => 'Please confirm operation to continue')) !!}
+
 									@elseif($operator->ding->products_type()=="RANGE")
-										
+
 										<input type="hidden" name="product_sku" value="{{ $operator->ding->products()->first()->SkuCode }}">
 										<div class="form-group row">
-											<label class="col-md-3 col-form-label" for="text-input">Amount&nbsp;€ ({{number_format($operator->ding->products()->first()->minAmount(Auth::user()->group_id),2)}}/{{number_format($operator->ding->products()->first()->maxAmount(Auth::user()->group_id),2)}})</label>
+											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.amount') }}&nbsp;€ ({{number_format($operator->ding->products()->first()->minAmount(Auth::user()->group_id),2)}}/{{number_format($operator->ding->products()->first()->maxAmount(Auth::user()->group_id),2)}})</label>
 											<div class="col-md-9">
-												<input 
-													class="form-control" 
-													id="amount" 
-													type="number" 
+												<input
+													class="form-control"
+													id="amount"
+													type="number"
 													name="amount"
-													value="" 
-													step="0.01"													
+													value=""
+													step="0.01"
 													@if ( $operator->ding->products()->first() )
 														{!! 'min="'.number_format($operator->ding->products()->first()->minAmount(Auth::user()->group_id),2).'"' !!}
 														{!! 'data-min="'.number_format($operator->ding->products()->first()->minAmount(Auth::user()->group_id),2).'"' !!}
 														{!! 'max="'.number_format($operator->ding->products()->first()->maxAmount(Auth::user()->group_id),2).'"' !!}
 														{!! 'data-max="'.number_format($operator->ding->products()->first()->maxAmount(Auth::user()->group_id),2).'"' !!}
-													@endif													
+													@endif
 													data-fxrate="{{ round($operator->ding->products()->first()->config_rate(Auth::user()->group_id),3) }}"
-													data-local="0" 
+													data-local="0"
 													required >
-												<p class="uk-text-danger" id="amount-alert" style="display:none;">Wrong amount</p>
+												<p class="uk-text-danger" id="amount-alert" style="display:none;">{{ trans('titles.wrong-amount') }}</p>
 											</div>
 										</div>
 										<div class="form-group row">
-											<label class="col-md-3 col-form-label" for="text-input">Gain €</label>
+											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.gain') }} €</label>
 											<div class="col-md-9">
 												<input class="form-control" id="gain" type="number" name="gain" value="" step="0.01" required>
 											</div>
 										</div>
 										<div class="form-group row">
-											<label class="col-md-3 col-form-label" for="text-input">Final €</label>
+											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.final-c') }} €</label>
 											<div class="col-md-9">
 												<input class="form-control" id="final_amount" type="text" name="final_amount" value="" step="0.01" readonly>
 											</div>
 										</div>
 										<div class="form-group row">
-											<label class="col-md-3 col-form-label" for="text-input">Expected charge {{ $operator->ding->products()->first()->minimum->SendCurrencyIso }}</label>
+											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.expected-charge') }} {{ $operator->ding->products()->first()->minimum->SendCurrencyIso }}</label>
 											<div class="col-md-9">
 												<input class="form-control" id="final_amount_destination" type="number" name="final_amount_destination" value="" step="0.01">
 											</div>
 										</div>
-						
-										{!! Form::button('Finalize', array('id' => 'finalizer', 'class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => 'Confirm submit', 'data-message' => 'Please confirm operation to continue')) !!}
-								
+
+										{!! Form::button(trans('titles.finalize'), array('id' => 'finalizer', 'class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => 'Confirm submit', 'data-message' => 'Please confirm operation to continue')) !!}
+
 									@else
-										
-										We are sorry, an error occurred in operator data.
-										
+
+										{{ trans('descriptions.error-msg-operator-data') }}
+
 									@endif
-									
+
 									<input type="hidden" name="product_sku" value="{{ $operator->ding->products()->first()->SkuCode }}" id="product-sku">
 									<input type="hidden" name="operator_id" value="{{ $operator->id }}">
 									<input type="hidden" name="country_iso" value="{{ $operator->ding->country->CountryIso }}">
 									<input type="hidden" name="local" id="local" value="0">
-								
+
 								@endif
-								
+
 							{!! Form::close() !!}
-							
+
 						@else
-							
-							We are sorry, an error occurred.
-						
+
+							{{ trans('descriptions.general-error') }}
+
 						@endif
                     </div>
-					
+
 					{{--
                     <div class="card-body">
 						Log: {!! $log !!}
@@ -441,12 +441,12 @@ a.operator-choice * {
 						<pre>{!! var_dump($operator) !!}</pre>
                     </div>
 					--}}
-					
+
                 </div>
             </div>
         </div>
     </div>
-	
+
 	@include('modals.modal-save')
 
 @endsection
@@ -485,7 +485,7 @@ a.operator-choice * {
 					}
 					@endif
 				});
-			*/	
+			*/
 				$(".amount-choice").click(function(e){
 					e.preventDefault();
 					$(".amount-choice").removeClass('selected');
@@ -512,7 +512,7 @@ a.operator-choice * {
 					}
 					@endif
 				});
-				
+
 				$("#gain").change(function(){
 					if( !$("#gain").val() ) {
 						$("#gain").val() = 0;
@@ -523,7 +523,7 @@ a.operator-choice * {
 					final_amount = amount + gain;
 					$("#final_amount").val(final_amount.toFixed(2))
 				});
-			@else				
+			@else
 				$("#amount").change(function(){
 					amount = parseFloat($(this).val());
 					min = parseFloat($(this).data('min')) ?? 0;
@@ -553,17 +553,17 @@ a.operator-choice * {
 					gain = parseFloat($("#gain").val());
 					final_amount = amount + gain;
 					if (local == 0){
-						final_amount_destination = amount * fxRate ;				
+						final_amount_destination = amount * fxRate ;
 					}
 					$("#final_amount").val(final_amount.toFixed(2));
 					$("#final_amount_destination").val(final_amount_destination.toFixed(2));
 				}
-				
+
 				$("#final_amount_destination").change(function(){
 					fxRate = parseFloat($("#amount").data("fxrate"));
 					final_amount_destination = parseFloat($(this).val());
 					amount = final_amount_destination / fxRate;
-					$("#amount").val(amount.toFixed(2))		
+					$("#amount").val(amount.toFixed(2))
 					gain = (gain_percent/100) * amount;
 					$("#gain").val(gain.toFixed(2));
 					final_amount = amount + gain;
@@ -584,7 +584,7 @@ a.operator-choice * {
 				});
 			</script>
 		@endif
-		<script>			
+		<script>
 			$(".operator-choice").click(function(e){
 				e.preventDefault();
 				/*
@@ -592,7 +592,7 @@ a.operator-choice * {
 				$(this).addClass('selected');
 				input = $(this).find("input").first();
 				input.prop('checked',true);
-				*/				
+				*/
 				$(this).addClass('selected');
 				var operatorId = $(this).data('operator-id');
 				var categoryId = $(this).data('category-id');

@@ -5,22 +5,22 @@
             <div class="card-header">
                 <div class="d-flex justify-content-between">
 					<div>
-						<h4 class="card-title mb-0 mt-1">Traffic &amp; Sales</h4>
+						<h4 class="card-title mb-0 mt-1">{{ trans('titles.traffic-sales') }}</h4>
 					</div>
                     <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
                         <div class="d-flex">
                             <div class="btn-group btn-group-toggle mx-3" data-toggle="buttons">
                                 <label class="btn btn-outline-secondary {{ $filterSelected == 'day' ? 'active' : '' }}">
-                                    <input wire:model="filterSelected" value="day" name="filterSelectedOperation" type="radio" autocomplete="off" checked> Day
+                                    <input wire:model="filterSelected" value="day" name="filterSelectedOperation" type="radio" autocomplete="off" checked> {{ trans('days.day') }}
                                 </label>
                                 <label class="btn btn-outline-secondary {{ $filterSelected == 'yesterday' ? 'active' : '' }}">
-                                    <input wire:model="filterSelected" value="yesterday" name="filterSelectedOperation" type="radio" autocomplete="off"> Yesterday
+                                    <input wire:model="filterSelected" value="yesterday" name="filterSelectedOperation" type="radio" autocomplete="off"> {{ trans('days.yesterday') }}
                                 </label>
                                 <label class="btn btn-outline-secondary {{ $filterSelected == 'week' ? 'active' : '' }}">
-                                    <input wire:model="filterSelected" value="week" name="filterSelectedOperation" type="radio" autocomplete="off"> Week
+                                    <input wire:model="filterSelected" value="week" name="filterSelectedOperation" type="radio" autocomplete="off"> {{ trans('days.week') }}
                                 </label>
                                 <label class="btn btn-outline-secondary {{ $filterSelected == 'month' ? 'active' : '' }}">
-                                    <input wire:model="filterSelected" value="month" name="filterSelectedOperation" type="radio" autocomplete="off"> Month
+                                    <input wire:model="filterSelected" value="month" name="filterSelectedOperation" type="radio" autocomplete="off"> {{ trans('days.month') }}
                                 </label>
                             </div>
 							<a href="{{ auth()->user()->hasRole('admin') ? route('admin.report.operations') : url('users/reports/operations')  }}" class="btn btn-primary" type="button">
@@ -29,8 +29,8 @@
                             @if(auth()->user()->hasRole('admin'))
                             <div class="ml-2">
                                 <div class="d-flex">
-                                    <input class="form-control" wire:model.defer="userEmail" type="text" placeholder="search user by email">
-                                    <button class="btn btn-primary" wire:click="searchByEmail">Search</button>
+                                    <input class="form-control" wire:model.defer="userEmail" type="text" placeholder="{{ trans('placeholders.search-by-email') }}">
+                                    <button class="btn btn-primary" wire:click="searchByEmail">{{ trans('titles.search') }}</button>
                                 </div>
                             </div>
                             @endif
@@ -44,7 +44,7 @@
                         <div class="row">
                             <div class="col">
                                 <div class="card">
-                                    <div class="card-header">User</div>
+                                    <div class="card-header">{{ trans('titles.user') }}</div>
                                     <div class="card-body">
                                         <ul class="list-group">
                                             @foreach($usersDetails as $operation)
@@ -56,7 +56,7 @@
                             </div>
                             <div class="col">
                                 <div class="card">
-                                    <div class="card-header">Country</div>
+                                    <div class="card-header">{{ trans('titles.country') }}</div>
                                     <div class="card-body">
                                         <ul class="list-group">
                                             @foreach($countriesList as $country)
@@ -68,7 +68,7 @@
                             </div>
                             <div class="col">
                                 <div class="card">
-                                    <div class="card-header">Operator</div>
+                                    <div class="card-header">{{ trans('titles.operator') }}</div>
                                     <div class="card-body">
                                         <ul class="list-group">
                                             @foreach($operationsList as $serviceOperation)
@@ -90,13 +90,13 @@
                                 <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-people"></use>
                             </svg>
                         </th>
-                        <th>User</th>
-                        <th>Amount</th>
-                        <th>Cost</th>
-                        <th>Gain</th>
-                        <th>Country</th>
-                        <th>Operator</th>
-                        <th>Provider</th>
+                        <th>{{ trans('titles.user') }}</th>
+                        <th>{{ trans('titles.amount') }}</th>
+                        <th>{{ trans('titles.cost') }}</th>
+                        <th>{{ trans('titles.gain') }}</th>
+                        <th>{{ trans('titles.country') }}</th>
+                        <th>{{ trans('titles.operator') }}</th>
+                        <th>{{ trans('titles.provider') }}</th>
                     </tr>
                     </thead>
                     <tbody>
