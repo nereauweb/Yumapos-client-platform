@@ -1,5 +1,5 @@
 <?php
 
     return [
-        'pwd-forgot' => 'Forgot Your Password?'
+        'pwd-forgot' => 'Password dimenticata?'
     ];

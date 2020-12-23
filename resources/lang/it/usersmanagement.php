@@ -67,7 +67,7 @@ return [
     ],
 
     'buttons' => [
-        'create-new'    => 'New User',
+        'create-new'    => 'Nuovo Utente',
         'delete'        => '<i class="fa fa-trash-o fa-fw" aria-hidden="true"></i>  <span class="hidden-xs hidden-sm">Elimina</span><span class="hidden-xs hidden-sm hidden-md"> utente</span>',
         'show'          => '<i class="fa fa-eye fa-fw" aria-hidden="true"></i> <span class="hidden-xs hidden-sm">Mostra</span><span class="hidden-xs hidden-sm hidden-md"> utente</span>',
         'edit'          => '<i class="fa fa-pencil fa-fw" aria-hidden="true"></i> <span class="hidden-xs hidden-sm">Modifica</span><span class="hidden-xs hidden-sm hidden-md"> utente</span>',
@@ -89,33 +89,33 @@ return [
     ],
 
     'messages' => [
-        'userNameTaken'          => 'Username is taken',
-        'userNameRequired'       => 'Username is required',
-        'fNameRequired'          => 'First Name is required',
-        'lNameRequired'          => 'Last Name is required',
-        'emailRequired'          => 'Email is required',
-        'emailInvalid'           => 'Email is invalid',
-        'passwordRequired'       => 'Password is required',
-        'PasswordMin'            => 'Password needs to have at least 6 characters',
-        'PasswordMax'            => 'Password maximum length is 20 characters',
-        'captchaRequire'         => 'Captcha is required',
-        'CaptchaWrong'           => 'Wrong captcha, please try again.',
-        'roleRequired'           => 'User role is required.',
-        'user-creation-success'  => 'Successfully created user!',
-        'update-user-success'    => 'Successfully updated user!',
-        'delete-success'         => 'Successfully deleted the user!',
-        'cannot-delete-yourself' => 'You cannot delete yourself!',
+        'userNameTaken'          => 'Username in uso',
+        'userNameRequired'       => 'Username richiesto',
+        'fNameRequired'          => 'Nome richiesto',
+        'lNameRequired'          => 'Cognome richiesto',
+        'emailRequired'          => 'Email richiesta',
+        'emailInvalid'           => 'Email invalida',
+        'passwordRequired'       => 'Password richiesta',
+        'PasswordMin'            => 'La password deve avere almeno 6 caratteri',
+        'PasswordMax'            => 'La Password deve essere lunga al massimo 20 caratteri',
+        'captchaRequire'         => 'Captcha richiesto',
+        'CaptchaWrong'           => 'Captcha sbagliato, si prega di riprovare.',
+        'roleRequired'           => 'Ruolo utemnte richiesto.',
+        'user-creation-success'  => 'Utente creato con successo!',
+        'update-user-success'    => 'Utente aggiornato con successo!',
+        'delete-success'         => 'Utente eliminato con successo!',
+        'cannot-delete-yourself' => 'Non puoi cancellare te stesso!',
     ],
 
     'show-user' => [
         'id'                => 'User ID',
-        'name'              => 'Username',
-        'email'             => '<span class="hidden-xs">User </span>Email',
-        'role'              => 'User Role',
-        'created'           => 'Created <span class="hidden-xs">at</span>',
-        'updated'           => 'Updated <span class="hidden-xs">at</span>',
-        'labelRole'         => 'User Role',
-        'labelAccessLevel'  => '<span class="hidden-xs">User</span> Access Level|<span class="hidden-xs">User</span> Access Levels',
+        'name'              => 'Nome',
+        'email'             => '<span class="hidden-xs">Email </span>utente',
+        'role'              => 'Ruolo utente',
+        'created'           => 'Creato <span class="hidden-xs">a</span>',
+        'updated'           => 'Aggiornato <span class="hidden-xs">a</span>',
+        'labelRole'         => 'Ruolo utente',
+        'labelAccessLevel'  => '<span class="hidden-xs">User</span> Livello di accesso|<span class="hidden-xs">Utente</span> Livelli di accesso',
     ],
 
     'search'  => [
@@ -126,6 +126,6 @@ return [
     ],
 
     'modals' => [
-        'delete_user_message' => 'Are you sure you want to delete :user?',
+        'delete_user_message' => 'Sicuro di voler eliminare :user?',
     ],
 ];

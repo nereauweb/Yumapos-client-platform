@@ -1,16 +1,16 @@
 <?php
 
 return [
-    'monday' => 'Monday',
-    'tuesday' => 'Tuesday',
-    'wednesday' => 'Wednesday',
-    'thursday' => 'Thursday',
-    'friday' => 'Friday',
-    'saturday' => 'Saturday',
-    'sunday' => 'Sunday',
+    'monday' => 'Lunedì',
+    'tuesday' => 'Martedì',
+    'wednesday' => 'Mercoledì',
+    'thursday' => 'Giovedì',
+    'friday' => 'Venerdì',
+    'saturday' => 'Sabato',
+    'sunday' => 'Domenica',
 
-    'day' => 'Day',
-    'yesterday' => 'Yesterday',
-    'week' => 'Week',
-    'month' => 'Month'
+    'day' => 'Giorno',
+    'yesterday' => 'Ieri',
+    'week' => 'Settimana',
+    'month' => 'Mese'
 ];

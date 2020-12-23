@@ -10,66 +10,66 @@ return [
     */
 
     // Messages
-    'createSuccess'     => 'Theme created! ',
-    'updateSuccess'     => 'Theme updated! ',
-    'deleteSuccess'     => 'Theme deleted! ',
-    'deleteSelfError'   => 'You cannot delete the default theme. ',
+    'createSuccess'     => 'Tema creato! ',
+    'updateSuccess'     => 'Tema aggiornato! ',
+    'deleteSuccess'     => 'Tema cancellato! ',
+    'deleteSelfError'   => 'Non puoi eliminare il Tema di default. ',
 
     // Shared
-    'statusLabel'       => 'Theme Status',
-    'statusEnabled'     => 'Enabled',
-    'statusDisabled'    => 'Disabled',
+    'statusLabel'       => 'Status del Tema',
+    'statusEnabled'     => 'Abilitato',
+    'statusDisabled'    => 'Disabilitato',
 
-    'nameLabel'         => 'Theme Name *',
-    'namePlaceholder'   => 'Enter Theme Name',
+    'nameLabel'         => 'Nome del Tema *',
+    'namePlaceholder'   => 'Inserisci nome del Tema',
 
-    'linkLabel'         => 'Theme CSS Link *',
-    'linkPlaceholder'   => 'Enter CSS Link',
+    'linkLabel'         => 'Link Tema CSS *',
+    'linkPlaceholder'   => 'Inserisci Tema CSS',
 
-    'notesLabel'        => 'Theme Notes',
-    'notesPlaceholder'  => 'Enter Theme Notes',
+    'notesLabel'        => 'Note del Tema',
+    'notesPlaceholder'  => 'Inserisci note del Tema',
 
-    'themes'            => 'Themes',
+    'themes'            => 'Temi',
 
     // Add Theme
-    'btnAddTheme'       => 'Add Theme',
+    'btnAddTheme'       => 'Aggiungi Tema',
 
     // Edit Theme
-    'editTitle'         => 'Editing Theme:',
-    'editSave'          => 'Save Theme Changes',
-    'themeTitle'        => 'Theme :name',
+    'editTitle'         => 'Sto modificando il Tema:',
+    'editSave'          => 'Salva modifiche del Tema',
+    'themeTitle'        => 'Tema :name',
 
     // Show Theme
-    'showHeadTitle'     => 'Theme',
-    'showTitle'         => 'Theme Information',
-    'showBackBtn'       => 'Back to Themes',
-    'showUsers'         => 'Theme Users',
+    'showHeadTitle'     => 'Tema',
+    'showTitle'         => 'Informazioni sul Tema',
+    'showBackBtn'       => 'Torna ai Temi',
+    'showUsers'         => 'Utenti del Tema',
     'showStatus'        => 'Status',
-    'showLink'          => 'CSS Link',
-    'showNotes'         => 'Notes',
-    'showAdded'         => 'Added',
-    'showUpdated'       => 'Updated',
-    'confirmDeleteHdr'  => 'Delete Theme',
-    'confirmDelete'     => 'Are you sure you want to delete this theme?',
+    'showLink'          => 'Link CSS',
+    'showNotes'         => 'Note',
+    'showAdded'         => 'Aggiunti',
+    'showUpdated'       => 'Aggiornati',
+    'confirmDeleteHdr'  => 'Cancella Tema',
+    'confirmDelete'     => 'Sicuro di voler cancellare questo Tema?',
 
     // Show Themes
-    'themesTitle'       => 'Showing All',
+    'themesTitle'       => 'Mostra tutti',
     'themesStatus'      => 'Status',
-    'themesUsers'       => 'Users',
-    'themesName'        => 'Name',
-    'themesLink'        => 'CSS Link',
-    'themesActions'     => 'Actions',
-    'themesBtnShow'     => 'Show Theme',
-    'themesBtnEdit'     => 'Edit Theme',
+    'themesUsers'       => 'Utenti',
+    'themesName'        => 'Nome',
+    'themesLink'        => 'Link CSS',
+    'themesActions'     => 'Azioni',
+    'themesBtnShow'     => 'Mostra Tema',
+    'themesBtnEdit'     => 'Modifica Tema',
     'themesBtnDelete'   => '',
     'themesBtnEdits'    => '',
 
     // Tooltips
-    'backToThemeTt'     => 'Back to Theme',
-    'backToThemesTt'    => 'Back to Themes',
+    'backToThemeTt'     => 'Torna al Tema',
+    'backToThemesTt'    => 'Torna ai Temi',
 
     // Buttons
-    'backToThemeBtn'    => 'Back  <span class="hidden-xs">to Theme</span>',
-    'backToThemesBtn'   => '<span class="hidden-xs">Back to </span>Themes',
+    'backToThemeBtn'    => 'Torna  <span class="hidden-xs">al Tema</span>',
+    'backToThemesBtn'   => '<span class="hidden-xs">Torna ai </span>Temi',
 
 ];

@@ -1,10 +1,10 @@
 <?php
 
     return [
-        'email' => 'E-Mail Address',
+        'email' => 'Indirizzo E-Mail',
         'password' => 'Password',
-        'forgot-pwd' => 'Forgot Your Password?',
-        'search-by-email' => 'Search user by email',
-        'search-by-id'  => 'Search by ID',
-        'search-by-operation-id' => 'search by operation id',
+        'forgot-pwd' => 'Password dimenticata?',
+        'search-by-email' => 'Cerca utente per email',
+        'search-by-id'  => 'Ceeca per ID',
+        'search-by-operation-id' => 'cerca per ID operazione',
     ];
