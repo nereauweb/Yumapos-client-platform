@@ -90,10 +90,10 @@
                                                 <td>{{ $operation->country_name() }}</td>
                                                 <td>{{ $operation->operator_name()  }}</td>
                                                 <td>{{ $operation->request_recipient_phone }}</td>
-                                                <td>{{ round($operation->final_amount,2) }}&nbsp;&euro;</td>
-                                                <td>{{ round($operation->user_gain,2) }}&nbsp;&euro;</td>
-                                                <td>{{ round($operation->user_discount,2) }}&nbsp;&euro;</td>
-                                                <td>{{ round($operation->user_total_gain,2) }}&nbsp;&euro;</td>
+                                                <td>{{ round($operation->final_amount,3) }}&nbsp;&euro;</td>
+                                                <td>{{ round($operation->user_gain,3) }}&nbsp;&euro;</td>
+                                                <td>{{ round($operation->user_discount,3) }}&nbsp;&euro;</td>
+                                                <td>{{ round($operation->user_total_gain,3) }}&nbsp;&euro;</td>
                                                 <td>
                                                     <a href="/users/services/print/{{ $operation->id }}" target="_BLANK">[{{ trans('titles.open') }}]</a>
                                                     <a href="/users/services/print/{{ $operation->id }}/small" target="_BLANK">[{{trans('titles.small')}}]</a>

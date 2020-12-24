@@ -113,9 +113,9 @@
                                                 <td>{{ $operation->service_operation_id }}</td>
                                                 <td>{{ $operation->user->name ?? 'not set' }}</td>
                                                 <td>{{ $operation->pointOperation->user->name ?? '' }}</td>
-                                                <td>{{ round($operation->original_amount, 2) }}&nbsp;&euro;</td>
+                                                <td>{{ round($operation->original_amount, 3) }}&nbsp;&euro;</td>
                                                 <td>{{ $operation->applied_commission_id }}</td>
-                                                <td>{{ round($operation->commission, 2) }}&nbsp;&euro;</td>
+                                                <td>{{ round($operation->commission, 3) }}&nbsp;&euro;</td>
                                             </tr>
                                         @endforeach
                                     @endif

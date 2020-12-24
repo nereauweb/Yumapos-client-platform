@@ -118,7 +118,7 @@ class UsersController extends Controller
 		if ($request->input('password')) {
 		    if ($request->input('password') == $request->input('password_confirmation')) {
                 $user->password = Hash::make($request->input('password'));
-                #Mail::to($user->email)->send(new UpdatedPasswordMail($user, $request->input('password')));
+                Mail::to($user->email)->send(new UpdatedPasswordMail($user, $request->input('password')));
             } else {
 		        return back()->with(['status' => 'error', 'message' => 'user passwords do not match']);
             }

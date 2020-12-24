@@ -165,15 +165,15 @@
                                 <td>{{ $operation->request_country_iso }}</td>
                                 <td>{{ $operation->operator_name() }}</td>
                                 <td>{{ $operation->request_recipient_phone }}</td>
-                                <td>{{ round($operation->final_expected_destination_amount, 2) ?? '' }}&nbsp;{{ $operation->reloadly_operation->deliveredAmountCurrencyCode ?? '' }}
+                                <td>{{ round($operation->final_expected_destination_amount, 3) ?? '' }}&nbsp;{{ $operation->reloadly_operation->deliveredAmountCurrencyCode ?? '' }}
                                 </td>
-                                <td>{{ round($operation->final_amount - $operation->user_gain - $operation->sent_amount, 2) }}&nbsp;&euro;
+                                <td>{{ round($operation->final_amount - $operation->user_gain - $operation->sent_amount, 3) }}&nbsp;&euro;
                                 </td>
-                                <td>{{ $operation->agent_commission ? round($operation->agent_commission, 2) : 0 }}&nbsp;&euro;</td>
-                                <td>{{ round($operation->platform_commission, 2) }}&nbsp;&euro;</td>
-                                <td>{{ round($operation->platform_total_gain, 2) }}&nbsp;&euro;</td>
-                                <td>{{ round($operation->user_discount, 2) }}&nbsp;&euro;</td>
-                                <td>{{ round($operation->platform_total_gain - $operation->user_discount, 2) }}&nbsp;&euro;
+                                <td>{{ $operation->agent_commission ? round($operation->agent_commission, 3) : 0 }}&nbsp;&euro;</td>
+                                <td>{{ round($operation->platform_commission, 3) }}&nbsp;&euro;</td>
+                                <td>{{ round($operation->platform_total_gain, 3) }}&nbsp;&euro;</td>
+                                <td>{{ round($operation->user_discount, 3) }}&nbsp;&euro;</td>
+                                <td>{{ round($operation->platform_total_gain - $operation->user_discount, 3) }}&nbsp;&euro;
                                 </td>
                             </tr>
                         @endforeach
