@@ -119,6 +119,7 @@
                                 <i class="cil-arrow-top"></i>
                             @endif
                         </th>
+                        <th>{{ trans('titles.signal-status') }}</th>
                         <th wire:click="sortBy('provider')">
                             <span>{{ trans('titles.provider') }}</span>
                             @if($sortAsc && $sortField == 'reloadly_transactionId')
@@ -161,6 +162,31 @@
                                 <td>{{ $operation->user->name ?? '' }} [Id {{ $operation->user->id ?? '' }}]
                                 </td>
                                 <td>{{ $operation->id }}</td>
+								<td>
+									<div class="btn-group btn-group-xs">
+										@if ($operation->report_status != 'rejected' && $operation->report_status != 'refunded' )
+											<button type="button" class="btn btn-table-action dropdown-toggle" data-toggle="dropdown">
+												{{ $operation->report_status ?? 'OK' }}
+												<i class="fa fa-ellipsis-v fa-fw" aria-hidden="true"></i>
+												<span class="sr-only">
+													{{ trans('titles.actions') }}
+												</span>
+											</button>
+											<div class="dropdown-menu dropdown-menu-right">
+												<button class="dropdown-item btn-success" data-toggle="modal" data-target="#modalApprove"
+													wire:click="manage_ticket({{ $operation->id }}, 'rejected')">Reject</button>
+												<button class="dropdown-item btn-success" data-toggle="modal" data-target="#modalApprove"
+													wire:click="manage_ticket({{ $operation->id }}, 'confirmed')">Confirm</button>
+												<button class="dropdown-item btn-success" data-toggle="modal" data-target="#modalApprove"
+													wire:click="manage_ticket({{ $operation->id }}, 'sent')">Send</button>
+												<button class="dropdown-item btn-success" data-toggle="modal" data-target="#modalApprove"
+													wire:click="manage_ticket({{ $operation->id }}, 'refunded')">Refund</button>
+											</div>
+										@else
+											<span>{{ $operation->report_status }}</span>
+										@endif
+									</div>
+								</td>								
                                 <td><a href="#"  onclick="details({{ $operation->id }})">{{ $operation->provider }}</a></td>
                                 <td>{{ $operation->request_country_iso }}</td>
                                 <td>{{ $operation->operator_name() }}</td>

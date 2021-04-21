@@ -223,6 +223,7 @@ return [
 
     // users/settings/account.blade.php
     'company-name'      => 'Company name',
+    'company-data'      => 'Company data',
     'default-gain'      => 'Default gain',
     'sales'             => 'Sales',
     'percentage'        => 'Percentage',
@@ -488,10 +489,8 @@ return [
 
     'company-mobile'    => 'Cellulare referente',
 
-
-
-
-
-
+    'signal'    => 'Open ticket',
+    'signal-ok' => 'OK',
+    'signal-status' => 'Ticket status',
 
 ];

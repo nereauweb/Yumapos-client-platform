@@ -79,6 +79,7 @@
                                     <th>{{ trans('titles.platform-discount') }}</th>
                                     <th>{{ trans('titles.total-user-gain') }}</th>
                                     <th>{{ trans('titles.receipt') }}</th>
+                                    <th>{{ trans('titles.signal-status') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -98,6 +99,25 @@
                                                     <a href="/users/services/print/{{ $operation->id }}" target="_BLANK">[{{ trans('titles.open') }}]</a>
                                                     <a href="/users/services/print/{{ $operation->id }}/small" target="_BLANK">[{{trans('titles.small')}}]</a>
                                                 </td>
+												<td>
+													<div class="btn-group btn-group-xs">
+														@if (!$operation->report_status)
+														<button type="button" class="btn btn-table-action dropdown-toggle" data-toggle="dropdown">
+															{{ trans('titles.signal-ok') }}
+															<i class="fa fa-ellipsis-v fa-fw" aria-hidden="true"></i>
+															<span class="sr-only">
+																{{ trans('titles.actions') }}
+															</span>
+														</button>
+														<div class="dropdown-menu dropdown-menu-right">
+															<button class="dropdown-item btn-success" data-toggle="modal" data-target="#modalApprove"
+																wire:click="signal({{ $operation->id }})">{{ trans('titles.signal') }}</button>
+														</div>
+														@else
+															<span>{{ $operation->report_status }}</span>
+														@endif
+													</div>
+												</td>
                                             </tr>
                                         @endforeach
                                     @endif

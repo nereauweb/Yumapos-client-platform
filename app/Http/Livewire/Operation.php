@@ -75,19 +75,28 @@ class Operation extends Component
         if ($this->operationId) {
             $operations = ServiceOperation::where('id', $this->operationId);
         }
-
-        $this->totalOperationsCount = $operations->count();
+        
         if ($user_id != 0) {
             $operations->where('user_id', $user_id);
             $this->totalOperationsCount = $operations->count();
-        }
-        $this->operationsSum = $operations->sum('user_discount');
-        $this->totalCommissions = $operations->sum('platform_commission');
-        $this->totalGrossPlatformGain = $operations->sum('platform_total_gain');
-        $this->totalNetPlatformGains = $operations->sum('platform_total_gain') - $operations->sum('user_discount');
-        $this->sentAmount = $operations->sum('sent_amount');
-        $this->platformTotalGain = $operations->sum('platform_total_gain') - $operations->sum('user_discount');
-        $operations = $operations->paginate(10);
+        } else {
+			$this->totalOperationsCount = $operations->count();
+		}
+		
+		$report_operations = $operations;
+		$operations = $operations->paginate(10);
+		
+		$report_operations->where(function ($query) {
+				$query->whereNull('report_status')->orWhere('report_status','!=','refunded');
+			});
+		
+        $this->operationsSum = $report_operations->sum('user_discount');
+        $this->totalCommissions = $report_operations->sum('platform_commission');
+        $this->totalGrossPlatformGain = $report_operations->sum('platform_total_gain');
+        $this->totalNetPlatformGains = $report_operations->sum('platform_total_gain') - $report_operations->sum('user_discount');
+        $this->sentAmount = $report_operations->sum('sent_amount');
+        $this->platformTotalGain = $report_operations->sum('platform_total_gain') - $report_operations->sum('user_discount');
+        
         return view('livewire.operation', compact('operations','users', 'user_name', 'date_begin', 'date_end', 'user_id', 'usedOperators'));
     }
 
@@ -115,5 +124,21 @@ class Operation extends Component
     }
 
     // searchById is bind to button inside view: livewire/operation.blade.php to the search by id input
-    public function searchById() {}
+    public function searchById() {}	
+	
+	public function manage_ticket($id,$status) {
+        $operation = ServiceOperation::find($id);
+        $operation->update(['report_status' => $status]);
+		if ($status == 'refunded'){
+			$operation_cost = $operation->user_old_plafond - $operation->user_new_plafond;
+			$user= $operation->user;
+			$user->plafond = $user->plafond + $operation_cost;
+			$user->save();
+			if ($operation->agent_operation){
+				$agent = $operation->agent_operation->user;
+				$agent->credit = $agent->credit - $operation->agent_operation->commission;
+				$agent->save();
+			}
+		}
+    }
 }

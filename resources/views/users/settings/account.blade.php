@@ -67,6 +67,7 @@
                                         <thead>
                                             <tr>
                                                 <th>{{ trans('titles.name') }}</th>
+												<th>Balance</th>
                                                 <th>{{ trans('titles.percentage') }}</th>
                                                 <th>State</th>
                                             </tr>
@@ -75,6 +76,7 @@
                                             @foreach (auth()->user()->referenced as $reference)
                                                 <tr>
                                                     <td>{{ $reference->name }}</td>
+                                                    <td>{{ number_format($reference->plafond,2) }} €</td>
                                                     <td>{{ $reference->parent_percent }}&percnt;</td>
                                                     <td>
                                                         <span class="badge px-4 py-2 @if($reference->state == 1) text-white bg-success @else text-dark bg-secondary @endif">

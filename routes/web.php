@@ -33,7 +33,9 @@ Route::group(['middleware' => ['get.menu']], function () {
 		return redirect('/backend');
 	})->name('admin.users.impersonate');
 
-	Route::get('/page', function () {       return view('frontend.page'); });
+	Route::get('/test', function () { return view('test'); });
+
+	Route::get('/page', function () { return view('frontend.page'); });
 
 	Route::get('/backend', 'HomeController@index')->name('home');
 
@@ -54,8 +56,8 @@ Route::group(['middleware' => ['get.menu']], function () {
         Route::put('/user/update-password', 'ApprovedUserController@updatePassword')->name('user.updatePassword');
 
 //	    chart data
-        Route::post('/user/internal/services/operations/totals/{type}', 'ServiceOperationController@totals'); // endpoint for initial calculations (daily)
-        Route::post('user/internal/services/{type}', 'ServiceOperationController@operations');  // data for operations
+        Route::post('/user/internal/services/operations/totals/{type}', 'ServiceOperationController@user_totals'); // endpoint for initial calculations (daily)
+        Route::post('user/internal/services/{type}', 'ServiceOperationController@user_operations');  // data for operations
         Route::post('/admin/internal/services/countries/{country}', 'ServiceOperationController@countries');  // data for operations
 
 		Route::get('/users/info', function () { return view('users.info'); });
@@ -71,6 +73,12 @@ Route::group(['middleware' => ['get.menu']], function () {
 			Route::get('/reloadly/transaction/result', 'ApiReloadlyController@user_recharge')->name('users.services.reloadly.transaction.result');
 			Route::get('/print/{id}', 'PointServiceController@print')->name('users.services.print');
 			Route::get('/print/{id}/small', 'PointServiceController@print_small')->name('users.services.print.small');
+			
+			Route::post('/mbs/ricarica', 'PointServiceController@user_mbs_recharge_request')->name('users.services.mbs.ricarica_telefonica');
+			Route::get('/mbs/ricarica/bridged', 'ApiMbsController@point_ricarica_telefonica')->name('users.services.mbs.ricarica_telefonica.bridged');			
+			Route::post('/mbs/ricarica-pin', 'PointServiceController@user_mbs_pin_request')->name('users.services.mbs.ricarica_pin');
+			Route::get('/mbs/ricarica-pin/bridged', 'ApiMbsController@point_ricarica_pin')->name('users.services.mbs.ricarica_pin.bridged');
+			
         });
 
 		Route::prefix('/users/reports')->group(function () {
@@ -173,7 +181,31 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::post('/pay-user', 'PaymentsController@payUserStore')->name('admin.payments.payUserStore');
             Route::delete('/delete/{payment}', 'PaymentsController@reject')->name('admin.payments.reject');
             Route::put('/recover-from-trash/{payment}', 'PaymentsController@recoverFromTrash')->name('admin.payments.recover-from-trash');
-        });
+        });		
+
+		Route::prefix('/admin/api/mbs')->group(function () {
+			Route::get('/', 'ApiMbsController@index')->name('admin.api.mbs.index');
+			Route::get('/balance', 'ApiMbsController@balance')->name('admin.api.mbs.balance');
+			Route::get('/prefix-list', 'ApiMbsController@list_prefix')->name('admin.api.mbs.list_prefix');			
+			Route::post('/beneficiario-bollettino', 'ApiMbsController@beneficiario_bollettino')->name('admin.api.mbs.beneficiario_bollettino');
+			Route::post('/pagamento-bollettino', 'ApiMbsController@pagamento_bollettino')->name('admin.api.mbs.pagamento_bollettino');
+			Route::post('/pagamento-bollettino', 'ApiMbsController@pagamento_bollettino')->name('admin.api.mbs.pagamento_bollettino');
+			Route::post('/pagamento-bollettino-mav', 'ApiMbsController@pagamento_bollettino_mav')->name('admin.api.mbs.pagamento_bollettino_mav');
+			Route::post('/pagamento-bollettino-rav', 'ApiMbsController@pagamento_bollettino_rav')->name('admin.api.mbs.pagamento_bollettino_rav');
+			Route::post('/richiesta-biller', 'ApiMbsController@richiesta_biller')->name('admin.api.mbs.richiesta_biller');
+			Route::post('/pagamento-bollettino-cbill', 'ApiMbsController@pagamento_bollettino_cbill')->name('admin.api.mbs.pagamento_bollettino_cbill');
+			Route::post('/ricarica-telefonica', 'ApiMbsController@ricarica_telefonica')->name('admin.api.mbs.ricarica_telefonica');
+			Route::post('/ricarica-pin', 'ApiMbsController@ricarica_pin')->name('admin.api.mbs.ricarica_pin');
+			Route::post('/verifica-ricarica', 'ApiMbsController@verifica_ricarica')->name('admin.api.mbs.verifica_ricarica');
+			Route::post('/verifica-ricarica-pin', 'ApiMbsController@verifica_ricarica_pin')->name('admin.api.mbs.verifica_ricarica_pin');
+			Route::post('/tagli-prefissi-internazionali', 'ApiMbsController@tagli_prefissi_internazionali')->name('admin.api.mbs.tagli_prefissi_internazionali');
+			Route::post('/ricarica-internazionale', 'ApiMbsController@ricarica_internazionale')->name('admin.api.mbs.ricarica_internazionale');
+			Route::post('/pagamento-visura', 'ApiMbsController@pagamento_visura')->name('admin.api.mbs.pagamento_visura');
+			Route::post('/verifica-visura', 'ApiMbsController@verifica_visura')->name('admin.api.mbs.verifica_visura');
+			Route::post('/spedizione', 'ApiMbsController@spedizione')->name('admin.api.mbs.spedizione');
+			Route::post('/verifica-spedizione', 'ApiMbsController@verifica_spedizione')->name('admin.api.mbs.verifica_spedizione');
+			Route::post('/ricarica-postepay', 'ApiMbsController@ricarica_postepay')->name('admin.api.mbs.ricarica_postepay');
+		});
 
 		Route::prefix('/admin/api/reloadly')->group(function () {
 			Route::get('/', 'ApiReloadlyController@index')->name('admin.api.reloadly.index');
@@ -187,7 +219,6 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::get('/transactions', 'ApiReloadlyController@transactions')->name('admin.api.reloadly.transactions');
             Route::post('/recharge', 'ApiReloadlyController@recharge')->name('admin.api.reloadly.recharge');
             Route::get('/operators/save', 'ApiReloadlyController@save_operators')->name('admin.api.reloadly.operators.save');
-
             Route::get('/graph','ApiReloadlyController@graph_data')->name('graph_data');
         });
 
@@ -211,7 +242,6 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::get('/Promotions', 'ApiDingController@Promotions')->name('admin.api.ding.Promotions');
             Route::get('/PromotionDescriptions', 'ApiDingController@PromotionDescriptions')->name('admin.api.ding.PromotionDescriptions');
             Route::post('/AccountLookup', 'ApiDingController@AccountLookup')->name('admin.api.ding.account_lookup');
-
             Route::get('/graph', 'ApiDingController@graph_data')->name('admin.ding.graph_data');
 		});
 
@@ -222,6 +252,8 @@ Route::group(['middleware' => ['get.menu']], function () {
 		Route::resource('/admin/service/reloadly',  'ReloadlyController', [ 'names' => 'admin.reloadly' ]);
 
 		Route::resource('/admin/service/ding',  'DingController', [ 'names' => 'admin.ding' ]);
+		
+		Route::resource('/admin/service/mbs',  'MbsController', [ 'names' => 'admin.mbs' ]);
 
 		Route::post('/admin/internal/services/operations/totals/{type}', 'ServiceOperationController@totals'); // endpoint for initial calculations (daily)
 		Route::post('/admin/internal/services/{type}', 'ServiceOperationController@operations');  // data for operations
@@ -244,6 +276,7 @@ Route::group(['middleware' => ['get.menu']], function () {
 
 		Route::prefix('/admin/report')->group(function () {
             Route::get('/', 'ReportController@operations')->name('admin.report.operations');
+            Route::get('/ticket', 'ReportController@operations_ticket')->name('admin.report.operations_ticket');
             Route::get('/agents', 'ReportController@agentOperations')->name('admin.agent.operations');
             Route::get('/agents/export', 'ReportController@agentOperationsExport')->name('admin.report.agent.export');
 			Route::get('/export', 'ReportController@export_operations')->name('admin.report.operations.export');
@@ -251,6 +284,7 @@ Route::group(['middleware' => ['get.menu']], function () {
 			Route::get('/calls', 'ReportController@calls')->name('admin.report.calls');
 			Route::get('/calls/reloadly', 'ReportController@reloadly_calls')->name('admin.report.calls.reloadly');
 			Route::get('/calls/ding', 'ReportController@ding_calls')->name('admin.report.calls.ding');
+			Route::get('/calls/mbs', 'ReportController@mbs_calls')->name('admin.report.calls.mbs');
 			Route::get('/{id}/details', 'ReportController@operation_details')->name('admin.report.operation.details');
         });
 
@@ -259,7 +293,6 @@ Route::group(['middleware' => ['get.menu']], function () {
 		Route::get('/users/deleted', 'UsersController@deleted')->name('admin.users.deleted');
 		Route::put('users/{id}/recover', 'UsersController@recover')->name('admin.users.recover');
         Route::resource('users', 'UsersController');
-
 
         Route::resource('languages',    'LanguageController');
         Route::resource('mail',        'MailController');

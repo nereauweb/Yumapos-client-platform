@@ -41,12 +41,17 @@ class AgentReportOperations extends Component
         $operations = ModelsAgentOperation::where('created_at','>=',$date_begin)->where('created_at','<=',$date_end)->where('user_id', auth()->id())->when($this->sortField, function ($query) {
             $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
         })->orderBy('id', 'desc');
+		
+		$report_operations = $operations;
+		$operations = $operations->paginate(10);
+		
+		$report_operations->whereHas('pointOperation', function($q) {
+			$q->whereNull('report_status')->orWhere('report_status','!=','refunded'); 
+		});
 
-        $this->totalOperations = $operations->count();
-        $this->sumOfOperations = $operations->sum('original_amount');
-        $this->sumOfCom = $operations->sum('commission');
-
-        $operations = $operations->paginate(10);
+        $this->totalOperations = $report_operations->count();
+        $this->sumOfOperations = $report_operations->sum('original_amount');
+        $this->sumOfCom = $report_operations->sum('commission');
 
         return view('livewire.agent-report-operations', compact('operations','date_begin','date_end'));
     }

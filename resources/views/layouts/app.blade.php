@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.basictable/1.1.0/basictable.min.css" integrity="sha512-uhJBKXu91y+d352XFs3H4pleDOkpv8cB44hZ1AR7GSkU/ic5/hoSxFYFsVqSZSV+e2fcyq00HKeetcRn78JdTg==" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.basictable/1.1.0/jquery.basictable.js" integrity="sha512-nWpIKXCKNcC4VHVCWrWEUdaolGZTe84yIp10hGHjME3g9gBlhJzpPNRKWHUTilZ3zbcPQptz20DDNb+W4aXuWA==" crossorigin="anonymous"></script>
 	@yield('css')
+	@yield('style')
 </head>
 <body>
     <div id="app">

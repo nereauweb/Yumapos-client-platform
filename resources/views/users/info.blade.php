@@ -17,7 +17,6 @@
 							<dd class="col-sm-7">
 								<ul class="uk-list">
 									<li><i class="c-icon cil-phone"></i> +39 391 386 4315 </li>
-									<li><i class="c-icon cil-phone"></i> +39 342 564 7783 </li>
 									<li><i class="c-icon cil-at"></i> info@yumapos.it </li>
 								</ul>
 							</dd>

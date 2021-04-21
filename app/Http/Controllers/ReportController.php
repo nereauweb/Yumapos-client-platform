@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\AgentOperationsExport;
 use App\Models\ApiReloadlyCall;
 use App\Models\ApiDingCall;
+use App\Models\ApiMbsCall;
 use App\Models\ServiceOperation;
 use App\Models\ServiceOperator;
 use App\User;
@@ -46,6 +47,27 @@ class ReportController extends Controller
 		$operations = ServiceOperation::all();
         return view('admin/report/operations',compact('operations','date_begin','date_end','users','user_name','user_id'));
 	}
+    public function operations_ticket(Request $request)
+    {
+		$users = User::pluck('name','id');
+		$user_name = "All users";
+		$user_id = 0;
+		if ($request->input('user') && $request->input('user')!=0){
+			$user = User::find($request->input('user'));
+			$user_name = $user->name;
+			$user_id = $user->id;
+		}
+		$date_begin = $request->input('date_begin') ? $request->input('date_begin') . ' 00:00:00' : date("Y-m-d") . ' 00:00:00';
+		$date_end = $request->input('date_end') ? $request->input('date_end') . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
+		$operations = ServiceOperation::where('created_at','>=',$date_begin)->where('created_at','<=',$date_end);
+		if($user_id!=0){
+			$operations->where('user_id',$user_id);
+		}
+		$operations = $operations->get();
+		$operations = ServiceOperation::all();
+        return view('admin/report/operations-ticket',compact('operations','date_begin','date_end','users','user_name','user_id'));
+	}
+
 
 	public function operation_details(Request $request, $id)
     {
@@ -171,6 +193,12 @@ class ReportController extends Controller
 		$date_end = $request->input('date_end') ? $request->input('date_end') . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
 		$operations = ApiDingCall::where('created_at','>=',$date_begin)->where('created_at','<=',$date_end)->get();
         return view('admin/report/calls-ding',compact('operations','date_begin','date_end'));
+    }
+
+    public function mbs_calls(Request $request)
+    {
+		$operations = ApiMbsCall::orderBy('id','desc')->get();
+        return view('admin/report/calls-mbs',compact('operations'));
     }
 
 

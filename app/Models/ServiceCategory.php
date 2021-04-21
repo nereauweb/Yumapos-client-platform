@@ -40,4 +40,11 @@ class ServiceCategory extends Model
 		return ServiceOperator::select('service_operators.*')->whereNotIn($this->operators()->pluck('id'));
 	}
 	
+	public function allowed_operators_ids(){
+		if ($this->operator_list_type=="include"){
+			return $this->operators()->pluck('service_operators.id');
+		}
+		return ServiceOperator::select('service_operators.*')->whereNotIn('service_operators.id',$this->operators()->pluck('service_operators.id'))->pluck('service_operators.id');
+	}
+	
 }

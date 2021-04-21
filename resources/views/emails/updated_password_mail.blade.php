@@ -7,7 +7,7 @@ Your password has been changed through admin:<br>
 
 # use those credentials login
 
-@component('mail::button', ['url' => 'http://test.yumapos.it/login'])
+@component('mail::button', ['url' => url('/login')])
     Login
 @endcomponent
 

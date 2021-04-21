@@ -39,7 +39,7 @@
                                             <div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
                                                 <div>
                                                     <div class="text-value-lg">
-                                                        @if(!is_null($ding_balance_cache) && $ding_balance_cache[date('w')])
+                                                        @if(!is_null($ding_balance_cache) && isset($ding_balance_cache[date('w')]))
                                                             <span id="ding-balance">{{ $ding_balance_cache[date('w')] }}</span> €
                                                         @else
                                                            <span id="ding-balance">{{ trans('descriptions.out-of-sync-error') }}</span>

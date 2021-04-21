@@ -81,6 +81,7 @@
                                                 <i class="cil-arrow-top"></i>
                                             @endif
                                         </th>
+										<th>{{ trans('titles.signal-status') }}</th>
                                         <th>{{ trans('titles.agent') }}</th>
                                         <th>{{ trans('titles.point') }}</th>
                                         <th wire:click="sortBy('original_amount')">
@@ -111,6 +112,7 @@
                                                 <td>{{ date('d/m/Y', strtotime($operation->created_at)) }}</td>
                                                 <td>{{ $operation->id }}</td>
                                                 <td>{{ $operation->service_operation_id }}</td>
+                                                <td>{{ $operation->pointOperation->report_status }}</td>
                                                 <td>{{ $operation->user->name ?? 'not set' }}</td>
                                                 <td>{{ $operation->pointOperation->user->name ?? '' }}</td>
                                                 <td>{{ round($operation->original_amount, 3) }}&nbsp;&euro;</td>

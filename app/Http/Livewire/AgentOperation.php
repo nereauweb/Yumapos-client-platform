@@ -61,12 +61,17 @@ class AgentOperation extends Component
         if($user_id!=0){
             $operations->where('user_id',$user_id);
         }
+		
+		$report_operations = $operations;
+		$operations = $operations->paginate(10);
+		
+		$report_operations->whereHas('pointOperation', function($q) {
+			$q->whereNull('report_status')->orWhere('report_status','!=','refunded'); 
+		});
 
-        $this->totalOperations = $operations->count();
-        $this->sumOfOperations = $operations->sum('original_amount');
-        $this->sumOfCom = $operations->sum('commission');
-
-        $operations = $operations->paginate(10);
+        $this->totalOperations = $report_operations->count();
+        $this->sumOfOperations = $report_operations->sum('original_amount');
+        $this->sumOfCom = $report_operations->sum('commission');
 
         return view('livewire.agent-operation', compact('operations','date_begin','date_end','users','user_name','user_id', 'agents'));
     }

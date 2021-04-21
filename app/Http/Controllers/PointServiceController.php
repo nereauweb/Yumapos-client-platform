@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Models\ApiMbsProduct;
+
 use App\Models\ServiceCategory;
 use App\Models\ServiceOperator;
 use App\Models\ServiceOperation;
+
+use Auth;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +25,26 @@ class PointServiceController extends Controller
 
     public function category(Request $request, $id)
     {
+		if ($id==1){
+			$products = ApiMbsProduct::orderBy('Operatore')->orderBy('Tipo')->orderBy('PrezzoUtente')->get();			
+			$providers_ricarica = [
+				"DigiMobile",
+				"FastWeb",
+				"Ho",
+				"Iliad",
+				"Kena",
+				"Linkem",
+				"Lyca",
+				"PosteMobile",
+				"Tim",
+				"UnoMobile",
+				"VeryMobile",
+				"Vodafone",
+				"Wind",
+			];
+			return view('users/service/mbs', compact('products','providers_ricarica'));
+		}
+		
 		$category = ServiceCategory::findOrFail($id);
         return view('users/service/category', compact('category'));
     }
@@ -69,7 +94,7 @@ class PointServiceController extends Controller
 		$category = ServiceCategory::findOrFail($id);
 
 		$dingService = new \App\Http\Ding\Api\V1Api();
-		$phone_number = '+'.$request->input('prefix').str_replace(' ', '', $request->input('number'));
+		$phone_number = $request->input('prefix').str_replace(' ', '', $request->input('number'));
 		try{
 			$result = $dingService->GetAccountLookup($phone_number);
 		} catch (Exception $ex){
@@ -79,21 +104,28 @@ class PointServiceController extends Controller
 			return redirect()->route('users.services.category',[$category->id])->withError('We are sorry, an error occurred while reading the search result data.');
 		}
 		try{
-			$items_array = $result->getItems();
-			if (!isset($items_array)||!$items_array||!is_array($items_array)){
-				return back()->withError('We are sorry, we could find no correspondance for the given number.');
+			$items_array = $result->getItems();			
+			if (isset($items_array)&&$items_array&&is_array($items_array)){			
+				$data = $items_array[0]->getData();
+				$operator = ServiceOperator::where('ding_ProviderCode',$data['provider_code'])->whereIn('id',$category->allowed_operators_ids())->first();
+				if (!$operator&&isset($items_array[1])){
+					$data = $items_array[1]->getData();
+					$operator = ServiceOperator::where('ding_ProviderCode',$data['provider_code'])->whereIn('id',$category->allowed_operators_ids())->first();
+				}
+			} else {
+				$reloadly_operator = app('App\Http\Controllers\ApiReloadlyController')->get_operator_by_number('+'.$phone_number,strtoupper($request->input('country')));
+				$operator = $reloadly_operator ? ServiceOperator::where('reloadly_operatorId',$reloadly_operator->operatorId)->first() : false;
+				$data = [];
 			}
-			$data = $items_array[0]->getData();
+			if (!isset($operator)||!$operator){
+				return redirect()->route('users.services.category',[$category->id])->withError('No operator found for number '.$phone_number.' ('.$data['provider_code'].')');
+			}
 		} catch (\App\Http\Ding\ApiException $ex){
 			return redirect()->route('users.services.category',[$category->id])->withError($ex->getResponseBody());
 		} catch (Exception $ex){
 			return redirect()->route('users.services.category',[$category->id])->withError($ex->getMessage());
 		}
-		$operator = ServiceOperator::where('ding_ProviderCode',$data['provider_code'])->first();
-		if (!$operator){
-			return redirect()->route('users.services.category',[$category->id])->withError('No operator found for number '.$phone_number.' ('.$data['provider_code'].')');
-		}
-		$operators = ServiceOperator::where('country_id',$operator->country->id)->get();
+		$operators = ServiceOperator::where('country_id',$operator->country->id)->whereIn('id',$category->allowed_operators_ids())->get();
 		return view('users/service/preview', compact('data', 'category', 'operator', 'phone_number', 'operators'));
     }
 
@@ -145,6 +177,34 @@ class PointServiceController extends Controller
 			$request->session()->flash('request_data', $request_data);
 			return redirect()->route('users.services.ding.transaction.result');
 		}
+
+		return redirect('/backend')->with('error','We are sorry, a problem occurred in selecting operator provider. Request aborted.');
+	}
+	
+	public function user_mbs_recharge_request(Request $request){
+		
+		$request_data = [
+			'Prodotto'	=> $request->Prodotto,
+			'Numero'	=> $request->Numero,
+		];
+		$request->session()->flash('request_data', $request_data);
+		return redirect()->route('users.services.mbs.ricarica_telefonica.bridged');
+		
+
+		return redirect('/backend')->with('error','We are sorry, a problem occurred in selecting operator provider. Request aborted.');
+	}
+	
+	public function user_mbs_pin_request(Request $request){
+		
+		$request_data = [
+			'Prodotto'	=> $request->Prodotto,
+			'Numero'	=> null,
+			'CodiceUtente'	=> null,
+			'ImportoPinLibero'	=> null,
+		];
+		
+		$request->session()->flash('request_data', $request_data);
+		return redirect()->route('users.services.mbs.ricarica_pin.bridged');		
 
 		return redirect('/backend')->with('error','We are sorry, a problem occurred in selecting operator provider. Request aborted.');
 	}

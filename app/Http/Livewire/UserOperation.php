@@ -6,6 +6,7 @@ use App\Models\ApiReloadlyOperator;
 use App\Models\ApiReloadlyOperatorCountry;
 use App\Models\ServiceCountry;
 use App\Models\ServiceOperator;
+use App\Models\ServiceOperation;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -71,15 +72,25 @@ class UserOperation extends Component
         if ($this->operationId) {
             $this->operations = auth()->user()->serviceOperations()->where('id', $this->operationId);
         }
-
-        $this->totalOperations = $this->operations->count();
-        $this->finalAmount = $this->operations->sum('final_amount');
-        $this->userDiscount = $this->operations->sum('user_discount');
-        $this->userGain = $this->operations->sum('user_gain');
-        $this->userTotalGain = $this->operations->sum('user_total_gain');
-
+		
+		$report_operations = $this->operations;
         $this->operations = $this->operations->paginate(10);
+		
+		$report_operations->where(function ($query) {
+				$query->whereNull('report_status')->orWhere('report_status','!=','refunded');
+			});
+		
+        $this->totalOperations = $report_operations->count();
+        $this->finalAmount = $report_operations->sum('final_amount');
+        $this->userDiscount = $report_operations->sum('user_discount');
+        $this->userGain = $report_operations->sum('user_gain');
+        $this->userTotalGain = $report_operations->sum('user_total_gain');
     }
     // search an operation by id
     public function searchById() {}
+	
+	public function signal($id) {
+        $operation = ServiceOperation::find($id);
+        $operation->update(['report_status' => 'reported']);
+    }
 }

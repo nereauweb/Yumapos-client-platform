@@ -165,6 +165,7 @@ class UsersController extends Controller
 		       'group_id' => $request->group_id
             ]);
         } else if ($request->role == 'sales') {
+			$user->assignRole(['user','sales']);
 		    $user->update([
 		        'agent_group_id' => $request->agent_group_id,
                 'group_id' => $request->group_id

@@ -22,15 +22,17 @@ class ServiceOperation extends Model
 	protected $fillable = [
 		'provider',
 		'user_id',
-		'api_reloadly_calls_id',
-		'api_reloadly_operations_id',
-		'reloadly_transactionId',
-		'ding_TransferRef',
-		'api_ding_call_id',
-		'api_ding_operation_id',
-		'result',
-		'request_operatorId',
-		'request_ProviderCode',
+		'api_reloadly_calls_id',		//reloadly
+		'api_reloadly_operations_id',	//reloadly
+		'reloadly_transactionId',		//reloadly
+		'ding_TransferRef',				//ding
+		'api_ding_call_id',				//ding
+		'api_ding_operation_id',		//ding
+		'api_mbs_operation_id',				//mbs
+		'result',						//1
+		'request_operatorId',			//reloadly
+		'request_ProviderCode',			//ding
+		'request_Prodotto',				//mbs
 		'request_local',
 		'request_amount',
 		'request_country_iso',
@@ -48,6 +50,7 @@ class ServiceOperation extends Model
 		'user_total_gain',
 		'agent_commission',
 		'platform_total_gain',
+		'pin',
 		'report_status',
 		'report_notes',
 		];
@@ -77,6 +80,14 @@ class ServiceOperation extends Model
 		return $this->hasOne('App\Models\ApiDingOperator','ProviderCode','request_ProviderCode');
 	}
 
+	public function mbs_operation(){
+		return $this->hasOne('App\Models\ApiMbsOperation','id','api_mbs_operation_id');
+	}
+
+	public function mbs_product(){
+		return $this->hasOne('App\Models\ApiMbsProduct','Prodotto','request_Prodotto');
+	}
+
 	public function operator(){
 		if ($this->provider == 'reloadly'){
 			return $this->reloadly_operator;
@@ -90,6 +101,9 @@ class ServiceOperation extends Model
 	public function operator_name(){
 		try
 		{
+			if ($this->provider == 'mbs'){
+				return $this->mbs_product->Operatore;
+			}
 			if ($this->provider == 'reloadly'){
 				return $this->reloadly_operator->name;
 			}
@@ -105,7 +119,10 @@ class ServiceOperation extends Model
 		return '';
 	}
 
-	public function country_name(){
+	public function country_name(){		
+		if ($this->provider == 'mbs'){
+			return 'Italy';
+		}
 		try
 		{
 			return ServiceCountry::where('iso',$this->request_country_iso)->first()->name;
@@ -123,11 +140,18 @@ class ServiceOperation extends Model
 		if ($this->provider == 'ding'){
 			return $this->ding_operation->ReceiveCurrencyIso;
 		}
+		if ($this->provider == 'mbs'){
+			return '€';
+		}
 		return '';
 	}
 
 	public function user(){
 		return $this->hasOne('App\User','id','user_id');
+	}
+	
+	public function agent_operation(){ 
+		return $this->hasOne('App\Models\AgentOperation','service_operation_id','id'); 
 	}
 
 }

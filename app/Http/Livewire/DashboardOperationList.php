@@ -27,13 +27,13 @@ class DashboardOperationList extends Component
     public function render()
     {
         if ($this->isUser) {
-            $this->usersDetails = ServiceOperation::where('user_id', auth()->id())->select(DB::raw('sum(user_amount) amount, service_operations.*'))->when($this->filterSelected, function ($query) {
+            $this->usersDetails = ServiceOperation::where('user_id', auth()->id())->select(DB::raw('sum(user_amount) amount, service_operations.*'))->where(function ($query) { $query->whereNull('report_status')->orWhere('report_status','!=','refunded'); })->when($this->filterSelected, function ($query) {
                 $this->filter($query);
             })->orderBy('amount', 'desc')->groupBy('user_id')->take(5)->get();
-            $this->countriesList = ServiceOperation::where('user_id', auth()->id())->select(DB::raw('sum(user_amount) amount, service_operations.*'))->when($this->filterSelected, function ($query) {
+            $this->countriesList = ServiceOperation::where('user_id', auth()->id())->select(DB::raw('sum(user_amount) amount, service_operations.*'))->where(function ($query) { $query->whereNull('report_status')->orWhere('report_status','!=','refunded'); })->when($this->filterSelected, function ($query) {
                 $this->filter($query);
             })->orderBy('amount', 'desc')->groupBy('request_country_iso')->take(5)->get();
-            $this->operationsList = ServiceOperation::where('user_id', auth()->id())->select(DB::raw('sum(user_amount) amount, service_operations.*'))->when($this->filterSelected, function ($query) {
+            $this->operationsList = ServiceOperation::where('user_id', auth()->id())->select(DB::raw('sum(user_amount) amount, service_operations.*'))->where(function ($query) { $query->whereNull('report_status')->orWhere('report_status','!=','refunded'); })->when($this->filterSelected, function ($query) {
                 $this->filter($query);
             })->orderBy('amount', 'desc')->groupBy('request_operatorId', 'request_ProviderCode')->take(5)->get();
             $services = auth()->user()->accessServices($this->filterSelected);
@@ -42,18 +42,18 @@ class DashboardOperationList extends Component
             if ($this->userEmail !== '' && !is_null($this->userEmail)) {
                 $user = \App\User::where('email', $this->userEmail)->first();
                 if ($user) {
-                    $this->usersDetails = ServiceOperation::where('user_id', $user->id)->select(DB::raw('sum(user_amount) amount, service_operations.*'))->orderBy('amount', 'desc')->groupBy('user_id')->take(5)->get();
-                    $this->countriesList = ServiceOperation::where('user_id', $user->id)->select(DB::raw('sum(user_amount) amount, service_operations.*'))->orderBy('amount', 'desc')->groupBy('request_country_iso')->take(5)->get();
-                    $this->operationsList = ServiceOperation::where('user_id', $user->id)->select(DB::raw('sum(user_amount) amount, service_operations.*'))->orderBy('amount', 'desc')->groupBy('request_operatorId')->take(5)->get();
+                    $this->usersDetails = ServiceOperation::where('user_id', $user->id)->select(DB::raw('sum(user_amount) amount, service_operations.*'))->where(function ($query) { $query->whereNull('report_status')->orWhere('report_status','!=','refunded'); })->orderBy('amount', 'desc')->groupBy('user_id')->take(5)->get();
+                    $this->countriesList = ServiceOperation::where('user_id', $user->id)->select(DB::raw('sum(user_amount) amount, service_operations.*'))->where(function ($query) { $query->whereNull('report_status')->orWhere('report_status','!=','refunded'); })->orderBy('amount', 'desc')->groupBy('request_country_iso')->take(5)->get();
+                    $this->operationsList = ServiceOperation::where('user_id', $user->id)->select(DB::raw('sum(user_amount) amount, service_operations.*'))->where(function ($query) { $query->whereNull('report_status')->orWhere('report_status','!=','refunded'); })->orderBy('amount', 'desc')->groupBy('request_operatorId')->take(5)->get();
                 }
             } else {
-                $this->usersDetails = ServiceOperation::select(DB::raw('sum(user_amount) amount, service_operations.*'))->when($this->filterSelected, function ($query) {
+                $this->usersDetails = ServiceOperation::select(DB::raw('sum(user_amount) amount, service_operations.*'))->where(function ($query) { $query->whereNull('report_status')->orWhere('report_status','!=','refunded'); })->when($this->filterSelected, function ($query) {
                     $this->filter($query);
                 })->orderBy('amount', 'desc')->groupBy('user_id')->take(5)->get();
-                $this->countriesList = ServiceOperation::select(DB::raw('sum(user_amount) amount, service_operations.*'))->when($this->filterSelected, function ($query) {
+                $this->countriesList = ServiceOperation::select(DB::raw('sum(user_amount) amount, service_operations.*'))->where(function ($query) { $query->whereNull('report_status')->orWhere('report_status','!=','refunded'); })->when($this->filterSelected, function ($query) {
                     $this->filter($query);
                 })->orderBy('amount', 'desc')->groupBy('request_country_iso')->take(5)->get();
-                $this->operationsList = ServiceOperation::select(DB::raw('sum(user_amount) amount, service_operations.*'))->when($this->filterSelected, function ($query) {
+                $this->operationsList = ServiceOperation::select(DB::raw('sum(user_amount) amount, service_operations.*'))->where(function ($query) { $query->whereNull('report_status')->orWhere('report_status','!=','refunded'); })->when($this->filterSelected, function ($query) {
                     $this->filter($query);
                 })->orderBy('amount', 'desc')->when(true, function ($query) {
                     $query->groupBy('request_operatorId', 'request_ProviderCode');

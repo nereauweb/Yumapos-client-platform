@@ -223,6 +223,7 @@ return [
 
     // users/settings/account.blade.php
     'company-name'      => 'Nome compagnia',
+    'company-data'      => 'Dati compagnia',
     'default-gain'      => 'Guadagno di default',
     'sales'             => 'Sconti',
     'percentage'        => 'Percentuale',
@@ -485,14 +486,11 @@ return [
     // agents/users/create.blade.php
     'create-user'   => 'Create user',
 
+    'company-mobile'    => 'Cellulare referente',	
 
-    'company-mobile'    => 'Cellulare referente',
-
-
-
-
-
-
-
+    'signal'    => 'Segnala problema',
+    'signal-ok' => 'OK',
+    'signal-status' => 'Stato segnalazione',
+	
 
 ];
