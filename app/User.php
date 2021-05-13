@@ -26,7 +26,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'parent_id', 'parent_percent', 'plafond', 'debt_limit', 'group_id', 'agent_group_id', 'state', 'credit'
+        'name', 'email', 'password', 'parent_id', 'parent_percent', 'plafond', 'debt_limit', 'group_id', 'agent_group_id', 'state', 'credit','api_token'
     ];
 
     /**
@@ -141,4 +141,13 @@ class User extends Authenticatable
             return ServiceOperation::where('user_id', auth()->id())->orderBy('created_at', 'desc')->whereMonth('created_at', $month)->limit(10)->get();
         }
     }
+	
+	public function generateToken()
+    {
+        $this->api_token = \Str::random(60);
+        $this->save();
+
+        return $this->api_token;
+    }
+	
 }

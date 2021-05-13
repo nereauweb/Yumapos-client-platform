@@ -83,7 +83,8 @@ Route::group(['middleware' => ['get.menu']], function () {
 
 		Route::prefix('/users/reports')->group(function () {
 			Route::get('/operations', 'PointReportController@operations')->name('users.reports.operations');
-            Route::get('/users/operations/export', 'PointReportController@export')->name('user.operations.export');
+            Route::get('/users/operations/export', 'PointReportController@export')->name('user.operations.export');			
+            Route::get('/ticket', 'PointReportController@operations_ticket')->name('user.reports.operations_ticket');
         });
 
 		Route::prefix('/users')->group(function () {

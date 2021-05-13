@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\Log;
 class ApiReloadlyController extends Controller
 {
 	private $environment = 'live';
@@ -151,7 +151,7 @@ class ApiReloadlyController extends Controller
 
 	public function log_call($type,$path,$parameters = '',$response = ''){
 		$call = ApiReloadlyCall::create([
-			'user_id' => Auth::user()->id,
+			'user_id' => Auth::user() ? Auth::user()->id : 0,
 			'type' => $type,
 			'path' => $path,
 			'parameters' => $parameters,
@@ -264,6 +264,13 @@ class ApiReloadlyController extends Controller
 		$data = $this->get_call('/operators/auto-detect/phone/'.$full_number.'/countries/'.strtoupper($request->input('country')),true);
 		$operator = isset($data['operatorId']) ? $this->save_operator_data($data,0,true) : false;
 		return view('users/service/preview', ['log' => $this->log, 'data' => $data, 'operator' => $operator, 'phone_number' => $full_number] );
+    }
+	
+	public function get_operator_by_number($full_number,$country)
+    {
+		$data = $this->get_call('/operators/auto-detect/phone/'.$full_number.'/countries/'.$country,true);
+		$operator = isset($data['operatorId']) ? $this->save_operator_data($data,0,true) : false;
+		return $operator;
     }
 
 	public function user_recharge(Request $request)
@@ -638,6 +645,26 @@ class ApiReloadlyController extends Controller
         ];
 
         return response()->json(['graph_data' => $return], 200);
+    }
+	
+	public function data_update()
+	{
+		$this->log .= '[UPDATE JOB] Reloadly providers ';
+		$page=1;
+		$last=false;
+		$count = 0;
+		while($last==false||$page==100){
+			$data = $this->get_call('/operators?page='.$page.'&size=100&suggestedAmounts=true&suggestedAmountsMap=true', true);
+			if (!isset($data['content'])){
+				$this->log .= '<br>NO $data[content]';
+				return view('admin/api/reloadly/result', ['log' => $this->log, 'count' => $count, 'data' => $data] );
+			}
+			$this->log .= "<br>Elaborazione pagina $page ...<br>";
+			$count = $this->save_operators_data($data['content'],$count);
+			$last = $data['last'];
+			$page++;
+		}
+		Log::info($this->log);
     }
 
 

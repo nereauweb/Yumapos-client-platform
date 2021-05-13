@@ -44,6 +44,16 @@ class PointReportController extends Controller
 
         return Excel::download(new UserOperationsExport($userOperations), 'user_operations.xlsx');
     }
-
+	
+	public function operations_ticket(Request $request)
+    {		
+		$date_begin = $request->input('date_begin') ? $request->input('date_begin') . ' 00:00:00' : date("Y-m-d") . ' 00:00:00';
+		$date_end = $request->input('date_end') ? $request->input('date_end') . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
+		$operations = ServiceOperation::where('created_at','>=',$date_begin)->where('created_at','<=',$date_end);
+		$operations->where('user_id',\Auth::user()->id);
+		$operations = $operations->get();
+		$operations = ServiceOperation::all();
+        return view('users/report/tickets',compact('operations','date_begin','date_end'));
+	}
 
 }
