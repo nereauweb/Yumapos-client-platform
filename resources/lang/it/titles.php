@@ -30,6 +30,7 @@ return [
     'adminPHP'          => 'PHP Info',
     'adminRoutes'       => 'Struttura pagine',
 
+    'linked-users' 		=> 'Utenti collegati',
     'activeUsers'       => 'Utenti attivi',
     'laravelBlocker'    => 'Blocchi',
 
@@ -64,12 +65,13 @@ return [
     'plafond-limit'     => 'Limite Plafond',
     'close'             => 'Chiudi',
     'approve'           => 'Approva',
+    'reject'           	=> 'Rifiuta',
     'cancel'            => 'Cancella',
     'delete'            => 'Elimina',
     'confirm-delete'    => 'Conferma Eliminazione',
     'actions'           => 'Azioni',
     'pending-payments'  => 'Pagamenti in attesa',
-    'traffic-sales'     => 'Traffic &amp; Sconti',
+    'traffic-sales'     => 'Traffico e Vendite',
     'user'              => 'Utente',
     'country'           => 'Paese',
     'operator'          => 'Operatore',
@@ -80,12 +82,12 @@ return [
     'list-trashed-payments'         => 'Lista pagamenti battuti',
     'pay-user'                      => 'Paga utente',
     'pay-provider'                  => 'Paga provider',
-    'add-payment'                   => 'Aggiungi payment',
+    'add-payment'                   => 'Aggiungi pagamento',
     'type'                          => 'Tipo',
     'all-types'                     => 'Tutti i tipi',
-    'user-to-platform'              => 'User to platform',
-    'platform-to-user'              => 'Platform to user',
-    'platform-to-provider'          => 'Platform to provider',
+    'user-to-platform'              => 'Utente verso piattaforma',
+    'platform-to-user'              => 'Piattaforma verso utente',
+    'platform-to-provider'          => 'Piattaforma verso fornitore',
     'state'                         => 'Stato',
     'all'                           => 'Tutti',
     'canceled'                      => 'Cancellato',
@@ -438,7 +440,7 @@ return [
 
     // admin/users/edit.blade.php
     'client'                => 'Utente',
-    'credit'                => 'Credit',
+    'credit'                => 'Credito',
     'client-group-id'       => 'Client group id',
     'agent-group-id'        => 'Agent group id',
     'vat-percent'           => 'Percentuale IVA',
@@ -461,6 +463,8 @@ return [
 
     // admin/users/group-edit.blade.php
     'modify-group-client'       => 'Modifica gruppo utenti',
+	
+    'group-delete'       => 'Elimina gruppo utenti',
 
 
     // admin/users/group-edit-agent.blade.php
@@ -492,5 +496,9 @@ return [
     'signal-ok' => 'OK',
     'signal-status' => 'Stato segnalazione',
 	
+	'balance'			=>	'Bilancio',
+	'transfer-balance'	=>	'Trasferisci bilancio',
+	'to'	=>	'a',
+	'return-to-users-list'	=>	'Torna alla lista utenti',	
 
 ];

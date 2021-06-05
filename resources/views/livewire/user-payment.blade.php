@@ -111,7 +111,7 @@
                                             <i class="cil-x"></i>
                                         @endif
                                     </td>
-                                    <td>{{ $payment->type == 1 ? trans('titles.you-to-platform') : trans('titles.platform-to-you') }}</td>
+                                    <td>{{ $payment->type(true,true,Auth::user()->hasRole('sales')) }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

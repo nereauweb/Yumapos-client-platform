@@ -16,7 +16,7 @@
 		</div>
 
 		<div class="card-body">
-			{!! Form::open(array('route' => 'admin.groups.store', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation')) !!}
+			{!! Form::open(array('route' => 'admin.groups.store', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation', 'files' => true)) !!}
 
 				{!! csrf_field() !!}
 
@@ -66,6 +66,36 @@
 						@endif
 					</div>
 				</div>
+
+                <div class="form-group has-feedback row {{ $errors->has('use_margin') ? ' has-error ' : '' }}">
+                    {!! Form::label('use_margin', 'Abilita margini', array('class' => 'col-md-3 control-label')); !!}
+                    <div class="col-md-9">
+                        <div class="input-group">
+							<label>
+								{!! Form::checkbox('use_margin', '1', true, array('id' => 'use_margin', 'class' => 'uk-checkbox')) !!}
+							</label>
+                        </div>
+                        @if($errors->has('use_margin'))
+                            <span class="help-block">
+								<strong>{{ $errors->first('use_margin') }}</strong>
+							</span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group has-feedback row {{ $errors->has('logo') ? ' has-error ' : '' }}">
+                    {!! Form::label('logo', 'Logo personalizzato', array('class' => 'col-md-3 control-label')); !!}
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            {!! Form::file('logo', array('id' => 'logo', 'class' => '', 'placeholder' => 'Logo personalizzato')) !!}							
+                        </div>
+                        @if($errors->has('logo'))
+                            <span class="help-block">
+								<strong>{{ $errors->first('logo') }}</strong>
+							</span>
+                        @endif
+                    </div>
+                </div>
 
 				<input type="hidden" name="type" value="1">
 

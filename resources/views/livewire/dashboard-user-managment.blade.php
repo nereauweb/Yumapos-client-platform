@@ -10,16 +10,16 @@
             </button>
             <div class="dropdown-menu dropdown-menu-right">
                 @if (!$user->state)
-                    <button class="dropdown-item btn-success" data-toggle="modal" data-target="#modalApprove"
-                            wire:click="approve({{ $user->id }})">Approve</button>
+                    <button class="dropdown-item" data-toggle="modal" data-target="#modalApprove"
+                            wire:click="approve({{ $user->id }})">{{ trans('titles.approve') }}</button>
                 @endif
-                <a href="{{ url('/users/' . $user->id) }}" class="dropdown-item btn-primary">{{ __('coreuiforms.view') }}</a>
-                <a href="{{ url('/users/' . $user->id. '/edit') }}" class="dropdown-item btn-success">{{ __('coreuiforms.edit') }}</a>
+                <a href="{{ url('/users/' . $user->id) }}" class="dropdown-item">{{ __('coreuiforms.view') }}</a>
+                <a href="{{ url('/users/' . $user->id. '/edit') }}" class="dropdown-item">{{ __('coreuiforms.edit') }}</a>
                 @if (auth()->id() !== $user->id)
                     @if ($user->hasrole('user')||$user->hasrole('sales'))
-                        <a href="{{ url('/users/' . $user->id. '/impersonate') }}" class="dropdown-item btn-warning">{{ trans('titles.impersonate') }}</a>
+                        <a href="{{ url('/users/' . $user->id. '/impersonate') }}" class="dropdown-item ">{{ trans('titles.impersonate') }}</a>
                     @endif
-                    <button class="dropdown-item btn-danger" data-toggle="modal" data-target="#modalDelete"
+                    <button class="dropdown-item" data-toggle="modal" data-target="#modalDelete"
                             wire:click="destroy({{ $user->id }})">{{ __('coreuiforms.delete') }}</button>
                 @endif
             </div>

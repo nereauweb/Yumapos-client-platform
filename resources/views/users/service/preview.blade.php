@@ -180,7 +180,7 @@ a.operator-choice * {
 											@endif
 											</div>
 										</div>
-										<div class="form-group row">
+										<div class="form-group row @if(!Auth::user()->group->use_margin) d-none @endif">
 											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.gain') }} €</label>
 											<div class="col-md-9">
 												<input class="form-control" id="gain" type="number" name="gain" value="" step="0.01" required>
@@ -227,7 +227,7 @@ a.operator-choice * {
 												<p class="uk-text-danger" id="amount-alert" style="display:none;">{{ trans('titles.wrong-amount') }}</p>
 											</div>
 										</div>
-										<div class="form-group row">
+										<div class="form-group row @if(!Auth::user()->group->use_margin) d-none @endif">
 											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.gain') }} €</label>
 											<div class="col-md-9">
 												<input class="form-control" id="gain" type="number" name="gain" value="" step="0.01" required>
@@ -345,7 +345,7 @@ a.operator-choice * {
 											@endif
 											</div>
 										</div>
-										<div class="form-group row">
+										<div class="form-group row @if(!Auth::user()->group->use_margin) d-none @endif">
 											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.gain') }} €</label>
 											<div class="col-md-9">
 												<input class="form-control" id="gain" type="number" name="gain" value="" step="0.01" required>
@@ -391,7 +391,7 @@ a.operator-choice * {
 												<p class="uk-text-danger" id="amount-alert" style="display:none;">{{ trans('titles.wrong-amount') }}</p>
 											</div>
 										</div>
-										<div class="form-group row">
+										<div class="form-group row @if(!Auth::user()->group->use_margin) d-none @endif">
 											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.gain') }} €</label>
 											<div class="col-md-9">
 												<input class="form-control" id="gain" type="number" name="gain" value="" step="0.01" required>
@@ -455,7 +455,7 @@ a.operator-choice * {
 	@if($operator && is_object($operator))
 		@include('scripts.save-modal-script')
 		<script>
-			var gain_percent = {{ Auth::user()->configuration ? Auth::user()->configuration->default_gain : 0 }};
+			var gain_percent = {{ Auth::user()->configuration ? (Auth::user()->group->use_margin ? Auth::user()->configuration->default_gain : 0) : 0 }};
 			var amount = 0.00;
 			var gain = 0.00;
 			var final_amount = 0.00;

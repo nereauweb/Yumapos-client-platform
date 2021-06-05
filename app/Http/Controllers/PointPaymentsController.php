@@ -21,6 +21,7 @@ class PointPaymentsController extends Controller
     {
 		$payments = Payment::
 						where('user_id',\Auth::user()->id)
+						->orWhere('target_id',\Auth::user()->id)
 						->get();
         return view('users/payments/list', compact('payments') );
     }
@@ -96,4 +97,61 @@ class PointPaymentsController extends Controller
             return redirect()->route('users.payments.index')->with(['status' => 'error', 'message' => $q->getMessage()]);
         }
     }
+	
+	public function create_transfer(Request $request, $id)
+    {
+		$user = User::find($id);
+        return view('users/payments/transfer-balance', compact('user') );
+    }
+	
+	public function transfer(Request $request)
+    {
+        $validator = Validator::make($request->all(),
+            [
+                'amount'	=> 'required',
+            ],
+            [
+                'amount.required'	=> 'Amount required'
+            ]
+        );
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+		
+		if (\Auth::user()->plafond < $request->input('amount')){
+			return back()->withError('Insufficient plafond to transfer the requested amount');
+		}
+		
+		$user = \Auth::user();
+		$target_user = User::find($request->input('target_id'));
+		
+		if (!$target_user){
+			return back()->withError('Target user not found');
+		}
+
+        try {
+			$user->plafond -= $request->input('amount');
+			$target_user->plafond += $request->input('amount');
+            DB::beginTransaction();
+            $payment = Payment::create([
+                'date'		=> date("Y-m-d H:i:s"),
+                'amount'	=> $request->input('amount'),
+                'user_id'	=> $user->id,
+                'target_id'	=> $target_user->id,
+                'details'	=> $request->input('details'),
+                'approved'	=> 1,
+                'type'      => 4,
+                'update_balance' => 1
+            ]);
+            DB::commit();
+			$user->save();
+			$target_user->save();			
+            return back()->with(['status' => 'success', 'message' => 'Transfer completed']);
+        } catch (QueryException $q_ex) {
+		    DB::rollBack();
+            return back()->withError($q_ex->getMessage());
+        }
+    }
+	
 }

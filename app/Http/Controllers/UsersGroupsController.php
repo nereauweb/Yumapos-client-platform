@@ -57,20 +57,23 @@ class UsersGroupsController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-
-		if ($request->type == 1) {
-			$group = UsersGroup::create([
-				'type'             	=> $request->type,
-				'name'             	=> $request->name,
-				'discount' 			=> $request->discount,
-				'description'		=> $request->description ? $request->description : "",
-			]);
-		} else {
-			$group = UsersGroup::create([
-				'type'             	=> $request->type,
-				'name'             	=> $request->name,
-				'description'		=> $request->description ? $request->description : "",
-			]);
+		
+		$group = UsersGroup::create([
+			'type'             	=> $request->type,
+			'name'             	=> $request->name,
+			'discount' 			=> $request->discount ?? 0,
+			'description'		=> $request->description ? $request->description : "",
+			'use_margin'		=> $request->type == 1 ? ($request->margin ? true : false) : true,
+		]);
+		
+		if ($request->hasFile('logo')) {
+			$saved_filename = 'logo'.time().'.'.$request->logo->extension();
+			$request->logo->storeAs('public',$saved_filename);
+			$group->logo = $saved_filename;
+			$group->save();
+		}		
+		
+		if ($request->type != 1) {
 			foreach ($request->configurations as $target_group_id => $cat_configuration){
 				foreach ($cat_configuration as $category_id => $configuration){
 					if (isset($configuration['type'])&&$configuration['amount']){
@@ -117,6 +120,7 @@ class UsersGroupsController extends Controller
         $group->description = $request->input('description') ? $request->input('description') : "";
 		if ($group->type==1){
 			$group->discount	= $request->input('discount');
+			$group->use_margin 	= $request->input('margin') ? true : false;
 		} else {
 			foreach ($request->configurations as $target_group_id => $cat_configuration){
 				foreach ($cat_configuration as $category_id => $configuration){
@@ -132,6 +136,14 @@ class UsersGroupsController extends Controller
 					}
 				}
 			}
+		}
+		if ($request->input('remove_logo')){
+			$group->logo = null;
+		}
+		if ($request->hasFile('logo')) {
+			$saved_filename = 'logo'.time().'.'.$request->logo->extension();
+			$request->logo->storeAs('public',$saved_filename);
+			$group->logo = $saved_filename;
 		}
 		$group->save();
 		if($request->input('users')){

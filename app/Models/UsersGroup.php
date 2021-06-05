@@ -22,6 +22,8 @@ class UsersGroup extends Model
 		'name',
 		'description',
 		'discount',
+		'use_margin',
+		'logo',
 		];
 		
 	private $configurations = [];

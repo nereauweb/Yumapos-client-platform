@@ -23587,6 +23587,11 @@ button.bg-gray-900:focus {
   display: none !important;
 }
 
+
+.c-dark-theme-false .c-d-light-none {
+  display: none !important;
+}
+
 .c-dark-theme .c-d-dark-none {
   display: none !important;
 }

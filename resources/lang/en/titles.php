@@ -29,7 +29,8 @@ return [
     'adminActivity'     => 'Activity Log',
     'adminPHP'          => 'PHP Information',
     'adminRoutes'       => 'Routing Details',
-
+	
+	'linked-users' 		=> 'Linked users',
     'activeUsers'       => 'Active Users',
     'laravelBlocker'    => 'Blocker',
 
@@ -64,6 +65,7 @@ return [
     'plafond-limit'     => 'Plafond limit',
     'close'             => 'Close',
     'approve'           => 'Approve',
+    'reject'           	=> 'Reject',
     'cancel'            => 'Cancel',
     'delete'            => 'Delete',
     'confirm-delete'    => 'Confirm Deletion',
@@ -492,5 +494,10 @@ return [
     'signal'    => 'Open ticket',
     'signal-ok' => 'OK',
     'signal-status' => 'Ticket status',
+	
+	'balance'	=>	'Bilancio',
+	'transfer-balance'	=>	'Transfer balance',
+	'to'	=>	'to',
+	'return-to-users-list'	=>	'Return to users list',
 
 ];

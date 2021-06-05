@@ -86,12 +86,12 @@ class User extends Authenticatable
 		return $this->hasOne('App\Models\UserConfiguration','user_id');
     }
 
-    public function payments() :HasMany
+    public function payments()
     {
         return $this->hasMany(Payment::class, 'user_id', 'id');
     }
 
-    public function serviceOperations() :HasMany
+    public function serviceOperations()
     {
         return $this->hasMany(ServiceOperation::class, 'user_id', 'id');
     }
@@ -149,5 +149,15 @@ class User extends Authenticatable
 
         return $this->api_token;
     }
+	
+	public function logo($light = false){
+		if (!$this->group){
+			return $light ? '/img/testlogoLight.png' : '/img/testlogo.png';
+		}		
+		if (!$this->group->logo){
+			return $light ? '/img/testlogoLight.png' : '/img/testlogo.png';
+		}
+		return '/files/'.$this->group->logo;
+	}
 	
 }

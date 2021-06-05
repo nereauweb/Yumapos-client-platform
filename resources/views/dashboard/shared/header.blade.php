@@ -3,11 +3,9 @@
     <div class="c-wrapper">
       <header class="c-header c-header-light c-header-fixed c-header-with-subheader">
         <button class="c-header-toggler c-class-toggler d-lg-none mr-auto" type="button" data-target="#sidebar" data-class="c-sidebar-show"><span class="c-header-toggler-icon"></span></button>
-          <a class="c-header-brand d-sm-none" href="#">
-            <img class="c-header-brand-full c-d-dark-none" src="/img/yuma.png" width="118" height="46" alt="Yuma non stop">
-            <img class="c-header-brand-minimized c-d-dark-none" src="/img/yuma.png" width="46" height="46" alt="Yuma non stop">
-            <img class="c-header-brand-full c-d-light-none" src="/img/yuma.png" width="118" height="46" alt="Yuma non stop">
-            <img class="c-header-brand-minimized c-d-light-none" src="/img/yuma.png" width="46" height="46" alt="Yuma non stop">
+          <a class="c-header-brand d-inline-flex d-lg-none" href="{{url('/')}}">
+            <img class="c-header-brand-full c-d-dark-none" src="{{ Auth::user()->logo(true) }}" width="118" height="46" alt="Yuma non stop">
+            <img class="c-header-brand-full c-d-light-none" src="{{ Auth::user()->logo() }}" width="118" height="46" alt="Yuma non stop">
           </a>
         <button class="c-header-toggler c-class-toggler ml-3 d-md-down-none" type="button" data-target="#sidebar" data-class="c-sidebar-lg-show" responsive="true"><span class="c-header-toggler-icon"></span></button>
         <?php

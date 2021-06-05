@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Payment;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -36,7 +37,7 @@ class UserPayment extends Component
     // load function loads the data related to payments and implements within the query the needed filters
     public function load()
     {
-        $this->payments = auth()->user()->payments()->when(($this->from !== null && !empty($this->from)), function ($query) {
+        $this->payments = Payment::where('user_id',auth()->user()->id)->orWhere('target_id',auth()->user()->id)->when(($this->from !== null && !empty($this->from)), function ($query) {
             $query->where('date', '>=', $this->from);
         })->when(($this->to !== null && !empty($this->to)), function ($query) {
             $query->where('date', '<=', $this->to);

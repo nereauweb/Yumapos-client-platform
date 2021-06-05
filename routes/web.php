@@ -89,6 +89,8 @@ Route::group(['middleware' => ['get.menu']], function () {
 
 		Route::prefix('/users')->group(function () {
             Route::get('/payments/export', 'PointPaymentsController@export')->name('users.payments.export');
+            Route::get('/payments/transfer/{id}', 'PointPaymentsController@create_transfer')->name('users.payments.transfer.create');
+            Route::post('/payments/transfer/', 'PointPaymentsController@transfer')->name('users.payments.transfer.do');
             Route::resource('payments',  'PointPaymentsController', [ 'names' => 'users.payments' ]);
         });
 
@@ -370,4 +372,11 @@ Route::get('users-added-payments/{filename}', function ($filename)
     $path = storage_path() . '/app/payments/' . $filename;
     if (!\File::exists($path)) abort(404);
     return response()->download($path);
+});
+
+Route::get('files/{filename}', function ($filename)
+{
+    $path = storage_path() . '/app/public/'. $filename;
+    if(!\File::exists($path)) abort(404);
+    return response()->file($path);
 });

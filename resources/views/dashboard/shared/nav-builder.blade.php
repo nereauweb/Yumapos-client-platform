@@ -30,7 +30,10 @@ if(!function_exists('renderDropdown')){
 }
 ?>
 
-      <div class="c-sidebar-brand"><img class="c-sidebar-brand-full" src="/img/yuma.png" width="118" height="46" alt="Yuma non stop"><img class="c-sidebar-brand-minimized" src="/img/yuma.png" width="118" height="46" alt="Yuma non stop"></div>
+      <div class="c-sidebar-brand">
+		<img class="c-sidebar-brand-full" src="{{ Auth::user()->logo() }}" width="200" height="50" style="margin-top:10px;" alt="Yuma non stop">
+		<img class="c-sidebar-brand-minimized" src="{{ Auth::user()->logo() }}" width="125" height="35" alt="Yuma non stop">
+	  </div>
         <ul class="c-sidebar-nav">
         @if(isset($appMenus['sidebar menu']))
             @foreach($appMenus['sidebar menu'] as $menuel)

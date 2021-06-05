@@ -11,7 +11,7 @@
                                 <div class="row" style="height: 200px">
                                     <div class="col-sm-6 col-lg-3" style="height: 100%">
                                         <div class="card text-white bg-gradient-primary" style="height: 90%">
-                                            <div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
+                                            <div class="card-body card-body p-2 d-flex justify-content-between align-items-start">
                                                 <div>
                                                     <div class="text-value-lg">
                                                         @if(isset($reloadly_balance_cache[date('w')]))
@@ -36,7 +36,7 @@
 
                                     <div class="col-sm-6 col-lg-3" style="height: 100%">
                                         <div class="card text-white bg-gradient-info" style="height: 90%">
-                                            <div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
+                                            <div class="card-body card-body p-2 d-flex justify-content-between align-items-start">
                                                 <div>
                                                     <div class="text-value-lg">
                                                         @if(!is_null($ding_balance_cache) && isset($ding_balance_cache[date('w')]))
@@ -61,7 +61,7 @@
 
                                     <div class="col-sm-6 col-lg-3" style="height: 100%">
                                         <div class="card text-white bg-gradient-warning" style="height: 90%">
-                                            <div class="card-body card-body pb-0">
+                                            <div class="card-body card-body p-2">
                                                 <div class="d-flex justify-content-between align-items-start">
                                                     <div>
                                                         <div class="text-value-lg">{{ $paymentsData['totals'] }}</div>
@@ -92,12 +92,12 @@
                                                                             {!! Form::open(['route' => ['admin.payments.updatePaymentStatus', $pendingPayment->id],
                                                                             'method' => 'PUT', 'role' => 'form']) !!}
                                                                             {!! csrf_field() !!}
-                                                                            <button class="dropdown-item" type="submit">Approve</button>
+                                                                            <button class="dropdown-item" type="submit">{{ trans('titles.approve') }}</button>
                                                                             {!! Form::close() !!}
                                                                             {!! Form::open(['route' => ['admin.payments.reject', $pendingPayment],
                                                                             'method' => 'DELETE', 'role' => 'form']) !!}
                                                                             {!! csrf_field() !!}
-                                                                            <button class="dropdown-item" type="submit">Reject</button>
+                                                                            <button class="dropdown-item" type="submit">{{ trans('titles.reject') }}</button>
                                                                             {!! Form::close() !!}
                                                                             <a href="{{ route('admin.payments.edit', $pendingPayment) }}" class="dropdown-item">{{ trans('titles.edit-payment') }}</a>
                                                                         @endif
@@ -115,7 +115,7 @@
 
                                     <div class="col-sm-6 col-lg-3" style="height: 100%">
                                         <div class="card text-white bg-gradient-danger" style="height: 90%">
-                                            <div class="card-body card-body pb-0">
+                                            <div class="card-body card-body p-2">
                                                 <div class="d-flex justify-content-between align-items-start">
                                                     <div>
                                                         <div class="text-value-lg">{{ $usersData['totals'] }}</div>

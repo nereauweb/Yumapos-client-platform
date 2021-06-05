@@ -1,7 +1,22 @@
 .c-dark-theme .custom-select option {
     color: black;
 }
+.uk-tab > li > a {
+    color: gray;
+}
 .uk-tab > li.uk-active > a {
+    color: black;
+}
+.c-dark-theme .uk-tab > * > a {
+	border-color: gray;
+}
+.c-dark-theme .uk-tab > li > a {
+    color: gray;
+}
+.c-dark-theme .uk-tab > .uk-active > a {
+	border-color: white;
+}
+.c-dark-theme .uk-tab > li.uk-active > a {
     color: white;
 }
 .uk-modal {

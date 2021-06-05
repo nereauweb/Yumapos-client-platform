@@ -23,9 +23,12 @@
                         @endif
                         {{ trans('titles.id') }}: {{ Auth::user()->id }}<br>
                         {{ trans('titles.balance') }}: {{ round(Auth::user()->plafond, 2) }} € <br>
+						@if (auth()->user()->hasRole('sales'))
+                        {{ trans('titles.credit') }}: {{ round(Auth::user()->credit, 2) }} € <br>
+						@endif
                         {{ trans('titles.profile') }}:
                         {{ Auth::user()->group_id && Auth::user()->group_id != 0
-                                ? Auth::user()->group()->first()->name
+                                ? Auth::user()->group->name
                                 : trans('descriptions.error-msg-without-name') }}<br>
                         {{trans('titles.default-gain')}}: {{ Auth::user()->configuration ? Auth::user()->configuration->default_gain : 0 }}
                         %<br>
@@ -56,7 +59,7 @@
                     <div class="card">
                         <div class="card-header">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <h3>{{ trans('titles.sales') }}</h3>
+                                <h3>{{ trans('titles.linked-users') }}</h3>
                             </div>
                         </div>
                         <div class="card-body">
@@ -67,9 +70,10 @@
                                         <thead>
                                             <tr>
                                                 <th>{{ trans('titles.name') }}</th>
-												<th>Balance</th>
+												<th>{{ trans('titles.balance') }}</th>
                                                 <th>{{ trans('titles.percentage') }}</th>
-                                                <th>State</th>
+                                                <th>{{ trans('titles.state') }}</th>
+                                                <th>{{ trans('titles.actions') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -87,6 +91,11 @@
                                                             @endif
                                                         </span>
                                                     </td>
+													<td>
+														@if ($reference->state == 1)
+															<a href="/users/payments/transfer/{{$reference->id}}" class="btn btn-sm btn-primary">{{ trans('titles.transfer-balance') }}</a>
+														@endif
+													</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

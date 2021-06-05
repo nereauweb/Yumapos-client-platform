@@ -52,10 +52,40 @@
 					</div>
 				</div>
 
+                <div class="form-group has-feedback row {{ $errors->has('use_margin') ? ' has-error ' : '' }}">
+                    {!! Form::label('use_margin', 'Abilita margini', array('class' => 'col-md-3 control-label')); !!}
+                    <div class="col-md-9">
+                        <div class="input-group">
+							<label>
+								{!! Form::checkbox('use_margin', '1', $group->use_margin, array('id' => 'use_margin', 'class' => 'uk-checkbox', 'placeholder' => 'Nome del gruppo utenti')) !!}
+							</label>
+                        </div>
+                        @if($errors->has('use_margin'))
+                            <span class="help-block">
+								<strong>{{ $errors->first('use_margin') }}</strong>
+							</span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group has-feedback row {{ $errors->has('logo') ? ' has-error ' : '' }}">
+                    {!! Form::label('logo', 'Logo personalizzato', array('class' => 'col-md-3 control-label')); !!}
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            {!! Form::file('logo', $group->logo, array('id' => 'logo', 'class' => 'form-control', 'placeholder' => 'Logo personalizzato')) !!}
+                        </div>
+                        @if($errors->has('logo'))
+                            <span class="help-block">
+								<strong>{{ $errors->first('logo') }}</strong>
+							</span>
+                        @endif
+                    </div>
+                </div>
+
 				@foreach($categories as $category)
 					@foreach($target_groups as $target_group)
 						<div class="form-group has-feedback row {{ $errors->has('categories') ? ' has-error ' : '' }}">
-							{!! Form::label('cat'.$target_group->id.'-'.$category->id, $category->name . ' ' . $target_group->name, array('class' => 'col-md-3 control-label uk-text-bold')); !!}
+							<label for="{{ 'cat'.$target_group->id.'-'.$category->id }}" class="col-md-3 control-label uk-text-bold">{!! $category->name . ' ' . $target_group->name !!}</label>
 							<div class="col-md-9">
 								<div class="input-group row no-gutters">
 									<div class="col-md-6">
