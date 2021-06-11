@@ -121,3 +121,6 @@ html:not([dir="rtl"]) .custom-select-sm {
 	background: #5b5b5b;
 	color: white;
 }
+.c-sidebar-brand-full {
+	padding: 1em;
+}

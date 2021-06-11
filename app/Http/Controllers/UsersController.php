@@ -172,10 +172,14 @@ class UsersController extends Controller
             ]);
 
 		    $user->assignRole('sales');
-        }
+        } elseif ($request->role == 'user') {
+			$user->update([
+		       'group_id' => $request->group_id
+            ]);
+		}
 
 //        $request->session()->flash('message', 'Successfully updated user');
-		return redirect('users')->with(['status' => 'success', 'message' => 'Successfully updated user']);
+		return redirect('users')->with(['status' => 'success', 'message' => 'Successfully updated user.']);
     }
 
     /**
