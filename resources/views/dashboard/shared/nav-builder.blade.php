@@ -31,7 +31,7 @@ if(!function_exists('renderDropdown')){
 ?>
 
       <div class="c-sidebar-brand">
-		<img class="c-sidebar-brand-full" src="{{ Auth::user()->logo() }}" width="200" height="50" style="margin-top:10px;" alt="Yuma non stop">
+		<img class="c-sidebar-brand-full test" src="{{ Auth::user()->logo() }}" width="200" height="50" style="margin-top:10px;" alt="Yuma non stop">
 		<img class="c-sidebar-brand-minimized" src="{{ Auth::user()->logo() }}" width="125" height="35" alt="Yuma non stop">
 	  </div>
         <ul class="c-sidebar-nav">

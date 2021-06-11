@@ -152,10 +152,10 @@ class User extends Authenticatable
 	
 	public function logo($light = false){
 		if (!$this->group){
-			return $light ? '/img/testlogoLight.png' : '/img/testlogo.png';
+			return $light ? '/img/yuma.png' : '/img/yuma.png';
 		}		
 		if (!$this->group->logo){
-			return $light ? '/img/testlogoLight.png' : '/img/testlogo.png';
+			return $light ? '/img/yuma.png' : '/img/yuma.png';
 		}
 		return '/files/'.$this->group->logo;
 	}
