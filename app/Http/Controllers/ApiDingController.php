@@ -28,6 +28,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class ApiDingController extends Controller
 {
@@ -767,5 +768,134 @@ class ApiDingController extends Controller
 
         return response()->json(['graph_data' => $return], 200);
     }
+	
+	public function data_update()
+	{
+		$result = "[UPDATE JOB] Ding providers saved:<br><ol>";
+		try{
+			$data = $this->ding->GetProviders();
+			$index = 0;
+			foreach ($data->getItems() as $item){
+				$index ++;
+				$provider_data = $item->getData();
+				$provider = ApiDingOperator::updateOrCreate(
+					[
+						'ProviderCode' 			=> $provider_data['provider_code'],
+					],
+					[
+						'CountryIso' 			=> $provider_data['country_iso'],
+						'Name' 					=> $provider_data['name'],
+						'ShortName' 			=> $provider_data['short_name'],
+						'ValidationRegex' 		=> $provider_data['validation_regex'],
+						'CustomerCareNumber'	=> $provider_data['customer_care_number'],
+						'LogoUrl' 				=> $provider_data['logo_url'],
+					]
+				);
+				$provider->region_codes()->delete();
+				if (!empty($provider_data['region_codes'])){
+					foreach ($provider_data['region_codes'] as $region_code) {
+						$provider->region_codes()->create(['RegionCode' => $region_code]);
+					}
+				}
+				$provider->payment_types()->delete();
+				if (!empty($provider_data['payment_types'])){
+					foreach ($provider_data['payment_types'] as $payment_type) {
+						$provider->payment_types()->create(['payment_type' => $payment_type]);
+					}
+				}
+				$result.= "<li> $provider_data[provider_code] $provider_data[name]</li>";
+			}
+			$result.= "</ol><br>Total: " . $index;
+		} catch (Exception $ex){
+			$result = $ex->getMessage();
+		}
+		Log::info($result);
+		$result = "[UPDATE JOB] Ding products saved:<br><ol>";
+		ApiDingProduct::truncate();
+		try{
+			$data = $this->ding->GetProducts();
+			$index = 0;
+			foreach ($data->getItems() as $item){
+				$index ++;
+				$product_data = $item->getData();
+				$product = ApiDingProduct::updateOrCreate(
+					[
+						'SkuCode'	 			=> $product_data['sku_code'],
+					],
+					[
+						'ProviderCode' 			=> $product_data['provider_code'],
+						'LocalizationKey' 		=> $product_data['localization_key'],
+						'CommissionRate' 		=> $product_data['commission_rate'],
+						'ProcessingMode' 		=> $product_data['processing_mode'],
+						'RedemptionMechanism'	=> $product_data['redemption_mechanism'],
+						'ValidityPeriodIso' 	=> $product_data['validity_period_iso'],
+						'UatNumber' 			=> $product_data['uat_number'],
+						'AdditionalInformation' => $product_data['additional_information'],
+						'DefaultDisplayText' 	=> $product_data['default_display_text'],
+						'RegionCode' 			=> $product_data['region_code'],
+						'LookupBillsRequired' 	=> $product_data['lookup_bills_required'],
+					]
+				);
+				$product->setting_definitions()->delete();
+				if (!empty($product_data['setting_definitions'])){
+					foreach ($product_data['setting_definitions'] as $setting_definition) {
+						$product->setting_definitions()->create([
+							'Name' => $setting_definition['name'],
+							'Description' => $setting_definition['description'],
+							'IsMandatory' => $setting_definition['is_mandatory'],
+						]);
+					}
+				}
+				$product->maximum()->delete();
+				if (!empty($product_data['maximum'])){
+						$product->maximum()->create([
+							'CustomerFee' 				=> $product_data['maximum']['customer_fee'],
+							'DistributorFee' 			=> $product_data['maximum']['distributor_fee'],
+							'ReceiveValue' 				=> $product_data['maximum']['receive_value'],
+							'ReceiveCurrencyIso' 		=> $product_data['maximum']['receive_currency_iso'],
+							'ReceiveValueExcludingTax' 	=> $product_data['maximum']['receive_value_excluding_tax'],
+							'TaxRate' 					=> $product_data['maximum']['tax_rate'],
+							'TaxName' 					=> $product_data['maximum']['tax_name'],
+							'TaxCalculation' 			=> $product_data['maximum']['tax_calculation'],
+							'SendValue' 				=> $product_data['maximum']['send_value'],
+							'SendCurrencyIso' 			=> $product_data['maximum']['send_currency_iso'],
+						]);
+				}
+				$product->minimum()->delete();
+				if (!empty($product_data['minimum'])){
+						$product->minimum()->create([
+							'CustomerFee' 				=> $product_data['minimum']['customer_fee'],
+							'DistributorFee' 			=> $product_data['minimum']['distributor_fee'],
+							'ReceiveValue' 				=> $product_data['minimum']['receive_value'],
+							'ReceiveCurrencyIso' 		=> $product_data['minimum']['receive_currency_iso'],
+							'ReceiveValueExcludingTax' 	=> $product_data['minimum']['receive_value_excluding_tax'],
+							'TaxRate' 					=> $product_data['minimum']['tax_rate'],
+							'TaxName' 					=> $product_data['minimum']['tax_name'],
+							'TaxCalculation' 			=> $product_data['minimum']['tax_calculation'],
+							'SendValue' 				=> $product_data['minimum']['send_value'],
+							'SendCurrencyIso' 			=> $product_data['minimum']['send_currency_iso'],
+						]);
+				}
+				$product->benefits()->delete();
+				if (!empty($product_data['benefits'])){
+					foreach ($product_data['benefits'] as $benefit) {
+						$product->benefits()->create(['benefit' => $benefit]);
+					}
+				}
+				$product->payment_types()->delete();
+				if (!empty($product_data['payment_types'])){
+					foreach ($product_data['payment_types'] as $payment_type) {
+						$product->payment_types()->create(['payment_type' => $payment_type]);
+					}
+				}
+				$result.= "<li> $product_data[sku_code]  $product_data[default_display_text] Provider $product_data[provider_code]";
+				$result.= "</li>";
+			}
+			$result.= "</ol><br>Total: " . $index;
+		} catch (Exception $ex){
+			$result = $ex->getMessage();
+		}		
+		Log::info($result);
+	}
 
 }
