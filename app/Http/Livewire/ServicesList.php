@@ -28,6 +28,7 @@ class ServicesList extends Component
      * */
     public function render()
     {
+		$service_update_errors = [];
         $ding_operators = ApiDingOperator::orderBy('Name')->pluck('ProviderCode','Name');
         $ding_operators_options = '';
         foreach($ding_operators as $ding_operator_name => $ding_ProviderCode){
@@ -37,7 +38,16 @@ class ServicesList extends Component
                 $service_operator->save();
             } else {
                 $country = ApiDingOperator::where('ProviderCode',$ding_ProviderCode)->first()->country;
-                $service_country = ServiceCountry::updateOrCreate(['iso'=>$country->CountryIso],['name'=>$country->CountryName]);
+                if ($country){
+					$service_country = ServiceCountry::updateOrCreate(['iso'=>$country->CountryIso],['name'=>$country->CountryName]);
+				} else {
+					$ding_operator = ApiDingOperator::where('Name',$ding_operator_name)->first();
+					if (!$ding_operator||!$ding_operator->country) { 
+						array_push($service_update_errors,'No country for ding operator: ' . $ding_operator_name);
+						continue; 
+					}
+					$service_country = ServiceCountry::updateOrCreate(['iso'=>$ding_operator->country->CountryIso],['name'=>$ding_operator->country->CountryName]);
+				}
                 ServiceOperator::create([
                     'name' => $ding_operator_name,
                     'country_id' => $service_country->id,

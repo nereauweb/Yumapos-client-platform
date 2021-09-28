@@ -23,4 +23,8 @@ class ApiMbsCall extends Model
 		'fields',
 		'raw_answer',
 		];
+		
+	public function user(){ 
+		return $this->hasOne('App\User','id','user_id'); 
+	}
 }

@@ -137,7 +137,39 @@
                                     </div>
 
                                 </div>
-
+								
+								<div class="row" style="height: 100px">
+                                    <div class="col-sm-6 col-lg-6" style="height: 100%">
+                                        <div class="card text-white bg-success" style="height: 90%">
+                                            <div class="card-body card-body p-2 d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <div class="text-value-lg">
+                                                        <span id="mbs-balance">{{ $mbs_balance }}</span> €
+                                                    </div>
+                                                    <div class="uk-text-uppercase">{{ trans('titles.mbs-balance') }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-6" style="height: 100%">
+                                        <div class="card text-white bg-dark" style="height: 90%">
+                                            <div class="card-body card-body p-2">
+                                                <div>
+                                                    <div class="text-value-lg">
+                                                        {{ $waiting_tickets }}
+                                                    </div>
+                                                    <div class="uk-text-uppercase">Ticket in attesa</div>
+                                                </div>
+												<div class="btn-group" style="position:absolute;top:0;right:0;padding:10px;">
+													<a class="btn btn-pill btn-primary" type="button" aria-haspopup="true" aria-expanded="false" href="{{ route('admin.report.operations_ticket') }}">
+														 <i class="cil-library"></i>
+													</a>
+												</div>
+                                            </div>
+                                        </div>
+                                    </div>
+								</div>
+								
 								<div class="card">
                                     <div class="card-body">
 										<div>
@@ -383,9 +415,55 @@ $(document).ready(function(){
 });
 </script>
                 @else
-                        <div class="card">
+						
+						@if (Auth::user()->first_access==1)
+							<div class="container-fluid">
+								<div class="alert alert-danger alert-dismissible fade show" role="alert">
+									<span>{{ trans('auth.privacy-alert') }}</span>
+									<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+							</div>
+							<div class="card" uk-margin-bottom>	
+								<div class="card-body">
+									<ul uk-accordion>
+										<li class="uk-open">
+											<a class="uk-accordion-title" href="#">{{ trans('titles.privacy') }}</a>
+											<div class="uk-accordion-content">@include('pages.privacy')</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+						@endif
+						
+						<div class="card" uk-margin-bottom>	
+							
+							<div class="uk-grid-match uk-grid-divider uk-text-center" uk-grid style="padding-right:3em;">
+								<div class="uk-width-1-5@m">
+									<div class="card-body uk-flex uk-flex-middle uk-flex-center">
+										<h4 class="uk-padding-remove uk-margin-remove uk-text-left">Ticket</h4>
+									</div>
+								</div>
+								<div class="uk-width-2-5@m">
+									<div class="card-body">
+										<strong>In attesa </strong><br><span class="uk-text-large uk-text-danger">{{ $tickets['confirmed'] }}</span>
+									</div>
+								</div>
+								<div class="uk-width-2-5@m">
+									<div class="card-body">
+										<strong>Completati negli ultimi 7 giorni</strong><br><span class="uk-text-large uk-text-success">{{ $tickets['answered'] }}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+                        <div class="card">					
+					
                             <div class="card-body">
+								
                                 <div>
+									
                                     <div>
                                         <div class="d-flex align-items-center">
                                             <h4 class="card-title mb-0">{{ trans('titles.operations-report') }}</h4>
@@ -394,14 +472,14 @@ $(document).ready(function(){
                                     <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
                                         <div class="row">
                                             @role('sales')
-                                            <div class="col-6 mt-3">
+                                            <div class="col-3 mt-3">
                                                 <select id="graph-selected" autocomplete="off" class="form-control">
                                                     <option value="1" selected>{{ trans('titles.user-chart') }}</option>
                                                     <option value="2">{{ trans('titles.agent-chart') }}</option>
                                                 </select>
                                             </div>
                                             @endrole
-                                            <div class="col-6 mt-3">
+                                            <div class="col-3 mt-3">
                                                 <select id="country-selected" autocomplete="off" class="form-control">
                                                     <option value="0">{{ trans('titles.all-countries') }}</option>
                                                     @foreach(\App\Models\ServiceCountry::orderBy('name', 'asc')->get() as $country)
@@ -409,7 +487,7 @@ $(document).ready(function(){
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-6 mt-3">
+                                            <div class="col-3 mt-3">
                                                 <select id="operator-selected" autocomplete="off" class="form-control">
                                                     <option value="0">{{ trans('titles.all-operators') }}</option>
                                                     @foreach(\App\Models\ServiceOperator::orderBy('name', 'asc')->pluck('name','id') as $key => $operator)
@@ -417,7 +495,7 @@ $(document).ready(function(){
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-6 mt-3">
+                                            <div class="col-6 mt-3 uk-flex uk-flex-right">
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-secondary">
                                                         <input id="option1day" value="day" name="filterSelected" type="radio" autocomplete="off" checked> {{ trans('days.day') }}
@@ -431,10 +509,10 @@ $(document).ready(function(){
                                                     <label class="btn btn-outline-secondary">
                                                         <input id="option2month" value="month" name="filterSelected" type="radio" autocomplete="off"> {{ trans('days.month') }}
                                                     </label>
-                                                </div>
                                                 <a href="{{ url('users/reports/operations') }}" class="btn btn-primary" type="button">
                                                     <i class="cil-library"></i>
                                                 </a>
+                                                </div>
                                             </div>
                                             <input hidden value="{{ auth()->id() }}" id="identifier-custom">
                                         </div>
@@ -509,6 +587,19 @@ $(document).ready(function(){
                         @livewireStyles()
                         @livewire('dashboard-operation-list', ['isUser' => true])
                         @livewireScripts()
+					
+						@if (Auth::user()->first_access==0)
+						<div class="card uk-margin-top">	
+                            <div class="card-body">
+								<ul uk-accordion>
+									<li class="">
+										<a class="uk-accordion-title" href="#">{{ trans('titles.privacy') }}</a>
+										<div class="uk-accordion-content">@include('pages.privacy')</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+						@endif
                 @endif
             </div>
         </div>

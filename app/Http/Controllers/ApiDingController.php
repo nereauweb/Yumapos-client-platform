@@ -705,6 +705,8 @@ class ApiDingController extends Controller
 				if ($commission){
 					if ($commission->type=='percent'){
 						$agent_amount = round(($user_cost * ( $commission->amount / 100 )),3);
+					} elseif($commission->type=='total_percent') {
+						$agent_amount = round(($final_amount * ( $commission->amount / 100 )),3);
 					} else {
 						$agent_amount = $commission->amount;
 					}

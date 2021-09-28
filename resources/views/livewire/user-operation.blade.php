@@ -12,11 +12,11 @@
                     <div class="card-body">
                         <div class="uk-padding-small">
                             <dl class="row">
-                                <dt class="col-sm-5">{{ trans('titles.operations') }}<dt><dd class="col-sm-7">{{ $totalOperations }}</dd>
-                                <dt class="col-sm-5">{{ trans('titles.total-amount') }}<dt><dd class="col-sm-7">{{ $finalAmount }} €</dd>
-                                <dt class="col-sm-5">{{ trans('titles.platform-discounts') }}<dt><dd class="col-sm-7">{{ $userDiscount }} €</dd>
-                                <dt class="col-sm-5">{{ trans('titles.user-added-gains') }}<dt><dd class="col-sm-7">{{ $userGain }} €</dd>
-                                <dt class="col-sm-5">{{ trans('titles.total-user-gains') }}<dt><dd class="col-sm-7">{{ $userTotalGain }} €</dd>
+                                <dt class="col-sm-5">{{ trans('titles.operations') }}</dt><dd class="col-sm-7">{{ $totalOperations }}</dd>
+                                <dt class="col-sm-5">{{ trans('titles.total-amount') }}</dt><dd class="col-sm-7">{{ $finalAmount }} €</dd>
+                                <dt class="col-sm-5">{{ trans('titles.platform-discounts') }}</dt><dd class="col-sm-7">{{ $userDiscount }} €</dd>
+                                <dt class="col-sm-5">{{ trans('titles.user-added-gains') }}</dt><dd class="col-sm-7">{{ $userGain }} €</dd>
+                                <dt class="col-sm-5">{{ trans('titles.total-user-gains') }}</dt><dd class="col-sm-7">{{ $userTotalGain }} €</dd>
                             </dl>
                         </div>
                         <div class="row align-items-center">

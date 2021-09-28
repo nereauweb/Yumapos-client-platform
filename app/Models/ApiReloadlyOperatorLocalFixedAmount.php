@@ -22,4 +22,7 @@ class ApiReloadlyOperatorLocalFixedAmount extends Model
 		'amount',
 		];
 	
+	public function configuration(){		
+		return $this->hasOne('App\Models\ApiReloadlyOperatorConfiguration','id','parent_id'); 
+	}
 }

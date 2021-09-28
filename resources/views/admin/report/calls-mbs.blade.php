@@ -1,30 +1,28 @@
 @extends('dashboard.base')
 
+@section('css')
+    <link href="{{ asset('css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+@endsection
+@livewireStyles()
 @section('content')
-<div class="container-fluid">
-<div style="overflow:auto;">
-                            <table class="table table-striped table-bordered col-filtered-datatable" >
-	<thead>
-		<tr>
-			<th>created at</th>
-			<th>user id</th>
-			<th>mbs operation id</th>
-			<th>fields</th>
-			<th>raw answer</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach ($operations as $operation)
-			<tr>
-				<td>{{$operation->created_at}}</td>
-				<td>{{$operation->user_id}}</td>
-				<td>{{$operation->operation_id}}</td>
-				<td>{{$operation->fields}}</td>
-				<td>{{$operation->raw_answer}}</td>
-			</tr>			
-		@endforeach
-	</tbody>
-</table>
-</div>
-</div>
+@livewire('api-call-mbs')
+@endsection
+@livewireScripts()
+@section('javascript')
+    <script src="{{ asset('js/jquery.dataTables.js') }}"></script>
+    <script src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('js/datatables.js') }}"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+		  $('#daterange').daterangepicker({
+			opens: 'left'
+		  }, function(start, end, label) {
+			$("#date_begin").val(start.format('YYYY-MM-DD'));
+			$("#date_end").val(end.format('YYYY-MM-DD'));
+		  });
+		});
+	</script>
 @endsection

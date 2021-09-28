@@ -22,8 +22,6 @@
 		  }, function(start, end, label) {
 			$("#date_begin").val(start.format('YYYY-MM-DD'));
 			$("#date_end").val(end.format('YYYY-MM-DD'));
-			console.log($("#date_begin").val());
-			console.log($("#date_end").val());
 		  });
 		});
 	</script>

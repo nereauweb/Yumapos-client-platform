@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ strpos($_SERVER["SERVER_NAME"],'ping')!== false ? 'Ping' : 'Yumapos' }}</title>
 
 	<!-- UIkit CSS -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.5.5/dist/css/uikit.min.css" />
@@ -30,6 +30,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.basictable/1.1.0/jquery.basictable.js" integrity="sha512-nWpIKXCKNcC4VHVCWrWEUdaolGZTe84yIp10hGHjME3g9gBlhJzpPNRKWHUTilZ3zbcPQptz20DDNb+W4aXuWA==" crossorigin="anonymous"></script>
 	@yield('css')
 	@yield('style')
+	
+	@if (strpos($_SERVER["SERVER_NAME"],'ping')!== false)
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-206868297-2"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+		  gtag('config', 'UA-206868297-2');
+		</script>
+	@endif
+	
 </head>
 <body>
     <div id="app">

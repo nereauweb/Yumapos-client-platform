@@ -112,7 +112,7 @@
                     @endif
                 </th>
                 <th wire:click="sortBy('credit')">
-                    <span>{{ trans('titles.balance') }} (€)</span>
+                    <span>{{ trans('titles.credit') }} (€)</span>
                     @if($sortAsc && $sortField == 'credit')
                         <i class="cil-arrow-bottom"></i>
                     @else

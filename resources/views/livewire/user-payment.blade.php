@@ -86,6 +86,7 @@
                     <table class="table table-bordered col-filtered-datatable">
                         <thead class="thead">
                         <tr>
+                            <th>ID</th>
                             <th>{{ trans('titles.date') }}</th>
                             <th>{{ trans('titles.amount') }}</th>
                             <th>{{ trans('titles.details') }}</th>
@@ -96,6 +97,7 @@
                         <tbody id="users_table">
                             @foreach($payments as $payment)
                                 <tr>
+                                    <td>{{ $payment->id }}</td>
                                     <td>
                                         <span style="display:none;">{{ date("Y-m-d H:i:s",strtotime($payment->date)) }}</span>
                                         {{ date("d/m/Y",strtotime($payment->date)) }}

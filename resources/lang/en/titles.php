@@ -40,7 +40,8 @@ return [
     'payment'           => 'Payment',
 
     'reloadly-balance'  => 'Reloadly balance',
-    'ding-balance'      => 'Api Ding balance',
+    'ding-balance'      => 'Ding balance',
+    'mbs-balance'      => 'MBS balance',
 
     'operations-report' => 'Operations Report',
     'pending-users'     => 'Pending users',
@@ -499,5 +500,10 @@ return [
 	'transfer-balance'	=>	'Transfer balance',
 	'to'	=>	'to',
 	'return-to-users-list'	=>	'Return to users list',
+	
+	'fields' => 'Fields',
+	'call' => 'API calls',
+		
+	'privacy' => 'Privacy agreement',
 
 ];

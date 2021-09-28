@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Payment;
 use App\User;
 
+use App\Models\ApiMbsOperation;
+use App\Models\ServiceOperation;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -69,12 +72,22 @@ class HomeController extends Controller
 
 		$reloadly_balance_cache = Cache::get('reloadly_cache_balance');
 		$ding_balance_cache = Cache::get('ding_cache_balance');
+		$mbs_balance = ApiMbsOperation::select('platform_balance_after')->orderBy('id','DESC')->first()->platform_balance_after; // da collegare alla cache
+		
+		$waiting_tickets = ServiceOperation::where('report_status','reported')->count(); 
 
-		return view('welcome', compact( 'paymentsData', 'usersData', 'reloadly_balance_cache', 'ding_balance_cache'));
+		return view('welcome', compact( 'paymentsData', 'usersData', 'reloadly_balance_cache', 'ding_balance_cache', 'ding_balance_cache','mbs_balance','waiting_tickets'));
 	}
 
 	public function user(){
-		return view('welcome');
+		$tickets = \Auth::user()->tickets_counters();
+		return view('welcome',compact('tickets'));
+	}
+	
+	public function accept_privacy(){
+		\Auth::user()->first_access = 0;
+		\Auth::user()->save();
+		return back()->with(['status' => 'success', 'message' => trans('auth.privacy-accepted-message')]);
 	}
 
 }

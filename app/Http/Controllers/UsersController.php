@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\UsersExport;
 use App\Mail\ConfirmationMail;
+use App\Mail\ConfirmationMailPing;
 use App\Mail\UpdatedPasswordMail;
 use Illuminate\Http\Request;
 use App\User;
@@ -19,6 +20,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+
+use \Swift_Mailer;
+use \Swift_SmtpTransport as SmtpTransport;
 
 class UsersController extends Controller
 {
@@ -289,9 +293,22 @@ class UsersController extends Controller
                 'parent_percent' => $request->parent_percent,
                 'password' => bcrypt($notHashedPassword),
             ]);
-
-
-            Mail::to($user->email)->send(new ConfirmationMail($user, $notHashedPassword));
+			
+			if($user->parent_id==172){
+				//set
+				$transport = (new SmtpTransport('smtp.office365.com', 587, 'TLS'))->setUsername('info@ping.international')->setPassword('729507Byt3!');
+				$mailer = new Swift_Mailer($transport);
+				Mail::setSwiftMailer($mailer);
+				//send
+				Mail::to($user->email)->bcc('info@ping.international')->send(new ConfirmationMailPing($user, $notHashedPassword));
+				//reset
+				$transport = (new SmtpTransport(config('mail.host'), config('mail.port'), config('mail.encryption')))->setUsername(config('mail.username'))->setPassword(config('mail.password'));
+				$mailer = new Swift_Mailer($transport);
+				Mail::setSwiftMailer($mailer);
+				return back()->with(['status' => 'success', 'message' => 'User approved successfully! (Ping)']);
+			} else {
+				Mail::to($user->email)->send(new ConfirmationMail($user, $notHashedPassword));
+			}
 
             return back()->with(['status' => 'success', 'message' => 'User approved successfully!']);
 

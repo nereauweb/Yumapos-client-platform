@@ -41,4 +41,14 @@ class ApiDingOperatorConfiguration extends Model
 		return $this->local_amounts->where('original_amount', $original_amount)->first();
 	}
 	
+	public function operator(){ 
+		return $this->hasOne('App\Models\ApiDingOperator','ProviderCode','operator_ProviderCode'); 
+	}
+	
+	public function original_fx(){
+		$product = $this->operator->products->first();
+		if (!$product) { return false; }
+		return $product->fx_rate();
+	}
+	
 }

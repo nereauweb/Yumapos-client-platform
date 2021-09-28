@@ -231,7 +231,7 @@
                                     @elseif($payment->type ==3)
                                         Platform to provider
                                     @elseif($payment->type == 4)
-                                        Reduced payment
+                                        User to user
                                     @endif
                                 </td>
                                 <td>

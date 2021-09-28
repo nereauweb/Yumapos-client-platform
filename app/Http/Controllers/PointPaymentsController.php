@@ -42,7 +42,14 @@ class PointPaymentsController extends Controller
 
     public function create()
     {
-        return view('users/payments/create' );
+		$active = true;
+		$last_payment = Payment::where('user_id',\Auth::user()->id)->orderBy('created_at', 'desc')->first();
+		if($last_payment){
+			if (strtotime($last_payment->created_at) > strtotime("-5 minutes")){
+				$active = false;
+			}
+		}
+        return view('users/payments/create', compact('active') );
     }
 
     public function store(Request $request)
@@ -62,6 +69,13 @@ class PointPaymentsController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
+		
+		$last_payment = Payment::where('user_id',\Auth::user()->id)->orderBy('created_at', 'desc')->first();
+		if($last_payment){
+			if (strtotime($last_payment->created_at) > strtotime("-5 minutes")){
+				return back()->with(['status' => 'error', 'message' => 'Invio non registrato: è già presente un\'operazione recente. Attendi 5 minuti prima di effettuare un nuovo invio, se necessario.']);
+			}
+		}
 
 		$date = \DateTime::createFromFormat("d/m/Y",$request->input('date'));
 
@@ -71,17 +85,30 @@ class PointPaymentsController extends Controller
 
         try {
             DB::beginTransaction();
-            $payment = Payment::create([
-                'date'		=> $date->format("Y-m-d H:i:s"),
-                'amount'	=> $request->input('amount'),
-                'user_id'	=> \Auth::user()->id,
-                'details'	=> $request->input('details'),
-                'approved'	=> 0,
-                'type'      => 1,
-                'update_balance' => 1
-            ]);
+			if ($request->input('type')==1){
+				$payment = Payment::create([
+					'date'		=> $date->format("Y-m-d H:i:s"),
+					'amount'	=> $request->input('amount'),
+					'user_id'	=> \Auth::user()->id,
+					'details'	=> $request->input('details'),
+					'approved'	=> 0,
+					'type'      => 1,
+					'update_balance' => 1
+				]);
+			} else {
+				$payment = Payment::create([
+					'date'		=> $date->format("Y-m-d H:i:s"),
+					'amount'	=> $request->input('amount'),
+					'user_id'	=> \Auth::user()->id,
+					'details'	=> $request->input('details'),
+					'approved'	=> 0,
+					'type'      => 4,
+					'target_id' => $request->input('target_id'),
+					'update_balance' => 0
+				]);
+			}
+			
             $file = $request->file('document');
-
             if ($file) {
                 $filename = 'document-'.auth()->user()->name.'-'. time() . '.' . $file->getClientOriginalExtension();
                 $path = $file->storeAs('payments', $filename);
@@ -131,8 +158,8 @@ class PointPaymentsController extends Controller
 		}
 
         try {
-			$user->plafond -= $request->input('amount');
-			$target_user->plafond += $request->input('amount');
+			$user->plafond = $user->plafond - $request->input('amount');
+			$target_user->plafond = $target_user->plafond + $request->input('amount');
             DB::beginTransaction();
             $payment = Payment::create([
                 'date'		=> date("Y-m-d H:i:s"),

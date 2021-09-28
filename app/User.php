@@ -56,6 +56,7 @@ class User extends Authenticatable
     ];
 
 	public function referent() {
+		if ($this->parent_id==0){ return false; }
 		return $this->hasOne('App\Models\User','id','parent_id');
     }
 
@@ -158,6 +159,26 @@ class User extends Authenticatable
 			return $light ? '/img/yuma.png' : '/img/yuma.png';
 		}
 		return '/files/'.$this->group->logo;
+	}
+	
+	public function tickets_counters($switch = false){
+		if ($switch=='submitted'){
+			return ServiceOperation::where('user_id',$this->id)->whereNotNull('report_status')->count();
+		} 
+		if ($switch=='confirmed'){
+			return ServiceOperation::where('user_id',$this->id)->where('report_status','reported')->count(); 
+		} 
+		if ($switch=='answered'){
+			return ServiceOperation::where('user_id',$this->id)->whereNotNull('report_status')->where('report_status','!=','reported')->where('updated_at','>',date("Y-m-d H:i:s", strtotime('-7 days')))->count();
+		} 
+		$submitted = ServiceOperation::where('user_id',$this->id)->whereNotNull('report_status')->count(); 
+		$confirmed = ServiceOperation::where('user_id',$this->id)->where('report_status','reported')->count(); 
+		$answered = ServiceOperation::where('user_id',$this->id)->whereNotNull('report_status')->where('report_status','!=','reported')->where('created_at','>',date("Y-m-d H:i:s", strtotime('-7 days')))->count();
+		return [
+			'submitted' => $submitted,
+			'confirmed' => $confirmed,
+			'answered' => $answered,
+		];
 	}
 	
 }

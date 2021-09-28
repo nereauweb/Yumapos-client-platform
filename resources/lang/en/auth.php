@@ -79,5 +79,10 @@ return [
     'login-title' => 'Login',
     'login-desc' => 'Sign In to your account',
     'login-error' => 'Please enter correct email and password to proceed.',
+	
+    'privacy-alert' => 'Please read and accept the privacy terms and conditions.',
+    'accept-privacy' => 'I accept the agreement',
+    'privacy-accepted' => 'Accepted',
+    'privacy-accepted-message' => 'Privacy conditions accepted',
 
 ];

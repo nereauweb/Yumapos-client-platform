@@ -89,7 +89,7 @@
 							<div class="col-md-9">
 								<div class="input-group row no-gutters">
 									<div class="col-md-6">
-										{!! Form::select('configurations['.$target_group->id.']['.$category->id.'][type]', [ 'percent' => 'Percentuale', 'value' => 'Valore'], $group->configuration($target_group->id,$category->id) ? $group->configuration($target_group->id,$category->id)->type : NULL, array('id' => 'cat'.$target_group->id.'-'.$category->id, 'class' => 'form-control', 'placeholder' => 'Seleziona tipo','required' => 'required')) !!}
+										{!! Form::select('configurations['.$target_group->id.']['.$category->id.'][type]', [ 'percent' => 'Percentuale sul guadagno', 'value' => 'Valore', 'total_percent' => 'Percentuale sul totale'], $group->configuration($target_group->id,$category->id) ? $group->configuration($target_group->id,$category->id)->type : NULL, array('id' => 'cat'.$target_group->id.'-'.$category->id, 'class' => 'form-control', 'placeholder' => 'Seleziona tipo','required' => 'required')) !!}
 									</div>
 									<div class="col-md-6">
 										{!! Form::number('configurations['.$target_group->id.']['.$category->id.'][amount]', $group->configuration($target_group->id,$category->id) ? $group->configuration($target_group->id,$category->id)->amount : NULL, array('id' => 'cat'.$target_group->id.'-'.$category->id, 'class' => 'form-control', 'placeholder' => 'Valore','required' => 'required','step' => '0.01')) !!}

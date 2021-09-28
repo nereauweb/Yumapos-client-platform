@@ -508,6 +508,11 @@ class ApiMbsController extends Controller
 			$response['message'] = 'We are sorry, an error occurred:' . $ex->getMessage() . '. Please contact administration.';
 			return view('users/service/result', ['response' => $response]);
 		}
+		if(!isset($result_array[0])||strpos($result_array[0],'OK')==false){
+			$response['result'] = -1;
+			$response['message'] = 'We are sorry, an error occurred: ' . ($result ?? 'call error');
+			return view('users/service/result', ['response' => $response]);
+		}
 		$user = Auth::user();
 		$user_old_plafond = $user->plafond;
 		$user->plafond = Auth::user()->plafond - $user_cost;

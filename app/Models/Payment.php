@@ -61,8 +61,13 @@ class Payment extends Model
 	];
 	
 	public function type($ita = false, $to_user = false, $is_agent = false){
-		if ($is_agent && $this->type == 4){
-			return $ita ? ('trasferimento a utente ' . $this->target->name) : ('transfer to user ' . $this->target->name);
+		if ($this->type == 4){
+			if (\Auth::user()->id == $this->target_id){
+				return $ita ? ('trasferimento da utente ' . $this->user->name) : ('transfer from user ' . $this->user->name);
+			}
+			if ($is_agent || \Auth::user()->id == $this->user_id){
+				return $ita ? ('trasferimento a utente ' . $this->target->name) : ('transfer to user ' . $this->target->name);
+			}
 		}
 		if ($ita){
 			$array = $to_user ? $this->types_ita_to_user : $this->types_ita;

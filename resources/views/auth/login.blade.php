@@ -9,7 +9,7 @@
             <div class="card p-4">
               <div class="card-body">
                 <h1>{{ trans('titles.login') }}</h1>
-                <p class="text-muted">{{ trans('descriptions.login') }}</p>
+                <p class="text-muted">{{ trans('descriptions.login') }} {{ $_SERVER["SERVER_NAME"] }}</p>
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
                     <div class="input-group mb-3">
@@ -36,11 +36,11 @@
                         <div class="col-6">
                             <button class="btn btn-primary px-4" type="submit">{{ trans('titles.login') }}</button>
                         </div>
+						<div class="col-6 text-right">
+							<a href="{{ route('password.request') }}" class="btn btn-link px-0">{{ trans('placeholders.forgot-pwd') }}</a>
+						</div>
                     </div>
                 </form>
-                <div class="col-6 text-right">
-                    <a href="{{ route('password.request') }}" class="btn btn-link px-0">{{ trans('placeholders.forgot-pwd') }}</a>
-                </div>
             </div>
           </div>
         </div>

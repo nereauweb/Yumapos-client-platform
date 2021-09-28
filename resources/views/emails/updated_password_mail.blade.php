@@ -1,16 +1,40 @@
-@component('mail::message')
-# Password Updated
+@component('mail::layout')
+{{-- Header --}}
+@slot('header')
+@component('mail::header', ['url' => isset($context_url) ? $context_url : config('app.url'), 'name' => isset($context) ? $context : config('app.name')])
+@endcomponent
+@endslot
 
-Your password has been changed through admin:<br>
+{{-- Body --}}
+
+# Attivazione servizi
+
+Gentile cliente,<br>
+
+con la presente email le inviamo le nuove credenziali che potrà usare per accedere al servizio {{ isset($context_title) ? $context_title : config('app.name') }}:
+
 # email: {{ $user->email }}<br>
 # password: {{ $password }}<br>
 
-# use those credentials login
-
-@component('mail::button', ['url' => url('/login')])
-    Login
+@component('mail::button', ['url' => isset($context_url) ? $context_url.'/login' : url('/login') ])
+Login
 @endcomponent
 
-Thanks,<br>
-{{ config('app.name') }}
+Grazie,<br>
+{{ isset($context_title) ? $context_title : config('app.name') }}
+
+{{-- Subcopy --}}
+@slot('subcopy')
+@component('mail::subcopy')
+	<!-- subcopy here -->
 @endcomponent
+@endslot
+
+
+{{-- Footer --}}
+@slot('footer')
+@component('mail::footer', ['name' => isset($context) ? $context : config('app.name')])
+@endcomponent
+@endslot
+@endcomponent
+

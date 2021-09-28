@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
+use App\Http\Ding\ApiException;
+
 
 class PointServiceController extends Controller
 {
@@ -59,7 +61,7 @@ class PointServiceController extends Controller
 		}
 		catch (Exception $ex)
 		{
-			$data['message'] = $ex;
+			$data['message'] = $ex->getMessage();
 		}
 		return view('users/service/preview', compact('data', 'category', 'operator', 'phone_number', 'operators'));
 	}
@@ -70,7 +72,7 @@ class PointServiceController extends Controller
 		$phone_number = '+'.$request->input('prefix').str_replace(' ', '', $request->input('number'));
 		try{
 			$result = $dingService->GetAccountLookup($phone_number);
-		} catch (Exception $ex){
+		} catch (ApiException $ex){
 			return redirect('/backend')->withError($ex->getMessage());
 		}
 		if (!is_object($result)){
@@ -97,33 +99,47 @@ class PointServiceController extends Controller
 		$phone_number = $request->input('prefix').str_replace(' ', '', $request->input('number'));
 		try{
 			$result = $dingService->GetAccountLookup($phone_number);
-		} catch (Exception $ex){
-			return redirect()->route('users.services.category',[$category->id])->withError($ex->getMessage());
+		} catch (ApiException $ex){
+			// return redirect()->route('users.services.category',[$category->id])->withError($ex->getMessage());
+			//return redirect()->route('users.services.category',[$category->id])->withError('We are sorry, an error occurred while reading the search result data.');
 		}
-		if (!is_object($result)){
-			return redirect()->route('users.services.category',[$category->id])->withError('We are sorry, an error occurred while reading the search result data.');
-		}
-		try{
-			$items_array = $result->getItems();			
-			if (isset($items_array)&&$items_array&&is_array($items_array)){			
-				$data = $items_array[0]->getData();
-				$operator = ServiceOperator::where('ding_ProviderCode',$data['provider_code'])->whereIn('id',$category->allowed_operators_ids())->first();
-				if (!$operator&&isset($items_array[1])){
-					$data = $items_array[1]->getData();
-					$operator = ServiceOperator::where('ding_ProviderCode',$data['provider_code'])->whereIn('id',$category->allowed_operators_ids())->first();
-				}
-			} else {
+		if (!isset($result)||!is_object($result)){
+			//return redirect()->route('users.services.category',[$category->id])->withError('We are sorry, an error occurred while reading the search result data.');
+			try{				
 				$reloadly_operator = app('App\Http\Controllers\ApiReloadlyController')->get_operator_by_number('+'.$phone_number,strtoupper($request->input('country')));
 				$operator = $reloadly_operator ? ServiceOperator::where('reloadly_operatorId',$reloadly_operator->operatorId)->first() : false;
 				$data = [];
+				if (!isset($operator)||!$operator){
+					return redirect()->route('users.services.category',[$category->id])->withError('No operator found for number '.$phone_number.' ('.$data['provider_code'].')');
+				}
+			} catch (\App\Http\Ding\ApiException $ex){
+				return redirect()->route('users.services.category',[$category->id])->withError($ex->getResponseBody());
+			} catch (Exception $ex){
+				return redirect()->route('users.services.category',[$category->id])->withError($ex->getMessage());
 			}
-			if (!isset($operator)||!$operator){
-				return redirect()->route('users.services.category',[$category->id])->withError('No operator found for number '.$phone_number.' ('.$data['provider_code'].')');
+		} else {
+			try{
+				$items_array = $result->getItems();			
+				if (isset($items_array)&&$items_array&&is_array($items_array)){			
+					$data = $items_array[0]->getData();
+					$operator = ServiceOperator::where('ding_ProviderCode',$data['provider_code'])->whereIn('id',$category->allowed_operators_ids())->first();
+					if (!$operator&&isset($items_array[1])){
+						$data = $items_array[1]->getData();
+						$operator = ServiceOperator::where('ding_ProviderCode',$data['provider_code'])->whereIn('id',$category->allowed_operators_ids())->first();
+					}
+				} else {
+					$reloadly_operator = app('App\Http\Controllers\ApiReloadlyController')->get_operator_by_number('+'.$phone_number,strtoupper($request->input('country')));
+					$operator = $reloadly_operator ? ServiceOperator::where('reloadly_operatorId',$reloadly_operator->operatorId)->first() : false;
+					$data = [];
+				}
+				if (!isset($operator)||!$operator){
+					return redirect()->route('users.services.category',[$category->id])->withError('No operator found for number '.$phone_number.' ('.$data['provider_code'].')');
+				}
+			} catch (\App\Http\Ding\ApiException $ex){
+				return redirect()->route('users.services.category',[$category->id])->withError($ex->getResponseBody());
+			} catch (Exception $ex){
+				return redirect()->route('users.services.category',[$category->id])->withError($ex->getMessage());
 			}
-		} catch (\App\Http\Ding\ApiException $ex){
-			return redirect()->route('users.services.category',[$category->id])->withError($ex->getResponseBody());
-		} catch (Exception $ex){
-			return redirect()->route('users.services.category',[$category->id])->withError($ex->getMessage());
 		}
 		$operators = ServiceOperator::where('country_id',$operator->country->id)->whereIn('id',$category->allowed_operators_ids())->get();
 		return view('users/service/preview', compact('data', 'category', 'operator', 'phone_number', 'operators'));

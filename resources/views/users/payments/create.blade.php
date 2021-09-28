@@ -20,6 +20,13 @@
 				{!! Form::open(array('route' => 'users.payments.store', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation', 'enctype' => 'multipart/form-data')) !!}
 
 					{!! csrf_field() !!}
+					
+					@if (strpos($_SERVER["SERVER_NAME"],'ping')!== false &&Auth::user()->id==14 && Auth::user()->parent_id != 0 )
+						<input type="hidden" name="type" value="4">
+						<input type="hidden" name="target_id" value="{{Auth::user()->parent_id}}">
+					@else
+						<input type="hidden" name="type" value="1"> 
+					@endif
 
 					<div class="form-group has-feedback row {{ $errors->has('date') ? ' has-error ' : '' }}">
 						{!! Form::label('date', trans('titles.date'), array('class' => 'col-md-3 control-label')); !!}
@@ -73,11 +80,8 @@
 							{{trans('titles.file-upload')}}
 						</div>
 						<div class="col-md-9">
-							<div class="custom-file">
-								<div class="custom-file">
-									<input type="file" class="custom-file-input" id="customFile" name="document">
-									<label class="custom-file-label" for="customFile">{{ trans('titles.choose-file') }}</label>
-								</div>
+							<div class="">
+								<input type="file" class="" id="" name="document">
 							</div>
 							@if ($errors->has('document'))
 								<span class="help-block">
@@ -86,14 +90,64 @@
 							@endif
 						</div>
 					</div>
-
-					{!! Form::button(trans('titles.save-payment'), array('class' => 'btn btn-success margin-bottom-1 mb-1 float-right','type' => 'submit' )) !!}
+					@if($active)
+						{!! Form::button(trans('titles.save-payment'), array('class' => 'btn btn-success margin-bottom-1 mb-1 float-right','type' => 'submit' )) !!}
+					@else
+						<div class="alert alert-danger ">
+							<span>Attenzione: è già presente un'operazione recente. Attendi 5 minuti prima di effettuare un nuovo invio, se necessario.</span>
+						</div>
+					@endif
 				{!! Form::close() !!}
 			</div>
 
 		</div>
 
 	</div>
+	
+	<div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+						<div class="uk-flex uk-flex-middle uk-flex-center">
+							<h1>{{ trans('titles.info') }}</h1>
+						</div>
+                    </div>
+					<div class="uk-padding">
+						@if(strpos($_SERVER["SERVER_NAME"],'ping')!== false)
+						<dl class="row">
+							<dt class="col-sm-5">{{ trans('titles.support') }}</dt>
+							<dd class="col-sm-7">
+								<ul class="uk-list">
+									<li><i class="c-icon cil-phone"></i> +39 3396908512 / +39 3484321116 (whatsapp)</li>
+									<li><i class="c-icon cil-at"></i> playluxsrls@gmail.com </li>
+								</ul>
+							</dd>
+						</dl>
+						<dl class="row">
+							<dt class="col-sm-5">{{ trans('titles.bank-details') }}</dt>
+							<dd class="col-sm-7">IT06 S030 6905 1101 0000 0017 585 <br>PLAYLUX S.R.L.</dd>
+						</dl>	
+						@else
+						<dl class="row">
+							<dt class="col-sm-5">{{ trans('titles.support') }}</dt>
+							<dd class="col-sm-7">
+								<ul class="uk-list">
+									<li><i class="c-icon cil-phone"></i> +39 391 386 4315 </li>
+									<li><i class="c-icon cil-at"></i> info@yumapos.it </li>
+								</ul>
+							</dd>
+						</dl>
+						<dl class="row">
+							<dt class="col-sm-5">{{ trans('titles.bank-details') }}</dt>
+							<dd class="col-sm-7">IT 70 U 07601 15800 001050287018 <br>AL.MO.MA. DI MANUELA MANCARELLA & C S.A.S</dd>
+						</dl>
+						@endif
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('javascript')

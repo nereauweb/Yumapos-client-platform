@@ -33,6 +33,6 @@ class ConfirmationMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.confirmation')->with(['user' => $this->user, 'password' => $this->notHashedPwd]);
+        return $this->subject('Attivazione servizi Yuma')->from('postmaster@yumapos.it','Yumapos')->markdown('emails.confirmation')->with(['user' => $this->user, 'password' => $this->notHashedPwd]);
     }
 }

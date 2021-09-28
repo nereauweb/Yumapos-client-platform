@@ -92,7 +92,7 @@
 			@if($operation->pin)
 				<tr>
 					<th>PIN</th>
-					<td>{{ $operation->pin }}</td>
+					<td>{{ $operation->pin() }}</td>
 				</tr>
 			@endif
 		  </tbody>

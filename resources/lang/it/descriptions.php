@@ -12,7 +12,7 @@ return [
 
 
     'append-payment-user' => 'aggiungi l\'ammontare del pagamento al bilancio dell\'utente',
-    'append-payment-agent'  => 'aggiungi l\'ammontare al credito dell\'agente',
+    'append-payment-agent'  => 'togli l\'ammontare dal credito dell\'agente',
     'choose-a-group-for' => 'Scegli un gruppo per',
     'choose-a-group-for-user' => 'Scegli un gruppo per l\'utente',
 

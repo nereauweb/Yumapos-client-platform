@@ -39,6 +39,14 @@ class ApiReloadlyOperatorConfiguration extends Model
 	
 	public function local_amount($original_amount){
 		return $this->local_amounts->where('original_amount', $original_amount)->first();
+	}	
+	
+	public function operator(){		
+		return $this->hasOne('App\Models\ApiReloadlyOperator','id','operator_id'); 
+	}
+	
+	public function original_fx(){
+		return $this->operator->fx->rate;
 	}
 	
 }

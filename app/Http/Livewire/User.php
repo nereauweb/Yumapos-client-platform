@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Mail\ConfirmationMail;
+use App\Mail\ConfirmationMailPing;
 use App\Models\UserCompanyData;
 use App\Models\UsersGroup;
 use Illuminate\Support\Str;
@@ -11,6 +12,9 @@ use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
+
+use \Swift_Mailer;
+use \Swift_SmtpTransport as SmtpTransport;
 
 class User extends Component
 {
@@ -70,8 +74,6 @@ class User extends Component
         $this->trashedUsers = AppUser::onlyTrashed()->count();
         $you = auth()->user();
 
-
-
         $cities = UserCompanyData::distinct()->where('legal_seat_city', '!=', null)->get('legal_seat_city');
 
         $this->totalBalance = AppUser::where('state', 1)->sum('plafond');
@@ -114,7 +116,7 @@ class User extends Component
         $this->user_id = $id;
     }
 
-    // stores the new user creation
+    // updates the approved user
     public function store() {
         $user = AppUser::findOrFail($this->user_id);
         if ($user) {
@@ -137,10 +139,23 @@ class User extends Component
                     'password' => bcrypt($notHashedPassword),
                 ]);
 
-
-                Mail::to($user->email)->send(new ConfirmationMail($user, $notHashedPassword));
-
-                session()->flash('success', 'User approved successfully!');
+				if($user->parent_id==172){
+					//set
+					$transport = (new SmtpTransport('smtp.office365.com', 587, 'TLS'))->setUsername('info@ping.international')->setPassword('729507Byt3!');
+					$mailer = new Swift_Mailer($transport);
+					Mail::setSwiftMailer($mailer);
+					//send
+					Mail::to($user->email)->bcc('info@ping.international')->send(new ConfirmationMailPing($user, $notHashedPassword));
+					//reset
+					$transport = (new SmtpTransport(config('mail.host'), config('mail.port'), config('mail.encryption')))->setUsername(config('mail.username'))->setPassword(config('mail.password'));
+					$mailer = new Swift_Mailer($transport);
+					Mail::setSwiftMailer($mailer);
+					session()->flash('success', 'User approved successfully! (PING)');
+				} else {
+					Mail::to($user->email)->send(new ConfirmationMail($user, $notHashedPassword));
+					session()->flash('success', 'User approved successfully!');
+				}
+				
                 $this->resetInputFields();
                 $this->emit('userClose');
 

@@ -80,5 +80,10 @@ return [
     'login-title' => 'Login',
     'login-desc' => 'Sign In to your account',
     'login-error' => 'Please enter correct email and password to proceed.',
+	
+	'privacy-alert' => 'Utilizzando questo sito, accetti le condizioni espresse nell\'informativa privacy. Leggi e accetta le condizioni per non visualizzare più questo avviso.',
+	'accept-privacy' => 'Accetto le condizioni proposte',
+    'privacy-accepted' => 'Accettato',
+    'privacy-accepted-message' => 'Informativa privacy approvata e sottoscritta',
 
 ];

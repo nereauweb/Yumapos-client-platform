@@ -153,5 +153,9 @@ class ServiceOperation extends Model
 	public function agent_operation(){ 
 		return $this->hasOne('App\Models\AgentOperation','service_operation_id','id'); 
 	}
-
+	
+	public function pin(){
+		return preg_replace('/\x03/', '', $this->pin);
+	}
+	
 }

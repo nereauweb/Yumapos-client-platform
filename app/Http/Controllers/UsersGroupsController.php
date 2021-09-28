@@ -11,6 +11,15 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\ApiReloadlyOperator;
+use App\Models\ApiReloadlyOperatorConfiguration;
+use App\Models\ApiReloadlyOperatorConfigurationAmount;
+use App\Models\ApiReloadlyOperatorConfigurationLocalAmount;
+use App\Models\ApiDingOperator;
+use App\Models\ApiDingOperatorConfiguration;
+use App\Models\ApiDingOperatorConfigurationAmount;
+use App\Models\ApiDingProduct;
+
 use Validator;
 
 class UsersGroupsController extends Controller
@@ -244,5 +253,116 @@ class UsersGroupsController extends Controller
     {
         $group = UsersGroup::findOrFail($id);
         return view('admin/users/group-view',compact('group'));
-    }
+    }	
+	
+	public function ping_pricings(){
+		$total_ding_configurations = 0;		
+		$total_ding_configurations_set = 0;
+		$total_ding_configurations_amounts = 0;
+		$total_ding_configurations_amounts_set = 0;
+		$total_reloadly_configurations = 0;		
+		$total_reloadly_configurations_set = 0;
+		$total_reloadly_configurations_amounts = 0;
+		$total_reloadly_configurations_amounts_set = 0;
+		$total_reloadly_configurations_local_amounts = 0;
+		$total_reloadly_configurations_local_amounts_set = 0;
+		
+		$standard_configurations = ApiDingOperatorConfiguration::where('group_id',6)->get();
+		foreach($standard_configurations as $standard_configuration){
+			$total_ding_configurations++;
+			$original_fx = $standard_configuration->original_fx();
+			if (!$original_fx) { continue; }
+			$standard_fx = $original_fx - ($original_fx * $standard_configuration->fx_delta_percent / 100);
+			$new_fx = $standard_fx / 1.25;
+			$new_fx_delta = -1 * ((($new_fx - $original_fx)/$original_fx * 100));
+			//return redirect()->route('admin.groups.list')->with(['status' => 'success', 'message' => "DEBUG ".$standard_configuration->operator_ProviderCode.": original_fx $original_fx | standard_fx $standard_fx | new_fx $new_fx | new_fx_delta $new_fx_delta	"]);
+			$ping_configuration = ApiDingOperatorConfiguration::updateOrCreate(
+				[
+					'operator_ProviderCode' => $standard_configuration->operator_ProviderCode,
+					'group_id' => 12
+				],
+				[
+					'fx_delta_percent' =>  round($new_fx_delta,2),
+					'discount_percent' =>  10,
+					'enabled' =>  $standard_configuration->enabled,
+				]);
+			$total_ding_configurations_set++;
+			foreach($standard_configuration->amounts as $standard_configuration_amount){
+				$total_ding_configurations_amounts++;
+				ApiDingOperatorConfigurationAmount::updateOrCreate(
+				[
+					'parent_id' => $ping_configuration->id,
+					'original_amount' => $standard_configuration_amount->original_amount
+				],
+				[
+					'final_amount' => round($standard_configuration_amount->final_amount * 1.25,2),
+					'discount' => 10,
+					'visible' =>  $standard_configuration_amount->visible,
+				]);
+				$total_ding_configurations_amounts_set++;
+			}
+		}
+		$standard_reloadly_configurations = ApiReloadlyOperatorConfiguration::where('group_id',6)->get();
+		foreach($standard_reloadly_configurations as $standard_reloadly_configuration){	
+			$total_reloadly_configurations++;
+			$original_fx = $standard_reloadly_configuration->original_fx();
+			if (!$original_fx) { continue; }
+			$standard_fx = $original_fx - ($original_fx * $standard_reloadly_configuration->fx_delta_percent / 100);
+			$new_fx = $standard_fx / 1.25;
+			$new_fx_delta = -1 * ((($new_fx - $original_fx)/$original_fx) * 100);
+			$ping_reloadly_configuration = ApiReloadlyOperatorConfiguration::updateOrCreate(
+				[
+					'operator_id' => $standard_reloadly_configuration->operator_id,
+					'group_id' => 12
+				],
+				[
+					'fx_delta_percent' => round($new_fx_delta,2),
+					'discount_percent' =>  10,
+					'enabled' =>  $standard_reloadly_configuration->enabled,
+				]);
+			$total_reloadly_configurations_set++;
+			foreach($standard_reloadly_configuration->amounts as $standard_reloadly_configuration_amount){
+				$total_reloadly_configurations_amounts++;				
+				ApiReloadlyOperatorConfigurationAmount::updateOrCreate(
+				[
+					'parent_id' => $ping_reloadly_configuration->id,
+					'original_amount' => $standard_reloadly_configuration_amount->original_amount
+				],
+				[
+					'final_amount' => round($standard_reloadly_configuration_amount->final_amount * 1.25,2),
+					'discount' => 10,
+					'visible' =>  $standard_reloadly_configuration_amount->visible,
+				]);				
+				$total_reloadly_configurations_amounts_set++;	
+			}
+			foreach($standard_reloadly_configuration->local_amounts as $standard_reloadly_configuration_local_amount){		
+				$total_reloadly_configurations_local_amounts++;				
+				ApiReloadlyOperatorConfigurationAmount::updateOrCreate(
+				[
+					'parent_id' => $ping_reloadly_configuration->id,
+					'original_amount' => $standard_reloadly_configuration_local_amount->original_amount
+				],
+				[
+					'final_amount' => round($standard_reloadly_configuration_local_amount->final_amount * 1.25,2),
+					'discount' => 10,
+					'visible' =>  $standard_reloadly_configuration_local_amount->visible,
+				]);
+				$total_reloadly_configurations_local_amounts_set++;	
+			}
+		}
+		return redirect()->route('admin.groups.list')->with(['status' => 'success', 'message' => "Pricings Ping aggiornati:
+		
+		ding_configurations $total_ding_configurations_set / $total_ding_configurations ; 		
+		
+		ding_configurations_amounts $total_ding_configurations_amounts_set /$total_ding_configurations_amounts ; 
+		
+		reloadly_configurations $total_reloadly_configurations_set / $total_reloadly_configurations ; 		
+		
+		reloadly_configurations_amounts $total_reloadly_configurations_amounts_set / $total_reloadly_configurations_amounts ; 
+		
+		reloadly_configurations_local_amounts $total_reloadly_configurations_local_amounts_set / $total_reloadly_configurations_local_amounts ; 
+		
+		"]);
+	}
+	
 }

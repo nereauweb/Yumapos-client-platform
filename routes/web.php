@@ -33,8 +33,6 @@ Route::group(['middleware' => ['get.menu']], function () {
 		return redirect('/backend');
 	})->name('admin.users.impersonate');
 
-	Route::get('/test', function () { return view('test'); });
-
 	Route::get('/page', function () { return view('frontend.page'); });
 
 	Route::get('/backend', 'HomeController@index')->name('home');
@@ -54,6 +52,7 @@ Route::group(['middleware' => ['get.menu']], function () {
 	Route::group(['middleware' => ['role:user|sales']], function () {
 
         Route::put('/user/update-password', 'ApprovedUserController@updatePassword')->name('user.updatePassword');
+		Route::post('/user/accept-privacy', 'HomeController@accept_privacy')->name('user.privacy.accept');
 
 //	    chart data
         Route::post('/user/internal/services/operations/totals/{type}', 'ServiceOperationController@user_totals'); // endpoint for initial calculations (daily)
@@ -155,6 +154,9 @@ Route::group(['middleware' => ['get.menu']], function () {
 
 
 		Route::prefix('/admin/users/groups')->group(function () {
+			
+			Route::get('/ping-pricings', 'UsersGroupsController@ping_pricings')->name('admin.groups.ping_pricings');
+			
 			Route::get('', 'UsersGroupsController@list')->name('admin.groups.list');
 			Route::get('/create', 'UsersGroupsController@create')->name('admin.groups.create');
 			Route::get('/create-agent', 'UsersGroupsController@create_agent')->name('admin.groups.create_agent');

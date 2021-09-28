@@ -44,7 +44,7 @@ class ReportController extends Controller
 			$operations->where('user_id',$user_id);
 		}
 		$operations = $operations->get();
-		$operations = ServiceOperation::all();
+		//$operations = ServiceOperation::all();
         return view('admin/report/operations',compact('operations','date_begin','date_end','users','user_name','user_id'));
 	}
     public function operations_ticket(Request $request)
@@ -64,7 +64,7 @@ class ReportController extends Controller
 			$operations->where('user_id',$user_id);
 		}
 		$operations = $operations->get();
-		$operations = ServiceOperation::all();
+		//$operations = ServiceOperation::all();
         return view('admin/report/operations-ticket',compact('operations','date_begin','date_end','users','user_name','user_id'));
 	}
 
@@ -196,9 +196,12 @@ class ReportController extends Controller
     }
 
     public function mbs_calls(Request $request)
-    {
-		$operations = ApiMbsCall::orderBy('id','desc')->get();
-        return view('admin/report/calls-mbs',compact('operations'));
+    {		
+		$date_begin = $request->input('date_begin') ? $request->input('date_begin') . ' 00:00:00' : date("Y-m-d") . ' 00:00:00';
+		$date_end = $request->input('date_end') ? $request->input('date_end') . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
+		$operations = ApiMbsCall::where('created_at','>=',$date_begin)->where('created_at','<=',$date_end)->get();
+        return view('admin/report/calls-mbs',compact('operations','date_begin','date_end'));
+		
     }
 
 

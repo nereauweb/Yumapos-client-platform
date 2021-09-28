@@ -39,8 +39,9 @@ return [
     'balance'           => 'Bilancio',
     'payment'           => 'Pagamenti',
 
-    'reloadly-balance'  => 'Ricarica Bilancio',
-    'ding-balance'      => 'Bilancio Api Ding',
+    'reloadly-balance'  => 'Bilancio Reloadly',
+    'ding-balance'      => 'Bilancio Ding',
+    'mbs-balance'      => 'Bilancio MBS',
 
     'operations-report' => 'Report operazioni',
     'pending-users'     => 'Utenti in attesa',
@@ -102,7 +103,7 @@ return [
     'cancel-payment'                => 'Cancella pagamento',
     'recover'                       => 'Recupera',
     'export'                        => 'Esporta',
-    'operations'                    => 'Operationi',
+    'operations'                    => 'Operazioni',
     'total-amount'                  => 'Ammontare complessivo',
     'total-commissions'             => 'Commissioni complessive',
     'agent'                         => 'Agente',
@@ -500,5 +501,10 @@ return [
 	'transfer-balance'	=>	'Trasferisci bilancio',
 	'to'	=>	'a',
 	'return-to-users-list'	=>	'Torna alla lista utenti',	
+	
+	'fields' => 'Campi',
+	'call' => 'Chiamate API',
+		
+	'privacy' => 'Informativa privacy',
 
 ];

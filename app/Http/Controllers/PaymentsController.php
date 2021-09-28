@@ -440,6 +440,23 @@ class PaymentsController extends Controller
                     $payment->update(['approved' => '-1']);
                     return back()->with(['status' => 'info', 'message' => 'payment of [ \'PLATFORM\' ] has been canceled, without any effect to other tables']);
                     break;
+                case 4:
+                    try {
+                        DB::beginTransaction();
+						$target = $payment->target;
+						if (!$target){
+							return back()->with(['status' => 'warning', 'message' => 'Target user not found']);
+						}
+						$target->update(['plafond' => (float)$target->plafond - (float)$payment->amount]);
+                        $payment->user()->update(['plafond' => (float)$payment->user->plafond + (float)$payment->amount]);
+                        $payment->update(['approved' => '-1']);
+                        DB::commit();
+                        return back()->with(['status' => 'info', 'message' => 'payment of [ '.ucwords($payment->user->name).' ] to [ '.ucwords($target->name).' ]  got canceled!']);
+                    } catch (\ErrorException $e) {
+                        DB::rollBack();
+                        return back()->with(['status' => 'error', 'message' => $e->getMessage()]);
+                    }
+                    break;
                 default:
                     return back()->with(['status' => 'warning', 'message' => 'Payment type is unknown']);
             }
