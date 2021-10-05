@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ServiceOperator;
+
 use App\Mail\ConfirmationMail;
 use App\User;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-
 use Illuminate\Http\Request;
 
 class AgentController extends Controller
@@ -154,6 +155,17 @@ class AgentController extends Controller
         }
     }
 	
+	public function providersListApi(Request $request)
+    {
+        try {        
+			$operators = ServiceOperator::select('id','name')->get();			
+			return response()->json($operators->toArray(), 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+			return response()->json(['result' => 'ERROR'], 400);
+        }
+    }
+	
 	public function test_api(Request $request)
     {
         $request->validate(
@@ -206,4 +218,7 @@ class AgentController extends Controller
             throw $th;
         }
     }
+
+	
+	
 }

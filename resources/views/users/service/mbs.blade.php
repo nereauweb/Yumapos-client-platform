@@ -80,7 +80,7 @@
 											@if ($last_type!=$product->Tipo&&$product->Tipo=="Ricarica PIN")
 												<div class="uk-width-1-1"></div>
 											@endif
-											@if(in_array($product->Operatore,$providers_ricarica)&&($product->Tipo=="Ricarica OnLine"||$product->Tipo=="Ricarica PIN"))
+											@if(in_array($product->Operatore,$providers_ricarica)&&($product->Tipo=="Ricarica OnLine"||$product->Tipo=="Ricarica PIN")&&strpos($product->Descrizione,'Vodafone Servizi')==false)
 												<div class="uk-child-1-2 uk-width-1-3@s uk-width-1-4@m uk-width-1-5@l uk-width-1-6@xl">
 													<a href="#" class="choose-product" data-product-type="{{$product->Tipo}}"data-product="{{$product->Prodotto}}" data-product-full="{{$product->Tipo}} {{number_format($product->PrezzoUtente,2)}}&nbsp;€">
 														<div class="uk-padding-small uk-text-justify uk-grid-collapse choose-product-grid {{ $product->Tipo=='Ricarica OnLine' ? 'topup-background' : 'pin-background' }}" uk-grid>	
