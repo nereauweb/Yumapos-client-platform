@@ -92,6 +92,7 @@
                             <th>{{ trans('titles.details') }}</th>
                             <th>{{ trans('titles.approved') }}</th>
                             <th>{{ trans('titles.type') }}</th>
+                            <th>{{ trans('titles.documents') }}</th>
                         </tr>
                         </thead>
                         <tbody id="users_table">
@@ -104,16 +105,41 @@
                                     </td>
                                     <td>{{ $payment->amount }}</td>
                                     <td>{{ $payment->details }}</td>
-                                    <td>
+                                    <td class="uk-text-center">
                                         @if($payment->approved == 1)
                                             <i class="cil-check-alt"></i>
                                         @elseif($payment->approved == 0)
                                             <i class="cil-clock"></i>
+											@if ($payment->type == 5 && $payment->target_id == Auth::user()->id)
+                                                {!! Form::open(['route' => ['users.payments.approve', $payment->id],
+                                                'method' => 'PUT', 'role' => 'form']) !!}
+                                                {!! csrf_field() !!}
+                                                <button class="btn btn-success mt-1" type="submit">{{ trans('titles.approve') }}</button>
+                                                {!! Form::close() !!}
+											@endif
                                         @elseif($payment->approved == -1)
                                             <i class="cil-x"></i>
                                         @endif
                                     </td>
                                     <td>{{ $payment->type(true,true,Auth::user()->hasRole('sales')) }}</td>
+									<td>
+										@if (count($payment->documents) > 0)
+										<div class="row">
+											@foreach ($payment->documents as $doc)
+													<a target="_blank" href="{{url($doc->filename)}}">
+														<svg width="30" height="30" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"></path></svg>
+													</a>
+													@if($payment->approved == 0)
+														<form action="{{ route('admin.paymentfile.destroy', $doc) }}" method="post">
+															@method('DELETE')
+															@csrf
+															<button class="btn"><i class="cid-delete mx-2">X</i></button>
+														</form>
+													@endif
+											@endforeach
+										</div>
+										@endif
+									</td>
                                 </tr>
                             @endforeach
                         </tbody>

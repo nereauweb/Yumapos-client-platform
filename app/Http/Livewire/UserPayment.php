@@ -43,7 +43,7 @@ class UserPayment extends Component
             $query->where('date', '<=', $this->to);
         })->when($this->state, function ($query) {
             $query->where('approved', '=', $this->state == '00' ? 0 : $this->state);
-        })->paginate(10);
+        })->orderBy('id','desc')->paginate(10);
 
         $this->totalBalance = $this->payments->where('type', '=', 2)->where('approved', '=', 1)->sum('amount') + auth()->user()->plafound;
         $this->negativeBalance = $this->payments->where('type', '=', 1)->where('approved', '=', 1)->sum('amount') + auth()->user()->plafound;

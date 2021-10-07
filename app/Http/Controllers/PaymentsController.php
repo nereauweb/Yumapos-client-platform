@@ -20,7 +20,7 @@ class PaymentsController extends Controller
 
     public function index()
     {
-		$payments = Payment::paginate(10);
+		$payments = Payment::orderBy('id','desc')->paginate(10);
         return view('admin/payments/list', compact('payments') );
     }
 

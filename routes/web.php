@@ -90,6 +90,7 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::get('/payments/export', 'PointPaymentsController@export')->name('users.payments.export');
             Route::get('/payments/transfer/{id}', 'PointPaymentsController@create_transfer')->name('users.payments.transfer.create');
             Route::post('/payments/transfer/', 'PointPaymentsController@transfer')->name('users.payments.transfer.do');
+			Route::put('/payments/approve/{id}', 'PointPaymentsController@approve')->name('users.payments.approve');
             Route::resource('payments',  'PointPaymentsController', [ 'names' => 'users.payments' ]);
         });
 

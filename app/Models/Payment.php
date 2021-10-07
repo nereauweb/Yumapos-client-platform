@@ -37,6 +37,7 @@ class Payment extends Model
 		2 => 'platform to user',
 		3 => 'platoform to provider',
 		4 => 'user to user transfer',
+		5 => 'user to agent transfer',
 	];
 	
 	public $types_ita = [
@@ -44,6 +45,7 @@ class Payment extends Model
 		2 => 'piattaforma a utente',
 		3 => 'piattaforma a fornitore',
 		4 => 'trasferimento da utente a utente',
+		5 => 'trasferimento da utente a agente',
 	];
 	
 	public $types_to_user = [
@@ -51,6 +53,7 @@ class Payment extends Model
 		2 => 'platform to you',
 		3 => 'platoform to provider',
 		4 => 'transfer from user to you',
+		5 => 'charge request from user',
 	];
 	
 	public $types_ita_to_user = [
@@ -58,6 +61,7 @@ class Payment extends Model
 		2 => 'piattaforma a te',
 		3 => 'piattaforma a fornitore',
 		4 => 'trasferimento da utente a te',
+		5 => 'richiesta ricarica da utente',
 	];
 	
 	public function type($ita = false, $to_user = false, $is_agent = false){
@@ -67,6 +71,14 @@ class Payment extends Model
 			}
 			if ($is_agent || \Auth::user()->id == $this->user_id){
 				return $ita ? ('trasferimento a utente ' . $this->target->name) : ('transfer to user ' . $this->target->name);
+			}
+		}
+		if ($this->type == 5){
+			if (\Auth::user()->id == $this->target_id){
+				return $ita ? ('richiesta ricarica da utente ' . $this->user->name) : ('transfer from user ' . $this->user->name);
+			}
+			if ($is_agent || \Auth::user()->id == $this->user_id){
+				return $ita ? ('richiesta ricarica a ' . $this->target->name) : ('charge request to ' . $this->target->name);
 			}
 		}
 		if ($ita){

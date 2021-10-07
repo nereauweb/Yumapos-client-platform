@@ -22,6 +22,7 @@ class PointPaymentsController extends Controller
 		$payments = Payment::
 						where('user_id',\Auth::user()->id)
 						->orWhere('target_id',\Auth::user()->id)
+						->orderBy('id','desc')
 						->get();
         return view('users/payments/list', compact('payments') );
     }
@@ -180,5 +181,31 @@ class PointPaymentsController extends Controller
             return back()->withError($q_ex->getMessage());
         }
     }
+	
+	public function approve(Request $request, $id)
+    {
+        $payment = Payment::findOrFail($id);
+        if ($payment) {
+            try {
+                DB::beginTransaction();
+                $payment->update([
+                    'approved' => 1
+                ]);
+				$payment->target()->update([
+                    'plafond' => $payment->target->plafond - $payment->amount
+                ]);
+                $payment->user()->update([
+                    'plafond' => $payment->user->plafond + $payment->amount
+                ]);
+                DB::commit();
+                return back()->with(['status' => 'success', 'message' => 'payment approved successfully, user balance updated']);
+            } catch (QueryException $q) {
+                DB::rollBack();
+                return back()->with(['status' => 'error', 'message' => $q->getMessage()]);
+            }
+        }
+        return back()->with(['status' => 'warning', 'message' => 'payment not found']);
+    }
+
 	
 }
