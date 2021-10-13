@@ -28,7 +28,7 @@ class AgentOperationsExport implements FromCollection, WithHeadings, WithMapping
     public function headings(): array
     {
         return [
-            "Date","Nome Commerciale","Nome Utente","Città","Nome Listino","Numero Ricaricato","Operatore Mobile","Importo Ricarica Euro","Sconto utente","Sovrapprezzo applicato da utente","Guadagno totale utente","Vendita finale ricarica","Costo ricarica a Yuma","Sconto fornitore","Profitto Lordo Yuma","Profitto Netto Yuma"
+            "Date","Nome Commerciale","Nome Utente","Città","Nome Listino","Numero Ricaricato","Operatore Mobile","Importo Ricarica Euro","Sconto utente","Sovrapprezzo applicato da utente","Guadagno totale utente","Vendita finale ricarica","Costo ricarica a Yuma","Sconto fornitore","Profitto Lordo Yuma","Profitto Netto Yuma","Agente","Commissione"
         ];
     }
 
@@ -51,7 +51,9 @@ class AgentOperationsExport implements FromCollection, WithHeadings, WithMapping
             $row->pointOperation->sent_amount,
             $row->pointOperation->platform_commission,
             $row->pointOperation->platform_total_gain,
-            $row->pointOperation->platform_total_gain - $row->pointOperation->user_discount
+            $row->pointOperation->platform_total_gain - $row->pointOperation->user_discount,			
+			$row->user->name,
+			$row->commission,
         ];
     }
 }

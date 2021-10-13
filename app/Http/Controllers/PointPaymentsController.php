@@ -103,9 +103,9 @@ class PointPaymentsController extends Controller
 					'user_id'	=> \Auth::user()->id,
 					'details'	=> $request->input('details'),
 					'approved'	=> 0,
-					'type'      => 4,
+					'type'      => $request->input('type') ? $request->input('type') : 4,
 					'target_id' => $request->input('target_id'),
-					'update_balance' => 0
+					'update_balance' => $request->input('type') == 5 ? 1 : 0
 				]);
 			}
 			

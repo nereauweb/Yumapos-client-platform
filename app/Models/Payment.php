@@ -67,18 +67,18 @@ class Payment extends Model
 	public function type($ita = false, $to_user = false, $is_agent = false){
 		if ($this->type == 4){
 			if (\Auth::user()->id == $this->target_id){
-				return $ita ? ('trasferimento da utente ' . $this->user->name) : ('transfer from user ' . $this->user->name);
+				return $ita ? ('trasferimento da utente ' . ( $this->user->name ?? '[eliminato]')) : ('transfer from user ' . ( $this->user->name ?? '[deleted]'));
 			}
 			if ($is_agent || \Auth::user()->id == $this->user_id){
-				return $ita ? ('trasferimento a utente ' . $this->target->name) : ('transfer to user ' . $this->target->name);
+				return $ita ? ('trasferimento a utente ' . ($this->target->name ?? '[eliminato]')) : ('transfer to user ' . ($this->target->name ?? '[deleted]'));
 			}
 		}
 		if ($this->type == 5){
 			if (\Auth::user()->id == $this->target_id){
-				return $ita ? ('richiesta ricarica da utente ' . $this->user->name) : ('transfer from user ' . $this->user->name);
+				return $ita ? ('richiesta ricarica da utente ' . ( $this->user->name ?? '[eliminato]')) : ('transfer from user ' . ( $this->user->name ?? '[deleted]'));
 			}
 			if ($is_agent || \Auth::user()->id == $this->user_id){
-				return $ita ? ('richiesta ricarica a ' . $this->target->name) : ('charge request to ' . $this->target->name);
+				return $ita ? ('richiesta ricarica a ' . ($this->target->name ?? '[eliminato]')) : ('charge request to ' . ($this->target->name ?? '[deleted]'));
 			}
 		}
 		if ($ita){
@@ -86,7 +86,7 @@ class Payment extends Model
 		} else {
 			$array = $to_user ? $this->types_to_user : $this->types;			
 		}
-		return $to_user ? str_replace("da utente", "da utente " . $this->user->name, $array[$this->type]) : $array[$this->type];
+		return $to_user ? str_replace("da utente", "da utente " . ( $this->user->name ?? '[eliminato]'), $array[$this->type]) : $array[$this->type];
 	}
 
 	public function user() {

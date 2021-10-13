@@ -21,7 +21,7 @@
 
 					{!! csrf_field() !!}
 					
-					@if ((strpos($_SERVER["SERVER_NAME"],'ping')!== false || strpos($_SERVER["SERVER_NAME"],'test')!== false) && (Auth::user()->id==14||Auth::user()->id==391) && Auth::user()->parent_id == 172 )
+					@if ((strpos($_SERVER["SERVER_NAME"],'ping')!== false || strpos($_SERVER["SERVER_NAME"],'test')!== false) &&  Auth::user()->parent_id == 172 )
 						<input type="hidden" name="type" value="5">
 						<input type="hidden" name="target_id" value="{{Auth::user()->parent_id}}">
 					@else
