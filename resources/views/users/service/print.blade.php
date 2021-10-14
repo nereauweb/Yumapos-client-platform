@@ -17,6 +17,9 @@
 			text-align:left;
 			font-size: 14px;
 		}
+		@media print {
+		  .no-print { display: none !important; }
+		}
 	</style>
 	<body class="uk-margin">
 		<table class="uk-table uk-table-small uk-text-left uk-width-auto">
@@ -93,7 +96,10 @@
 		  <tfoot>
 			<tr>
 				<td colspan="2">
-				  <div class="footer"><br><br>{{ trans('titles.print-time') }} {{ date("d/m/Y H:i:s") }}</div>
+				  <div class="footer">
+					<br><br>
+					<button onclick="window.print();" class="no-print">Stampa</button> 
+					{{ trans('titles.print-time') }} {{ date("d/m/Y H:i:s") }}</div>
 				</td>
 			</tr>
 		  </tfoot>

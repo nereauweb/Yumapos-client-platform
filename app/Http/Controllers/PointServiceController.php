@@ -224,6 +224,31 @@ class PointServiceController extends Controller
 
 		return redirect('/backend')->with('error','We are sorry, a problem occurred in selecting operator provider. Request aborted.');
 	}
+	
+	public function user_mbs_list(){	
+		$providers_ricarica = [
+			"DigiMobile",
+			"FastWeb",
+			"Ho",
+			"Iliad",
+			"Kena",
+			"Linkem",
+			"Lyca",
+			"PosteMobile",
+			"Tim",
+			"UnoMobile",
+			"VeryMobile",
+			"Vodafone",
+			"Wind",
+		];
+		$products = ApiMbsProduct::whereIn('Operatore',$providers_ricarica)
+			->whereIn('Tipo',['Ricarica PIN','Ricarica OnLine'])
+			->orderBy('Operatore')
+			->orderBy('Tipo')
+			->orderBy('PrezzoUtente')
+			->get();		
+        return view('users/service/mbs_list', compact('products') );
+    }
 
 	public function print($id)
     {

@@ -35,6 +35,7 @@
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <h3>Ricariche nazionali</h3>
+							<div><a href="{{url('/users/services/mbs/list')}}">Listino</a></div>
                         </div>
                     </div>
                     <div class="card-body">						

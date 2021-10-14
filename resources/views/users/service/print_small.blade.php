@@ -3,7 +3,7 @@
 <html lang="en">
 	<head>
 	  <meta charset="utf-8">
-	  <title>{{ trans('titles.yumaps-receipt') }}</title>
+	  <title>{{ trans('titles.yumapos-receipt') }}</title>
 	  <meta name="author" content="Yumapos">
 	  <!-- UIkit CSS -->
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.5.5/dist/css/uikit.min.css" />
@@ -22,6 +22,9 @@
 		}
 		.uk-table tfoot{
 			font-size: 9px;
+		}
+		@media print {
+		  .no-print { display: none !important; }
 		}
 	</style>
 	<body class="uk-margin">
@@ -99,7 +102,10 @@
 		  <tfoot>
 			<tr>
 				<td colspan="2">
-				  <div class="footer"><br><br>{{ trans('titles.print-time') }} {{ date("d/m/Y H:i:s") }}</div>
+				  <div class="footer">
+					<br><br>
+					<button onclick="window.print();" class="no-print">Stampa</button> 
+					{{ trans('titles.print-time') }} {{ date("d/m/Y H:i:s") }}</div>
 				</td>
 			</tr>
 		  </tfoot>

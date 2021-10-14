@@ -73,6 +73,7 @@ Route::group(['middleware' => ['get.menu']], function () {
 			Route::get('/print/{id}', 'PointServiceController@print')->name('users.services.print');
 			Route::get('/print/{id}/small', 'PointServiceController@print_small')->name('users.services.print.small');
 			
+			Route::get('/mbs/list', 'PointServiceController@user_mbs_list')->name('users.services.mbs.list');		
 			Route::post('/mbs/ricarica', 'PointServiceController@user_mbs_recharge_request')->name('users.services.mbs.ricarica_telefonica');
 			Route::get('/mbs/ricarica/bridged', 'ApiMbsController@point_ricarica_telefonica')->name('users.services.mbs.ricarica_telefonica.bridged');			
 			Route::post('/mbs/ricarica-pin', 'PointServiceController@user_mbs_pin_request')->name('users.services.mbs.ricarica_pin');

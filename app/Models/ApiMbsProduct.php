@@ -36,4 +36,19 @@ class ApiMbsProduct extends Model
 		return $this->configurations->where('group_id', $group_id)->first();
 	}
 	
+	public function user_discount(){
+		$discount = 0;
+		try{
+			$discount = $this->configuration(\Auth::user()->group_id)->percent;
+		} catch (\Exception $ex) {
+			return 0;
+		}
+		return $discount;
+	}
+	
+	public function user_price(){
+		$discount = $this->user_discount();
+		return $this->PrezzoUtente - ($this->PrezzoUtente * ($discount/100));
+	}
+	
 }

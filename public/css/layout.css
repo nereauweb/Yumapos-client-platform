@@ -127,3 +127,6 @@ html:not([dir="rtl"]) .custom-select-sm {
 .uk-modal-dialog{
 	width:auto;
 }
+@media print {
+  .no-print { display: none !important; }
+}
