@@ -51,7 +51,7 @@
                                     <table class="table">
                                     @foreach($roles as $role)
                                         <tr>
-                                            <td>
+                                            <td class="text-center">
                                                 <?php
                                                     $temp = false;
                                                     foreach($menuroles as $menurole){
@@ -60,9 +60,9 @@
                                                         }
                                                     }
                                                     if($temp === true){
-                                                        echo '<input checked type="checkbox" name="role[]" value="' . $role . '" class="form-control"/>';
+                                                        echo '<input checked type="checkbox" name="role[]" value="' . $role . '" class="form-check-input"/>';
                                                     }else{
-                                                        echo '<input type="checkbox" name="role[]" value="' . $role . '" class="form-control"/>';
+                                                        echo '<input type="checkbox" name="role[]" value="' . $role . '" class="form-check-input"/>';
                                                     }
                                                 ?>
                                             </td>

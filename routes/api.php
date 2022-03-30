@@ -13,11 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-/*
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-*/
 Route::post('/login', 'Auth\LoginController@api_login');
 Route::group(['middleware' => ['auth:api']], function () {
 	Route::post('/sales/propose', 'AgentController@userStoreApi')->name('api.agent.propose');

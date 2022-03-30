@@ -37,8 +37,8 @@
                                     <table class="table">
                                     @foreach($roles as $role)
                                         <tr>
-                                            <td>
-                                                <input type="checkbox" name="role[]" value="{{ $role }}" class="form-control"/>
+                                            <td class="text-center">
+                                                <input type="checkbox" name="role[]" value="{{ $role }}" class="form-check-input"/>
                                             </td>
                                             <td>
                                                 {{ $role }}

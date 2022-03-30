@@ -9506,11 +9506,11 @@ html:not([dir="rtl"]) .form-check {
 }
 
 html:not([dir="rtl"]) .form-check-input {
-  margin-left: -1.25rem;
+  margin-left: -.25rem;
 }
 
 *[dir="rtl"] .form-check-input {
-  margin-right: -1.25rem;
+  margin-right: -.25rem;
 }
 
 .form-check-input[disabled] ~ .form-check-label,

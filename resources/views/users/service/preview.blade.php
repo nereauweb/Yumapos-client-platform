@@ -204,7 +204,7 @@ a.operator-choice * {
 									@elseif($operator->reloadly->denominationType=="RANGE")
 
 										<div class="form-group row">
-											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.amount') }}&nbsp;€ ({{number_format($operator->reloadly->minAmount(Auth::user()->group_id),2)}}/{{number_format($operator->reloadly->maxAmount(Auth::user()->group_id),2)}})</label>
+											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.amount') }}&nbsp;€ ({{number_format($operator->reloadly->minAmount(Auth::user()->group_id),2,'.','')}}/{{number_format($operator->reloadly->maxAmount(Auth::user()->group_id),2,'.','')}})</label>
 											<div class="col-md-9">
 												<input
 													class="form-control"
@@ -214,12 +214,12 @@ a.operator-choice * {
 													value=""
 													step="0.01"
 													@if ($operator->reloadly->minAmount)
-														{!! 'min="'.number_format($operator->reloadly->minAmount(Auth::user()->group_id),2).'"' !!}
-														{!! 'data-min="'.number_format($operator->reloadly->minAmount(Auth::user()->group_id),2).'"' !!}
+														{!! 'min="'.number_format($operator->reloadly->minAmount(Auth::user()->group_id),2,'.','').'"' !!}
+														{!! 'data-min="'.number_format($operator->reloadly->minAmount(Auth::user()->group_id),2,'.','').'"' !!}
 													@endif
 													@if ($operator->reloadly->maxAmount)
-														{!! 'max="'.number_format($operator->reloadly->maxAmount(Auth::user()->group_id),2).'"' !!}
-														{!! 'data-max="'.number_format($operator->reloadly->maxAmount(Auth::user()->group_id),2).'"' !!}
+														{!! 'max="'.number_format($operator->reloadly->maxAmount(Auth::user()->group_id),2,'.','').'"' !!}
+														{!! 'data-max="'.number_format($operator->reloadly->maxAmount(Auth::user()->group_id),2,'.','').'"' !!}
 													@endif
 													data-fxrate="{{ round($operator->reloadly->config_rate(Auth::user()->group_id),3) }}"
 													data-local="0"
@@ -370,7 +370,7 @@ a.operator-choice * {
 
 										<input type="hidden" name="product_sku" value="{{ $operator->ding->products()->first()->SkuCode }}">
 										<div class="form-group row">
-											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.amount') }}&nbsp;€ ({{number_format($operator->ding->products()->first()->minAmount(Auth::user()->group_id),2)}}/{{number_format($operator->ding->products()->first()->maxAmount(Auth::user()->group_id),2)}})</label>
+											<label class="col-md-3 col-form-label" for="text-input">{{ trans('titles.amount') }}&nbsp;€ ({{number_format($operator->ding->products()->first()->minAmount(Auth::user()->group_id),2)}}/{{number_format($operator->ding->products()->first()->maxAmount(Auth::user()->group_id),2,'.','')}})</label>
 											<div class="col-md-9">
 												<input
 													class="form-control"
@@ -380,10 +380,10 @@ a.operator-choice * {
 													value=""
 													step="0.01"
 													@if ( $operator->ding->products()->first() )
-														{!! 'min="'.number_format($operator->ding->products()->first()->minAmount(Auth::user()->group_id),2).'"' !!}
-														{!! 'data-min="'.number_format($operator->ding->products()->first()->minAmount(Auth::user()->group_id),2).'"' !!}
-														{!! 'max="'.number_format($operator->ding->products()->first()->maxAmount(Auth::user()->group_id),2).'"' !!}
-														{!! 'data-max="'.number_format($operator->ding->products()->first()->maxAmount(Auth::user()->group_id),2).'"' !!}
+														{!! 'min="'.number_format($operator->ding->products()->first()->minAmount(Auth::user()->group_id),2,'.','').'"' !!}
+														{!! 'data-min="'.number_format($operator->ding->products()->first()->minAmount(Auth::user()->group_id),2,'.','').'"' !!}
+														{!! 'max="'.number_format($operator->ding->products()->first()->maxAmount(Auth::user()->group_id),2,'.','').'"' !!}
+														{!! 'data-max="'.number_format($operator->ding->products()->first()->maxAmount(Auth::user()->group_id),2,'.','').'"' !!}
 													@endif
 													data-fxrate="{{ round($operator->ding->products()->first()->config_rate(Auth::user()->group_id),3) }}"
 													data-local="0"

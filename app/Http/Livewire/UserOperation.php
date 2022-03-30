@@ -41,7 +41,9 @@ class UserOperation extends Component
     {
         $this->load();
         $operators = auth()->user()->serviceOperations;
-        return view('livewire.user-operation', ['operations' => $this->operations, 'operatorsData' => $this->usedOperators]);
+        
+		$countries = [];
+        return view('livewire.user-operation', ['operations' => $this->operations, 'operatorsData' => $this->usedOperators, 'countries' => $countries]);
     }
 
     // load function holds the loading of the data, this gets called in render function

@@ -122,9 +122,7 @@ Route::group(['middleware' => ['get.menu']], function () {
 
         Route::put('admin/agent/user/approve', 'AgentController@approve')->name('admin.agent.user.approve');
 
-        Route::get('/reloadly_balance', 'ApiReloadlyController@getBalance');
-
-        // providers paths
+        // PROVIDERS
         Route::prefix('/admin/providers')->group(function () {
             Route::get('/', 'ProviderController@index')->name('admin.providers.index');
             Route::get('/create', 'ProviderController@create')->name('admin.providers.create');
@@ -137,7 +135,7 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::put('/restore/{provider}', 'ProviderController@restore')->name('admin.providers.restore');
         });
 
-        // referents paths
+        // REFERENTS
         Route::prefix('/admin/referents')->group(function () {
             Route::post('/', 'ProviderReferentController@store')->name('admin.referents.store');
             Route::get('/create', 'ProviderReferentController@create')->name('admin.referents.create');
@@ -190,77 +188,9 @@ Route::group(['middleware' => ['get.menu']], function () {
             Route::put('/recover-from-trash/{payment}', 'PaymentsController@recoverFromTrash')->name('admin.payments.recover-from-trash');
         });		
 
-		Route::prefix('/admin/api/mbs')->group(function () {
-			Route::get('/', 'ApiMbsController@index')->name('admin.api.mbs.index');
-			Route::get('/balance', 'ApiMbsController@balance')->name('admin.api.mbs.balance');
-			Route::get('/prefix-list', 'ApiMbsController@list_prefix')->name('admin.api.mbs.list_prefix');			
-			Route::post('/beneficiario-bollettino', 'ApiMbsController@beneficiario_bollettino')->name('admin.api.mbs.beneficiario_bollettino');
-			Route::post('/pagamento-bollettino', 'ApiMbsController@pagamento_bollettino')->name('admin.api.mbs.pagamento_bollettino');
-			Route::post('/pagamento-bollettino', 'ApiMbsController@pagamento_bollettino')->name('admin.api.mbs.pagamento_bollettino');
-			Route::post('/pagamento-bollettino-mav', 'ApiMbsController@pagamento_bollettino_mav')->name('admin.api.mbs.pagamento_bollettino_mav');
-			Route::post('/pagamento-bollettino-rav', 'ApiMbsController@pagamento_bollettino_rav')->name('admin.api.mbs.pagamento_bollettino_rav');
-			Route::post('/richiesta-biller', 'ApiMbsController@richiesta_biller')->name('admin.api.mbs.richiesta_biller');
-			Route::post('/pagamento-bollettino-cbill', 'ApiMbsController@pagamento_bollettino_cbill')->name('admin.api.mbs.pagamento_bollettino_cbill');
-			Route::post('/ricarica-telefonica', 'ApiMbsController@ricarica_telefonica')->name('admin.api.mbs.ricarica_telefonica');
-			Route::post('/ricarica-pin', 'ApiMbsController@ricarica_pin')->name('admin.api.mbs.ricarica_pin');
-			Route::post('/verifica-ricarica', 'ApiMbsController@verifica_ricarica')->name('admin.api.mbs.verifica_ricarica');
-			Route::post('/verifica-ricarica-pin', 'ApiMbsController@verifica_ricarica_pin')->name('admin.api.mbs.verifica_ricarica_pin');
-			Route::post('/tagli-prefissi-internazionali', 'ApiMbsController@tagli_prefissi_internazionali')->name('admin.api.mbs.tagli_prefissi_internazionali');
-			Route::post('/ricarica-internazionale', 'ApiMbsController@ricarica_internazionale')->name('admin.api.mbs.ricarica_internazionale');
-			Route::post('/pagamento-visura', 'ApiMbsController@pagamento_visura')->name('admin.api.mbs.pagamento_visura');
-			Route::post('/verifica-visura', 'ApiMbsController@verifica_visura')->name('admin.api.mbs.verifica_visura');
-			Route::post('/spedizione', 'ApiMbsController@spedizione')->name('admin.api.mbs.spedizione');
-			Route::post('/verifica-spedizione', 'ApiMbsController@verifica_spedizione')->name('admin.api.mbs.verifica_spedizione');
-			Route::post('/ricarica-postepay', 'ApiMbsController@ricarica_postepay')->name('admin.api.mbs.ricarica_postepay');
+		Route::prefix('/admin/api/')->group(function () {
+			Route::get('/', 'ApiMbsController@index')->name('admin.api.index');			
 		});
-
-		Route::prefix('/admin/api/reloadly')->group(function () {
-			Route::get('/', 'ApiReloadlyController@index')->name('admin.api.reloadly.index');
-            Route::get('/balance', 'ApiReloadlyController@balance')->name('admin.api.reloadly.balance');
-            Route::get('/cached_balance', 'ApiReloadlyController@get_cache_balance')->name('admin.api.reloadly.cached_balance');
-            Route::get('/discounts', 'ApiReloadlyController@discounts')->name('admin.api.reloadly.discounts');
-            Route::post('/fx_rates', 'ApiReloadlyController@fx_rates')->name('admin.api.reloadly.fx_rates');
-            Route::get('/countries', 'ApiReloadlyController@countries')->name('admin.api.reloadly.countries');
-            Route::get('/operators/list', 'ApiReloadlyController@operators')->name('admin.api.reloadly.operators');
-            Route::get('/promotions', 'ApiReloadlyController@promotions')->name('admin.api.reloadly.promotions');
-            Route::get('/transactions', 'ApiReloadlyController@transactions')->name('admin.api.reloadly.transactions');
-            Route::post('/recharge', 'ApiReloadlyController@recharge')->name('admin.api.reloadly.recharge');
-            Route::get('/operators/save', 'ApiReloadlyController@save_operators')->name('admin.api.reloadly.operators.save');
-            Route::get('/graph','ApiReloadlyController@graph_data')->name('graph_data');
-        });
-
-		Route::prefix('/admin/api/ding')->group(function () {
-			Route::get('/', 'ApiDingController@index')->name('admin.api.ding.index');
-            Route::get('/ErrorCodeDescriptions', 'ApiDingController@ErrorCodeDescriptions')->name('admin.api.ding.ErrorCodeDescriptions');
-            Route::get('/Currencies', 'ApiDingController@Currencies')->name('admin.api.ding.Currencies');
-            Route::get('/Currencies/save', 'ApiDingController@Currencies_save')->name('admin.api.ding.Currencies.save');
-            Route::get('/Regions', 'ApiDingController@Regions')->name('admin.api.ding.Regions');
-            Route::get('/Regions/save', 'ApiDingController@Regions_save')->name('admin.api.ding.Regions.save');
-            Route::get('/Countries', 'ApiDingController@Countries')->name('admin.api.ding.Countries');
-            Route::get('/Countries/save', 'ApiDingController@Countries_save')->name('admin.api.ding.Countries.save');
-            Route::get('/Providers', 'ApiDingController@Providers')->name('admin.api.ding.Providers');
-            Route::get('/Providers/save', 'ApiDingController@Providers_save')->name('admin.api.ding.Providers.save');
-            Route::get('/ProviderStatus', 'ApiDingController@ProviderStatus')->name('admin.api.ding.ProviderStatus');
-            Route::get('/Products', 'ApiDingController@Products')->name('admin.api.ding.Products');
-            Route::get('/Products/save', 'ApiDingController@Products_save')->name('admin.api.ding.Products.save');
-            Route::get('/ProductDescriptions', 'ApiDingController@ProductDescriptions')->name('admin.api.ding.ProductDescriptions');
-            Route::get('/Balance', 'ApiDingController@Balance')->name('admin.api.ding.Balance');
-            Route::get('/cached_balance', 'ApiDingController@get_cache_balance')->name('admin.api.ding.cached_balance');
-            Route::get('/Promotions', 'ApiDingController@Promotions')->name('admin.api.ding.Promotions');
-            Route::get('/PromotionDescriptions', 'ApiDingController@PromotionDescriptions')->name('admin.api.ding.PromotionDescriptions');
-            Route::post('/AccountLookup', 'ApiDingController@AccountLookup')->name('admin.api.ding.account_lookup');
-            Route::get('/graph', 'ApiDingController@graph_data')->name('admin.ding.graph_data');
-		});
-
-		Route::prefix('/admin/service/reloadly')->group(function () {
-			Route::get('/{id}/edit/local', 'ReloadlyController@edit_local')->name('admin.reloadly.edit.local');
-			Route::put('/{id}/local', 'ReloadlyController@update_local')->name('admin.reloadly.update.local');
-        	});
-		Route::resource('/admin/service/reloadly',  'ReloadlyController', [ 'names' => 'admin.reloadly' ]);
-
-		Route::resource('/admin/service/ding',  'DingController', [ 'names' => 'admin.ding' ]);
-		
-		Route::resource('/admin/service/mbs',  'MbsController', [ 'names' => 'admin.mbs' ]);
 
 		Route::post('/admin/internal/services/operations/totals/{type}', 'ServiceOperationController@totals'); // endpoint for initial calculations (daily)
 		Route::post('/admin/internal/services/{type}', 'ServiceOperationController@operations');  // data for operations

@@ -19,7 +19,47 @@
                             </svg>
                           </span>
                         </div>
-                        <input class="form-control" type="text" placeholder="{{ __('Name') }}" name="name" value="{{ old('name') }}" required autofocus>
+                        <input class="form-control" type="text" placeholder="{{ trans('forms.create_user_ph_firstname')  }}" name="name" value="{{ old('name') }}" required autofocus>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">
+                            <svg class="c-icon">
+                              <use xlink:href="assets/icons/coreui/free-symbol-defs.svg#cui-user"></use>
+                            </svg>
+                          </span>
+                        </div>
+                        <input class="form-control" type="text" placeholder="{{ trans('forms.create_user_ph_lastname') }}" name="surname" value="{{ old('surname') }}" required autofocus>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">
+                            <svg class="c-icon">
+                              <use xlink:href="assets/icons/coreui/free-symbol-defs.svg#cui-user"></use>
+                            </svg>
+                          </span>
+                        </div>
+                        <input class="form-control" type="text" placeholder="{{  trans('titles.company-name') }}" name="company_name" value="{{ old('company_name') }}" required autofocus>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">
+                            <svg class="c-icon">
+                              <use xlink:href="assets/icons/coreui/free-symbol-defs.svg#cui-user"></use>
+                            </svg>
+                          </span>
+                        </div>
+                        <input class="form-control" type="text" placeholder="{{  trans('titles.vat') }}" name="vat" value="{{ old('vat') }}" required autofocus>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">
+                            <svg class="c-icon">
+                              <use xlink:href="assets/icons/coreui/free-symbol-defs.svg#cui-phone"></use>
+                            </svg>
+                          </span>
+                        </div>
+                        <input class="form-control" type="text" placeholder="{{  trans('titles.mobile') }}" name="mobile" value="{{ old('mobile') }}" required autofocus>
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
@@ -53,20 +93,6 @@
                     </div>
                     <button class="btn btn-block btn-success" type="submit">{{ __('Register') }}</button>
                 </form>
-            </div>
-            <div class="card-footer p-4">
-              <div class="row">
-                <div class="col-6">
-                  <button class="btn btn-block btn-facebook" type="button">
-                    <span>facebook</span>
-                  </button>
-                </div>
-                <div class="col-6">
-                  <button class="btn btn-block btn-twitter" type="button">
-                    <span>twitter</span>
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
         </div>

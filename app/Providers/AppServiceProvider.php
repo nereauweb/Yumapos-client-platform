@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Models\ApiReloadlyOperator;
-use App\Models\ApiReloadlyOperatorCountry;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
@@ -28,12 +26,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
-        view()->composer(['livewire.*'], function($view) {
-            $countries = ApiReloadlyOperatorCountry::select('name', 'isoName')->orderBy('name')->groupBy('name', 'isoName')->get();
-            $operators = ApiReloadlyOperator::all();
-            $view->with(['countries' => $countries, 'operators' => $operators]);
-        });
 
 
 //		 \URL::forceScheme('https');

@@ -14,13 +14,9 @@
                                             <div class="card-body card-body p-2 d-flex justify-content-between align-items-start">
                                                 <div>
                                                     <div class="text-value-lg">
-                                                        @if(isset($reloadly_balance_cache[date('w')]))
-                                                            <span id="reloadly-balance">{{ $reloadly_balance_cache[date('w')] }}</span> €
-                                                        @else
-                                                           <span id="reloadly-balance">{{ trans('descriptions.out-of-sync-error') }}</span>
-                                                        @endif
+                                                        0 €
                                                     </div>
-                                                    <div class="uk-text-uppercase">{{ trans('titles.reloadly-balance') }}</div>
+                                                    <div class="uk-text-uppercase">Balance</div>
                                                 </div>
                                                 <div class="btn-group">
                                                     <a href="#" class="btn btn-pill btn-success" type="button" aria-haspopup="true" aria-expanded="false" id="reload-reloadly-balance">
@@ -34,30 +30,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6 col-lg-3" style="height: 100%">
-                                        <div class="card text-white bg-gradient-info" style="height: 90%">
-                                            <div class="card-body card-body p-2 d-flex justify-content-between align-items-start">
-                                                <div>
-                                                    <div class="text-value-lg">
-                                                        @if(!is_null($ding_balance_cache) && isset($ding_balance_cache[date('w')]))
-                                                            <span id="ding-balance">{{ $ding_balance_cache[date('w')] }}</span> €
-                                                        @else
-                                                           <span id="ding-balance">{{ trans('descriptions.out-of-sync-error') }}</span>
-                                                        @endif
-                                                    </div>
-                                                    <div class="uk-text-uppercase">{{ trans('titles.ding-balance') }}</div>
-                                                </div>
-                                                <div class="btn-group">
-                                                    <a href="#" class="btn btn-pill btn-success" type="button" aria-haspopup="true" aria-expanded="false" id="reload-ding-balance">
-                                                        <i class="cil-sync"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                                                <canvas id="card-chart2" height="80" width="343" style="display: block; width: 343px; height: 70px;"></canvas>
-                                                <div id="card-chart2-tooltip" class="c-chartjs-tooltip top" style="opacity: 0; left: 188.39px; top: 116.979px;"><div class="c-tooltip-header"><div class="c-tooltip-header-item">April</div></div><div class="c-tooltip-body"><div class="c-tooltip-body-item"><span class="c-tooltip-body-item-color" style="background-color: rgb(51, 153, 255);"></span><span class="c-tooltip-body-item-label">My First dataset</span><span class="c-tooltip-body-item-value">17</span></div></div></div></div>
-                                        </div>
-                                    </div>
+                                    
 
                                     <div class="col-sm-6 col-lg-3" style="height: 100%">
                                         <div class="card text-white bg-gradient-warning" style="height: 90%">
@@ -135,23 +108,8 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                </div>
-								
-								<div class="row" style="height: 100px">
-                                    <div class="col-sm-6 col-lg-6" style="height: 100%">
-                                        <div class="card text-white bg-success" style="height: 90%">
-                                            <div class="card-body card-body p-2 d-flex justify-content-between align-items-start">
-                                                <div>
-                                                    <div class="text-value-lg">
-                                                        <span id="mbs-balance">{{ $mbs_balance }}</span> €
-                                                    </div>
-                                                    <div class="uk-text-uppercase">{{ trans('titles.mbs-balance') }}</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-lg-6" style="height: 100%">
+									
+                                    <div class="col-sm-6 col-lg-3" style="height: 100%">
                                         <div class="card text-white bg-dark" style="height: 90%">
                                             <div class="card-body card-body p-2">
                                                 <div>
@@ -285,135 +243,6 @@
                                 @livewireScripts()
                             </div>
                         </div>
-<script>
-$(document).ready(function(){
-	// api reloadly cached values
-	let dingValues = [];
-	let labelsForDing = [];
-	fetch('/admin/api/ding/graph').then(data => data.json()).then(data => {
-		for (const [key, value] of Object.entries(data['graph_data'])) {
-			labelsForDing.push(key);
-			dingValues.push(parseInt(value));
-		}
-
-	}).then(item => {
-		var cardChart2 = new Chart(document.getElementById('card-chart2'), {
-			type: 'line',
-			data: {
-				labels: labelsForDing,
-				datasets: [{
-					label: 'Balance',
-					backgroundColor: 'transparent',
-					borderColor: 'rgba(255,255,255,.55)',
-					pointBackgroundColor: coreui.Utils.getStyle('--info'),
-					data: dingValues
-				}]
-			},
-			options: {
-				maintainAspectRatio: false,
-				legend: {
-					display: false
-				},
-				scales: {
-					xAxes: [{
-						gridLines: {
-							color: 'transparent',
-							zeroLineColor: 'transparent'
-						},
-						ticks: {
-							fontSize: 2,
-							fontColor: 'transparent'
-						}
-					}],
-					yAxes: [{
-						display: false,
-						ticks: {
-							display: false,
-							// min: -4,
-							// max: 39
-						}
-					}]
-				},
-				elements: {
-					line: {
-						tension: 0.00001,
-						borderWidth: 1
-					},
-					point: {
-						radius: 4,
-						hitRadius: 10,
-						hoverRadius: 4
-					}
-				}
-			}
-		}); // eslint-disable-next-line no-unused-vars
-	}).catch(e => {
-		console.log(e);
-	});
-	// api reloadly cached values
-	let reloadlyValues = [];
-	let labelsForReloadly = [];
-	fetch('/admin/api/reloadly/graph').then(data => data.json()).then(data => {
-		for (const [key, value] of Object.entries(data['graph_data'])) {
-			labelsForReloadly.push(key);
-			reloadlyValues.push(parseInt(value));
-		}
-
-	}).then(item => {
-		var cardChart1 = new Chart(document.getElementById('card-chart1'), {
-			type: 'line',
-			data: {
-				labels: labelsForReloadly,
-				datasets: [{
-					label: 'Balance',
-					backgroundColor: 'transparent',
-					borderColor: 'rgba(255,255,255,.55)',
-					pointBackgroundColor: coreui.Utils.getStyle('--primary'),
-					data: reloadlyValues
-				}]
-			},
-			options: {
-				maintainAspectRatio: false,
-				legend: {
-					display: false
-				},
-				scales: {
-					xAxes: [{
-						gridLines: {
-							color: 'transparent',
-							zeroLineColor: 'transparent'
-						},
-						ticks: {
-							fontSize: 2,
-							fontColor: 'transparent'
-						}
-					}],
-					yAxes: [{
-						display: false,
-						ticks: {
-							display: false,
-							// min: 35,
-							// max: 89
-						}
-					}]
-				},
-				elements: {
-					line: {
-						borderWidth: 1
-					},
-					point: {
-						radius: 4,
-						hitRadius: 10,
-						hoverRadius: 4
-					}
-				}
-			}
-		});
-	}).catch(e => {
-		alert(e.message);
-	});
-});
-</script>
                 @else
 						
 						@if (Auth::user()->first_access==1)
@@ -604,25 +433,4 @@ $(document).ready(function(){
             </div>
         </div>
     </div>
-@endsection
-
-@section('javascript')
-	<script>
-		$("#reload-reloadly-balance").click(function(e){
-			e.preventDefault();
-			$.get( "{{ route('admin.api.reloadly.cached_balance') }}", function( data ) {
-				if(data!='error'){
-					$( "#reloadly-balance" ).html( data );
-				}
-			});
-        });
-		$("#reload-ding-balance").click(function(e){
-			e.preventDefault();
-			$.get( "{{ route('admin.api.ding.cached_balance') }}", function( data ) {
-				if(data!='error'){
-					$( "#ding-balance" ).html( data );
-				}
-			});
-		});
-	</script>
 @endsection

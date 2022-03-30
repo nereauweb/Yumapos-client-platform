@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Payment;
 use App\User;
 
-use App\Models\ApiMbsOperation;
 use App\Models\ServiceOperation;
 
 use Illuminate\Http\Request;
@@ -69,14 +68,10 @@ class HomeController extends Controller
 		];
 
 		$users = User::orderBy('state', 'asc')->paginate(10, ['*'], 'users');
-
-		$reloadly_balance_cache = Cache::get('reloadly_cache_balance');
-		$ding_balance_cache = Cache::get('ding_cache_balance');
-		$mbs_balance = ApiMbsOperation::select('platform_balance_after')->orderBy('id','DESC')->first()->platform_balance_after; // da collegare alla cache
 		
 		$waiting_tickets = ServiceOperation::where('report_status','reported')->count(); 
 
-		return view('welcome', compact( 'paymentsData', 'usersData', 'reloadly_balance_cache', 'ding_balance_cache', 'ding_balance_cache','mbs_balance','waiting_tickets'));
+		return view('welcome', compact( 'paymentsData', 'usersData', 'waiting_tickets'));
 	}
 
 	public function user(){

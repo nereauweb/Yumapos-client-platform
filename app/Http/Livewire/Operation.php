@@ -97,7 +97,9 @@ class Operation extends Component
         $this->sentAmount = $report_operations->sum('sent_amount');
         $this->platformTotalGain = $report_operations->sum('platform_total_gain') - $report_operations->sum('user_discount');
         
-        return view('livewire.operation', compact('operations','users', 'user_name', 'date_begin', 'date_end', 'user_id', 'usedOperators'));
+		$countries = [];
+		
+        return view('livewire.operation', compact('operations','users', 'user_name', 'date_begin', 'date_end', 'user_id', 'usedOperators', 'countries'));
     }
 
     /*

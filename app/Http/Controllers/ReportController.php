@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Exports\AgentOperationsExport;
-use App\Models\ApiReloadlyCall;
-use App\Models\ApiDingCall;
-use App\Models\ApiMbsCall;
 use App\Models\ServiceOperation;
 use App\Models\ServiceOperator;
 use App\User;
@@ -45,7 +42,8 @@ class ReportController extends Controller
 		}
 		$operations = $operations->get();
 		//$operations = ServiceOperation::all();
-        return view('admin/report/operations',compact('operations','date_begin','date_end','users','user_name','user_id'));
+		$countries = [];
+        return view('admin/report/operations',compact('operations','date_begin','date_end','users','user_name','user_id','countries'));
 	}
     public function operations_ticket(Request $request)
     {
@@ -175,33 +173,8 @@ class ReportController extends Controller
     {
 		$date_begin = $request->input('date_begin') ? $request->input('date_begin') . ' 00:00:00' : date("Y-m-d") . ' 00:00:00';
 		$date_end = $request->input('date_end') ? $request->input('date_end') . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
-		$operations = ApiReloadlyCall::where('created_at','>=',$date_begin)->where('created_at','<=',$date_end)->get();
+		$operations = []; //todo
         return view('admin/report/calls',compact('operations','date_begin','date_end'));
-    }
-
-    public function reloadly_calls(Request $request)
-    {
-		$date_begin = $request->input('date_begin') ? $request->input('date_begin') . ' 00:00:00' : date("Y-m-d") . ' 00:00:00';
-		$date_end = $request->input('date_end') ? $request->input('date_end') . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
-		$operations = ApiReloadlyCall::where('created_at','>=',$date_begin)->where('created_at','<=',$date_end)->get();
-        return view('admin/report/calls-reloadly',compact('operations','date_begin','date_end'));
-    }
-
-    public function ding_calls(Request $request)
-    {
-		$date_begin = $request->input('date_begin') ? $request->input('date_begin') . ' 00:00:00' : date("Y-m-d") . ' 00:00:00';
-		$date_end = $request->input('date_end') ? $request->input('date_end') . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
-		$operations = ApiDingCall::where('created_at','>=',$date_begin)->where('created_at','<=',$date_end)->get();
-        return view('admin/report/calls-ding',compact('operations','date_begin','date_end'));
-    }
-
-    public function mbs_calls(Request $request)
-    {		
-		$date_begin = $request->input('date_begin') ? $request->input('date_begin') . ' 00:00:00' : date("Y-m-d") . ' 00:00:00';
-		$date_end = $request->input('date_end') ? $request->input('date_end') . ' 23:59:59' : date("Y-m-d") . ' 23:59:59';
-		$operations = ApiMbsCall::where('created_at','>=',$date_begin)->where('created_at','<=',$date_end)->get();
-        return view('admin/report/calls-mbs',compact('operations','date_begin','date_end'));
-		
     }
 
 
